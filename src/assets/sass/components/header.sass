@@ -6,16 +6,23 @@
     justify-content: space-between
     width: 100%
     font-size: rem(16px)
+    padding: 0
+    list-style-type: none
+    &:not(.header__nav--jsfied)
+      overflow-x: auto
+      -webkit-overflow-scrolling: touch
     a
       color: $colorText
+      white-space: nowrap
       position: relative
       line-height: 160%
       margin: 0 rem(15px)
       padding-bottom: rem(10px)
-      &:first-child
-        margin: 0
-      &:last-child
-        margin: 0
+      //flex-grow: 1
+      //&:first-child
+      //  margin: 0
+      //&:last-child
+      //  margin: 0
       &:after
         transition: .3s transform
         position: absolute

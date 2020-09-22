@@ -1,0 +1,52 @@
+.more-js
+  position: relative
+  width: 100%
+
+.more-js .-secondary
+  display: none
+  position: absolute
+  top: 100%
+  right: 0
+
+.more-js.--show-secondary .-secondary
+  display: block
+  list-style-type: none
+  box-shadow: 0 0 4px #00000038
+  border-radius: rem(6px)
+  padding: rem(10px) rem(5px)
+  .more-js__item
+    margin-bottom: 8px
+    &:last-child
+      margin-bottom: 0
+
+.more-js .--hidden
+  display: none
+
+.more-js .-more button
+  line-height: 160%
+  outline: none
+  background-color: transparent
+  border: none
+  span
+    position: relative
+    padding-bottom: rem(10px)
+    &:after
+      transition: .3s transform
+      position: absolute
+      content: " "
+      width: 100%
+      height: rem(4px)
+      bottom: 0
+      left: 50%
+      background-color: $colorTurquoise
+      transform: translateX(-50%) scaleX(0)
+    &:hover
+      &:after
+        transform: translateX(-50%) scaleX(1)
+
+  &[aria-expanded="true"]
+    span
+      position: relative
+      padding-bottom: rem(10px)
+      &:after
+        transform: translateX(-50%) scaleX(1)
