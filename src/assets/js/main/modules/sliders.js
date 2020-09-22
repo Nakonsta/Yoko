@@ -1,0 +1,2 @@
+global.slickPrevArrow = '<button class="slick-arrow slick-prev"><svg width="103" height="34" viewBox="0 0 103 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M85 32L100 17L85 2" stroke-width="3"/><path d="M100 17L0 17" stroke-width="3"/></svg></button>';
+global.slickNextArrow = '<button class="slick-arrow slick-next"><svg width="103" height="34" viewBox="0 0 103 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M85 32L100 17L85 2" stroke-width="3"/><path d="M100 17L0 17" stroke-width="3"/></svg></button>';

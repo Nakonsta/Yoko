@@ -1,0 +1,42 @@
+.section
+    .container
+        .section__title.title You May Also Like
+        .list__items
+            -
+                var items = [
+                    {
+                        img: './content/news-1.jpg',
+                        date: 'June 19, 2020',
+                        categories: ['News', 'Awards'],
+                        title: 'Webinar: Developing functional MultiScreen and MultiRec from STREAM LABS',
+                        desc: 'Besides meetings and roadshow for broadcasters and system integrators in South-West Pacific area, STREAM LABS participated in a big event.'
+                    },
+                    {
+                        img: './content/news-2.jpg',
+                        date: 'June 2, 2020',
+                        categories: ['News', 'Awards'],
+                        title: 'Improving First Responder Calls and Patient Monitoring One Live Stream at a Time',
+                        desc: 'Besides meetings and roadshow for broadcasters and system integrators in South-West Pacific area, STREAM LABS participated in a big event.'
+                    },
+                    {
+                        img: './content/news-3.jpg',
+                        date: 'June 2, 2020',
+                        categories: ['News', 'Awards'],
+                        title: 'Leadership in Uncertain Times, Part II: Advice From the Colorado Tech Scene',
+                        desc: 'Besides meetings and roadshow for broadcasters and system integrators in South-West Pacific area, STREAM LABS participated in a big event.'
+                    },
+                ];
+            each item in items
+                .list__item.arrowshort-container
+                    .list__item-image: img.js-object-fill(src=item.img)
+                    .list__item-wrap
+                        if item.categories
+                            .list__item-categories
+                                 each category in item.categories
+                                    //a(href="#") #{category}
+                                    span #{category}
+                        .list__item-title: h3: a(href="./news-detail.html") #{item.title}
+                        .list__item-desc #{item.desc}
+                        .list__item-date #{item.date}
+                    .list__item-more.arrowshort: svg.icon-more: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#more")
+        .section__all.all: a(href="./news.html") All Press Releases

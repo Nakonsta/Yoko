@@ -1,0 +1,21 @@
+block default
+
+doctype html
+//html.nav-opened
+//html.search-opened
+html
+head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+    meta(http-equiv="X-UA-Compatible" content="ie=edge")
+    meta(name="format-detection" content="telephone=no")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;600;700;900&display=swap")
+    title #{title}
+body(class = pageClass ? pageClass : '')
+    include ../includes/header
+
+    //include ../includes/nav
+
+    block content
+
+    //include ../includes/footer

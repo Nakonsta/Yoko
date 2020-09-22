@@ -1,0 +1,26 @@
+extends ../layouts/page-list
+block content
+    .container
+        .page-list
+            .page-list-header
+                .page-list-link-title
+                    | Страница и ссылка
+                .page-list-progress-title
+                    | Верстка десктопная
+                .page-list-progress-title
+                    | Верстка мобильная
+            .page-list-body
+                -
+                    var pages = [
+                        {title: 'News', href: 'news.html', desktop: '-', mobile: '-'},
+                    ];
+                each page in pages
+                    .page-list-item
+                        .page-list-link-box
+                            a.page-list-link(href = page.href)
+                                | #{page.title}
+                        .page-list-progress
+                            .page-list-progress-item
+                                | #{page.desktop}
+                            .page-list-progress-item
+                                | #{page.mobile}

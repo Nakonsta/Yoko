@@ -1,0 +1,71 @@
+.header
+  .container
+    display: flex
+  &__nav
+    display: flex
+    justify-content: space-between
+    width: 100%
+    font-size: 16px
+    a
+      color: $colorText
+      position: relative
+      line-height: 160%
+      margin: 0 15px
+      padding-bottom: 10px
+      &:first-child
+        margin: 0
+      &:last-child
+        margin: 0
+      &:after
+        transition: .3s transform
+        position: absolute
+        content: " "
+        width: 100%
+        height: 4px
+        bottom: 0
+        left: 50%
+        background-color: $colorTurquoise
+        transform: translateX(-50%) scaleX(0)
+      &:hover
+        &:after
+          transform: translateX(-50%) scaleX(1)
+  &__top
+    font-size: 12px
+    border-bottom: 1px solid #F4F4F4
+    padding: 9px 0
+    .container
+      justify-content: space-between
+  &__middle
+    .container
+      justify-content: space-between
+  &__middle
+    padding-bottom: 24px
+    padding-top: 30px
+
+  &__rate
+    display: flex
+    //width: 50%
+    //justify-content: space-between
+    flex-wrap: wrap
+  &__rate-currency
+    display: flex
+    margin-right: 50px
+    &:last-child
+      margin-right: 0
+  &__rate-share
+    margin-left: 4px
+    color: #9B9B9A
+
+  &__links
+    //width: 23%
+    display: flex
+    //justify-content: space-between
+    a
+      display: flex
+      align-items: center
+      color: $colorText
+      margin-left: 50px
+      &:first-child
+        margin-left: 0
+      span
+        margin-left: 10px

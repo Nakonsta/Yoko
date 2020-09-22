@@ -1,0 +1,7 @@
+@import "../variables/variables"
+
+@function rem($size)
+    @return strip-unit($size) / strip-unit($fontSize) * 1rem
+
+@function strip-unit($n)
+    @return $n / ($n * 0 + 1)

@@ -1,0 +1,58 @@
+section.mainnews.section
+    .section__columns.container
+        .section__head
+            .title: h2 News
+            p Actual news of our company
+        .section__content
+            .mainnews__items.js-slider
+                -
+                    var items = [
+                        {
+                            img: './content/mainnews-1.jpg',
+                            date: 'June 19, 2020',
+                            title: 'New Stream MultiScreen! OP-42/47, T2MI, NDI, 12G-SDI, Telegram',
+                        },
+                        {
+                            img: './content/mainnews-2.jpg',
+                            date: 'June 2, 2020',
+                            title: 'Improving First Responder Calls and Patient Monitoring One Live Stream at a Time',
+                        },
+                        {
+                            img: './content/mainnews-3.jpg',
+                            date: 'June 2, 2020',
+                            title: 'Leadership in Uncertain Times, Part II: Advice From the Colorado Tech Scene',
+                        },
+                        {
+                            img: './content/mainnews-4.jpg',
+                            date: 'June 1, 2020',
+                            title: 'What are the top streaming trends for 2020?',
+                        },
+                        {
+                            img: './content/mainnews-1.jpg',
+                            date: 'June 19, 2020',
+                            title: 'New Stream MultiScreen! OP-42/47, T2MI, NDI, 12G-SDI, Telegram',
+                        },
+                        {
+                            img: './content/mainnews-2.jpg',
+                            date: 'June 2, 2020',
+                            title: 'Improving First Responder Calls and Patient Monitoring One Live Stream at a Time',
+                        },
+                        {
+                            img: './content/mainnews-3.jpg',
+                            date: 'June 2, 2020',
+                            title: 'Leadership in Uncertain Times, Part II: Advice From the Colorado Tech Scene',
+                        },
+                        {
+                            img: './content/mainnews-4.jpg',
+                            date: 'June 1, 2020',
+                            title: 'What are the top streaming trends for 2020?',
+                        },
+                    ];
+                each item in items
+                    .mainnews__item.arrow-container
+                        .mainnews__item-bg: img.js-object-fill(src=item.img)
+                        .mainnews__item-wrap
+                            .mainnews__item-date #{item.date}
+                            .mainnews__item-title: h3: a(href="./news-detail.html") #{item.title}
+                        .mainnews__item-more.arrow: svg.icon-arrow: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#arrow")
+        .section__all.all: a(href="./news.html") All news

@@ -1,0 +1,240 @@
+@import "../variables/variables"
+@import "../mixins/mq"
+
+.slick-slider
+    position: relative
+    display: block
+    box-sizing: border-box
+    user-select: none
+    touch-action: pan-y
+    -webkit-tap-highlight-color: transparent
+
+.slick-list
+    position: relative
+    overflow: hidden
+    display: block
+    margin: 0
+    padding: 0
+
+    &:focus
+        outline: none
+
+    &.dragging
+        cursor: pointer
+        cursor: hand
+
+.slick-slider .slick-track,
+.slick-slider .slick-list
+    -webkit-transform: translate3d(0, 0, 0)
+    -moz-transform: translate3d(0, 0, 0)
+    -ms-transform: translate3d(0, 0, 0)
+    -o-transform: translate3d(0, 0, 0)
+    transform: translate3d(0, 0, 0)
+    height: 100%
+
+.slick-track
+    position: relative
+    left: 0
+    top: 0
+    display: block
+    margin-left: auto
+    margin-right: auto
+
+    &:before,
+    &:after
+        content: ""
+        display: table
+
+    &:after
+        clear: both
+
+    .slick-loading &
+        visibility: hidden
+
+.slick-slide
+    float: left
+    height: 100%
+    min-height: 1px
+    [dir="rtl"] &
+        float: right
+    
+    img
+        display: block
+    
+    &.slick-loading img
+        display: none
+
+    display: none
+
+    &.dragging img
+        pointer-events: none
+
+    .slick-initialized &
+        display: block
+
+    .slick-loading &
+        visibility: hidden
+
+    .slick-vertical &
+        display: block
+        height: auto
+        border: 1px solid transparent
+
+    > div
+        height: 100%
+
+.slick
+    &-arrow
+        margin: 0
+        border: 0
+        border-radius: 0
+        padding: 0
+        outline: none
+        background: transparent
+        width: 103px
+        height: 34px
+        cursor: pointer
+        transition: opacity $animation
+        overflow: hidden
+
+        svg
+            display: block
+            margin-left: -50px
+            width: 103px
+            height: 34px
+            stroke: $colorGray
+            transition: margin $animation, stroke $animation
+
+        &:hover
+            svg
+                margin-left: 0
+                //stroke: rgba($colorRed, .7) !important
+                stroke: $colorRed !important
+
+                @include mq($until: widescreen)
+                    margin-left: -10px
+
+                @include mq($until: desktop)
+                    margin-left: -25px
+
+                @include mq($until: tablet)
+                    margin-left: -40px
+
+
+    &-prev
+        margin-left: -50px
+        transform: rotate(180deg)
+
+        @include mq($from: 600px)
+            order: 1
+            margin-left: 0
+
+    &-next
+        margin-right: -50px
+
+        @include mq($from: 600px)
+            order: 1
+            margin-right: 0
+
+    &-dots
+        display: flex
+        margin: -7px
+        list-style: none
+
+        li
+            margin: 7px
+
+            &.slick-active button
+                opacity: 1
+
+        button
+            margin: 0
+            border: 0
+            border-radius: 50%
+            padding: 0
+            width: 4px
+            height: 4px
+            text-indent: -9999px
+            background: #ffffff
+            opacity: .4
+            overflow: hidden
+            transition: opacity $animation
+            pointer-events: none
+
+    &-nav
+        display: flex
+        flex-wrap: wrap
+        justify-content: space-between
+        margin-left: -50px
+        //width: 140px
+        width: 246px
+
+        @include mq($until: 600px)
+            margin: 15px 0 0
+            width: 100%
+            padding: 0
+            position: relative
+
+    &-counter
+        flex-grow: 1
+        font-weight: 300
+        font-size: 30px
+        line-height: (35/30)
+        text-align: center
+        color: #7a8599
+        pointer-events: none
+        user-select: none
+
+        @include mq($from: 600px)
+            order: 0
+            margin: 0 0 40px
+            padding-left: 50px
+            width: 100%
+            text-align: left
+
+        @include mq($until: widescreen)
+            margin-bottom: 30px
+            font-size: 28px
+
+        @include mq($until: desktop)
+            margin-bottom: 20px
+            font-size: 26px
+
+        @include mq($until: tablet)
+            font-size: 24px
+
+        @include mq($until: 600px)
+            margin: 0
+
+
+        span
+            font-weight: 500
+            color: $colorDark
+
+    &-timer
+        width: 44px
+        height: 44px
+        position: relative
+        pointer-events: none
+
+        @include mq($until: desktop)
+            width: 34px
+            height: 34px
+
+        &::before
+            content: ''
+            display: block
+            border: 4px solid rgba($colorWhite, .4)
+            border-radius: 50%
+            width: 100%
+            height: 100%
+            position: absolute
+            top: 0
+            left: 0
+
+        svg
+            display: block
+            width: 100%
+            height: 100%
+            position: relative
+            transform: rotate(-90deg)

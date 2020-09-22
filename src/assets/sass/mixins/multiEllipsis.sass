@@ -1,0 +1,27 @@
+//@mixin multiEllipsis($font-size, $line-height, $lines-to-show: 1, $maxHeight: true)
+//    $unit: 'px'
+//    @if( unitless($font-size) == false )
+//        $unit: unit($font-size)
+//    @if( unitless($line-height) )
+//        @if( $maxHeight )
+//            max-height: ceil(strip-unit($font-size)*$line-height*$lines-to-show)#{$unit}
+//        @else
+//            height: ceil(strip-unit($font-size)*$line-height*$lines-to-show)#{$unit}
+//        line-height: $line-height
+//    @else
+//        @if( $maxHeight )
+//            max-height: ceil(strip-unit($line-height)*$lines-to-show)#{unit($line-height)}
+//        @else
+//            height: ceil(strip-unit($line-height)*$lines-to-show)#{unit($line-height)}
+//        line-height: $line-height
+//    display: block
+//    display: -webkit-box
+//    font-size: $font-size
+//    -webkit-line-clamp: $lines-to-show
+//    -webkit-box-orient: vertical
+//    overflow: hidden
+//    text-overflow: ellipsis
+//
+//
+//@function strip-unit($n)
+//    @return $n / ($n * 0 + 1)

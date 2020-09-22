@@ -1,0 +1,85 @@
+@import "../variables/variables"
+@import "../mixins/pxToRem"
+@import "../mixins/mq"
+
+html,
+body
+    font: $font
+    color: $colorText
+    overflow-x: hidden
+
+    @include mq($until: widescreen)
+        font-size: 17px
+
+    @include mq($until: desktop)
+        font-size: 16px
+
+    @include mq($until: tablet)
+        font-size: 15px
+
+
+a
+    text-decoration: none
+    transition: color $animation
+
+.container
+    padding: 0 80px
+
+    @include mq($until: widescreen)
+        padding: 0 60px
+        
+    @include mq($until: desktop)
+        padding: 0 30px
+
+    @include mq($until: tablet)
+        padding: 0 15px
+
+.shine
+    position: relative
+    overflow: hidden
+
+    &:hover
+        &::before
+            animation: shine .5s
+
+    &::before
+        content: ''
+        display: block
+        width: 25%
+        height: 100%
+        background: linear-gradient(to right,#fff0 0,#ffffff4d 50%, #fff0 100%)
+        position: absolute
+        top: 0
+        left: -50%
+        transform: skewX(-25deg)
+
+@keyframes shine
+    100%
+        left: 125%
+
+.title *
+    margin: 0 !important
+    padding: 0 !important
+    font: inherit !important
+    color: inherit
+
+.all
+    font-weight: 600
+    font-size: 30px
+    line-height: 1
+
+    @include mq($until: desktop)
+        font-size: 24px
+
+    @include mq($until: tablet)
+        font-size: 20px
+
+    a
+        color: $colorRed
+
+.js-object-fill
+    object-fit: cover
+    object-position: 50% 50%
+    display: block
+    width: 100%
+    height: 100%

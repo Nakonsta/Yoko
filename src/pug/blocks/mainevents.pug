@@ -1,0 +1,55 @@
+.events.section
+    .section__columns.container
+        .section__head
+            .events__title.title Trade Shows  &&nbsp;Events
+            p We show new products and share experiences
+        .section__content
+            .events__items
+                .events__columns.events__columns--head
+                    .events__column.events__column--title Event Name
+                    .events__column.events__column--date Dates
+                    .events__column.events__column--location Location
+                -
+                    var items = [
+                        {
+                            img: './content/news-1.jpg',
+                            date: 'Sep 20-22, 2020',
+                            title: 'IBS 2020',
+                            location: 'NL, Amsterdam',
+                        },
+                        {
+                            img: './content/news-1.jpg',
+                            date: 'July 20-22, 2020',
+                            title: 'ISC West 2020',
+                            location: 'USA, Las Vegas',
+                        },
+                        {
+                            img: './content/news-1.jpg',
+                            date: 'Sep 20-22, 2020',
+                            title: 'Enterprise Connect Orlando 2020',
+                            location: 'USA, Orlando',
+                        },
+                        {
+                            img: './content/news-1.jpg',
+                            date: 'Sep 20-22, 2020',
+                            title: 'DevOps Enterprise Summit Las Vegas (online only) DevOps Enterprise Summit Las',
+                            location: 'USA, Miami',
+                        },
+                        {
+                            img: './content/news-1.jpg',
+                            date: 'Sep 20-22, 2020',
+                            title: 'IBS 2020',
+                            location: 'NL, Amsterdam',
+                        },
+                    ];
+                each item in items
+                    .events__item.arrowshort-container
+                        if(item.img)
+                            .events__item-bg(style="background-image:url(" + item.img + ")")
+                        .events__columns
+                            .events__column.events__column--title
+                                a(href="./events-detail.html") #{item.title}
+                            .events__column.events__column--date #{item.date}
+                            .events__column.events__column--location #{item.location}
+                            .events__column.events__column--more.arrowshort: svg.icon-more: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#more")
+        .section__all.all: a(href="./events.html") All events
