@@ -5,13 +5,13 @@
     display: flex
     justify-content: space-between
     width: 100%
-    font-size: 16px
+    font-size: rem(16px)
     a
       color: $colorText
       position: relative
       line-height: 160%
-      margin: 0 15px
-      padding-bottom: 10px
+      margin: 0 rem(15px)
+      padding-bottom: rem(10px)
       &:first-child
         margin: 0
       &:last-child
@@ -21,7 +21,7 @@
         position: absolute
         content: " "
         width: 100%
-        height: 4px
+        height: rem(4px)
         bottom: 0
         left: 50%
         background-color: $colorTurquoise
@@ -30,23 +30,25 @@
         &:after
           transform: translateX(-50%) scaleX(1)
   &__top
-    font-size: 12px
+    font-size: rem(12px)
     border-bottom: 1px solid #F4F4F4
-    padding: 9px 0
+    padding: rem(9px) 0
     .container
       justify-content: space-between
   &__middle
     .container
       justify-content: space-between
   &__middle
-    padding-bottom: 24px
-    padding-top: 30px
+    padding-bottom: rem(24px)
+    padding-top: rem(30px)
     .container
       align-items: center
 
   &__logo
     svg
       display: block
+      width: rem(201px)
+      height: rem(60px)
 
   &__rate
     display: flex
@@ -55,11 +57,11 @@
     flex-wrap: wrap
   &__rate-currency
     display: flex
-    margin-right: 50px
+    margin-right: rem(50px)
     &:last-child
       margin-right: 0
   &__rate-share
-    margin-left: 4px
+    margin-left: rem(4px)
     color: $colorGray
 
   &__links
@@ -71,27 +73,27 @@
       display: flex
       align-items: center
       color: $colorText
-      margin-left: 50px
+      margin-left: rem(50px)
       &:first-child
         margin-left: 0
       span
-        margin-left: 10px
+        margin-left: rem(10px)
 
   &__phones
     display: flex
 
   &__phone
-    margin-right: 63px
+    margin-right: rem(63px)
     &:last-child
       margin-right: 0
 
   &__phone-number
-    font-size: 24px
+    font-size: rem(24px)
     color: $colorTurquoise
 
   &__phone-sity
-    font-size: 12px
-    margin-left: 12px
+    font-size: rem(12px)
+    margin-left: rem(12px)
     color: $colorGray
 
   &__login
@@ -100,10 +102,10 @@
   &__singin
     border: 1px solid #31ACB8
     border-right: none
-    border-radius: 6px 0 0 6px
-    min-width: 125px
+    border-radius: rem(6px) 0 0 rem(6px)
+    min-width: rem(125px)
     width: 100%
-    height: 48px
+    height: rem(48px)
     display: flex
     align-items: center
     justify-content: center
@@ -111,12 +113,12 @@
 
   &__registration
     border: 1px solid #31ACB8
-    border-radius: 0 6px 6px 0
+    border-radius: 0 rem(6px) rem(6px) 0
     background-color: $colorTurquoise
     color: #fff
-    min-width: 180px
+    min-width: rem(180px)
     width: 100%
-    height: 48px
+    height: rem(48px)
     display: flex
     align-items: center
     justify-content: center

@@ -1,10 +1,10 @@
 @import "../variables/variables"
-@import "../mixins/pxToRem"
 @import "../mixins/mq"
 
 html,
 body
-    font: $font
+    //font: $font
+    font-family: $fontFamily
     color: $colorText
     overflow-x: hidden
 
@@ -23,11 +23,11 @@ a
     transition: color $animation
 
 .container
-    padding: 0 80px
+    padding: 0 8%
 
     @include mq($until: widescreen)
         padding: 0 60px
-        
+
     @include mq($until: desktop)
         padding: 0 30px
 
