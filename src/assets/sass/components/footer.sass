@@ -1,3 +1,44 @@
 .footer
   background-color: $colorTurquoiseLight
   height: rem(526px)
+  &__menu
+    margin-top: rem(64px)
+  &__nav
+    list-style: none
+    display: flex
+    flex-wrap: wrap
+    margin: 0
+    padding: 0
+    li
+      width: 25%
+      padding: rem(5px) 0
+      a
+        font-size: rem(16px)
+
+  &__middle
+    margin-top: rem(55px)
+    display: flex
+
+  &__middle-left
+    width: 25%
+
+  &__middle-center
+    width: 50%
+    margin-top: rem(15px)
+    .header__phones
+      flex-direction: column
+    .header__phone-sity
+      color: $colorTurquoise
+      opacity: .5
+
+  &__stores
+    margin-top: rem(22px)
+    a
+      &:first-child
+        margin-right: rem(16px)
+
+  &__email
+    margin-top: rem(10px)
+    a
+      font-size: rem(16px)
+      color: $colorTurquoise
