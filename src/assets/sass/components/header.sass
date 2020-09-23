@@ -44,16 +44,21 @@
     padding: rem(6px) 0
     @media(max-width: 1220px)
       padding: rem(8px) 0
-    .container
-      justify-content: space-between
-  &__middle
+    @include mq($until: desktop)
+      padding: rem(15px) 0
     .container
       justify-content: space-between
   &__middle
     padding-bottom: rem(24px)
     padding-top: rem(30px)
     .container
+      justify-content: space-between
       align-items: center
+    @include mq($until: tablet)
+      display: none
+  &__bottom
+    @include mq($until: tablet)
+      display: none
 
   &__logo
     svg
@@ -65,6 +70,11 @@
     display: flex
     //width: 50%
     //justify-content: space-between
+    @include mq($until: tablet)
+      width: 100%
+      justify-content: space-between
+    @media(max-width: 348px)
+      flex-direction: column
   &__rate-container
     display: flex
     @include mq($from: widescreen)
@@ -84,6 +94,10 @@
       margin-right: rem(8px)
     @include mq($until: widescreen)
       margin-right: rem(44px)
+    @include mq($until: desktop)
+      margin-right: 0
+      line-height: 160%
+      padding: 2px 0
   &__rate-share
     margin-left: rem(4px)
     color: $colorGray
@@ -93,6 +107,8 @@
     display: flex
     flex-wrap: wrap
     //justify-content: space-between
+    @include mq($until: tablet)
+      display: none
     a
       display: flex
       align-items: center

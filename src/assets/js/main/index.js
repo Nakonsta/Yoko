@@ -1,4 +1,5 @@
-
+//Отрытие/закрытие мобильного меню
+import './modules/mobile-menu.js'
 
 // sliders
 import './modules/sliders';

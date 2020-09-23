@@ -1,0 +1,54 @@
+.mobile-nav
+  transition: 0s 1s height, 0s 1s width
+  position: fixed
+  top: 0
+  left: 0
+  height: 0
+  width: 0
+  overflow: auto
+  &__bg
+    transition: 1s .5s opacity
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background-color: #000
+    opacity: 0
+  &__body
+    transition: 1s transform
+    position: relative
+    background-color: #fff
+    width: calc(100% - 39px)
+    height: 100%
+    transform: translateX(-100%)
+    padding: rem(20px)
+    @media(max-width: 350px)
+      padding: rem(16px)
+
+  &__head
+    position: relative
+    .header__login
+      width: calc(100% - 84px)
+    .header__phones
+      margin-top: rem(24px)
+      .header__phone
+        margin-bottom: rem(9px)
+        .header__phone-number
+          font-size: rem(18px)
+
+  &__close
+    position: absolute
+    top: rem(4px)
+    right: rem(4px)
+
+  &--open
+    transition: 0s height, 0s width
+    height: 100%
+    width: 100%
+    .mobile-nav__bg
+      transition: 1s opacity
+      opacity: .7
+    .mobile-nav__body
+      transition: 1s .5s transform
+      transform: translateX(0%)
