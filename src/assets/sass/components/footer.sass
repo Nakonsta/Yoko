@@ -1,9 +1,12 @@
 .footer
   background-color: $colorTurquoiseLight
-  height: rem(526px)
+  padding: rem(64px) 0
+  @media(max-width: 745px)
+    padding: rem(32px) 0
   &__menu
     margin: 0 rem(-10px)
-    margin-top: rem(64px)
+    @media(max-width: 745px)
+      display: none
   &__nav
     list-style: none
     display: flex
@@ -13,9 +16,13 @@
     li
       width: 25%
       padding: rem(5px) rem(10px)
+      @media(max-width: 1000px)
+        width: 33.33%
       a
         color: $colorText
         font-size: rem(16px)
+        @include mq($until: widescreen)
+          font-size: rem(14px)
         &:hover
           color: $colorTurquoise
 
@@ -23,26 +30,55 @@
     margin: 0 rem(-10px)
     margin-top: rem(55px)
     display: flex
-
+    @media(max-width: 745px)
+      flex-direction: column
+      margin-top: 0
   &__middle-left
     width: 25%
     padding: 0 rem(10px)
-
+    .footer__socials
+      display: none
+    @media(max-width: 1000px)
+      width: 33.33%
+    @media(max-width: 745px)
+      width: 100%
+      text-align: center
+      .footer__socials
+        display: flex
   &__middle-center
     display: flex
     width: 50%
     margin-top: rem(15px)
+    @media(max-width: 1000px)
+      width: 33.33%
+      flex-direction: column
+    @media(max-width: 745px)
+      width: 100%
+      text-align: center
+      order: -2
     .header__phones
       flex-direction: column
     .header__phone
       margin-bottom: rem(15px)
+      @media(max-width: 745px)
+        margin-right: 0
     .header__phone-sity
       color: $colorTurquoise
       opacity: .5
-
+      @media(max-width: 1200px)
+        display: block
+        margin-left: 0
+    .header__phone-number
+      white-space: nowrap
+      @media(max-width: 1200px)
+        display: block
   &__middle-center-item
     width: 50%
     padding: 0 rem(10px)
+    @media(max-width: 1000px)
+      width: 100%
+    @media(max-width: 745px)
+      text-align: center
 
   &__stores
     margin-top: rem(22px)
@@ -54,15 +90,89 @@
     width: 25%
     margin-top: rem(15px)
     padding: 0 rem(10px)
+    @media(max-width: 1000px)
+      width: 33.33%
+    @media(max-width: 745px)
+      width: 100%
+      text-align: center
+      order: -1
+      margin-top: 0
+
+  &__bottom
+    display: flex
+    margin: 0 rem(-10px)
+    margin-top: rem(80px)
+    @media(max-width: 745px)
+      flex-direction: column
+      margin-top: rem(24px)
+    //align-items: center
+  &__bottom-left
+    width: 25%
+    color: $colorGray
+    font-size: rem(14px)
+    padding: 0 rem(10px)
+    @media(max-width: 1000px)
+      width: 33.33%
+    @media(max-width: 745px)
+      width: 100%
+      text-align: center
+  &__bottom-center
+    width: 50%
+    display: flex
+    padding: 0 rem(10px)
+    @media(max-width: 1000px)
+      flex-direction: column
+      width: 33.33%
+    @media(max-width: 745px)
+      width: 100%
+      text-align: center
+    a
+      margin-right: rem(54px)
+      color: $colorTurquoise
+      text-decoration: underline
+      &:last-child
+        margin-right: 0
+      @media(max-width: 745px)
+        margin-right: 0
+        margin-top: rem(8px)
+  &__bottom-right
+    width: 25%
+    padding: 0 rem(10px)
+    transform: translateY(rem(-5px))
+    @media(max-width: 1000px)
+      width: 33.33%
+    @media(max-width: 745px)
+      width: 100%
+      text-align: center
+      margin-top: rem(32px)
 
   &__email
     margin-top: rem(10px)
+    @media(max-width: 745px)
+      display: none
     a
       font-size: rem(16px)
       color: $colorTurquoise
+      @include mq($until: widescreen)
+        font-size: rem(14px)
+
+  &__logo
+    svg
+      height: rem(63px)
+      width: rem(210px)
+    @include mq($until: widescreen)
+      svg
+        height: rem(48px)
+        width: rem(160px)
+    @media(max-width: 745px)
+      display: none
 
   &__socials
     display: flex
+    @media(max-width: 745px)
+      justify-content: center
+      margin-top: rem(20px)
+      display: none
 
   &__social
     transition: .3s background-color
@@ -76,6 +186,13 @@
     background-color: transparent
     border: 1px solid $colorTurquoise
     flex: none
+    &:last-child
+      margin-right: 0
+    @include mq($until: widescreen)
+      height: rem(32px)
+      width: rem(32px)
+      svg
+        transform: scale(0.7)
     path
       transition: .3s fill
     &:hover
@@ -87,7 +204,23 @@
     margin-top: rem(20px)
     font-size: rem(16px)
     color: $colorGray
+    @include mq($until: widescreen)
+      font-size: rem(14px)
+    @media(max-width: 745px)
+      display: none
+
+  &__address-office
+    font-size: rem(16px)
+    @include mq($until: widescreen)
+      font-size: rem(14px)
+    @media(max-width: 745px)
+      display: none
 
   &__timetable
     margin-top: rem(16px)
+    font-size: rem(16px)
     color: $colorGray
+    @include mq($until: widescreen)
+      font-size: rem(14px)
+    @media(max-width: 745px)
+      margin-top: rem(10px)
