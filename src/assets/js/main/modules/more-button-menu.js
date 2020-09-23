@@ -59,3 +59,15 @@ function doAdapt() {
 
 doAdapt() // adapt immediately on load
 window.addEventListener('resize', doAdapt) // adapt on window resize
+
+document.addEventListener('click', (e) => {
+    let el = e.target
+    while(el) {
+        if(el === secondary || el === moreBtn) {
+            return;
+        }
+        el = el.parentNode
+    }
+    container.classList.remove('--show-secondary')
+    moreBtn.setAttribute('aria-expanded', false)
+})
