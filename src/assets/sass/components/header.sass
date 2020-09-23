@@ -8,6 +8,8 @@
     font-size: rem(16px)
     padding: 0
     list-style-type: none
+    @include mq($until: widescreen)
+      font-size: rem(14px)
     &:not(.header__nav--jsfied)
       overflow-x: auto
       -webkit-overflow-scrolling: touch
@@ -39,7 +41,9 @@
   &__top
     font-size: rem(12px)
     border-bottom: 1px solid #F4F4F4
-    padding: rem(9px) 0
+    padding: rem(6px) 0
+    @media(max-width: 1220px)
+      padding: rem(8px) 0
     .container
       justify-content: space-between
   &__middle
@@ -61,12 +65,25 @@
     display: flex
     //width: 50%
     //justify-content: space-between
-    flex-wrap: wrap
+  &__rate-container
+    display: flex
+    @include mq($from: widescreen)
+      &:nth-child(2)
+        a
+          &:nth-child(2)
+            margin-right: 0
+    @include mq($until: widescreen)
+      flex-direction: column
   &__rate-currency
     display: flex
     margin-right: rem(50px)
-    &:last-child
-      margin-right: 0
+    line-height: 160%
+    @include mq($until: large)
+      margin-right: rem(32px)
+    @media(max-width: 1220px)
+      margin-right: rem(8px)
+    @include mq($until: widescreen)
+      margin-right: rem(44px)
   &__rate-share
     margin-left: rem(4px)
     color: $colorGray
@@ -81,22 +98,48 @@
       align-items: center
       color: $colorText
       margin-left: rem(50px)
-      &:first-child
-        margin-left: 0
+      line-height: 160%
+      @include mq($until: large)
+        margin-left: rem(32px)
+      @media(max-width: 1220px)
+        margin-left: rem(8px)
+      @include mq($until: widescreen)
+        margin-left: rem(44px)
       span
         margin-left: rem(10px)
 
+  &__links-container
+    display: flex
+    @include mq($from: widescreen)
+      &:nth-child(1)
+        a
+          &:nth-child(1)
+            margin-left: 0
+    @include mq($until: widescreen)
+      flex-direction: column
+      &:nth-child(2)
+        a
+          &:nth-child(2)
+            order: -1
+
   &__phones
     display: flex
+    @media(max-width: 1220px)
+      flex-direction: column
+
 
   &__phone
     margin-right: rem(63px)
+    @media(max-width: 1300px)
+      margin-right: rem(33px)
     &:last-child
       margin-right: 0
 
   &__phone-number
     font-size: rem(24px)
     color: $colorTurquoise
+    @include mq($until: widescreen)
+     font-size: rem(21px)
 
   &__phone-sity
     font-size: rem(12px)

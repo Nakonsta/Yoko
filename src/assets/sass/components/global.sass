@@ -26,14 +26,8 @@ a
 .container
     padding: 0 8%
 
-    @include mq($until: widescreen)
-        padding: 0 60px
-
-    @include mq($until: desktop)
-        padding: 0 30px
-
-    @include mq($until: tablet)
-        padding: 0 15px
+    @include mq($until: large)
+        padding: 0 4%
 
 .shine
     position: relative
