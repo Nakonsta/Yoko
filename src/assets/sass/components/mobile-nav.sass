@@ -52,3 +52,18 @@
     .mobile-nav__body
       transition: 1s .5s transform
       transform: translateX(0%)
+
+  &__menu
+    overflow: auto
+    height: calc(100% - 150px);
+
+  &__nav
+    list-style: none
+    padding: 0
+    li
+      padding: rem(12px) 0
+      border-bottom: 1px solid #F4F4F4
+      a
+        color: $colorText
+        &.active
+          color: $colorTurquoise

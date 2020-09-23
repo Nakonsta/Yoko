@@ -20,11 +20,10 @@
       line-height: 160%
       margin: 0 rem(15px)
       padding-bottom: rem(10px)
-      //flex-grow: 1
-      //&:first-child
-      //  margin: 0
-      //&:last-child
-      //  margin: 0
+      &.active
+        color: $colorTurquoise
+        &:after
+          transform: translateX(-50%) scaleX(1)
       &:after
         transition: .3s transform
         position: absolute
