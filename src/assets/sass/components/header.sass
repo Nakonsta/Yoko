@@ -160,6 +160,9 @@
     align-items: center
     justify-content: center
     color: $colorTurquoise
+    @include mq($until: widescreen)
+      height: rem(40px)
+      min-width: rem(88px)
 
   &__registration
     border: 1px solid #31ACB8
@@ -172,4 +175,7 @@
     display: flex
     align-items: center
     justify-content: center
+    @include mq($until: widescreen)
+      height: rem(40px)
+      min-width: rem(126px)
 
