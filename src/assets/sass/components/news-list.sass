@@ -8,6 +8,7 @@
     margin: 0 rem(16px)
     position: relative
     margin-bottom: rem(32px)
+    overflow: hidden
     @include mq($until: widescreen)
       width: calc(33.33% - #{rem(32px)})
     @include mq($until: desktop)
@@ -17,12 +18,23 @@
     &--big
       @media(min-width: 996px)
         width: calc(50% - #{rem(32px)})
+        border-radius: 0 0 rem(25px) 0
+        &:after
+          content: " "
+          position: absolute
+          top: 0
+          left: 0
+          width: 100%
+          height: 100%
+          background-color: #000
+          opacity: 0.4
         @include mq($until: widescreen)
           width: calc(66.66% - #{rem(32px)})
         .news-list__img
           height: 100%
           min-height: rem(368px)
           padding-top: 0
+          border-radius: 0
           @include mq($from: large)
             padding-top: 63%
             height: auto
@@ -33,12 +45,13 @@
           padding:
           position: absolute
           bottom: 0
+          z-index: 1
         .news-list__title
           color: #fff
           font-size: rem(24px)
         .news-list__date
           color: #fff
-          border: none
+          border-color: transparent
   &__img
     width: 100%
     height: rem(175px)
@@ -66,6 +79,7 @@
   &__title
     font-size: rem(18px)
     line-height: 140%
+    color: $colorText
 
   &__date
     position: absolute
@@ -76,3 +90,18 @@
     border-bottom: 1px solid $colorTurquoise
     @media(max-width: 600px)
       padding-bottom: rem(8px)
+  &__more
+    transition: .3s background-color, .3s color
+    height: rem(48px)
+    border: 1px solid $colorTurquoise
+    display: flex
+    align-items: center
+    justify-content: center
+    font-size: rem(14px)
+    background-color: transparent
+    color: $colorTurquoise
+    cursor: pointer
+    &:hover
+      background-color: $colorTurquoise
+      color: #fff
+
