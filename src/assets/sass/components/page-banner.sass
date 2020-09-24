@@ -1,0 +1,31 @@
+.page-banner
+  position: relative
+  height: rem(340px)
+  background-size: cover
+  background-position: center center
+  @include mq($until: widescreen)
+    height: rem(240px)
+  @include mq($until: mobile)
+    height: rem(216px)
+  .container
+    display: flex
+    align-items: center
+    height: 100%
+  &__title
+    position: relative
+    color: #fff
+    font-size: rem(48px)
+    line-height: 120%
+    z-index: 2
+    @include mq($until: mobile)
+      font-size: rem(30px)
+  &:after
+    content: " "
+    position: absolute
+    height: 100%
+    width: 100%
+    top: 0
+    left: 0
+    background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)
+    opacity: .7
+

@@ -1,0 +1,6 @@
+mixin pageBanner(title, bg)
+    .page-banner(style=`background-image:url(${bg})`)
+        .container
+            block pageb
+                .page-banner__title #{title}
+

@@ -1,8 +1,9 @@
 extends ../layouts/default
+include ../blocks/page-banner
 
 block default
     - var title = 'Company - News & Awards/Success stories';
 
 block content
 
-    div
+    +pageBanner('Новости', '/content/news.jpg')
