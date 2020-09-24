@@ -36,7 +36,6 @@ function doAdapt() {
     let hiddenItems = []
     const primaryWidth = $(primary).outerWidth()
     primaryItems.forEach((item, i) => {
-        console.log(stopWidth, $(item).width())
         if(primaryWidth >= stopWidth + $(item).width()) {
             stopWidth += $(item).outerWidth()
         } else {
