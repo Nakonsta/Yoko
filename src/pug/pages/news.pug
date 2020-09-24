@@ -2,9 +2,11 @@ extends ../layouts/default
 include ../blocks/page-banner
 
 block default
-    - var title = 'Company - News & Awards/Success stories';
+    - var title = 'Новости список';
 
 block content
+
+    include ../includes/bread-crumbs
 
     +pageBanner('Новости', '/content/news.jpg')
 
