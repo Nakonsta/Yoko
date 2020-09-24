@@ -1,0 +1,94 @@
+.news-detail
+  &__back-link
+    span
+      font-size: rem(14px)
+      color: $colorTurquoise
+      margin-left: rem(12px)
+  &__flex
+    display: flex
+    @media(max-width: 1220px)
+      flex-direction: column
+  &__title
+    font-size: rem(48px)
+    font-family: $fontGilroy
+    line-height: 120%
+    margin-top: rem(24px)
+    @include mq($until: tablet)
+      font-size: rem(36px)
+    @media(max-width: 600px)
+      margin-top: rem(12px)
+  &__date
+    font-size: rem(16px)
+    margin-top: rem(16px)
+    color: $colorGray
+  &__content
+    padding-top: rem(40px)
+    p
+      margin: rem(40px) 0
+    strong
+      font-family: $fontGilroy
+      font-size: rem(24px)
+      @media(max-width: 600px)
+        font-size: rem(20px)
+    img
+      width: 100%
+
+  &__frame
+    position: relative
+    padding-top: 60%
+    iframe
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+
+  &__content-container
+    width: 65%
+    @media(max-width: 1220px)
+      width: 100%
+
+  &__news-bar-container
+    width: 35%
+    align-items: flex-start
+    display: flex
+    justify-content: flex-end
+    @media(max-width: 1220px)
+      width: 100%
+
+  &__items
+    margin: 0 rem(-16px)
+    @media(max-width: 1220px)
+      width: auto
+      display: flex
+      flex-wrap: wrap
+    @include mq($until: tablet)
+      flex-direction: column
+
+  &__news-bar
+    width: 70%
+    padding: rem(24px)
+    background: $colorTurquoiseLight
+    @media(max-width: 1220px)
+      width: 100%
+    .news-list__item
+      width: calc(100% - #{rem(32px)})
+      @media(max-width: 1220px)
+        width: calc(33.33% - #{rem(32px)})
+      @include mq($until: tablet)
+        width: calc(100% - #{rem(32px)})
+      @media(min-width: 1221px)
+        &:last-child
+          margin-bottom: 0
+        .news-list__info
+          min-height: auto
+        .news-list__date
+          padding-bottom: rem(8px)
+      @include mq($until: tablet)
+        &:last-child
+          margin-bottom: 0
+          .news-list__info
+            min-height: auto
+          .news-list__date
+            padding-bottom: rem(8px)
+

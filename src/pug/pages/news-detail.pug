@@ -5,4 +5,43 @@ block default
 
 block content
 
-    include ../blocks/news-list
+    include ../includes/bread-crumbs
+
+    .section.section--news-detail.news-detail
+        .container
+            .news-detail__back
+                a(href="#").news-detail__back-link
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 1L1 5L5 9" stroke="#31ACB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    span Вернуться в список
+            .news-detail__flex
+                .news-detail__content-container
+                    .news-detail__title КЗ "ЭКСПЕРТ-КАБЕЛЬ" запустил цех по производству индивидуальных средств защиты
+                    .news-detail__date 02.07.2020
+                    .news-detail__content
+                        img(src="/content/content-img.jpg")
+                        p
+                            strong Для решения вопроса дефицита индивидуальных средств защиты руководство КЗ ”ЭКСПЕРТ- КАБЕЛЬ”, системообразующего предприятия региона, проявило социальную ответственность и приняло решение о запуске линии по их изготовлению.
+                        p Уже несколько дней на предприятии работает цех по производству защитных масок. В смену с конвейера сходит более 1500 масок. За счет собственных мощностей планируется обеспечить ими волонтерские центры по оказанию помощи гражданам в период пандемии коронавируса, социальные службы, а если потребуется, то медицинские учреждения, полицию и спасателей – всех тех, кому приходится контактировать с людьми в силу своих профессиональных обязанностей.
+                        p «Я считаю, что социальная ответственность бизнеса должна быть не только красивым лозунгом, но и реальными, полезными для общества делами» - рассказывает генеральный директор ООО “Кабельный завод ”ЭКСПЕРТ- КАБЕЛЬ” Сергей Николаевич Кутенёв. «В сложившейся ситуации, когда одноразовые защитные маски стали дефицитом, было принято решение об организации цеха по их производству на нашем предприятии. Это позволит нам не только внести свой вклад в борьбу с распространением коронавируса в нашем регионе, но и открыть дополнительные рабочие места в сложившейся экономической ситуации».
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/2MpUj-Aua48" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        p В связи с открытием нового цеха по пошиву одноразовых масок на заводе планирует открыть до 40 новых рабочих мест.
+                .news-detail__news-bar-container
+                    .news-detail__news-bar
+                        .news-detail__items
+                            a(href="#").news-list__item
+                                .news-list__img(style="background-image:url(/content/news-demo.jpg)")
+                                .news-list__info
+                                    .news-list__title ООО “Кабельный Завод "ЭКСПЕРТ-КАБЕЛЬ" за цифровизацию
+                                    .news-list__date 18.07.2020
+                            a(href="#").news-list__item
+                                .news-list__img(style="background-image:url(/content/news-demo.jpg)")
+                                .news-list__info
+                                    .news-list__title ООО “Кабельный Завод "ЭКСПЕРТ-КАБЕЛЬ" за цифровизацию
+                                    .news-list__date 18.07.2020
+                            a(href="#").news-list__item
+                                .news-list__img(style="background-image:url(/content/news-demo.jpg)")
+                                .news-list__info
+                                    .news-list__title ООО “Кабельный Завод "ЭКСПЕРТ-КАБЕЛЬ" за цифровизацию
+                                    .news-list__date 18.07.2020

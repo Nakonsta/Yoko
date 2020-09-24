@@ -1,6 +1,8 @@
 //Отрытие/закрытие мобильного меню
 import './modules/mobile-menu.js'
 
+import './modules/news-detail-frame-fix'
+
 // sliders
 import './modules/sliders';
 import './modules/more-button-menu'
