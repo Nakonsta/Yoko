@@ -98,9 +98,10 @@
     @include mq($until: widescreen)
       margin-right: rem(44px)
     @include mq($until: desktop)
-      margin-right: 0
       line-height: 160%
       padding: 2px 0
+    @include mq($until: tablet)
+      margin-right: 0
   &__rate-share
     margin-left: rem(4px)
     color: $colorGray
@@ -124,6 +125,9 @@
         margin-left: rem(8px)
       @include mq($until: widescreen)
         margin-left: rem(44px)
+      @include mq($until: desktop)
+        line-height: 160%
+        padding: 2px 0
       span
         margin-left: rem(10px)
 

@@ -11,13 +11,18 @@
   @include mq($from: tablet)
     display: none
 
+  &__search
+    cursor: pointer
+
   &__burger-button
     position: relative
     height: rem(16px)
-    width: rem(26px)
+    width: rem(35px)
+    cursor: pointer
     div
       position: absolute
       transform: translateY(-50%)
+      svg
       &:nth-child(1)
         top: 0%
       &:nth-child(2)
