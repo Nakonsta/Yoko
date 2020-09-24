@@ -1,0 +1,78 @@
+.news-list
+  &__items
+    display: flex
+    flex-wrap: wrap
+    margin: 0 rem(-16px)
+  &__item
+    width: calc(25% - #{rem(32px)})
+    margin: 0 rem(16px)
+    position: relative
+    margin-bottom: rem(32px)
+    @include mq($until: widescreen)
+      width: calc(33.33% - #{rem(32px)})
+    @include mq($until: desktop)
+      width: calc(50% - #{rem(32px)})
+    @media(max-width: 600px)
+      width: calc(100% - #{rem(32px)})
+    &--big
+      @media(min-width: 996px)
+        width: calc(50% - #{rem(32px)})
+        @include mq($until: widescreen)
+          width: calc(66.66% - #{rem(32px)})
+        .news-list__img
+          height: 100%
+          min-height: rem(368px)
+          padding-top: 0
+          @include mq($from: large)
+            padding-top: 63%
+            height: auto
+            min-height: auto
+        .news-list__info
+          padding-left: rem(24px)
+          padding-right: rem(24px)
+          padding:
+          position: absolute
+          bottom: 0
+        .news-list__title
+          color: #fff
+          font-size: rem(24px)
+        .news-list__date
+          color: #fff
+          border: none
+  &__img
+    width: 100%
+    height: rem(175px)
+    background-size: cover
+    background-position: center center
+    border-radius: 0 0 rem(25px) 0
+    @include mq($from: large)
+      padding-top: 63%
+      height: auto
+    @include mq($until: desktop)
+      height: rem(186px)
+    @media(max-width: 600px)
+      height: auto
+      padding-top: 54%
+
+  &__info
+    min-height: rem(193px)
+    padding-top: rem(20px)
+    padding-bottom: rem(75px)
+    @media(max-width: 600px)
+      min-height: auto
+      padding-bottom: rem(45px)
+    //position: relative
+
+  &__title
+    font-size: rem(18px)
+    line-height: 140%
+
+  &__date
+    position: absolute
+    bottom: 0
+    color: $colorGray
+    font-size: rem(14px)
+    padding-bottom: rem(24px)
+    border-bottom: 1px solid $colorTurquoise
+    @media(max-width: 600px)
+      padding-bottom: rem(8px)
