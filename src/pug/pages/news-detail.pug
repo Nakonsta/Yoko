@@ -1,0 +1,11 @@
+extends ../layouts/default
+include ../blocks/page-banner
+
+block default
+    - var title = 'Company - News & Awards/Success stories';
+
+block content
+
+    +pageBanner('Новости', '/content/news.jpg')
+
+    include ../blocks/news-list
