@@ -13,12 +13,16 @@
     &:not(.header__nav--jsfied)
       overflow-x: auto
       -webkit-overflow-scrolling: touch
+    li
+      &:first-child
+        a
+          margin-left: 0
     a
       color: $colorText
       white-space: nowrap
       position: relative
       line-height: 160%
-      margin: 0 rem(15px)
+      margin-left: rem(15px)
       padding-bottom: rem(10px)
       &.active
         color: $colorTurquoise
