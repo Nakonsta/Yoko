@@ -2,27 +2,29 @@
   position: relative
   width: 100%
 
-.more-js .-secondary
+.more-js .secondary
   display: none
   position: absolute
   top: 100%
   right: 0
 
-.more-js.--show-secondary .-secondary
+.more-js.show-secondary .secondary
   display: block
   list-style-type: none
   box-shadow: 0 0 4px #00000038
   border-radius: rem(6px)
-  padding: rem(10px) rem(5px)
+  padding: rem(10px) rem(15px)
+  a
+    margin: 0
   .more-js__item
     margin-bottom: 8px
     &:last-child
       margin-bottom: 0
 
-.more-js .--hidden
+.more-js .hidden
   display: none
 
-.more-js .-more button
+.more-js .more button
   line-height: 160%
   outline: none
   background-color: transparent

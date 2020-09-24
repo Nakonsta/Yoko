@@ -1,6 +1,8 @@
 import * as jquery from 'jquery';
 global.$ = global.jQuery = jquery;
 
+import "core-js";
+
 //owl-carousel, через import не работает. см. - https://github.com/OwlCarousel2/OwlCarousel2/issues/2206
 window.fn = require('./modules/owl.carousel.min');
 import './modules/magnific-popup';
