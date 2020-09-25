@@ -4,26 +4,22 @@
 .typography
     //max-width: 1260px
     //padding-right: 260px
-    font-size: 24px
-
-    @include mq($until: large)
-        font-size: 22px
-
-    @include mq($until: widescreen)
-        font-size: 20px
-
-    @include mq($until: desktop)
-        font-size: 18px
+    font-size: rem(16px)
+    line-height: 160%
 
     @include mq($until: tablet)
-        font-size: 16px
+        font-size: rem(14px)
 
-    
+
     > :first-child
         margin-top: 0 !important
 
     > :last-child
         margin-bottom: 0 !important
+
+    &--accent
+        font-size: rem(24px)
+        font-family: $fontGilroy
 
     .big
         font-size: 36px
@@ -88,129 +84,6 @@
             + li
                 margin-top: 30px
 
-    &__block
-        display: flex
-        flex-wrap: wrap
-        justify-content: space-between
-        margin: 200px -9999px 180px
-        padding: 0 9999px
-
-        &--grey
-            padding-top: 100px
-            padding-bottom: 100px
-            background: #e9edf2
-
-        @include mq($until: widescreen)
-            margin: 160px -9999px
-
-        @include mq($until: desktop)
-            margin: 120px -9999px
-
-        @include mq($until: tablet)
-            margin: 80px -9999px
-
-        &-left
-            width: 380px
-
-            @include mq($until: large)
-                width: 320px
-
-            @include mq($until: widescreen)
-                width: 280px
-
-            @include mq($until: desktop)
-                margin-bottom: 40px
-                padding-bottom: 0
-                //width: 250px
-                width: 100%
-
-            > :first-child
-                margin-top: 0 !important
-
-            > :last-child
-                margin-bottom: 0 !important
-
-        &-right
-            margin-left: auto
-            width: calc(100% - 420px)
-
-            @include mq($until: large)
-                width: calc(100% - 340px)
-
-            @include mq($until: widescreen)
-                width: calc(100% - 330px)
-
-            @include mq($until: desktop)
-                //width: calc(100% - 270px)
-                width: 100%
-
-            > :first-child
-                margin-top: 0 !important
-
-            > :last-child
-                margin-bottom: 0 !important
-
-    &__columns
-        display: flex
-        margin: 200px 0 180px
-
-        &--grey
-            background: #e9edf2
-
-        @include mq($until: widescreen)
-            margin: 160px 0
-
-        @include mq($until: desktop)
-            margin: 120px 0
-
-        @include mq($until: tablet)
-            margin: 80px 0
-            flex-direction: column
-
-            .container &
-                margin-left: -15px
-                margin-right: -15px
-
-    &__column
-        padding-right: 80px
-        width: 50%
-
-        @include mq($until: desktop)
-            padding-right: 40px
-
-        @include mq($until: tablet)
-            order: 1
-            margin-left: 0 !important
-            margin-right: 0 !important
-            padding-left: 15px !important
-            padding-right: 15px !important
-            width: 100% !important
-
-        &:not(.typography__column--image)
-            align-self: center
-            width: 50%
-
-            @include mq($until: tablet)
-                padding-top: 40px !important
-                padding-bottom: 40px !important
-
-            + .typography__column--image
-                margin-right: -80px
-                margin-left: 0
-                width: calc(50% + 80px)
-
-        &--image
-            padding: 0 !important
-            margin-left: -80px
-            width: calc(50% + 80px)
-
-            @include mq($until: tablet)
-                order: 0
-
-            + .typography__column:not(.typography__column--image)
-                padding-right: 0
-                padding-left: 80px
-
     img,
     .video
         max-width: 100%
@@ -247,3 +120,6 @@ h2,.h2
     font-weight: 900
     font-size: 60px
     line-height: (70/60)
+
+p
+    margin: rem(40px) 0
