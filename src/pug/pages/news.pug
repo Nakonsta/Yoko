@@ -1,12 +1,16 @@
 extends ../layouts/default
 include ../blocks/page-banner
+include ../blocks/bread-crumbs
 
 block default
     - var title = 'Новости список';
 
 block content
 
-    include ../includes/bread-crumbs
+    +breadCrumbs([
+        'Главная',
+        'Новости'
+    ])
 
     +pageBanner('Новости', '/content/news.jpg')
 

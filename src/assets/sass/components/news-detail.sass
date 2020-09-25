@@ -29,6 +29,7 @@
       line-height: 160%
       @include mq($until: tablet)
         font-size: rem(14px)
+        margin: rem(32px) 0
     strong
       font-family: $fontGilroy
       font-size: rem(24px)
@@ -58,7 +59,10 @@
     display: flex
     justify-content: flex-end
     @media(max-width: 1220px)
+      margin-top: rem(24px)
       width: 100%
+    @include mq($until: tablet)
+      margin-top: 0
 
   &__items
     margin: 0 rem(-16px)
