@@ -62,6 +62,7 @@
     "nouislider": "^14.2.0",
     "object-fit-images": "3.2.4",
     "sass-mq": "^5.0.1",
-    "svg4everybody": "2.1.9"
+    "svg4everybody": "2.1.9",
+    "swiper": "^6.2.0"
   }
 }

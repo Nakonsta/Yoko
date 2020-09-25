@@ -13,12 +13,17 @@ import './modules/jquery.validate.additional-methods.min';
 import './modules/tooltipster.bundle.min.js';
 import './modules/jquery.scrollbar.min.js';
 // import './modules/slick.min.js';
+
+import Swiper from 'swiper'
+global.Swiper = Swiper
+
 import webkitLineClamp from 'webkit-line-clamp';
 global.webkitLineClamp = webkitLineClamp;
 import svg4everybody from 'svg4everybody';
 global.svg4everybody = svg4everybody;
 import objectFitImages from 'object-fit-images';
 global.objectFitImages = objectFitImages;
+
 
 
 
