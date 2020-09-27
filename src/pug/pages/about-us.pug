@@ -1,12 +1,16 @@
 extends ../layouts/default
 include ../blocks/page-banner
+include ../blocks/bread-crumbs
 
 block default
     - var title = 'О нас';
 
 block content
 
-    include ../blocks/bread-crumbs
+    +breadCrumbs([
+        'Главная',
+        'О нас'
+    ])
 
     +pageBanner('О нас', '/content/about-us.jpg')
 
