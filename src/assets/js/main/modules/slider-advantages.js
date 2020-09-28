@@ -8,15 +8,18 @@ if (advantagesSlider) {
     let advantagesSliderInstance = new Swiper(advantagesSlider, {
         speed: 400,
         spaceBetween: 32,
-        slidesPerView: 2,
+        slidesPerView: 1,
         watchOverflow: true,
         navigation: {
-            nextEl: prevButton,
-            prevEl: nextButton,
+            nextEl: nextButton,
+            prevEl: prevButton,
         },
         breakpoints: {
             1440: {
                 slidesPerView: 4,
+            },
+            769: {
+                slidesPerView: 2,
             },
         },
     });

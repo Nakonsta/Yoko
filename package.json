@@ -59,6 +59,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "dragula": "^3.7.2",
+    "glightbox": "^3.0.5",
     "nouislider": "^14.2.0",
     "object-fit-images": "3.2.4",
     "sass-mq": "^5.0.1",
