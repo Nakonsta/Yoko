@@ -14,7 +14,8 @@ import './modules/tooltipster.bundle.min.js';
 import './modules/jquery.scrollbar.min.js';
 // import './modules/slick.min.js';
 
-import Swiper from 'swiper'
+import Swiper, { Navigation } from 'swiper'
+Swiper.use([Navigation]);
 global.Swiper = Swiper
 
 import webkitLineClamp from 'webkit-line-clamp';

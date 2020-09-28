@@ -1,4 +1,38 @@
 .info-slider
+  //&--about
+
+  &__navigation-slider
+    display: flex
+    justify-content: flex-end
+    margin-bottom: rem(24px)
+    .swiper-button-prev
+      height: rem(48px)
+      width: rem(48px)
+      background-color: #fff
+      flex: none
+      display: flex
+      align-items: center
+      justify-content: center
+      border-radius: 50%
+      cursor: pointer
+      &.swiper-button-disabled
+        opacity: .5
+        cursor: default
+    .swiper-button-next
+      height: rem(48px)
+      width: rem(48px)
+      background-color: #fff
+      flex: none
+      display: flex
+      align-items: center
+      justify-content: center
+      border-radius: 50%
+      margin-left: rem(12px)
+      cursor: pointer
+      &.swiper-button-disabled
+        opacity: .5
+        cursor: default
+
   &__description
     p
       &:first-child
