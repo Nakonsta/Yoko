@@ -1,4 +1,5 @@
 let newsDetailContent = document.querySelector('.news-detail__content')
+let aboutUsContent = document.querySelector('.about-us__contant')
 
 function wrap(el, className = 'news-detail__frame') {
     const wrapper = document.createElement('div');
@@ -14,3 +15,12 @@ if (newsDetailContent) {
         wrap(frame)
     })
 }
+
+if (aboutUsContent) {
+    let frames = aboutUsContent.querySelectorAll('iframe')
+
+    frames.forEach((frame) => {
+        wrap(frame, 'about-us__frame')
+    })
+}
+
