@@ -4,7 +4,7 @@ import './modules/polyfill.js'
 //Отрытие/закрытие мобильного меню
 import './modules/mobile-menu.js'
 
-import './modules/news-detail-frame-fix'
+import './modules/content-frame-fix'
 
 // sliders
 import './modules/slider-advantages';
