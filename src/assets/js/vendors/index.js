@@ -3,6 +3,12 @@ global.$ = global.jQuery = jquery;
 
 import "core-js";
 
+import axios from 'axios';
+global.axios = axios;
+
+import Vue from 'vue/dist/vue.esm';
+global.Vue = Vue;
+
 import "./modules/glightbox-ie11";
 
 const  lightbox  =  GLightbox ( {

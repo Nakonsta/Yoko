@@ -11,3 +11,6 @@ requireAll(require.context('./assets/img/svg-templates/', true, /\.svg$/));
 // js
 import './assets/js/index.js';
 
+// vue
+import './vue/vue-apps';
+
