@@ -8,6 +8,7 @@ const HtmlBeautifyPlugin = require('html-beautify-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const PATHS = {
     src: path.join(__dirname, 'src'),
@@ -53,6 +54,10 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
+            },
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
             },
             {
                 test: /\.(sass|scss)$/,
@@ -132,6 +137,7 @@ module.exports = {
             {from:'src/assets/img/content',to:'content'},
             {from:'src/assets/json',to:'json'}
         ]),
+        new VueLoaderPlugin()
     ],
     devServer: {
         //contentBase: 'src',

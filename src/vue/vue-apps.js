@@ -1,10 +1,10 @@
-import App from './catalog.vue'
+import Catalog from './catalog.vue'
 
-const interactiveMap = document.querySelector('#interactive-map');
+const catalogBlock = document.querySelector('#catalog');
 
-if (interactiveMap) {
+if (catalogBlock) {
     let app = new Vue({
-        el: interactiveMap,
-        render: function(h) { return h(App); }
+        el: catalogBlock,
+        render: function(h) { return h(Catalog); }
     })
 }
