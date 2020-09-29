@@ -29,9 +29,15 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "./src/assets/sass/variables/fluid-variables";
+    @import "./src/assets/sass/mixins/fluid-mixin";
+
     .catalog {
         &__flex {
             display: flex
+        }
+        &__filter {
+            width: rem(276px);
         }
     }
 </style>
