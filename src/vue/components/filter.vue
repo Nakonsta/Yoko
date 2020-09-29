@@ -44,7 +44,7 @@
                 default: [],
                 type: Array
             }
-        }
+        },
     }
 </script>
 
@@ -54,11 +54,8 @@
 
     .filter {
         width: calc(100% - #{rem(68px)});
-        &__checkbox-container {
-
-        }
         &__checkbox {
-
+            margin: rem(18px) 0;
         }
     }
 </style>
