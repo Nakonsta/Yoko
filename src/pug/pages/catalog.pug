@@ -1,9 +1,19 @@
 extends ../layouts/default
+include ../blocks/page-banner
+include ../blocks/bread-crumbs
 
 block default
     - var title = 'Каталог';
 
 block content
 
-    div
-        #catalog
+    +breadCrumbs([
+        'Главная',
+        'Каталог'
+    ])
+
+    +pageBanner('Каталог', '/content/catalog.jpg')
+
+    .section.section--green
+        .container
+            #catalog
