@@ -5,7 +5,9 @@
         </div>
         <div class="catalog__flex">
             <div class="catalog__filter">
-                <filterBlock />
+                <filterBlock
+                    :filter="filter"
+                />
             </div>
             <div class="catalog__body">
                 Товары
@@ -23,12 +25,23 @@
         components: {
             filterBlock
         },
+        mixins: [api],
         data() {
             return {
                 url: 'https://d1.aspect.extyl.pro',
+                filter: []
             }
         },
-        created() {},
+        created() {
+            this.fetchFilter()
+                .then((data) => {
+                    console.log(data)
+                    this.filter = data.data.data
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
         methods: {},
     }
 </script>

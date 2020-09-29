@@ -67,7 +67,7 @@
                 color: $colorTurquoise;
             }
             &--show {
-                padding: rem(13px) 0;
+                padding: rem(15px) 0;
             }
         }
         &__body {

@@ -1,26 +1,30 @@
 <template>
     <div class="filter">
-        <spoiler>
+        <spoiler
+            v-for="item in filter"
+        >
             <template v-slot:header>
-                <b>Тип</b>
+                <b>{{ item.value }}</b>
             </template>
             <template v-slot:body>
-                <div>
-                    Для корректной работы на электронной торговой площадке на вашем
-                    рабочем столе должно быть установлено следующее програмное
-                    обеспечение:
-                </div>
-            </template>
-        </spoiler>
-        <spoiler>
-            <template v-slot:header>
-                <b>Тип</b>
-            </template>
-            <template v-slot:body>
-                <div>
-                    Для корректной работы на электронной торговой площадке на вашем
-                    рабочем столе должно быть установлено следующее програмное
-                    обеспечение:
+<!--                <input-->
+<!--                    v-for="value in item.values"-->
+<!--                    :name="value"-->
+<!--                    type="checkbox"-->
+<!--                />-->
+                <div class="filter__checkbox-container">
+                    <div
+                            v-for="value in item.values"
+                            class="filter__checkbox"
+                    >
+                        <label class="checkbox">
+                            <input type="checkbox" :name="value">
+                            <span class="checkbox__body"></span>
+                            <span class="checkbox__text">
+                            {{ value }}
+                        </span>
+                        </label>
+                    </div>
                 </div>
             </template>
         </spoiler>
@@ -33,6 +37,12 @@
         name: 'FilterBlock',
         components: {
             spoiler
+        },
+        props: {
+            filter: {
+                default: [],
+                type: Array
+            }
         }
     }
 </script>
@@ -43,5 +53,12 @@
 
     .filter {
         width: calc(100% - #{rem(68px)});
+        &__checkbox-container {
+            max-height: rem(303px);
+            overflow: auto;
+        }
+        &__checkbox {
+
+        }
     }
 </style>
