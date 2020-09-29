@@ -5,7 +5,7 @@
         </div>
         <div class="catalog__flex">
             <div class="catalog__filter">
-                Фильтер
+                <filterBlock />
             </div>
             <div class="catalog__body">
                 Товары
@@ -13,11 +13,16 @@
         </div>
     </div>
 </template>
+
 <script>
     import api from './helpers/api'
+    import filterBlock from "./components/filter.vue";
 
     export default {
         name: 'App',
+        components: {
+            filterBlock
+        },
         data() {
             return {
                 url: 'https://d1.aspect.extyl.pro',
