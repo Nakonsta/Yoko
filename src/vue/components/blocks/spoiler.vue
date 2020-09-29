@@ -1,14 +1,34 @@
 <template>
     <div class="spoiler">
-        <div class="spoiler__header" @click="show = !show">
+        <div
+            class="spoiler__header"
+            :class="{
+                'spoiler__header--show': show
+            }"
+            @click="show = !show"
+        >
             <slot name="header"></slot>
-            <div class="spoiler__header-arrow">
-                Стрелка
+            <div
+                class="spoiler__header-arrow"
+                :class="{
+                    'spoiler__header-arrow--top' : show
+                }"
+            >
+                <svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 1L5 4L1 1" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </div>
         </div>
-        <slideUpDown :active="show" :duration="500">
-            <slot name="body"></slot>
-        </slideUpDown>
+        <div
+            class="spoiler__body"
+            :class="{
+                'spoiler__body--show': show
+            }"
+        >
+            <slideUpDown :active="show" :duration="500">
+                <slot name="body"></slot>
+            </slideUpDown>
+        </div>
     </div>
 </template>
 
@@ -29,23 +49,52 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../../assets/sass/variables/variables";
+    @import "../../../assets/sass/variables/fluid-variables";
+    @import "../../../assets/sass/mixins/fluid-mixin";
+
     .spoiler {
+        border-bottom: 1px solid #CDCDCC;
         &__header {
-            transition: 0.3s color;
+            transition: 0.3s color, 0.3s padding;
             position: relative;
-            padding: 10px 0;
+            /*padding-top: rem(24px);*/
+            padding: rem(24px) 0;
             cursor: pointer;
+            font-size: rem(14px);
+            text-transform: uppercase;
             &:hover {
-                color: #00b8d4;
+                color: $colorTurquoise;
+            }
+            &--show {
+                padding: rem(13px) 0;
+            }
+        }
+        &__body {
+            transition: 0.3s padding;
+            &--show {
+                padding-bottom: rem(13px);
             }
         }
         &__header-arrow {
             position: absolute;
             top: 50%;
             right: 0;
-            transform: rotateX(0deg) translate(0%, -50%);
+            transform: translate(0%, -50%);
+            svg {
+                transition: .3s transform;
+                transform: rotateX(0deg);
+            }
+            path {
+                transition: .3s stroke;
+            }
             &--top {
-                transform: rotateX(180deg) translate(0%, -50%);
+                svg {
+                    transform: rotateX(180deg);
+                }
+                path {
+                    stroke: $colorTurquoise
+                }
             }
         }
     }

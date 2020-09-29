@@ -5,11 +5,23 @@
                 <b>Тип</b>
             </template>
             <template v-slot:body>
-                <p>
+                <div>
                     Для корректной работы на электронной торговой площадке на вашем
                     рабочем столе должно быть установлено следующее програмное
                     обеспечение:
-                </p>
+                </div>
+            </template>
+        </spoiler>
+        <spoiler>
+            <template v-slot:header>
+                <b>Тип</b>
+            </template>
+            <template v-slot:body>
+                <div>
+                    Для корректной работы на электронной торговой площадке на вашем
+                    рабочем столе должно быть установлено следующее програмное
+                    обеспечение:
+                </div>
             </template>
         </spoiler>
     </div>
@@ -26,5 +38,10 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../assets/sass/variables/fluid-variables";
+    @import "../../assets/sass/mixins/fluid-mixin";
 
+    .filter {
+        width: calc(100% - #{rem(68px)});
+    }
 </style>
