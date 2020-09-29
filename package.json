@@ -68,6 +68,7 @@
     "swiper": "^6.2.0",
     "vue": "^2.6.12",
     "vue-loader": "^15.9.3",
+    "vue-slide-up-down": "^2.0.1",
     "vue-template-compiler": "^2.6.12"
   }
 }
