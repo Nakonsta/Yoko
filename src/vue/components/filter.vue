@@ -12,7 +12,7 @@
 <!--                    :name="value"-->
 <!--                    type="checkbox"-->
 <!--                />-->
-                <div class="filter__checkbox-container">
+                <div>
                     <div
                             v-for="value in item.values"
                             class="filter__checkbox"
@@ -33,6 +33,7 @@
 
 <script>
     import spoiler from "./blocks/spoiler.vue";
+
     export default {
         name: 'FilterBlock',
         components: {
@@ -54,8 +55,7 @@
     .filter {
         width: calc(100% - #{rem(68px)});
         &__checkbox-container {
-            max-height: rem(303px);
-            overflow: auto;
+
         }
         &__checkbox {
 

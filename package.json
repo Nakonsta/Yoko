@@ -64,6 +64,7 @@
     "nouislider": "^14.2.0",
     "object-fit-images": "3.2.4",
     "sass-mq": "^5.0.1",
+    "simplebar-vue": "^1.6.0",
     "svg4everybody": "2.1.9",
     "swiper": "^6.2.0",
     "vue": "^2.6.12",

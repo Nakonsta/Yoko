@@ -25,19 +25,29 @@
                 'spoiler__body--show': show
             }"
         >
-            <slideUpDown :active="show" :duration="500">
-                <slot name="body"></slot>
-            </slideUpDown>
+<!--            <simplebar ref="simplebarEl" class="body-container" data-simplebar-auto-hide="false">-->
+<!--                <slideUpDown :active="show" :duration="500">-->
+<!--                    <slot name="body"></slot>-->
+<!--                </slideUpDown>-->
+<!--            </simplebar>-->
+            <div class="body-container">
+                <slideUpDown :active="show" :duration="500">
+                    <slot name="body"></slot>
+                </slideUpDown>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import slideUpDown from 'vue-slide-up-down'
+    import simplebar from 'simplebar-vue';
+
     export default {
         name: 'Spoiler',
         components: {
-            slideUpDown
+            slideUpDown,
+            simplebar
         },
         data() {
             return {
@@ -52,6 +62,11 @@
     @import "../../../assets/sass/variables/variables";
     @import "../../../assets/sass/variables/fluid-variables";
     @import "../../../assets/sass/mixins/fluid-mixin";
+
+    .body-container {
+        max-height: rem(303px);
+        overflow: auto;
+    }
 
     .spoiler {
         border-bottom: 1px solid #CDCDCC;
