@@ -7,18 +7,13 @@
                 <b>{{ item.value }}</b>
             </template>
             <template v-slot:body>
-<!--                <input-->
-<!--                    v-for="value in item.values"-->
-<!--                    :name="value"-->
-<!--                    type="checkbox"-->
-<!--                />-->
                 <div>
                     <div
-                            v-for="value in item.values"
-                            class="filter__checkbox"
+                        v-for="value in item.values"
+                        class="filter__checkbox"
                     >
                         <label class="checkbox">
-                            <input type="checkbox" :name="value">
+                            <input type="checkbox" @change="(e) => changeFilter(item.id, value, e.target.checked)">
                             <span class="checkbox__body"></span>
                             <span class="checkbox__text">
                             {{ value }}
@@ -45,6 +40,47 @@
                 type: Array
             }
         },
+        data() {
+            return {
+                currentFilter: {}
+            }
+        },
+        methods: {
+            changeFilter(group, value, isSelected) {
+                if (isSelected) {
+                    this.addValue(group, value)
+                } else {
+                    this.removeValue(group, value)
+                }
+                this.$emit('changeFilter', this.currentFilter)
+            },
+            addValue(group, value) {
+                if (this.currentFilter[group]) {
+                    this.currentFilter[group].push(value)
+                } else {
+                    this.addGroup(group, value)
+                }
+            },
+            removeValue(group, value) {
+                if (this.currentFilter[group]) {
+                    let index = this.currentFilter[group].indexOf(value);
+                    if (index > -1) {
+                        this.currentFilter[group].splice(index, 1);
+                        console.log(this.currentFilter[group].length)
+                        if (!this.currentFilter[group].length) {
+                            this.removeGroup(group)
+                        }
+                    }
+                }
+            },
+            addGroup(group, value) {
+                this.currentFilter[group] = [value]
+            },
+            removeGroup(group) {
+                delete this.currentFilter[group]
+            }
+        },
+
     }
 </script>
 

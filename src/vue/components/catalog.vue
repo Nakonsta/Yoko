@@ -1,7 +1,7 @@
 <template>
     <div class="catalog">
         <div class="catalog__counter">
-            Найдено 6528
+            Найдено {{ totalProducts }}
         </div>
         <div class="catalog__items">
             <div
@@ -18,7 +18,7 @@
                 </div>
                 <div class="catalog__item-body">
                     <a :href="product.url"
-                      v-for="product in item.showFlag ? item.items : item.items.slice(0, 5)"
+                      v-for="product in item.showFlag ? item.items : item.items.slice(0, 7)"
                       class="catalog__product"
                     >
                         {{ product.title }}
@@ -50,6 +50,10 @@
             catalogItem: {
                 default: () => [],
                 type: Array
+            },
+            totalProducts: {
+                default: 0,
+                type: Number
             }
         },
         data() {

@@ -7,11 +7,13 @@
             <div class="catalog__filter">
                 <filterBlock
                     :filter="filter"
+                    @changeFilter="getCatalogData"
                 />
             </div>
             <div class="catalog__body">
                 <catalogBlock
                     :catalog-item="catalog"
+                    :totalProducts="totalProducts"
                 />
             </div>
         </div>
@@ -34,31 +36,47 @@
             return {
                 url: 'https://d1.aspect.extyl.pro',
                 filter: [],
-                catalog: []
+                catalog: [],
+                totalProducts: 0
             }
         },
         created() {
-            this.fetchFilter()
-                .then((data) => {
-                    let arr = data.data.data
-                    this.filter = data.data.data
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
-
-            this.fetchCatalog()
-                .then((data) => {
-                    this.getCatalogData(data)
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
+            this.getFilterData()
+            this.getCatalogData()
         },
         methods: {
-            getCatalogData(data) {
-                let arr = data.data.data
-                this.catalog = this.addShowFlag(arr)
+            getFilterData() {
+                this.fetchFilter()
+                    .then((data) => {
+                        this.setFilterData(data.data.data)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+            },
+            getCatalogData(filterValues = null) {
+                this.fetchCatalog(filterValues)
+                    .then((data) => {
+                        this.setCatalogData(data.data.data)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+            },
+            setFilterData(data) {
+                this.filter = data
+            },
+            setCatalogData(data) {
+                this.catalog = this.addShowFlag(data)
+                this.setTotalCounterProducts(this.catalog)
+            },
+            setTotalCounterProducts(arr) {
+                let total = 0
+                arr.forEach((item) => {
+                    total = total + item.total
+                })
+
+                this.totalProducts = total
             },
             addShowFlag(arr) {
                 arr.forEach((item, index) => {
