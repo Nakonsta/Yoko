@@ -1,7 +1,7 @@
 <template>
     <div class="filter">
         <spoiler
-            v-for="item in filter"
+            v-for="item in showFullFilter ? filter : filter.slice(0, 5)"
         >
             <template v-slot:header>
                 <b>{{ item.value }}</b>
@@ -23,6 +23,12 @@
                 </div>
             </template>
         </spoiler>
+        <div
+            class="filter__more"
+            @click="showFullFilter = !showFullFilter"
+        >
+            <b>{{showFullFilter ? 'Скрыть фильтры' : 'Все фильтры'}}</b>
+        </div>
     </div>
 </template>
 
@@ -42,7 +48,8 @@
         },
         data() {
             return {
-                currentFilter: {}
+                currentFilter: {},
+                showFullFilter: false
             }
         },
         methods: {
@@ -85,6 +92,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../assets/sass/variables/variables";
     @import "../../assets/sass/variables/fluid-variables";
     @import "../../assets/sass/mixins/fluid-mixin";
 
@@ -92,6 +100,13 @@
         width: calc(100% - #{rem(68px)});
         &__checkbox {
             margin: rem(18px) 0;
+        }
+        &__more {
+            padding: rem(24px) 0;
+            cursor: pointer;
+            font-size: rem(14px);
+            text-transform: uppercase;
+            color: $colorTurquoise;
         }
     }
 </style>
