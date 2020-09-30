@@ -73,7 +73,6 @@
                     let index = this.currentFilter[group].indexOf(value);
                     if (index > -1) {
                         this.currentFilter[group].splice(index, 1);
-                        console.log(this.currentFilter[group].length)
                         if (!this.currentFilter[group].length) {
                             this.removeGroup(group)
                         }

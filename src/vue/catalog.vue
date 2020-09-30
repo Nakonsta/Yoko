@@ -1,7 +1,7 @@
 <template>
     <div class="catalog">
         <div class="catalog__search">
-            Поиск
+            <search />
         </div>
         <div class="catalog__flex">
             <div class="catalog__filter">
@@ -24,12 +24,14 @@
     import api from './helpers/api'
     import filterBlock from "./components/filter.vue";
     import catalogBlock from "./components/catalog.vue";
+    import search from "./components/search.vue";
 
     export default {
         name: 'App',
         components: {
             filterBlock,
             catalogBlock,
+            search,
         },
         mixins: [api],
         data() {
@@ -37,7 +39,7 @@
                 url: 'https://d1.aspect.extyl.pro',
                 filter: [],
                 catalog: [],
-                totalProducts: 0
+                totalProducts: 0,
             }
         },
         created() {
@@ -95,7 +97,8 @@
 
     .catalog {
         &__flex {
-            display: flex
+            display: flex;
+            margin-top: rem(64px);
         }
         &__filter {
             width: rem(276px);

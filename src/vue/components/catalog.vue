@@ -18,13 +18,16 @@
                 </div>
                 <div class="catalog__item-body">
                     <a :href="product.url"
-                      v-for="product in item.showFlag ? item.items : item.items.slice(0, 7)"
+                      v-for="product in item.showFlag ? item.items : item.items.slice(0, showQuantityProduct)"
                       class="catalog__product"
                     >
                         {{ product.title }}
                     </a>
                 </div>
-                <div class="catalog__more">
+                <div
+                    v-if="item.items.length > showQuantityProduct"
+                    class="catalog__more"
+                >
                     <span
                         v-if="item.showFlag"
                         @click="toggleBlock(catalogItem, index)"
@@ -58,7 +61,7 @@
         },
         data() {
             return {
-                hideElements: []
+                showQuantityProduct: 7
             }
         },
         methods: {
