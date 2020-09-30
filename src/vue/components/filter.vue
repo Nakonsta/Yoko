@@ -41,7 +41,7 @@
         },
         props: {
             filter: {
-                default: [],
+                default: () => [],
                 type: Array
             }
         },
