@@ -17,13 +17,12 @@
                     </span>
                 </div>
                 <div class="catalog__item-body">
-                    <div
+                    <a :href="product.url"
                       v-for="product in item.showFlag ? item.items : item.items.slice(0, 5)"
                       class="catalog__product"
                     >
-                        {{ item.showFlag }}
                         {{ product.title }}
-                    </div>
+                    </a>
                 </div>
                 <div class="catalog__more">
                     <span
@@ -110,6 +109,7 @@
             }
         }
         &__product {
+            transition: .3s background-color, .3s color, .3s border-color;
             height: rem(38px);
             padding: 0 rem(16px);
             border: 1px solid #CDCDCC;
@@ -119,7 +119,14 @@
             justify-content: center;
             white-space: nowrap;
             margin: 0 rem(8px);
+            background-color: transparent;
             margin-bottom: rem(16px);
+            color: $colorText;
+            &:hover {
+                background-color: $colorTurquoise;
+                border-color: $colorTurquoise;
+                color: #fff;
+            }
         }
     }
 </style>
