@@ -2,7 +2,7 @@
     <div class="catalog">
         <div class="catalog__head">
             <div class="catalog__counter">
-                Найдено {{ totalProducts }}
+                Найдено <span>{{ totalProducts }}</span>
             </div>
             <span class="catalog__filter-button popup-link" @click="openPopupById('filter-modal')">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -23,7 +23,7 @@
                         {{ item.value }}
                     </span>
                     <span class="catalog__item-counter">
-                        {{ item.total }} марка
+                        {{ item.total }} {{ getNameOfNum(item.total) }}
                     </span>
                 </div>
                 <div class="catalog__item-body">
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+    import functions from "../helpers/functions";
     export default {
         name: 'CatalogBlock',
         props: {
@@ -75,6 +76,15 @@
             }
         },
         methods: {
+            getNameOfNum(number) {
+                let list = [
+                    'марка',
+                    'марок',
+                    'марок',
+                ]
+
+                return functions.declOfNum(number, list)
+            },
             openPopupById(id) {
                 window.openPopupById(id)
             },
@@ -106,6 +116,15 @@
             font-weight: 500;
             font-size: rem(18px);
             line-height: 160%;
+        }
+        &__counter {
+            font-weight: 500;
+            font-size: rem(14px);
+            line-height: 160%;
+            color: #9B9B9A;
+            span {
+                color: $colorTurquoise
+            }
         }
         &__item-counter {
             font-weight: 500;
@@ -160,11 +179,15 @@
                 display: flex;
             }
             span {
+                transition: .3s color;
                 margin-left: rem(12px);
                 font-weight: bold;
                 font-size: rem(16px);
                 line-height: 140%;
                 color: $colorTurquoise;
+            }
+            path {
+                transition: .3s fill
             }
             &:hover {
                 span {

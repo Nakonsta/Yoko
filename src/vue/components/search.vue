@@ -74,6 +74,7 @@
             }
         }
         &__button {
+            transition: .3s background-color;
             display: flex;
             align-items: center;
             justify-content: center;
