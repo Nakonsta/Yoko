@@ -15,10 +15,23 @@
                 deselectLabel=""
                 track-by="title"
                 label="title"
+                group-values="items"
+                group-label="groupTitle"
+                :group-select="false"
+                open-direction="bottom"
+                :loading="isLoading"
+                :internal-search="false"
+                :preserveSearch="true"
                 @search-change="getListSearchCatalog"
             >
                 <template v-slot:caret>
                     <span></span>
+                </template>
+                <template v-slot:noOptions>
+                    <span>Начните поиск</span>
+                </template>
+                <template v-slot:noResult>
+                    <span>По вашему запросу ничего не найдено</span>
                 </template>
             </multiselect>
         </div>
@@ -36,10 +49,8 @@
         data() {
             return {
                 value: '',
-                options: [
-                    'Тест',
-                    'Тест 2'
-                ],
+                options: [],
+                isLoading: false,
                 searchCounter: null
             }
         },
@@ -49,17 +60,47 @@
                 clearInterval(this.searchCounter)
                 if (string) {
                     this.searchCounter = setTimeout(() => {
+                        this.isLoading = true
                         this.fetchListSearchCatalog(string)
                             .then((data) => {
-                                this.options = data.data.data
+                                this.startValueSearch()
+                                this.groupingSearchList(data.data.data)
+                                this.isLoading = false
                             })
                             .catch((e) => {
                                 console.log(e)
+                                this.isLoading = false
                             })
                     }, 1000)
                 } else {
-                    this.options = []
+                    this.cleanSearch()
+                    this.isLoading = false
                 }
+            },
+            startValueSearch() {
+                this.options = [
+                    {
+                        groupTitle: 'Марка',
+                        items: []
+                    },
+                    {
+                        groupTitle: 'Размер',
+                        items: []
+                    }
+                ]
+            },
+            cleanSearch() {
+                this.options = []
+            },
+            groupingSearchList(arr) {
+                arr.forEach((item) => {
+                    if (item.is_mark) {
+                        this.options[0].items.push(item)
+                    }
+                    if (item.is_mark_size) {
+                        this.options[1].items.push(item)
+                    }
+                })
             }
         }
     }
@@ -83,6 +124,12 @@
             .multiselect__option--highlight {
                 background: #f7fbfb;
                 color: $colorText;
+            }
+            .multiselect__single {
+                margin-top: rem(2px);
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
             }
             .multiselect__tags {
                 height: rem(52px);
