@@ -13,7 +13,9 @@
                 selectedLabel=""
                 selectLabel=""
                 deselectLabel=""
-                @search-change="() => {}"
+                track-by="title"
+                label="title"
+                @search-change="getListSearchCatalog"
             >
                 <template v-slot:caret>
                     <span></span>
@@ -27,15 +29,37 @@
 </template>
 
 <script>
+    import api from '../helpers/api'
     export default {
         name: 'Search',
+        mixins: [api],
         data() {
             return {
                 value: '',
                 options: [
                     'Тест',
                     'Тест 2'
-                ]
+                ],
+                searchCounter: null
+            }
+        },
+        methods: {
+            getListSearchCatalog(string) {
+                console.log(string)
+                clearInterval(this.searchCounter)
+                if (string) {
+                    this.searchCounter = setTimeout(() => {
+                        this.fetchListSearchCatalog(string)
+                            .then((data) => {
+                                this.options = data.data.data
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                            })
+                    }, 1000)
+                } else {
+                    this.options = []
+                }
             }
         }
     }
