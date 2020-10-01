@@ -1,0 +1,10 @@
+.add-product-section
+  position: relative
+.add-product-button
+  position: absolute
+  bottom: calc(100% + #{rem(96px)})
+  right: 0
+  @include mq($until: desktop)
+    position: static
+    margin-bottom: rem(24px)
+    display: flex

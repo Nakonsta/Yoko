@@ -86,6 +86,7 @@
             width: rem(200px);
             height: rem(52px);
             cursor: pointer;
+            font-family: "Gilroy-SemiBold", sans-serif;
             &:hover {
                 background-color: $colorTurquoiseHover
             }
