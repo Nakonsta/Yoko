@@ -4,9 +4,10 @@
             <search />
         </div>
         <div class="catalog__flex">
-            <div class="catalog__filter">
+            <div ref="filterContainer" class="catalog__filter">
                 <filterBlock
                     :filter="filter"
+                    :filterContainer="this.$refs.filterContainer"
                     @changeFilter="getCatalogData"
                 />
             </div>
@@ -103,6 +104,9 @@
         &__filter {
             width: rem(276px);
             flex: none;
+            @media(max-width: 768px) {
+                display: none;
+            }
         }
         &__body {
             width: 100%;

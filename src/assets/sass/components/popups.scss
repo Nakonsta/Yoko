@@ -1,0 +1,103 @@
+// СТИЛИ ПОПАП ОКНА И ЗАТЕНЕНИЯ
+
+.ie-fix {
+	.popup {
+		//height: 100%;
+	}
+	.popup__body {
+		height: 100%;
+		//flex-direction: column;
+		//margin-top: 40%;
+		//transform: translateY(-50%);
+		//position: absolute;
+		//top: 50%;
+		//left: 50%;
+		//transform: translate(-50%, -50%);
+	}
+}
+
+.popup {
+	position: fixed;
+	z-index: 50;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.8);
+	opacity: 0;
+	visibility: hidden;
+	overflow-y: auto;
+	overflow-x: hidden;
+	transition: all 0.8s ease 0s;
+	&--fix-ie {
+		.popup__body {
+			align-items: flex-start;
+		}
+	}
+	&.open {
+		opacity: 1;
+		visibility: visible;
+	}
+	&__body {
+		min-height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: rem(30px) rem(10px);
+		transition: all 0.8s ease 0s;
+	}
+	&__content {
+		background: #fff;
+		color: #000;
+		max-width: rem(908px);
+		width: 100%;
+		border-radius: rem(6px);
+		position: relative;
+		transition: all 0.8s ease 0s;
+		opacity: 0;
+		transform: translate(0px, -100%);
+		padding: rem(84px) rem(168px);
+		@media (max-width: 1040px) {
+			padding: rem(54px) rem(98px);
+			max-width: rem(708px);
+		}
+		@media (max-width: 768px) {
+			padding: rem(34px) rem(48px);
+			max-width: rem(508px);
+		}
+		&--big {
+			max-width: rem(1270px);
+			@media (max-width: 1040px) {
+				padding: rem(54px) rem(98px);
+			}
+			@media (max-width: 768px) {
+				padding: rem(34px) rem(48px);
+			}
+		}
+	}
+	&__close {
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 2;
+		border-radius: 0 rem(6px) 0 0;
+		width: rem(40px);
+		height: rem(40px);
+		top: 0;
+		right: 0;
+		background-color: $colorTurquoise;
+		svg {
+			width: rem(22px);
+			height: rem(22px);
+		}
+		&:hover {
+			background-color: $colorTurquoiseHover;
+		}
+	}
+}
+
+.popup.open .popup__content {
+	transform: translate(0px, 0%);
+	opacity: 1;
+}

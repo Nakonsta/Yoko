@@ -85,6 +85,10 @@
             line-height: 160%;
             width: rem(200px);
             height: rem(52px);
+            cursor: pointer;
+            &:hover {
+                background-color: $colorTurquoiseHover
+            }
             @media(max-width: 1440px) {
                 width: rem(136px);
             }

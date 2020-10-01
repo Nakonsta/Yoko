@@ -1,5 +1,11 @@
 <template>
-    <div class="filter">
+    <div
+        ref="filter"
+        class="filter"
+        :class="{
+           'filter--mobile': mobileFilter
+        }"
+    >
         <spoiler
             v-for="item in showFullFilter ? filter : filter.slice(0, 5)"
         >
@@ -44,15 +50,40 @@
             filter: {
                 default: () => [],
                 type: Array
+            },
+            filterContainer: {
+                type: HTMLDivElement
             }
         },
         data() {
             return {
                 currentFilter: {},
+                mobileFilter: false,
                 showFullFilter: false
             }
         },
+        mounted() {
+            this.toggleMobileFilter()
+            window.addEventListener('resize', this.toggleMobileFilter)
+        },
         methods: {
+            toggleMobileFilter() {
+                let popupFilter = document.querySelector('#filter-modal .popup__content-container')
+
+
+
+                if (window.innerWidth < 768) {
+                    if (!this.mobileFilter) {
+                        this.mobileFilter = true
+                        popupFilter.appendChild(this.$refs.filter)
+                    }
+                } else {
+                    if (this.mobileFilter) {
+                        this.mobileFilter = false
+                        this.filterContainer.appendChild(this.$refs.filter)
+                    }
+                }
+            },
             changeFilter(group, value, isSelected) {
                 if (isSelected) {
                     this.addValue(group, value)
@@ -97,6 +128,9 @@
 
     .filter {
         width: calc(100% - #{rem(68px)});
+        &--mobile {
+            width: 100%
+        }
         &__checkbox {
             margin: rem(18px) 0;
         }
