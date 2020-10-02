@@ -1,0 +1,184 @@
+<template>
+    <div class="search">
+        <div class="search__icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.4733 13.5267L11.9999 11.0733C12.96 9.87627 13.4249 8.35686 13.2991 6.82753C13.1733 5.2982 12.4664 3.87519 11.3236 2.85109C10.1808 1.827 8.68914 1.27967 7.15522 1.32164C5.62129 1.36362 4.16175 1.99171 3.0767 3.07676C1.99164 4.16181 1.36356 5.62136 1.32158 7.15528C1.27961 8.6892 1.82694 10.1809 2.85103 11.3237C3.87512 12.4664 5.29814 13.1734 6.82747 13.2992C8.3568 13.425 9.87621 12.9601 11.0733 12L13.5266 14.4533C13.5886 14.5158 13.6623 14.5654 13.7436 14.5993C13.8248 14.6331 13.9119 14.6505 13.9999 14.6505C14.0879 14.6505 14.1751 14.6331 14.2563 14.5993C14.3376 14.5654 14.4113 14.5158 14.4733 14.4533C14.5934 14.329 14.6606 14.1629 14.6606 13.99C14.6606 13.8171 14.5934 13.651 14.4733 13.5267ZM7.33327 12C6.41029 12 5.50804 11.7263 4.74061 11.2135C3.97318 10.7007 3.37504 9.97191 3.02183 9.11919C2.66862 8.26647 2.57621 7.32815 2.75627 6.42291C2.93634 5.51766 3.38079 4.68614 4.03344 4.0335C4.68608 3.38085 5.5176 2.9364 6.42285 2.75633C7.32809 2.57627 8.2664 2.66868 9.11913 3.02189C9.97185 3.3751 10.7007 3.97324 11.2135 4.74067C11.7262 5.5081 11.9999 6.41035 11.9999 7.33333C11.9999 8.57101 11.5083 9.75799 10.6331 10.6332C9.75793 11.5083 8.57095 12 7.33327 12Z" fill="#31ACB8"/>
+            </svg>
+        </div>
+        <div class="search__input">
+            <multiselect
+                v-model="value"
+                :options="options"
+                placeholder="Найти кабель"
+                selectedLabel=""
+                selectLabel=""
+                deselectLabel=""
+                track-by="title"
+                label="title"
+                group-values="items"
+                group-label="groupTitle"
+                :group-select="false"
+                open-direction="bottom"
+                :loading="isLoading"
+                :internal-search="false"
+                :preserveSearch="true"
+                @search-change="getListSearchCatalog"
+            >
+                <template v-slot:caret>
+                    <span></span>
+                </template>
+                <template v-slot:noOptions>
+                    <span>Начните поиск</span>
+                </template>
+                <template v-slot:noResult>
+                    <span>По вашему запросу ничего не найдено</span>
+                </template>
+            </multiselect>
+        </div>
+        <div class="search__button">
+            Найти
+        </div>
+    </div>
+</template>
+
+<script>
+    import api from '../helpers/api'
+    export default {
+        name: 'Search',
+        mixins: [api],
+        data() {
+            return {
+                value: '',
+                options: [],
+                isLoading: false,
+                searchCounter: null
+            }
+        },
+        methods: {
+            getListSearchCatalog(string) {
+                console.log(string)
+                clearInterval(this.searchCounter)
+                if (string) {
+                    this.searchCounter = setTimeout(() => {
+                        this.isLoading = true
+                        this.fetchListSearchCatalog(string)
+                            .then((data) => {
+                                this.startValueSearch()
+                                this.groupingSearchList(data.data.data)
+                                this.isLoading = false
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                                this.isLoading = false
+                            })
+                    }, 1000)
+                } else {
+                    this.cleanSearch()
+                    this.isLoading = false
+                }
+            },
+            startValueSearch() {
+                this.options = [
+                    {
+                        groupTitle: 'Марка',
+                        items: []
+                    },
+                    {
+                        groupTitle: 'Размер',
+                        items: []
+                    }
+                ]
+            },
+            cleanSearch() {
+                this.options = []
+            },
+            groupingSearchList(arr) {
+                arr.forEach((item) => {
+                    if (item.is_mark) {
+                        this.options[0].items.push(item)
+                    }
+                    if (item.is_mark_size) {
+                        this.options[1].items.push(item)
+                    }
+                })
+            }
+        }
+    }
+</script>
+
+<style lang="scss">
+    @import "../../assets/sass/variables/variables";
+    @import "../../assets/sass/variables/fluid-variables";
+    @import "../../assets/sass/mixins/fluid-mixin";
+
+    .search {
+        position: relative;
+        display: flex;
+        box-shadow: 5px 10px 15px rgba(55, 55, 53, 0.1);
+        border-radius: 0 rem(6px) rem(6px) 0;
+        &__input {
+            width: calc(100% - #{rem(200px)});
+            @media(max-width: 1440px) {
+                width: calc(100% - #{rem(136px)});
+            }
+            .multiselect__option--highlight {
+                background: #f7fbfb;
+                color: $colorText;
+            }
+            .multiselect__single {
+                margin-top: rem(2px);
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+            }
+            .multiselect__tags {
+                height: rem(52px);
+                padding: rem(13px) rem(40px) 0 rem(52px);
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+                border-radius: rem(6px) 0 0 rem(6px);
+                border: none;
+                input {
+                    margin-top: rem(2px);
+                    font-weight: 500;
+                    font-size: rem(14px);
+                    line-height: 160%;
+                }
+            }
+        }
+        &__button {
+            transition: .3s background-color;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $colorTurquoise;
+            color: #fff;
+            font-weight: 500;
+            font-size: rem(16px);
+            border-radius: 0 rem(6px) rem(6px) 0;
+            line-height: 160%;
+            width: rem(200px);
+            height: rem(52px);
+            cursor: pointer;
+            font-family: "Gilroy-SemiBold", sans-serif;
+            &:hover {
+                background-color: $colorTurquoiseHover
+            }
+            @media(max-width: 1440px) {
+                width: rem(136px);
+            }
+        }
+        &__icon {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            z-index: 51;
+            margin-left: rem(20px);
+            svg {
+                display: block;
+            }
+        }
+    }
+</style>

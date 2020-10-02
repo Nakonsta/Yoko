@@ -122,11 +122,14 @@ body:not(.page-main)
     @include mq($until: tablet)
       display: none
     a
+      transition: .3s color
       display: flex
       align-items: center
       color: $colorText
       margin-left: rem(50px)
       line-height: 160%
+      &:hover
+        color: $colorTurquoiseHover
       @include mq($until: large)
         margin-left: rem(32px)
       @media(max-width: 1220px)
@@ -168,9 +171,12 @@ body:not(.page-main)
       margin-right: 0
 
   &__phone-number
+    transition: .3s color
     font-size: rem(24px)
     color: $colorTurquoise
     font-family: $fontGilroy
+    &:hover
+      color: $colorTurquoiseHover
     @include mq($until: widescreen)
      font-size: rem(21px)
 
@@ -184,6 +190,7 @@ body:not(.page-main)
     font-family: $fontGilroy
 
   &__singin
+    transition: .3s background-color
     border: 1px solid #31ACB8
     border-right: none
     border-radius: rem(6px) 0 0 rem(6px)
@@ -194,11 +201,14 @@ body:not(.page-main)
     align-items: center
     justify-content: center
     color: $colorTurquoise
+    &:hover
+      background-color: #e5f1f3
     @include mq($until: widescreen)
       height: rem(40px)
       min-width: rem(88px)
 
   &__registration
+    transition: .3s background-color
     border: 1px solid #31ACB8
     border-radius: 0 rem(6px) rem(6px) 0
     background-color: $colorTurquoise
@@ -209,6 +219,8 @@ body:not(.page-main)
     display: flex
     align-items: center
     justify-content: center
+    &:hover
+      background-color: $colorTurquoiseHover
     @include mq($until: widescreen)
       height: rem(40px)
       min-width: rem(126px)

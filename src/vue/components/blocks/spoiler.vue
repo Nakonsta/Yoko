@@ -66,6 +66,22 @@
     .body-container {
         max-height: rem(303px);
         overflow: auto;
+        /* полоса прокрутки (скроллбар) */
+        &::-webkit-scrollbar {
+            width: 4px; /* ширина для вертикального скролла */
+            height: 4px; /* высота для горизонтального скролла */
+            background-color: rgba(155, 155, 154, 0.3);
+        }
+
+        /* ползунок скроллбара */
+        &::-webkit-scrollbar-thumb {
+            background-color: $colorTurquoise;
+            border-radius: 9em;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: $colorTurquoiseHover;
+        }
     }
 
     .spoiler {
