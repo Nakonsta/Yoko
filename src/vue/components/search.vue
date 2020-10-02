@@ -117,10 +117,7 @@
         box-shadow: 5px 10px 15px rgba(55, 55, 53, 0.1);
         border-radius: 0 rem(6px) rem(6px) 0;
         &__input {
-            width: calc(100% - #{rem(200px)});
-            @media(max-width: 1440px) {
-                width: calc(100% - #{rem(136px)});
-            }
+            width: 100%;
             .multiselect__option--highlight {
                 background: #f7fbfb;
                 color: $colorText;
@@ -152,6 +149,9 @@
             }
         }
         &__button {
+            position: absolute;
+            z-index: 51;
+            right: 0;
             transition: .3s background-color;
             display: flex;
             align-items: center;
