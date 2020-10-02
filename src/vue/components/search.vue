@@ -144,6 +144,10 @@
                     font-weight: 500;
                     font-size: rem(14px);
                     line-height: 160%;
+                    padding-left: 0;
+                    &::placeholder {
+                        color: #adadad;
+                    }
                 }
             }
         }
