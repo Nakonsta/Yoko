@@ -104,6 +104,7 @@
         &__filter {
             width: rem(276px);
             flex: none;
+            transform: translateY(rem(-15px));
             @media(max-width: 768px) {
                 display: none;
             }
