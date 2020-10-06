@@ -1,4 +1,5 @@
 @import "../variables/variables"
+@import "../mixins/fluid-mixin"
 @import "../mixins/mq"
 
 .section
@@ -18,3 +19,10 @@
         margin-bottom: rem(104px)
         @media(max-width: 600px)
             margin-bottom: rem(56px)
+    &--welcome
+        padding: rem(136px) 0 rem(176px)
+        @include mq($until: large)
+            padding-bottom: rem(163px)
+        @include mq($until: widescreen)
+            padding-top: rem(92px)
+            padding-bottom: rem(98px)

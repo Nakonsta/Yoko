@@ -1,9 +1,92 @@
 extends ../layouts/default
 
 block default
-    - var title = 'Новости детальная';
-    - var pageClass = 'page-main'
+    - let title = 'Главная';
+    - let pageClass = 'page-main'
 
 block content
+    .section.section--welcome.welcome
+        .container
+            .welcome__title Корпоративные закупки и продажи онлайн
+            .welcome__wrap
+                form.welcome__search.js-search
+                    input(type="text" placeholder="Введите номер процедуры или ключевое слово")
+                    button(type="submit"): svg.sprite-search: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#search")
+                .welcome__counters
+                    p #[span > 10 тыс.] новых закупок каждый день
+                    p #[span 1.5 млн.] проведенных процедур
+                    p #[span 26 трлн. ₽] общая сумма процедур
 
-    div
+    .section.section--join.join
+        .container
+            .join__item
+                svg.join__item-icon.sprite-cart: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#cart")
+                a.join__item-title(href="#") Стать #[span заказчиком]
+                    | #[svg.sprite-arr: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#arr")]
+                p Экономьте до 20% на закупках, выбирая из предложений #[span 471 219] поставщиков.
+            .join__item
+                svg.join__item-icon.sprite-cart: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#box")
+                a.join__item-title(href="#") Стать #[span поставщиком]
+                    | #[svg.sprite-arr: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#arr")]
+                p Участвуйте в #[span 6 518] актуальных закупках крупнейших компаний.
+    .section.section--green
+        .container
+            -
+                let items = [
+                    {
+                        href: '#',
+                        sprite: 'token',
+                        title: 'Электронная подпись',
+                        desc: 'Позволяет подтвердить авторство электронного документа, например, аккаунт в криптовалютной системе',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'weight',
+                        title: 'Расчёт веса кабеля',
+                        desc: 'Калькулятор выдаст информацию о том, сколько весит выбранная марка кабеля с учетом длины.',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'loading',
+                        title: 'Расчёт схемы погрузки',
+                        desc: 'Узнать какой транспорт подойдет для перевозки вашей продукции можно прямо сейчас.',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'logistic',
+                        title: 'Логистика',
+                        desc: 'Управление материальными, информационными и людскими потоками с целью их оптимизации.',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'insurance',
+                        title: 'Страхование',
+                        desc: 'Позволяет подтвердить авторство электронного документа, например, аккаунт в криптовалютной системе',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'accept',
+                        title: 'Приёмка продукции специалистом',
+                        desc: 'Позволяет подтвердить авторство электронного документа, например, аккаунт в криптовалютной системе',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'trinity',
+                        title: 'Факторинг',
+                        desc: 'Калькулятор выдаст информацию о том, сколько весит выбранная марка кабеля с учетом длины.',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'percent',
+                        title: 'Кредитование',
+                        desc: 'Узнать какой транспорт подойдет для перевозки вашей продукции можно прямо сейчас.',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'bank',
+                        title: 'Аккредитив',
+                        desc: 'Управление материальными, информационными и людскими потоками с целью их оптимизации.',
+                    },
+                ];
+            include  ../mixin/info-slider
+            +info-slider(items)
