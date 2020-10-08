@@ -26,3 +26,51 @@
         @include mq($until: widescreen)
             padding-top: rem(92px)
             padding-bottom: rem(98px)
+
+    &__head
+        display: flex
+        justify-content: space-between
+
+        @include mq($until: tablet)
+            // чтобы было куда выводить навигацию слайдеров
+            &.with-slider
+                padding-right: 120px !important
+
+    &__title
+        margin: 0 0 rem(32px)
+        font-size: rem(32px)
+        line-height: (45/32)
+        color: $colorText
+        font-family: $fontGilroy
+
+        @include mq($until: tablet)
+            margin-bottom: rem(28px)
+            font-size: rem(28px)
+            line-height: (40/28)
+
+    &__all
+        margin: 0 0 rem(42px) rem(30px)
+        white-space: nowrap
+        font-size: 16px
+        line-height: (40/16)
+        color: $colorTurquoise
+        font-family: $fontGilroy
+        transition: color $animation
+        
+        @include mq($until: tablet)
+            margin-bottom: rem(32px)
+
+        svg
+            display: inline-block
+            vertical-align: middle
+            margin-left: 16px
+            fill: $colorTurquoise
+
+        &:hover
+            color: $colorTurquoiseHover
+
+            span
+                color: $colorTurquoiseHover
+
+            svg
+                fill: $colorTurquoiseHover
