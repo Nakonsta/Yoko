@@ -16,8 +16,8 @@
         <div class="catalog__items">
             <template v-if="catalogItem.length">
                 <div
-                        v-for="(item, index) in catalogItem"
-                        class="catalog__item"
+                    v-for="(item, index) in catalogItem"
+                    class="catalog__item"
                 >
                     <div class="catalog__item-head">
                     <span class="catalog__item-name">
@@ -34,28 +34,33 @@
                         <!--                    >-->
                         <!--                        {{ product.title }}-->
                         <!--                    </a>-->
-                        <a :href="product.url"
-                           v-for="product in item.items"
-                           class="catalog__product"
-                        >
-                            {{ product.title }}
-                        </a>
+                        <template v-if="item.items.length">
+                            <a :href="product.url"
+                               v-for="product in item.items"
+                               class="catalog__product"
+                            >
+                                {{ product.title }}
+                            </a>
+                        </template>
+                        <div class="catalog__not-mark" v-else>
+                            Нет марок
+                        </div>
                     </div>
                     <div
-                            v-if="item.items.length > showQuantityProduct"
-                            class="catalog__more"
+                        v-if="item.items.length > showQuantityProduct"
+                        class="catalog__more"
                     >
                     <span
-                            v-if="item.showFlag"
-                            @click="toggleBlock(catalogItem, index)"
+                        v-if="item.showFlag"
+                        @click="toggleBlock(catalogItem, index)"
                     >
                         Скрыть
                     </span>
                         <span
-                                v-else
-                                @click="toggleBlock(catalogItem, index)"
+                            v-else
+                            @click="toggleBlock(catalogItem, index)"
                         >
-                        Показать все
+                        Загрузить еще
                     </span>
                     </div>
                 </div>
@@ -83,7 +88,7 @@
         },
         data() {
             return {
-                showQuantityProduct: 7
+                showQuantityProduct: 20
             }
         },
         methods: {
@@ -177,6 +182,9 @@
                 border-color: $colorTurquoise;
                 color: #fff;
             }
+        }
+        &__not-mark {
+            margin: 0 rem(8px);
         }
         &__head {
             display: flex;

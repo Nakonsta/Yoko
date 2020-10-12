@@ -16,7 +16,20 @@
                 <catalogBlock
                     :catalog-item="catalog"
                     :totalProducts="totalProducts"
+
                 />
+<!--                <InfiniteLoading-->
+<!--                    v-if="catalog.length"-->
+<!--                    @infinite="infiniteHandler"-->
+<!--                >-->
+<!--                </InfiniteLoading>-->
+                <div
+                    v-if="catalog.length && page < totalPages"
+                    class="news-list__more"
+                    @click="more"
+                >
+                    Загрузить ещё
+                </div>
             </div>
         </div>
     </div>
@@ -42,14 +55,34 @@
                 filter: [],
                 catalog: [],
                 totalProducts: 0,
+                weightFilter: [],
+                page: 1,
+                tMark: 4,
             }
+        },
+        computed: {
+            totalPages() {
+                return Math.ceil(this.weightFilter.values.length / this.tMark)
+            },
+            pageWeightFilter() {
+                const index = (this.page - 1) * this.tMark
+                return this.weightFilter.values.slice(index, index + this.tMark)
+            },
         },
         created() {
             this.getFilterData()
         },
         methods: {
-            changeFilter() {
+            infiniteHandler(infiniteState) {
+                console.log(111)
+                infiniteState.complete();
+            },
+            more() {
+                this.page += 1
                 this.getCatalogData(this.currentFilter)
+            },
+            changeFilter() {
+                this.getCatalogData(this.currentFilter, true)
             },
             getWeightFilter() {
                 let weightFilter = null
@@ -78,42 +111,58 @@
                 this.fetchFilter()
                     .then((data) => {
                         this.setFilterData(data.data.data)
-                        this.getCatalogData()
+                        this.getCatalogData(null, true)
                     })
                     .catch((e) => {
                         console.log(e)
                     })
             },
-            getCatalogData(filterValues = null) {
-                const weightFilter = this.getWeightFilter()
-                this.clearCatalog()
+            getCatalogData(filterValues = null, clearCatalog) {
+                this.weightFilter = this.getWeightFilter()
 
-                weightFilter.values.forEach((value) => {
-                    const group = this.getGroup(weightFilter.id, value)
+                if (clearCatalog) {
+                    this.clearCatalog()
+                }
 
-                    this.fetchCatalog(group, filterValues)
-                        .then((data) => {
-                            let catalogItem = data.data.data
+                this.fetchTotalCatalog(filterValues)
+                    .then((data) => {
+                        const total = data.data.data.total
 
-                            catalogItem.group = group
+                        this.setTotalCounterProducts(total)
 
-                            this.setCatalogData(catalogItem)
+                        this.pageWeightFilter.forEach((value) => {
+                            const group = this.getGroup(this.weightFilter.id, value)
+
+                            this.fetchCatalog(group, filterValues)
+                                .then((data) => {
+                                    let catalogItem = data.data.data
+
+                                    catalogItem.group = group
+
+                                    this.setCatalogData(catalogItem)
+                                })
+                                .catch((e) => {
+                                    console.log(e)
+                                })
                         })
-                        .catch((e) => {
-                            console.log(e)
-                        })
-                })
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+
             },
             setFilterData(data) {
                 this.filter = data
             },
             clearCatalog() {
+                this.page = 1
                 this.catalog = []
             },
             setCatalogData(data) {
-                if (data.items.length) {
-                    this.catalog.push(data)
-                }
+                // if (data.items.length) {
+                //     this.catalog.push(data)
+                // }
+                this.catalog.push(data)
             },
             setTotalCounterProducts(total) {
                 this.totalProducts = total
@@ -132,6 +181,10 @@
 <style lang="scss" scoped>
     @import "../assets/sass/variables/fluid-variables";
     @import "../assets/sass/mixins/fluid-mixin";
+
+    .news-list__more {
+        margin-top: rem(24px);
+    }
 
     .catalog {
         &__flex {

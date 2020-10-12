@@ -14,6 +14,15 @@ export default {
 
             return axios.post(`https://stage-content.ec.extyl.pro/api/catalog/`, body);
         },
+        fetchTotalCatalog(filter) {
+            let body = {}
+
+            if (filter) {
+                body.filter = filter
+            }
+
+            return axios.post(`https://stage-content.ec.extyl.pro/api/catalog/total/`, body);
+        },
         fetchListSearchCatalog(string) {
             return axios.get(`https://stage-content.ec.extyl.pro/api/catalog/search/`, {
                 params: {
