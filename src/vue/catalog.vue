@@ -16,7 +16,7 @@
                 <catalogBlock
                     :catalog-item="catalog"
                     :totalProducts="totalProducts"
-
+                    @moreTypeMark="moreTypeMark"
                 />
 <!--                <InfiniteLoading-->
 <!--                    v-if="catalog.length"-->
@@ -73,6 +73,18 @@
             this.getFilterData()
         },
         methods: {
+            moreTypeMark(typeMark) {
+                this.fetchCatalog(typeMark.group, this.currentFilter, 2)
+                    .then((response) => {
+                        const markItems = response.data.data.items
+                        markItems.forEach((item) => {
+                            typeMark.items.push(item)
+                        })
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+            },
             infiniteHandler(infiniteState) {
                 console.log(111)
                 infiniteState.complete();
@@ -162,18 +174,12 @@
                 // if (data.items.length) {
                 //     this.catalog.push(data)
                 // }
+                data.page = 1
                 this.catalog.push(data)
             },
             setTotalCounterProducts(total) {
                 this.totalProducts = total
             },
-            addShowFlag(arr) {
-                arr.forEach((item, index) => {
-                    arr[index].showFlag = false
-                })
-
-                return arr
-            }
         },
     }
 </script>

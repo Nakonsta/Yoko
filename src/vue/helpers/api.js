@@ -3,9 +3,9 @@ export default {
         fetchFilter() {
             return axios.get(`https://stage-content.ec.extyl.pro/api/catalog/filter/`);
         },
-        fetchCatalog(group, filter) {
+        fetchCatalog(group, filter, page = 1) {
             let body = {}
-            body.page = 1
+            body.page = page
             body.group = group
 
             if (filter) {

@@ -47,18 +47,11 @@
                         </div>
                     </div>
                     <div
-                        v-if="item.items.length > showQuantityProduct"
+                        v-if="item.page < totalPages(item.total)"
                         class="catalog__more"
                     >
-                    <span
-                        v-if="item.showFlag"
-                        @click="toggleBlock(catalogItem, index)"
-                    >
-                        Скрыть
-                    </span>
                         <span
-                            v-else
-                            @click="toggleBlock(catalogItem, index)"
+                            @click="more(item)"
                         >
                         Загрузить еще
                     </span>
@@ -88,10 +81,14 @@
         },
         data() {
             return {
-                showQuantityProduct: 20
+                showQuantityProduct: 20,
+                page: 1,
             }
         },
         methods: {
+            totalPages(total) {
+                return Math.ceil(total / this.showQuantityProduct)
+            },
             getNameOfNum(number) {
                 let list = [
                     'марка',
@@ -100,6 +97,10 @@
                 ]
 
                 return functions.declOfNum(number, list)
+            },
+            more(typeMark) {
+                typeMark.page += 1
+                this.$emit('moreTypeMark', typeMark)
             },
             openPopupById(id) {
                 window.openPopupById(id)
