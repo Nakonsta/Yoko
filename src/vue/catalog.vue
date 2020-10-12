@@ -171,10 +171,9 @@
                 this.catalog = []
             },
             setCatalogData(data) {
-                // if (data.items.length) {
-                //     this.catalog.push(data)
-                // }
+                // todo: вынести карточку в отдельный компонент и сделать там свою data page
                 data.page = 1
+
                 this.catalog.push(data)
             },
             setTotalCounterProducts(total) {

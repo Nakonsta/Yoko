@@ -15,6 +15,7 @@
         </div>
         <div class="catalog__items">
             <template v-if="catalogItem.length">
+<!--                todo: вынести карточку в отдельный компонент и сделать там свою data page-->
                 <div
                     v-for="(item, index) in catalogItem"
                     class="catalog__item"
