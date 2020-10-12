@@ -7,8 +7,9 @@
             <div ref="filterContainer" class="catalog__filter">
                 <filterBlock
                     :filter="filter"
+                    :currentFilter="currentFilter"
                     :filterContainer="this.$refs.filterContainer"
-                    @changeFilter="getCatalogData"
+                    @changeFilter="changeFilter"
                 />
             </div>
             <div class="catalog__body">
@@ -37,7 +38,7 @@
         mixins: [api],
         data() {
             return {
-                url: 'https://d1.aspect.extyl.pro',
+                currentFilter: {},
                 filter: [],
                 catalog: [],
                 totalProducts: 0,
@@ -45,40 +46,76 @@
         },
         created() {
             this.getFilterData()
-            this.getCatalogData()
         },
         methods: {
+            changeFilter() {
+                this.getCatalogData(this.currentFilter)
+            },
+            getWeightFilter() {
+                let weightFilter = null
+
+                for (const currentFilterKey in this.currentFilter) {
+                    this.filter.forEach((item, index) => {
+                        if (item.id === currentFilterKey) {
+                            if (index < this.filter.length - 1) {
+                                weightFilter = this.filter[index + 1]
+                            } else {
+                                weightFilter = this.filter[index]
+                            }
+                        }
+                    })
+                }
+
+                return weightFilter ? weightFilter : this.filter[0]
+            },
+            getGroup(property, value) {
+                return {
+                    property: property,
+                    value: value,
+                }
+            },
             getFilterData() {
                 this.fetchFilter()
                     .then((data) => {
                         this.setFilterData(data.data.data)
+                        this.getCatalogData()
                     })
                     .catch((e) => {
                         console.log(e)
                     })
             },
             getCatalogData(filterValues = null) {
-                this.fetchCatalog(filterValues)
-                    .then((data) => {
-                        this.setCatalogData(data.data.data)
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                    })
+                const weightFilter = this.getWeightFilter()
+                this.clearCatalog()
+
+                weightFilter.values.forEach((value) => {
+                    const group = this.getGroup(weightFilter.id, value)
+
+                    this.fetchCatalog(group, filterValues)
+                        .then((data) => {
+                            let catalogItem = data.data.data
+
+                            catalogItem.group = group
+
+                            this.setCatalogData(catalogItem)
+                        })
+                        .catch((e) => {
+                            console.log(e)
+                        })
+                })
             },
             setFilterData(data) {
                 this.filter = data
             },
-            setCatalogData(data) {
-                this.catalog = this.addShowFlag(data)
-                this.setTotalCounterProducts(this.catalog)
+            clearCatalog() {
+                this.catalog = []
             },
-            setTotalCounterProducts(arr) {
-                let total = 0
-                arr.forEach((item) => {
-                    total = total + item.total
-                })
-
+            setCatalogData(data) {
+                if (data.items.length) {
+                    this.catalog.push(data)
+                }
+            },
+            setTotalCounterProducts(total) {
                 this.totalProducts = total
             },
             addShowFlag(arr) {

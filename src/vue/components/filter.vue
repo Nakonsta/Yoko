@@ -53,11 +53,15 @@
             },
             filterContainer: {
                 type: HTMLDivElement
-            }
+            },
+            currentFilter: {
+                default: () => {},
+                type: Object
+            },
         },
         data() {
             return {
-                currentFilter: {},
+                // currentFilter: {},
                 mobileFilter: false,
                 showFullFilter: false
             }
@@ -90,7 +94,7 @@
                 } else {
                     this.removeValue(group, value)
                 }
-                this.$emit('changeFilter', this.currentFilter)
+                this.$emit('changeFilter')
             },
             addValue(group, value) {
                 if (this.currentFilter[group]) {

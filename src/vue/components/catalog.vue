@@ -14,43 +14,54 @@
             </span>
         </div>
         <div class="catalog__items">
-            <div
-                v-for="(item, index) in catalogItem"
-                class="catalog__item"
-            >
-                <div class="catalog__item-head">
+            <template v-if="catalogItem.length">
+                <div
+                        v-for="(item, index) in catalogItem"
+                        class="catalog__item"
+                >
+                    <div class="catalog__item-head">
                     <span class="catalog__item-name">
-                        {{ item.value }}
+                        {{ item.group.value }}
                     </span>
-                    <span class="catalog__item-counter">
+                        <span class="catalog__item-counter">
                         {{ item.total }} {{ getNameOfNum(item.total) }}
                     </span>
-                </div>
-                <div class="catalog__item-body">
-                    <a :href="product.url"
-                      v-for="product in item.showFlag ? item.items : item.items.slice(0, showQuantityProduct)"
-                      class="catalog__product"
+                    </div>
+                    <div class="catalog__item-body">
+                        <!--                    <a :href="product.url"-->
+                        <!--                      v-for="product in item.showFlag ? item.items : item.items.slice(0, showQuantityProduct)"-->
+                        <!--                      class="catalog__product"-->
+                        <!--                    >-->
+                        <!--                        {{ product.title }}-->
+                        <!--                    </a>-->
+                        <a :href="product.url"
+                           v-for="product in item.items"
+                           class="catalog__product"
+                        >
+                            {{ product.title }}
+                        </a>
+                    </div>
+                    <div
+                            v-if="item.items.length > showQuantityProduct"
+                            class="catalog__more"
                     >
-                        {{ product.title }}
-                    </a>
-                </div>
-                <div
-                    v-if="item.items.length > showQuantityProduct"
-                    class="catalog__more"
-                >
                     <span
-                        v-if="item.showFlag"
-                        @click="toggleBlock(catalogItem, index)"
+                            v-if="item.showFlag"
+                            @click="toggleBlock(catalogItem, index)"
                     >
                         Скрыть
                     </span>
-                    <span
-                        v-else
-                        @click="toggleBlock(catalogItem, index)"
-                    >
+                        <span
+                                v-else
+                                @click="toggleBlock(catalogItem, index)"
+                        >
                         Показать все
                     </span>
+                    </div>
                 </div>
+            </template>
+            <div v-if="!catalogItem.length">
+                Нет результатов
             </div>
         </div>
     </div>
@@ -68,7 +79,7 @@
             totalProducts: {
                 default: 0,
                 type: Number
-            }
+            },
         },
         data() {
             return {
