@@ -7,7 +7,7 @@
                 {{ item.group.value }}
             </span>
             <span class="catalog__item-counter">
-                {{ item.total }} {{ getNameOfNum(item.total) }}
+                Найдено: {{ item.total }}
             </span>
         </div>
         <div class="catalog__item-body">
@@ -83,7 +83,7 @@
             getNameOfNum(number) {
                 let list = [
                     'марка',
-                    'марок',
+                    'марки',
                     'марок',
                 ]
 

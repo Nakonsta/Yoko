@@ -22,16 +22,13 @@
             <template v-if="catalogItem.length">
                 <transition-group name="fade">
                     <marksCard
-                        v-for="(item, index) in catalogItem"
+                        v-for="(item) in catalogItem"
                         :key="item.group.value"
                         :item="item"
                         @more="more"
                     />
                 </transition-group>
             </template>
-            <div v-if="!catalogItem.length">
-                Нет результатов
-            </div>
         </div>
     </div>
 </template>
