@@ -141,27 +141,26 @@
                         const total = data.data.data.total
 
                         this.setTotalCounterProducts(total)
-
-                        this.pageWeightFilter.forEach((value) => {
-                            const group = this.getGroup(this.weightFilter.id, value)
-
-                            this.fetchCatalog(group, filterValues)
-                                .then((data) => {
-                                    let catalogItem = data.data.data
-
-                                    catalogItem.group = group
-
-                                    this.setCatalogData(catalogItem)
-                                })
-                                .catch((e) => {
-                                    console.log(e)
-                                })
-                        })
                     })
                     .catch((e) => {
                         console.log(e)
                     })
 
+                this.pageWeightFilter.forEach((value) => {
+                    const group = this.getGroup(this.weightFilter.id, value)
+
+                    this.fetchCatalog(group, filterValues)
+                        .then((data) => {
+                            let catalogItem = data.data.data
+
+                            catalogItem.group = group
+
+                            this.setCatalogData(catalogItem)
+                        })
+                        .catch((e) => {
+                            console.log(e)
+                        })
+                })
             },
             setFilterData(data) {
                 this.filter = data
@@ -171,9 +170,7 @@
                 this.catalog = []
             },
             setCatalogData(data) {
-                // todo: вынести карточку в отдельный компонент и сделать там свою data page
                 data.page = 1
-
                 this.catalog.push(data)
             },
             setTotalCounterProducts(total) {

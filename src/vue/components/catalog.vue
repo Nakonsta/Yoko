@@ -15,49 +15,6 @@
         </div>
         <div class="catalog__items">
             <template v-if="catalogItem.length">
-<!--                todo: вынести карточку в отдельный компонент и сделать там свою data page-->
-<!--                <div-->
-<!--                    v-for="(item, index) in catalogItem"-->
-<!--                    class="catalog__item"-->
-<!--                >-->
-<!--                    <div class="catalog__item-head">-->
-<!--                    <span class="catalog__item-name">-->
-<!--                        {{ item.group.value }}-->
-<!--                    </span>-->
-<!--                        <span class="catalog__item-counter">-->
-<!--                        {{ item.total }} {{ getNameOfNum(item.total) }}-->
-<!--                    </span>-->
-<!--                    </div>-->
-<!--                    <div class="catalog__item-body">-->
-<!--                        &lt;!&ndash;                    <a :href="product.url"&ndash;&gt;-->
-<!--                        &lt;!&ndash;                      v-for="product in item.showFlag ? item.items : item.items.slice(0, showQuantityProduct)"&ndash;&gt;-->
-<!--                        &lt;!&ndash;                      class="catalog__product"&ndash;&gt;-->
-<!--                        &lt;!&ndash;                    >&ndash;&gt;-->
-<!--                        &lt;!&ndash;                        {{ product.title }}&ndash;&gt;-->
-<!--                        &lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--                        <template v-if="item.items.length">-->
-<!--                            <a :href="product.url"-->
-<!--                               v-for="product in item.items"-->
-<!--                               class="catalog__product"-->
-<!--                            >-->
-<!--                                {{ product.title }}-->
-<!--                            </a>-->
-<!--                        </template>-->
-<!--                        <div class="catalog__not-mark" v-else>-->
-<!--                            Нет марок-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div-->
-<!--                        v-if="item.page < totalPages(item.total)"-->
-<!--                        class="catalog__more"-->
-<!--                    >-->
-<!--                        <span-->
-<!--                            @click="more(item)"-->
-<!--                        >-->
-<!--                        Загрузить еще-->
-<!--                    </span>-->
-<!--                    </div>-->
-<!--                </div>-->
                 <transition-group name="fade">
                     <marksCard
                         v-for="(item, index) in catalogItem"
