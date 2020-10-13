@@ -158,18 +158,18 @@
 
                 this.loadingCatalog = true
 
-                this.fetchTotalCatalog(filterValues)
-                    .then((data) => {
-                        const total = data.data.data.total
-
-                        this.setTotalCounterProducts(total)
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                    })
-
                 this.pageWeightFilter.forEach((value) => {
                     const group = this.getGroup(this.weightFilter.id, value)
+
+                    this.fetchTotalCatalog(group, filterValues)
+                        .then((data) => {
+                            const total = data.data.data.total
+
+                            this.setTotalCounterProducts(total)
+                        })
+                        .catch((e) => {
+                            console.log(e)
+                        })
 
                     this.fetchCatalog(group, filterValues)
                         .then((data) => {

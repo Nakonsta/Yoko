@@ -31,8 +31,9 @@ export default {
                 { cancelToken: this.CancelTokens.catalogCancelToken.token },
             );
         },
-        fetchTotalCatalog(filter) {
+        fetchTotalCatalog(group, filter) {
             let body = {}
+            body.group = group
 
             if (filter) {
                 body.filter = filter
