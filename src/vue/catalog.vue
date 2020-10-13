@@ -74,7 +74,7 @@
         },
         methods: {
             moreTypeMark(typeMark) {
-                this.fetchCatalog(typeMark.group, this.currentFilter, 2)
+                this.fetchCatalog(typeMark.group, this.currentFilter, typeMark.page)
                     .then((response) => {
                         const markItems = response.data.data.items
                         markItems.forEach((item) => {
