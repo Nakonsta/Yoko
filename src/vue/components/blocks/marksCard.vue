@@ -28,7 +28,7 @@
             </div>
         </div>
         <div
-            v-if="item.page < totalPages(item.total)"
+            v-if="item.page < totalPages(item.total) && !loader"
             class="catalog__more"
         >
             <span
@@ -36,6 +36,9 @@
             >
                 Загрузить еще
             </span>
+        </div>
+        <div v-if="loader">
+            Загрузка...
         </div>
     </div>
 </template>
@@ -54,12 +57,24 @@
         data() {
             return {
                 showQuantityProduct: 20,
+                loader: false
+            }
+        },
+        computed: {
+            marks() {
+                return this.item.items
+            }
+        },
+        watch: {
+            marks() {
+                this.loader = false
             }
         },
         methods: {
             more(item) {
                 console.log(item)
                 item.page += 1
+                this.loader = true
                 this.$emit('more', item)
             },
             totalPages(total) {
