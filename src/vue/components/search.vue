@@ -13,15 +13,13 @@
                 selectedLabel=""
                 selectLabel=""
                 deselectLabel=""
-                track-by="title"
+                track-by="url"
                 label="title"
-                group-values="items"
-                group-label="groupTitle"
-                :group-select="false"
                 open-direction="bottom"
                 :loading="isLoading"
                 :internal-search="false"
                 :preserveSearch="true"
+                @select="selectValue"
                 @search-change="getListSearchCatalog"
             >
                 <template v-slot:caret>
@@ -58,16 +56,21 @@
             }
         },
         methods: {
+            selectValue(value) {
+                // window.location.href = value.url
+            },
             getListSearchCatalog(string) {
                 console.log(string)
                 clearInterval(this.searchCounter)
                 if (string) {
                     this.searchCounter = setTimeout(() => {
                         this.isLoading = true
+                        this.cleanSearch()
                         this.fetchListSearchCatalog(string)
                             .then((data) => {
-                                this.startValueSearch()
-                                this.groupingSearchList(data.data.data)
+                                // this.startValueSearch()
+                                // this.groupingSearchList(data.data.data)
+                                this.options = data.data.data
                                 this.isLoading = false
                             })
                             .catch((e) => {

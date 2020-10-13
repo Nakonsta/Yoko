@@ -2,7 +2,12 @@
     <div class="catalog">
         <div class="catalog__head">
             <div class="catalog__counter">
-                Найдено <span>{{ totalProducts }}</span>
+                <template v-if="totalProducts !== -1">
+                    Найдено <span>{{ totalProducts }}</span>
+                </template>
+                <template v-else>
+                    <span>Загрузка...</span>
+                </template>
             </div>
             <span class="catalog__filter-button popup-link" @click="openPopupById('filter-modal')">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -14,52 +19,29 @@
             </span>
         </div>
         <div class="catalog__items">
-            <div
-                v-for="(item, index) in catalogItem"
-                class="catalog__item"
-            >
-                <div class="catalog__item-head">
-                    <span class="catalog__item-name">
-                        {{ item.value }}
-                    </span>
-                    <span class="catalog__item-counter">
-                        {{ item.total }} {{ getNameOfNum(item.total) }}
-                    </span>
-                </div>
-                <div class="catalog__item-body">
-                    <a :href="product.url"
-                      v-for="product in item.showFlag ? item.items : item.items.slice(0, showQuantityProduct)"
-                      class="catalog__product"
-                    >
-                        {{ product.title }}
-                    </a>
-                </div>
-                <div
-                    v-if="item.items.length > showQuantityProduct"
-                    class="catalog__more"
-                >
-                    <span
-                        v-if="item.showFlag"
-                        @click="toggleBlock(catalogItem, index)"
-                    >
-                        Скрыть
-                    </span>
-                    <span
-                        v-else
-                        @click="toggleBlock(catalogItem, index)"
-                    >
-                        Показать все
-                    </span>
-                </div>
-            </div>
+            <template v-if="catalogItem.length">
+                <transition-group name="fade">
+                    <marksCard
+                        v-for="(item) in catalogItem"
+                        :key="item.group.value"
+                        :item="item"
+                        @more="more"
+                    />
+                </transition-group>
+            </template>
         </div>
     </div>
 </template>
 
 <script>
     import functions from "../helpers/functions";
+    import marksCard from "./blocks/marksCard.vue";
+
     export default {
         name: 'CatalogBlock',
+        components: {
+            marksCard
+        },
         props: {
             catalogItem: {
                 default: () => [],
@@ -68,14 +50,18 @@
             totalProducts: {
                 default: 0,
                 type: Number
-            }
+            },
         },
         data() {
             return {
-                showQuantityProduct: 7
+                showQuantityProduct: 20,
+                page: 1,
             }
         },
         methods: {
+            totalPages(total) {
+                return Math.ceil(total / this.showQuantityProduct)
+            },
             getNameOfNum(number) {
                 let list = [
                     'марка',
@@ -85,12 +71,12 @@
 
                 return functions.declOfNum(number, list)
             },
+            more(typeMark) {
+                this.$emit('moreTypeMark', typeMark)
+            },
             openPopupById(id) {
                 window.openPopupById(id)
             },
-            toggleBlock(arr, index) {
-                arr[index].showFlag = !arr[index].showFlag
-            }
         }
     }
 </script>
@@ -166,6 +152,9 @@
                 border-color: $colorTurquoise;
                 color: #fff;
             }
+        }
+        &__not-mark {
+            margin: 0 rem(8px);
         }
         &__head {
             display: flex;
