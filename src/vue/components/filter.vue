@@ -6,35 +6,50 @@
            'filter--mobile': mobileFilter
         }"
     >
-        <spoiler
-            v-for="item in showFullFilter ? filter : filter.slice(0, 5)"
-        >
-            <template v-slot:header>
-                <b>{{ item.value }}</b>
-            </template>
-            <template v-slot:body>
-                <div>
-                    <div
-                        v-for="value in item.values"
-                        class="filter__checkbox"
-                    >
-                        <label class="checkbox">
-                            <input type="checkbox" @change="(e) => changeFilter(item.id, value, e.target.checked)">
-                            <span class="checkbox__body"></span>
-                            <span class="checkbox__text">
+        <template v-if="!loading">
+            <transition-group name="fade-left">
+                <spoiler
+                    v-for="item in showFullFilter ? filter : filter.slice(0, 5)"
+                    :key="item.id"
+                >
+                    <template v-slot:header>
+                        <b>{{ item.value }}</b>
+                    </template>
+                    <template v-slot:body>
+                        <div>
+                            <div
+                                    v-for="value in item.values"
+                                    class="filter__checkbox"
+                            >
+                                <label class="checkbox">
+                                    <input type="checkbox" @change="(e) => changeFilter(item.id, value, e.target.checked)">
+                                    <span class="checkbox__body"></span>
+                                    <span class="checkbox__text">
                             {{ value }}
                         </span>
-                        </label>
+                                </label>
+                            </div>
+                        </div>
+                    </template>
+                </spoiler>
+            </transition-group>
+            <div
+                class="filter__more"
+                @click="showFullFilter = !showFullFilter"
+            >
+                <b>{{showFullFilter ? 'Скрыть фильтры' : 'Все фильтры'}}</b>
+            </div>
+        </template>
+        <template v-if="loading">
+            <div class="filter__loader">
+                <div class="preloader">
+                    <div class="preloader__preloader">
+                        <div class="preloader__loader"></div>
                     </div>
                 </div>
-            </template>
-        </spoiler>
-        <div
-            class="filter__more"
-            @click="showFullFilter = !showFullFilter"
-        >
-            <b>{{showFullFilter ? 'Скрыть фильтры' : 'Все фильтры'}}</b>
-        </div>
+            </div>
+        </template>
+
     </div>
 </template>
 
@@ -47,6 +62,10 @@
             spoiler
         },
         props: {
+            loading: {
+                default: false,
+                type: Boolean
+            },
             filter: {
                 default: () => [],
                 type: Array
@@ -144,6 +163,10 @@
             font-size: rem(14px);
             text-transform: uppercase;
             color: $colorTurquoise;
+        }
+        &__loader {
+            position: relative;
+            height: 400px;
         }
     }
 </style>

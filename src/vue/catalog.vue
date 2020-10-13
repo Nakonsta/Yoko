@@ -6,6 +6,7 @@
         <div class="catalog__flex">
             <div ref="filterContainer" class="catalog__filter">
                 <filterBlock
+                    :loading="loadingFilter"
                     :filter="filter"
                     :currentFilter="currentFilter"
                     :filterContainer="this.$refs.filterContainer"
@@ -23,6 +24,19 @@
 <!--                    @infinite="infiniteHandler"-->
 <!--                >-->
 <!--                </InfiniteLoading>-->
+                <div
+                    v-if="loadingCatalog"
+                    class="catalog__loader"
+                    :class="{
+                        'catalog__loader--absolute': catalog.length
+                    }"
+                >
+                    <div class="preloader">
+                        <div class="preloader__preloader">
+                            <div class="preloader__loader"></div>
+                        </div>
+                    </div>
+                </div>
                 <div
                     v-if="catalog.length && page < totalPages"
                     class="news-list__more"
@@ -51,6 +65,8 @@
         mixins: [api],
         data() {
             return {
+                loadingFilter: true,
+                loadingCatalog: true,
                 currentFilter: {},
                 filter: [],
                 catalog: [],
@@ -94,6 +110,7 @@
                 this.getCatalogData(this.currentFilter)
             },
             changeFilter() {
+                this.cancelCatalogRequest()
                 this.getCatalogData(this.currentFilter, true)
             },
             getWeightFilter() {
@@ -124,9 +141,11 @@
                     .then((data) => {
                         this.setFilterData(data.data.data)
                         this.getCatalogData(null, true)
+                        this.loadingFilter = false
                     })
                     .catch((e) => {
                         console.log(e)
+                        this.loadingFilter = false
                     })
             },
             getCatalogData(filterValues = null, clearCatalog) {
@@ -135,6 +154,8 @@
                 if (clearCatalog) {
                     this.clearCatalog()
                 }
+
+                this.loadingCatalog = true
 
                 this.fetchTotalCatalog(filterValues)
                     .then((data) => {
@@ -156,6 +177,8 @@
                             catalogItem.group = group
 
                             this.setCatalogData(catalogItem)
+
+                            this.loadingCatalog = false
                         })
                         .catch((e) => {
                             console.log(e)
@@ -168,6 +191,7 @@
             clearCatalog() {
                 this.page = 1
                 this.catalog = []
+                this.totalProducts = -1
             },
             setCatalogData(data) {
                 data.page = 1
@@ -203,6 +227,43 @@
         }
         &__body {
             width: 100%;
+            position: relative;
+        }
+        &__loader {
+            position: relative;
+            height: 400px;
+            animation: blur 1.5s linear forwards;
+            &--absolute {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 100%;
+                width: 100%;
+                z-index: 2;
+                padding: 10px;
+                box-sizing: content-box;
+                .preloader {
+                    background-color: transparent;
+                }
+                .preloader__loader {
+                    position: sticky;
+                    top: 0;
+                }
+                .preloader__preloader {
+                    align-items: flex-start;
+                    padding-top: 200px;
+                }
+            }
+        }
+    }
+
+    @keyframes blur {
+        0%   {
+            backdrop-filter: blur(0px);
+        }
+        100% {
+            backdrop-filter: blur(5px);
         }
     }
 </style>

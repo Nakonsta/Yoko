@@ -96,3 +96,13 @@ a
 .fade-leave-to
     opacity: 0
     transform: translateY(rem(10px)) !important
+
+.fade-left-enter-active,
+.fade-left-leave-active
+    transition: opacity .5s, transform .5s !important
+    transform: translateX(rem(0px))
+
+.fade-left-enter,
+.fade-left-leave-to
+    opacity: 0
+    transform: translateX(rem(-10px)) !important

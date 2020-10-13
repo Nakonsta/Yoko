@@ -2,7 +2,12 @@
     <div class="catalog">
         <div class="catalog__head">
             <div class="catalog__counter">
-                Найдено <span>{{ totalProducts }}</span>
+                <template v-if="totalProducts !== -1">
+                    Найдено <span>{{ totalProducts }}</span>
+                </template>
+                <template v-else>
+                    <span>Загрузка...</span>
+                </template>
             </div>
             <span class="catalog__filter-button popup-link" @click="openPopupById('filter-modal')">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
