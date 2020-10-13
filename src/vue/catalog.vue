@@ -116,17 +116,18 @@
             getWeightFilter() {
                 let weightFilter = null
 
-                for (const currentFilterKey in this.currentFilter) {
-                    this.filter.forEach((item, index) => {
+                this.filter.forEach((item, index) => {
+                    for (const currentFilterKey in this.currentFilter) {
                         if (item.id === currentFilterKey) {
                             if (index < this.filter.length - 1) {
                                 weightFilter = this.filter[index + 1]
                             } else {
-                                weightFilter = this.filter[index]
+                                weightFilter = JSON.parse(JSON.stringify(this.filter[index]))
+                                weightFilter.values = this.currentFilter[currentFilterKey]
                             }
                         }
-                    })
-                }
+                    }
+                })
 
                 return weightFilter ? weightFilter : this.filter[0]
             },
