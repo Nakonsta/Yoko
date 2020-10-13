@@ -13,7 +13,7 @@ body
     color: $colorText
     overflow-x: hidden
     height: 100% !important
-    line-height: 1.6
+    line-height: 160%
     &.lock-popup
         overflow: hidden
 
@@ -65,6 +65,20 @@ a
     padding: 0 !important
     font: inherit !important
     color: inherit
+
+.all
+    font-weight: 600
+    font-size: 30px
+    line-height: 1
+
+    @include mq($until: desktop)
+        font-size: 24px
+
+    @include mq($until: tablet)
+        font-size: 20px
+
+    a
+        color: $colorRed
 
 .js-object-fill
     object-fit: cover
