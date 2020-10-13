@@ -1,77 +1,64 @@
-@import "../variables/variables"
-@import "../mixins/fluid-mixin"
-@import "../mixins/mq"
-
 .info-slider
   position: relative
-
-  &__items
-    &:not(.swiper-wrapper)
-      display: flex
-      flex-wrap: wrap
-      margin: -32px 0 0 -32px
-
-  &__item
-    border-radius: 6px
-    padding: rem(80px) rem(32px) rem(32px)
-    height: auto
-    background-color: #fff
-    position: relative
-    overflow: hidden
-
-    &:not(.swiper-slide)
-      margin: 32px 0 0 32px
-      width: calc(25% - 32px)
-
-      @include mq($until: large)
-        width: calc(33.33% - 32px)
-
-      @include mq($until: widescreen)
-        width: calc(50% - 32px)
-
-      @include mq($until: tablet)
-        width: calc(100% - 32px)
-
-    &::before
-      content: ''
-      display: block
-      width: 123px
-      height: 98px
-      background: url("data:image/svg+xml,%3Csvg width='123' height='98' viewBox='0 0 123 98' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.683013 -9.81699L107.204 -71.317L168.704 35.2041L105.051 71.9541C81.3758 85.6232 51.1021 77.5114 37.433 53.8359L0.683013 -9.81699Z' fill='white' stroke='%2331ACB8'/%3E%3C/svg%3E") no-repeat 100% 0
-      position: absolute
-      top: 0
-      right: 0
-
-    @at-root
-      a#{&}
-        display: block
-        color: $colorText
-        background: $colorWhite
-        transition: color $animation, background $animation
-
-      &:hover
-        color: $colorWhite
-        background: $colorTurquoise
-
-    .typography--accent
+  .swiper-container
+    position: static
+  &--about
+  @include mq($until: 1439px)
+    padding: 0 8%
+  @include mq($until: tablet)
+    padding: 0
+  &__navigation-slider
+    display: flex
+    justify-content: flex-end
+    @include mq($from: large)
+      display: none
+    @include mq($until: tablet)
       margin-bottom: rem(24px)
-      min-height: rem(24px*1.4*2)
-
-    p
-      margin: rem(12px) 0
-    ul
-      position: relative
-      padding-left: rem(12px)
-      list-style-type: none
-    li
-      margin: rem(12px) 0
-
-      &:before
+    .swiper-button-prev
+      height: rem(48px)
+      width: rem(48px)
+      background-color: #fff
+      flex: none
+      display: flex
+      align-items: center
+      justify-content: center
+      border-radius: 50%
+      cursor: pointer
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+      @include mq($until: 1439px)
         position: absolute
+        top: 50%
         left: 0
-        color: $colorTurquoise
-        content: "•"
-        padding-right: 10px
+        transform: translateY(-50%)
+      @include mq($until: tablet)
+        position: static
+        transform: none
+      &.swiper-button-disabled
+        opacity: .5
+        cursor: default
+    .swiper-button-next
+      height: rem(48px)
+      width: rem(48px)
+      background-color: #fff
+      flex: none
+      display: flex
+      align-items: center
+      justify-content: center
+      border-radius: 50%
+      margin-left: rem(12px)
+      cursor: pointer
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+      @include mq($until: 1439px)
+        position: absolute
+        top: 50%
+        right: 0
+        transform: translateY(-50%)
+      @include mq($until: tablet)
+        position: static
+        transform: none
+      &.swiper-button-disabled
+        opacity: .5
+        cursor: default
 
   &__pattern
     position: absolute
@@ -83,7 +70,25 @@
     top: rem(16px)
     right: rem(26px)
 
-    svg
-      display: block
-      width: rem(40px)
-      height: rem(40px)
+  .swiper-slide
+    background-color: #fff
+    padding: rem(32px)
+    padding-top: rem(80px)
+    height: auto
+    overflow: hidden
+    .typography--accent
+      margin-bottom: rem(24px)
+    p
+      margin: rem(12px) 0
+    ul
+      position: relative
+      padding-left: rem(12px)
+      list-style-type: none
+    li
+      margin: rem(12px) 0
+      &:before
+        position: absolute
+        left: 0
+        color: $colorTurquoise
+        content: "•"
+        padding-right: 10px
