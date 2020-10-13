@@ -1,0 +1,95 @@
+.section.section--clients.clients
+    .container
+        .section__head
+            .section__title Наши клиенты
+        .clients__items.js-slider
+            -
+                var items = [
+                    {
+                        href: '#',
+                        src: './content/clients-1.jpg',
+                        title: 'ПАО «Группа компаний ПИК»',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                    {
+                        href: '#',
+                        src: './content/clients-2.jpg',
+                        title: 'ПАО «Мегафон»',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                    {
+                        href: '#',
+                        src: './content/clients-3.jpg',
+                        title: 'ООО «Велесстрой»',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                    {
+                        href: '#',
+                        src: './content/clients-4.jpg',
+                        title: 'Госкорпорация «Росатом»',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                    {
+                        href: '#',
+                        src: './content/clients-5.jpg',
+                        title: 'АО «Тандер»',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                    {
+                        href: '#',
+                        src: './content/clients-6.jpg',
+                        title: 'S7 Airlanes',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                    {
+                        href: '#',
+                        src: './content/clients-7.jpg',
+                        title: 'ООО «ГлавСтрой Санкт-Петербург»',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                    {
+                        href: '#',
+                        src: './content/clients-5.jpg',
+                        title: 'АО «Тандер»',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                    {
+                        href: '#',
+                        src: './content/clients-6.jpg',
+                        title: 'S7 Airlanes',
+                        desc: [
+                            '3 млрд. руб',
+                            '300 процедур',
+                        ],
+                    },
+                ];
+            each item in items
+                .clients__item
+                    .clients__item-image: img(src=item.src)
+                    .clients__item-title #{item.title}
+                    each line in item.desc
+                        p #{line}

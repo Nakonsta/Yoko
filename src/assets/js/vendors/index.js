@@ -47,14 +47,13 @@ import './modules/jquery.validate.min';
 import './modules/jquery.validate.additional-methods.min';
 import './modules/tooltipster.bundle.min.js';
 import './modules/jquery.scrollbar.min.js';
-// import './modules/slick.min.js';
 
-import GLightbox from 'glightbox'
-global.GLightbox = GLightbox
+import GLightbox from 'glightbox';
+global.GLightbox = GLightbox;
 
-import Swiper, { Navigation } from 'swiper'
+import Swiper, { Navigation } from 'swiper';
 Swiper.use([Navigation]);
-global.Swiper = Swiper
+global.Swiper = Swiper;
 
 import webkitLineClamp from 'webkit-line-clamp';
 global.webkitLineClamp = webkitLineClamp;
