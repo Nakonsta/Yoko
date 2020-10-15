@@ -1,95 +1,48 @@
 <template>
     <div
-        class="catalog__item"
+        class="mark-catalog__item"
     >
-        <div class="catalog__item-head">
-            <span class="catalog__item-name">
-                {{ item.group.value }}
+        <div class="mark-catalog__item-head">
+            <span class="mark-catalog__item-name">
+                Каталог
             </span>
-            <span class="catalog__item-counter">
-                Найдено: {{ item.total }}
-            </span>
-        </div>
-        <div class="catalog__item-body">
-            <template v-if="item.items.length">
-                <transition-group name="fade" style="display: flex; flex-wrap: wrap">
-                    <a
-                        v-for="product in item.items"
-                       :href="product.url"
-                       :key="product.title"
-                       class="catalog__product"
-                    >
-                        {{ product.title }}
-                    </a>
-                </transition-group>
-            </template>
-            <div class="catalog__not-mark" v-else>
-                Нет марок
-            </div>
         </div>
         <div
-            v-if="item.page < totalPages(item.total) && !loader"
-            class="catalog__more"
+            class="mark-catalog__item-body"
+            :class="{
+                'mark-catalog__item-body--load': loadingCatalog
+            }"
         >
-            <span
-                @click="more(item)"
-            >
-                Загрузить еще
-            </span>
-        </div>
-        <div v-if="loader">
-            Загрузка...
+            <template v-if="item.length">
+                <a
+                    v-for="product in item"
+                    :href="product.url"
+                    :key="product.title"
+                    class="mark-catalog__product"
+                >
+                    {{ product.title }}
+                </a>
+            </template>
+            <div class="mark-catalog__not-mark" v-else>
+                Нет марок
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import functions from "../../helpers/functions";
-
     export default {
         name: 'MarksCard',
         props: {
             item: {
-                default: () => {},
-                type: Object
+                default: () => [],
+                type: Array
             },
-        },
-        data() {
-            return {
-                showQuantityProduct: 20,
-                loader: false
+            loadingCatalog: {
+                default: false,
+                type: Boolean
             }
         },
-        computed: {
-            marks() {
-                return this.item.items
-            }
-        },
-        watch: {
-            marks() {
-                this.loader = false
-            }
-        },
-        methods: {
-            more(item) {
-                console.log(item)
-                item.page += 1
-                this.loader = true
-                this.$emit('more', item)
-            },
-            totalPages(total) {
-                return Math.ceil(total / this.showQuantityProduct)
-            },
-            getNameOfNum(number) {
-                let list = [
-                    'марка',
-                    'марки',
-                    'марок',
-                ]
-
-                return functions.declOfNum(number, list)
-            },
-        }
     }
 </script>
 
@@ -98,7 +51,7 @@
     @import "../../../assets/sass/variables/fluid-variables";
     @import "../../../assets/sass/mixins/fluid-mixin";
 
-    .catalog {
+    .mark-catalog {
         &__item {
             background: #FFFFFF;
             border-radius: rem(6px);
@@ -131,10 +84,17 @@
             color: #9B9B9A;
         }
         &__item-body {
+            transition: 1s opacity, 1s transform;
             display: flex;
             flex-wrap: wrap;
             margin: 0 rem(-8px);
             margin-top: rem(24px);
+            transform: translateY(0px);
+            opacity: 1;
+            &--load {
+                transform: translateY(rem(5px));
+                opacity: .2;
+            }
         }
         &__more {
             font-weight: 500;

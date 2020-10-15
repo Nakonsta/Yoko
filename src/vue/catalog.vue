@@ -15,35 +15,24 @@
             </div>
             <div class="catalog__body">
                 <catalogBlock
+                    :isFirstLoad="isFirstLoad"
+                    :loadingCatalog="loadingCatalog"
                     :catalog-item="catalog"
                     :totalProducts="totalProducts"
-                    @moreTypeMark="moreTypeMark"
                 />
-<!--                <InfiniteLoading-->
-<!--                    v-if="catalog.length"-->
-<!--                    @infinite="infiniteHandler"-->
-<!--                >-->
-<!--                </InfiniteLoading>-->
-                <div
-                    v-if="loadingCatalog"
-                    class="catalog__loader"
-                    :class="{
-                        'catalog__loader--absolute': catalog.length
-                    }"
+                <paginate
+                    v-if="isFirstLoad && totalPages"
+                    :page-count="totalPages"
+                    :click-handler="pagination"
+                    prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                    next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                    :prev-class="'catalog-pagination__prev'"
+                    :next-class="'catalog-pagination__next'"
+                    :container-class="'catalog-pagination'"
+                    :page-class="'catalog-pagination__item'"
+                    :value="page"
                 >
-                    <div class="preloader">
-                        <div class="preloader__preloader">
-                            <div class="preloader__loader"></div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    v-if="catalog.length && page < totalPages"
-                    class="news-list__more"
-                    @click="more"
-                >
-                    Загрузить ещё
-                </div>
+                </paginate>
             </div>
         </div>
     </div>
@@ -65,6 +54,7 @@
         mixins: [api],
         data() {
             return {
+                isFirstLoad: false,
                 loadingFilter: true,
                 loadingCatalog: true,
                 currentFilter: {},
@@ -78,66 +68,26 @@
         },
         computed: {
             totalPages() {
-                return Math.ceil(this.weightFilter.values.length / this.tMark)
-            },
-            pageWeightFilter() {
-                const index = (this.page - 1) * this.tMark
-                return this.weightFilter.values.slice(index, index + this.tMark)
+                return Math.ceil(this.totalProducts / 100)
             },
         },
         created() {
             this.getFilterData()
         },
         methods: {
-            moreTypeMark(typeMark) {
-                this.fetchCatalog(typeMark.group, this.currentFilter, typeMark.page)
-                    .then((response) => {
-                        const markItems = response.data.data.items
-                        markItems.forEach((item) => {
-                            typeMark.items.push(item)
-                        })
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                    })
-            },
-            infiniteHandler(infiniteState) {
-                console.log(111)
-                infiniteState.complete();
-            },
-            more() {
-                this.page += 1
+            pagination(page) {
+                this.page = page
+                this.cancelCatalogRequest()
                 this.getCatalogData(this.currentFilter)
             },
             changeFilter() {
+                this.page = 1
+                this.totalProducts = -1
                 this.cancelCatalogRequest()
                 this.getCatalogData(this.currentFilter, true)
             },
-            getWeightFilter() {
-                let weightFilter = null
-
-                this.filter.forEach((item, index) => {
-                    for (const currentFilterKey in this.currentFilter) {
-                        if (item.id === currentFilterKey) {
-                            if (index < this.filter.length - 1) {
-                                weightFilter = this.filter[index + 1]
-                            } else {
-                                weightFilter = JSON.parse(JSON.stringify(this.filter[index]))
-                                weightFilter.values = this.currentFilter[currentFilterKey]
-                            }
-                        }
-                    }
-                })
-
-                return weightFilter ? weightFilter : this.filter[0]
-            },
-            getGroup(property, value) {
-                return {
-                    property: property,
-                    value: value,
-                }
-            },
             getFilterData() {
+                this.totalProducts = -1
                 this.fetchFilter()
                     .then((data) => {
                         this.setFilterData(data.data.data)
@@ -149,54 +99,35 @@
                         this.loadingFilter = false
                     })
             },
-            getCatalogData(filterValues = null, clearCatalog) {
-                this.weightFilter = this.getWeightFilter()
-
-                if (clearCatalog) {
-                    this.clearCatalog()
-                }
-
+            getCatalogData(filterValues = null) {
                 this.loadingCatalog = true
 
-                this.pageWeightFilter.forEach((value) => {
-                    const group = this.getGroup(this.weightFilter.id, value)
+                this.fetchCatalog(filterValues, this.page)
+                    .then((data) => {
+                        let total = data.data.data.total
+                        let catalogItem = data.data.data.items
 
-                    this.fetchTotalCatalog(group, filterValues)
-                        .then((data) => {
-                            const total = data.data.data.total
+                        this.clearCatalog()
 
-                            this.setTotalCounterProducts(total)
-                        })
-                        .catch((e) => {
-                            console.log(e)
-                        })
+                        this.isFirstLoad = true
 
-                    this.fetchCatalog(group, filterValues)
-                        .then((data) => {
-                            let catalogItem = data.data.data
+                        this.setCatalogData(catalogItem)
+                        this.setTotalCounterProducts(total)
 
-                            catalogItem.group = group
-
-                            this.setCatalogData(catalogItem)
-
-                            this.loadingCatalog = false
-                        })
-                        .catch((e) => {
-                            console.log(e)
-                        })
-                })
+                        this.loadingCatalog = false
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
             },
             setFilterData(data) {
                 this.filter = data
             },
             clearCatalog() {
-                this.page = 1
                 this.catalog = []
-                this.totalProducts = -1
             },
             setCatalogData(data) {
-                data.page = 1
-                this.catalog.push(data)
+                this.catalog = data
             },
             setTotalCounterProducts(total) {
                 this.totalProducts = total
@@ -229,42 +160,6 @@
         &__body {
             width: 100%;
             position: relative;
-        }
-        &__loader {
-            position: relative;
-            height: 400px;
-            animation: blur 1.5s linear forwards;
-            &--absolute {
-                position: absolute;
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                height: 100%;
-                width: 100%;
-                z-index: 2;
-                padding: 10px;
-                box-sizing: content-box;
-                .preloader {
-                    background-color: transparent;
-                }
-                .preloader__loader {
-                    position: sticky;
-                    top: 0;
-                }
-                .preloader__preloader {
-                    align-items: flex-start;
-                    padding-top: 200px;
-                }
-            }
-        }
-    }
-
-    @keyframes blur {
-        0%   {
-            backdrop-filter: blur(0px);
-        }
-        100% {
-            backdrop-filter: blur(5px);
         }
     }
 </style>
