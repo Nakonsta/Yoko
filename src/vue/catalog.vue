@@ -39,13 +39,26 @@
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                </div>-->
-                <div
+<!--                <div-->
+<!--                    v-if="isFirstLoad"-->
+<!--                    class="news-list__more"-->
+<!--                    @click="more"-->
+<!--                >-->
+<!--                    Загрузить ещё-->
+<!--                </div>-->
+                <paginate
                     v-if="isFirstLoad"
-                    class="news-list__more"
-                    @click="more"
+                    :page-count="totalPages"
+                    :click-handler="pagination"
+                    prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                    next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                    :prev-class="'catalog-pagination__prev'"
+                    :next-class="'catalog-pagination__next'"
+                    :container-class="'catalog-pagination'"
+                    :page-class="'catalog-pagination__item'"
+                    :value="page"
                 >
-                    Загрузить ещё
-                </div>
+                </paginate>
             </div>
         </div>
     </div>
@@ -107,6 +120,11 @@
             infiniteHandler(infiniteState) {
                 console.log(111)
                 infiniteState.complete();
+            },
+            pagination(page) {
+                this.page = page
+                this.cancelCatalogRequest()
+                this.getCatalogData(this.currentFilter)
             },
             more() {
                 this.page += 1

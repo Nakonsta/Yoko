@@ -1,0 +1,53 @@
+.catalog-pagination
+  display: flex
+  list-style: none
+  padding: 0
+  &__item
+    a
+      font-weight: 500
+      font-size: 14px
+      line-height: 160%
+      color: $colorGray
+      display: flex
+      align-items: center
+      justify-content: center
+      height: rem(40px)
+      width: rem(40px)
+      outline: none
+    &:hover
+      a
+        color: $colorTurquoiseHover
+        background-color: rgba(255, 255, 255, 0.3)
+    &.active
+      a
+        color: $colorTurquoiseHover
+        background-color: #fff
+  &__prev
+    order: 1
+    &.disabled
+      opacity: .5;
+    a
+      display: flex
+      align-items: center
+      justify-content: center
+      height: rem(40px)
+      width: rem(40px)
+      outline: none
+    &:not(.disabled):hover
+      path
+        stroke: $colorTurquoiseHover
+  &__next
+    order: 1
+    a
+      display: flex
+      align-items: center
+      justify-content: center
+      height: rem(40px)
+      width: rem(40px)
+      outline: none
+    svg
+      transform: rotate(180deg)
+    &:hover
+      path
+        stroke: $colorTurquoiseHover
+

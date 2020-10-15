@@ -72,6 +72,7 @@
     "vue-loader": "^15.9.3",
     "vue-multiselect": "^2.1.6",
     "vue-slide-up-down": "^2.0.1",
-    "vue-template-compiler": "^2.6.12"
+    "vue-template-compiler": "^2.6.12",
+    "vuejs-paginate": "^2.1.0"
   }
 }
