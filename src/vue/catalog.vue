@@ -110,9 +110,11 @@
             },
             more() {
                 this.page += 1
+                this.cancelCatalogRequest()
                 this.getCatalogData(this.currentFilter)
             },
             changeFilter() {
+                this.page = 1
                 this.cancelCatalogRequest()
                 this.getCatalogData(this.currentFilter, true)
             },
