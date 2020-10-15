@@ -24,7 +24,7 @@
                 </a>
             </template>
             <div class="mark-catalog__not-mark" v-else>
-                Нет марок
+                Подходящих товаров не найдено
             </div>
         </div>
     </div>
