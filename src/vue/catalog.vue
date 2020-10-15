@@ -19,7 +19,6 @@
                     :loadingCatalog="loadingCatalog"
                     :catalog-item="catalog"
                     :totalProducts="totalProducts"
-                    @moreTypeMark="moreTypeMark"
                 />
                 <paginate
                     v-if="isFirstLoad && totalPages"
@@ -76,18 +75,6 @@
             this.getFilterData()
         },
         methods: {
-            moreTypeMark(typeMark) {
-                this.fetchCatalog(this.currentFilter, typeMark.page)
-                    .then((response) => {
-                        const markItems = response.data.data.items
-                        markItems.forEach((item) => {
-                            typeMark.items.push(item)
-                        })
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                    })
-            },
             pagination(page) {
                 this.page = page
                 this.cancelCatalogRequest()

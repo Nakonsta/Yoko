@@ -1,62 +1,36 @@
 <template>
     <div
-        class="catalog__item"
+        class="mark-catalog__item"
     >
-        <div class="catalog__item-head">
-            <span class="catalog__item-name">
-                <!--                {{ item.group.value }}-->
+        <div class="mark-catalog__item-head">
+            <span class="mark-catalog__item-name">
                 Каталог
             </span>
         </div>
         <div
-            class="catalog__item-body"
+            class="mark-catalog__item-body"
             :class="{
-                'catalog__item-body--load': loadingCatalog
+                'mark-catalog__item-body--load': loadingCatalog
             }"
         >
             <template v-if="item.length">
-<!--                <transition-group name="fade-product" mode="out-in" style="display: flex; flex-wrap: wrap">-->
-<!--                    <a-->
-<!--                        v-for="product in item"-->
-<!--                       :href="product.url"-->
-<!--                       :key="product.title"-->
-<!--                       class="catalog__product"-->
-<!--                    >-->
-<!--                        {{ product.title }}-->
-<!--                    </a>-->
-<!--                </transition-group>-->
                 <a
                     v-for="product in item"
                     :href="product.url"
                     :key="product.title"
-                    class="catalog__product"
+                    class="mark-catalog__product"
                 >
                     {{ product.title }}
                 </a>
             </template>
-            <div class="catalog__not-mark" v-else>
+            <div class="mark-catalog__not-mark" v-else>
                 Нет марок
             </div>
-        </div>
-        <div
-            v-if="item.page < totalPages(item.total) && !loader"
-            class="catalog__more"
-        >
-            <span
-                @click="more(item)"
-            >
-                Загрузить еще
-            </span>
-        </div>
-        <div v-if="loader">
-            Загрузка...
         </div>
     </div>
 </template>
 
 <script>
-    import functions from "../../helpers/functions";
-
     export default {
         name: 'MarksCard',
         props: {
@@ -69,42 +43,6 @@
                 type: Boolean
             }
         },
-        data() {
-            return {
-                showQuantityProduct: 100,
-                loader: false
-            }
-        },
-        computed: {
-            marks() {
-                return this.item.items
-            }
-        },
-        watch: {
-            marks() {
-                this.loader = false
-            }
-        },
-        methods: {
-            more(item) {
-                console.log(item)
-                item.page += 1
-                this.loader = true
-                this.$emit('more', item)
-            },
-            totalPages(total) {
-                return Math.ceil(total / this.showQuantityProduct)
-            },
-            getNameOfNum(number) {
-                let list = [
-                    'марка',
-                    'марки',
-                    'марок',
-                ]
-
-                return functions.declOfNum(number, list)
-            },
-        }
     }
 </script>
 
@@ -113,7 +51,7 @@
     @import "../../../assets/sass/variables/fluid-variables";
     @import "../../../assets/sass/mixins/fluid-mixin";
 
-    .catalog {
+    .mark-catalog {
         &__item {
             background: #FFFFFF;
             border-radius: rem(6px);
