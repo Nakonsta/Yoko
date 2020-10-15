@@ -15,6 +15,8 @@
             </div>
             <div class="catalog__body">
                 <catalogBlock
+                    :isFirstLoad="isFirstLoad"
+                    :loadingCatalog="loadingCatalog"
                     :catalog-item="catalog"
                     :totalProducts="totalProducts"
                     @moreTypeMark="moreTypeMark"
@@ -24,21 +26,21 @@
 <!--                    @infinite="infiniteHandler"-->
 <!--                >-->
 <!--                </InfiniteLoading>-->
+<!--                <div-->
+<!--                    v-if="loadingCatalog"-->
+<!--                    class="catalog__loader"-->
+<!--                    :class="{-->
+<!--                        'catalog__loader&#45;&#45;absolute': isFirstLoad-->
+<!--                    }"-->
+<!--                >-->
+<!--                    <div class="preloader">-->
+<!--                        <div class="preloader__preloader">-->
+<!--                            <div class="preloader__loader"></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div
-                    v-if="loadingCatalog"
-                    class="catalog__loader"
-                    :class="{
-                        'catalog__loader--absolute': catalog.length
-                    }"
-                >
-                    <div class="preloader">
-                        <div class="preloader__preloader">
-                            <div class="preloader__loader"></div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    v-if="catalog.length && page < totalPages"
+                    v-if="isFirstLoad"
                     class="news-list__more"
                     @click="more"
                 >
@@ -65,6 +67,7 @@
         mixins: [api],
         data() {
             return {
+                isFirstLoad: false,
                 loadingFilter: true,
                 loadingCatalog: true,
                 currentFilter: {},
@@ -90,7 +93,7 @@
         },
         methods: {
             moreTypeMark(typeMark) {
-                this.fetchCatalog(typeMark.group, this.currentFilter, typeMark.page)
+                this.fetchCatalog(this.currentFilter, typeMark.page)
                     .then((response) => {
                         const markItems = response.data.data.items
                         markItems.forEach((item) => {
@@ -149,54 +152,66 @@
                         this.loadingFilter = false
                     })
             },
-            getCatalogData(filterValues = null, clearCatalog) {
+            getCatalogData(filterValues = null) {
                 this.weightFilter = this.getWeightFilter()
 
-                if (clearCatalog) {
-                    this.clearCatalog()
-                }
-
                 this.loadingCatalog = true
+                this.totalProducts = -1
 
-                this.pageWeightFilter.forEach((value) => {
-                    const group = this.getGroup(this.weightFilter.id, value)
+                this.fetchCatalog(filterValues, this.page)
+                    .then((data) => {
+                        let total = data.data.data.total
+                        let catalogItem = data.data.data.items
 
-                    this.fetchTotalCatalog(group, filterValues)
-                        .then((data) => {
-                            const total = data.data.data.total
+                        this.clearCatalog()
 
-                            this.setTotalCounterProducts(total)
-                        })
-                        .catch((e) => {
-                            console.log(e)
-                        })
+                        this.isFirstLoad = true
 
-                    this.fetchCatalog(group, filterValues)
-                        .then((data) => {
-                            let catalogItem = data.data.data
+                        this.setCatalogData(catalogItem)
+                        this.setTotalCounterProducts(total)
 
-                            catalogItem.group = group
+                        this.loadingCatalog = false
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
 
-                            this.setCatalogData(catalogItem)
-
-                            this.loadingCatalog = false
-                        })
-                        .catch((e) => {
-                            console.log(e)
-                        })
-                })
+                // this.pageWeightFilter.forEach((value) => {
+                //     const group = this.getGroup(this.weightFilter.id, value)
+                //
+                //     this.fetchTotalCatalog(group, filterValues)
+                //         .then((data) => {
+                //             const total = data.data.data.total
+                //
+                //             this.setTotalCounterProducts(total)
+                //         })
+                //         .catch((e) => {
+                //             console.log(e)
+                //         })
+                //
+                //     this.fetchCatalog(group, filterValues)
+                //         .then((data) => {
+                //             let catalogItem = data.data.data
+                //
+                //             catalogItem.group = group
+                //
+                //             this.setCatalogData(catalogItem)
+                //
+                //             this.loadingCatalog = false
+                //         })
+                //         .catch((e) => {
+                //             console.log(e)
+                //         })
+                // })
             },
             setFilterData(data) {
                 this.filter = data
             },
             clearCatalog() {
-                this.page = 1
                 this.catalog = []
-                this.totalProducts = -1
             },
             setCatalogData(data) {
-                data.page = 1
-                this.catalog.push(data)
+                this.catalog = data
             },
             setTotalCounterProducts(total) {
                 this.totalProducts = total
@@ -229,42 +244,6 @@
         &__body {
             width: 100%;
             position: relative;
-        }
-        &__loader {
-            position: relative;
-            height: 400px;
-            animation: blur 1.5s linear forwards;
-            &--absolute {
-                position: absolute;
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                height: 100%;
-                width: 100%;
-                z-index: 2;
-                padding: 10px;
-                box-sizing: content-box;
-                .preloader {
-                    background-color: transparent;
-                }
-                .preloader__loader {
-                    position: sticky;
-                    top: 0;
-                }
-                .preloader__preloader {
-                    align-items: flex-start;
-                    padding-top: 200px;
-                }
-            }
-        }
-    }
-
-    @keyframes blur {
-        0%   {
-            backdrop-filter: blur(0px);
-        }
-        100% {
-            backdrop-filter: blur(5px);
         }
     }
 </style>

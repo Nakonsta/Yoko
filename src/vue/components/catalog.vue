@@ -19,16 +19,35 @@
             </span>
         </div>
         <div class="catalog__items">
-            <template v-if="catalogItem.length">
-                <transition-group name="fade">
-                    <marksCard
-                        v-for="(item) in catalogItem"
-                        :key="item.group.value"
-                        :item="item"
-                        @more="more"
-                    />
-                </transition-group>
-            </template>
+<!--            <template v-if="catalogItem.length">-->
+<!--                &lt;!&ndash;                <transition-group name="fade">&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <marksCard&ndash;&gt;-->
+<!--                &lt;!&ndash;                        v-for="(item) in catalogItem"&ndash;&gt;-->
+<!--                &lt;!&ndash;                        :key="item.group.value"&ndash;&gt;-->
+<!--                &lt;!&ndash;                        :item="item"&ndash;&gt;-->
+<!--                &lt;!&ndash;                        @more="more"&ndash;&gt;-->
+<!--                &lt;!&ndash;                    />&ndash;&gt;-->
+<!--                &lt;!&ndash;                </transition-group>&ndash;&gt;-->
+<!--            </template>-->
+            <marksCard
+                v-if="isFirstLoad"
+                :item="catalogItem"
+                :loadingCatalog="loadingCatalog"
+                @more="more"
+            />
+            <div
+                v-if="loadingCatalog"
+                class="catalog__loader"
+                :class="{
+                    'catalog__loader--absolute': isFirstLoad
+                }"
+            >
+                <div class="preloader">
+                    <div class="preloader__preloader">
+                        <div class="preloader__loader"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -51,6 +70,14 @@
                 default: 0,
                 type: Number
             },
+            isFirstLoad: {
+                default: false,
+                type: Boolean
+            },
+            loadingCatalog: {
+                default: false,
+                type: Boolean
+            }
         },
         data() {
             return {
@@ -87,6 +114,35 @@
     @import "../../assets/sass/mixins/fluid-mixin";
 
     .catalog {
+        &__items {
+            position: relative;
+        }
+        &__loader {
+            position: relative;
+            height: 400px;
+            animation: blur 1s linear forwards;
+            &--absolute {
+                position: absolute;
+                z-index: 2;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 100%;
+                width: 100%;
+                padding: 10px;
+                box-sizing: content-box;
+                .preloader {
+                    background-color: transparent;
+                }
+                .preloader__loader {
+                    position: static;
+                }
+                .preloader__preloader {
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
         &__item {
             background: #FFFFFF;
             border-radius: rem(6px);
@@ -186,6 +242,14 @@
                     fill: $colorTurquoiseHover
                 }
             }
+        }
+    }
+    @keyframes blur {
+        0%   {
+            backdrop-filter: blur(0px);
+        }
+        100% {
+            backdrop-filter: blur(2px);
         }
     }
 </style>
