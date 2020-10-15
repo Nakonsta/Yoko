@@ -25,7 +25,7 @@
   &__prev
     order: 1
     &.disabled
-      opacity: .5;
+      opacity: .5
     a
       display: flex
       align-items: center
@@ -38,6 +38,8 @@
         stroke: $colorTurquoiseHover
   &__next
     order: 1
+    &.disabled
+      opacity: .5
     a
       display: flex
       align-items: center
@@ -47,7 +49,7 @@
       outline: none
     svg
       transform: rotate(180deg)
-    &:hover
+    &:not(.disabled):hover
       path
         stroke: $colorTurquoiseHover
 

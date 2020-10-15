@@ -21,33 +21,8 @@
                     :totalProducts="totalProducts"
                     @moreTypeMark="moreTypeMark"
                 />
-<!--                <InfiniteLoading-->
-<!--                    v-if="catalog.length"-->
-<!--                    @infinite="infiniteHandler"-->
-<!--                >-->
-<!--                </InfiniteLoading>-->
-<!--                <div-->
-<!--                    v-if="loadingCatalog"-->
-<!--                    class="catalog__loader"-->
-<!--                    :class="{-->
-<!--                        'catalog__loader&#45;&#45;absolute': isFirstLoad-->
-<!--                    }"-->
-<!--                >-->
-<!--                    <div class="preloader">-->
-<!--                        <div class="preloader__preloader">-->
-<!--                            <div class="preloader__loader"></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div-->
-<!--                    v-if="isFirstLoad"-->
-<!--                    class="news-list__more"-->
-<!--                    @click="more"-->
-<!--                >-->
-<!--                    Загрузить ещё-->
-<!--                </div>-->
                 <paginate
-                    v-if="isFirstLoad"
+                    v-if="isFirstLoad && totalPages"
                     :page-count="totalPages"
                     :click-handler="pagination"
                     prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -94,11 +69,7 @@
         },
         computed: {
             totalPages() {
-                return Math.ceil(this.weightFilter.values.length / this.tMark)
-            },
-            pageWeightFilter() {
-                const index = (this.page - 1) * this.tMark
-                return this.weightFilter.values.slice(index, index + this.tMark)
+                return Math.ceil(this.totalProducts / 100)
             },
         },
         created() {
@@ -117,50 +88,19 @@
                         console.log(e)
                     })
             },
-            infiniteHandler(infiniteState) {
-                console.log(111)
-                infiniteState.complete();
-            },
             pagination(page) {
                 this.page = page
                 this.cancelCatalogRequest()
                 this.getCatalogData(this.currentFilter)
             },
-            more() {
-                this.page += 1
-                this.cancelCatalogRequest()
-                this.getCatalogData(this.currentFilter)
-            },
             changeFilter() {
                 this.page = 1
+                this.totalProducts = -1
                 this.cancelCatalogRequest()
                 this.getCatalogData(this.currentFilter, true)
             },
-            getWeightFilter() {
-                let weightFilter = null
-
-                this.filter.forEach((item, index) => {
-                    for (const currentFilterKey in this.currentFilter) {
-                        if (item.id === currentFilterKey) {
-                            if (index < this.filter.length - 1) {
-                                weightFilter = this.filter[index + 1]
-                            } else {
-                                weightFilter = JSON.parse(JSON.stringify(this.filter[index]))
-                                weightFilter.values = this.currentFilter[currentFilterKey]
-                            }
-                        }
-                    }
-                })
-
-                return weightFilter ? weightFilter : this.filter[0]
-            },
-            getGroup(property, value) {
-                return {
-                    property: property,
-                    value: value,
-                }
-            },
             getFilterData() {
+                this.totalProducts = -1
                 this.fetchFilter()
                     .then((data) => {
                         this.setFilterData(data.data.data)
@@ -173,10 +113,7 @@
                     })
             },
             getCatalogData(filterValues = null) {
-                this.weightFilter = this.getWeightFilter()
-
                 this.loadingCatalog = true
-                this.totalProducts = -1
 
                 this.fetchCatalog(filterValues, this.page)
                     .then((data) => {
@@ -195,34 +132,6 @@
                     .catch((e) => {
                         console.log(e)
                     })
-
-                // this.pageWeightFilter.forEach((value) => {
-                //     const group = this.getGroup(this.weightFilter.id, value)
-                //
-                //     this.fetchTotalCatalog(group, filterValues)
-                //         .then((data) => {
-                //             const total = data.data.data.total
-                //
-                //             this.setTotalCounterProducts(total)
-                //         })
-                //         .catch((e) => {
-                //             console.log(e)
-                //         })
-                //
-                //     this.fetchCatalog(group, filterValues)
-                //         .then((data) => {
-                //             let catalogItem = data.data.data
-                //
-                //             catalogItem.group = group
-                //
-                //             this.setCatalogData(catalogItem)
-                //
-                //             this.loadingCatalog = false
-                //         })
-                //         .catch((e) => {
-                //             console.log(e)
-                //         })
-                // })
             },
             setFilterData(data) {
                 this.filter = data

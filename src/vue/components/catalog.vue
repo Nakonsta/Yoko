@@ -19,35 +19,27 @@
             </span>
         </div>
         <div class="catalog__items">
-<!--            <template v-if="catalogItem.length">-->
-<!--                &lt;!&ndash;                <transition-group name="fade">&ndash;&gt;-->
-<!--                &lt;!&ndash;                    <marksCard&ndash;&gt;-->
-<!--                &lt;!&ndash;                        v-for="(item) in catalogItem"&ndash;&gt;-->
-<!--                &lt;!&ndash;                        :key="item.group.value"&ndash;&gt;-->
-<!--                &lt;!&ndash;                        :item="item"&ndash;&gt;-->
-<!--                &lt;!&ndash;                        @more="more"&ndash;&gt;-->
-<!--                &lt;!&ndash;                    />&ndash;&gt;-->
-<!--                &lt;!&ndash;                </transition-group>&ndash;&gt;-->
-<!--            </template>-->
             <marksCard
                 v-if="isFirstLoad"
                 :item="catalogItem"
                 :loadingCatalog="loadingCatalog"
                 @more="more"
             />
-            <div
-                v-if="loadingCatalog"
-                class="catalog__loader"
-                :class="{
+            <transition name="fade-loader">
+                <div
+                    v-if="loadingCatalog"
+                    class="catalog__loader"
+                    :class="{
                     'catalog__loader--absolute': isFirstLoad
                 }"
-            >
-                <div class="preloader">
-                    <div class="preloader__preloader">
-                        <div class="preloader__loader"></div>
+                >
+                    <div class="preloader">
+                        <div class="preloader__preloader">
+                            <div class="preloader__loader"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </transition>
         </div>
     </div>
 </template>
