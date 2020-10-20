@@ -11,23 +11,45 @@
   color: $colorWhite
   background: url(../img/bg-welcome.jpg) no-repeat 50% 0 / cover
 
+  @include mq($until: tablet)
+    margin-left: -20%
+    margin-right: -20%
+    padding: 48px 20% 68px
+
   .container
     display: flex
-    flex-wrap: wrap
+    //flex-wrap: wrap
     justify-content: space-between
 
+    @include mq($until: tablet)
+      justify-content: flex-end
+
   &__title
-    width: 33.33%
+    flex-shrink: 0
+    width: 10em
     font-weight: 400
-    font-size: rem(56px)
+    @include fluid-property('font-size', 1024px, 1024px, 1440px, 36px, 36px, 48px)
     line-height: (78/56)
     font-family: $fontGilroy
+
+    @include mq($from: large)
+      font-size: rem(56px)
+
+    @include mq($until: desktop)
+      font-size: rem(24px)
 
   &__wrap
     display: flex
     flex-direction: column
     justify-content: space-between
-    width: calc(66.66% - 140px)
+    margin-left: 100px
+    flex-grow: 1
+    
+    @include mq($until: desktop)
+      margin-left: 60px
+
+    @include mq($until: tablet)
+      display: none
 
   &__search
     position: relative
@@ -37,12 +59,19 @@
       margin: 0
       border: 0
       border-radius: 6px
-      padding: rem(18px) rem(104px) rem(16px) rem(48px)
+      //padding: rem(18px) rem(104px) rem(16px) rem(48px)
+      @include fluid-property('padding-top', 1024px, 1024px, 1440px, 15px, 15px, 18px)
+      @include fluid-property('padding-left', 1024px, 1024px, 1440px, 20px, 20px, 48px)
+      @include fluid-property('padding-right', 1024px, 1024px, 1440px, 56px, 56px, 104px)
+      @include fluid-property('padding-bottom', 1024px, 1024px, 1440px, 13px, 13px, 16px)
       width: 100%
       font-size: rem(14px)
       line-height: (22/14)
       color: $colorText
       background: $colorWhite
+
+      @include mq($until: desktop)
+        font-size: 12px
 
       &::placeholder
         color: $colorGray
@@ -54,8 +83,8 @@
       border: 0
       border-radius: 0 6px 6px 0
       padding: 0
-      width: rem(56px)
-      //height: rem(56px)
+      //width: rem(56px)
+      @include fluid-property('width', 1024px, 1024px, 1440px, 56px, 56px, 104px)
       background: $colorTurquoise
       position: absolute
       top: 0
@@ -79,14 +108,27 @@
 
   &__counters
     display: flex
+    margin-left: -4em
     justify-content: space-between
-    font-size: rem(16px)
+    //font-size: rem(16px)
+    @include fluid-property('font-size', 1024px, 1024px, 1440px, 14px, 14px, 16px)
+    
+    @include mq($until: desktop)
+      font-size: 12px
 
     p
+      @include fluid-property('margin-top', 1024px, 1024px, 1440px, 30px, 30px, 40px)
+      margin-left: 4em
+      margin-right: 0
       margin-bottom: 0
-
+      
     span
       display: block
-      font-size: rem(36px)
+      white-space: nowrap
+      //font-size: rem(36px)
+      @include fluid-property('font-size', 1024px, 1024px, 1440px, 24px, 24px, 36px)
       line-height: (50/36)
       font-family: $fontGilroy
+
+      @include mq($until: desktop)
+        font-size: 16px
