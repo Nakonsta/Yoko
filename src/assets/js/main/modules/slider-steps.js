@@ -1,3 +1,18 @@
+let stepsTabs = document.querySelectorAll('.steps .section__title-tabs a');
+stepsTabs.forEach(item => {
+    item.addEventListener('click', evt => {
+        evt.preventDefault();
+        stepsTabs.forEach(tab => {
+            tab.classList.remove('active');
+            let slider = document.getElementById(tab.getAttribute('href').slice(1));
+            if( slider ) slider.closest('.swiper').style.display = 'none';
+        });
+        item.classList.add('active');
+        let slider = document.getElementById(item.getAttribute('href').slice(1));
+        if( item ) slider.closest('.swiper').style.display = 'block';
+    });
+});
+
 document.querySelectorAll('.steps__items.js-slider').forEach(item => {
     // init slider classes
     let slider = sliderAdd(item);
@@ -39,3 +54,6 @@ document.querySelectorAll('.steps__items.js-slider').forEach(item => {
         },
     });
 });
+
+// инициализируем клик по активному
+document.querySelector('.steps .section__title-tabs a').dispatchEvent(new Event('click'));

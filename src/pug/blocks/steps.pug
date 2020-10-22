@@ -2,13 +2,26 @@
     .container
         .section__head
             .section__title Всего за 3 шага стать:
-        .steps__items.js-slider
+                span.section__title-tabs
+                    a.active(href="#customer") заказчиком
+                    a(href="#supplier") поставщиком
+        #customer.steps__items.js-slider
             .steps__item
                 img(src="./content/steps-1.jpg")
-                .steps__item-title #[a(href="#") Зарегистрируйтесь] на площадке
+                .steps__item-title #[a(href="#") Зарегистрируйтесь] на&nbsp;площадке
             .steps__item
                 img(src="./content/steps-2.jpg")
-                .steps__item-title #[a(href="#") Получите] электронную подпись
+                .steps__item-title #[a(href="#") Получите] электронную&nbsp;подпись
             .steps__item
                 img(src="./content/steps-3.jpg")
                 .steps__item-title Разместите извещение в системе
+        #supplier.steps__items.js-slider
+            .steps__item
+                img(src="./content/steps-1.jpg")
+                .steps__item-title #[a(href="#") Зарегистрируйтесь] на&nbsp;площадке
+            .steps__item
+                img(src="./content/steps-2.jpg")
+                .steps__item-title #[a(href="#") Получите] электронную&nbsp;подпись
+            .steps__item
+                img(src="./content/steps-3.jpg")
+                .steps__item-title Enjoy!

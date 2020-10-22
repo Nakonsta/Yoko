@@ -13,6 +13,10 @@
     @include mq($until: desktop)
       justify-content: space-between
 
+    @include mq($until: tablet)
+      flex-direction: column
+      flex-wrap: nowrap
+
   &__item
     width: 50%
     //max-width: 360px
@@ -23,7 +27,7 @@
     position: relative
 
     @include mq($until: tablet)
-      max-width: 100%
+      margin: 0 auto
       width: 100%
 
       + .join__item

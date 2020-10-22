@@ -5,13 +5,11 @@
     font-family: 'Gilroy-SemiBold'
     src: url('/font/webFonts/Gilroy-SemiBold/font.woff2') format('woff2'), url('/font/webFonts/Gilroy-SemiBold/font.woff') format('woff')
 
-
 html,
 body
     //font: $font
     font-family: $fontFamily
     color: $colorText
-    overflow-x: hidden
     height: 100% !important
     line-height: 1.6
     &.lock-popup
@@ -26,6 +24,8 @@ body
     //@include mq($until: tablet)
     //    font-size: 15px
 
+body
+    overflow-x: hidden
 
 a
     text-decoration: none

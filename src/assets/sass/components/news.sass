@@ -22,7 +22,11 @@
       width: calc(33.33% - #{rem(74px)})
 
   &__column
-    @include mq($until: 1200px)
+    &:last-child
+      @include mq($until: 1200px)
+        display: none
+
+    @include mq($until: tablet)
       display: none
 
     .news__item + .news__item
