@@ -88,7 +88,8 @@
                     },
                 ];
             each item in items
-                .clients__item
+                - let tag = item.href ? 'a' : 'div'
+                #{tag}.clients__item(href= item.href ? item.href : false)
                     .clients__item-image: img(src=item.src)
                     .clients__item-title #{item.title}
                     each line in item.desc

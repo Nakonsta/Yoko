@@ -5,7 +5,7 @@ document.querySelectorAll('.clients__items.js-slider').forEach(item => {
     let sliderInstance = new Swiper(slider, {
         speed: 400,
         spaceBetween: 24,
-        slidesPerView: 1,
+        slidesPerView: 2,
         watchOverflow: true,
         navigation: {
             prevEl: '.swiper-button-prev',

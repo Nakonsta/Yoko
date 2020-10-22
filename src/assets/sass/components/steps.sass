@@ -3,6 +3,50 @@
 @import "../mixins/mq"
 
 .steps
+  .section__title-tabs
+    display: inline-flex
+    vertical-align: top
+    margin-left: rem(60px)
+    text-transform: uppercase
+    text-align: center
+    font-weight: 700
+    font-family: $fontGilroy
+    font-size: 14px
+    line-height: (22/14)
+
+    @include mq($until: desktop, $from: tablet)
+      font-size: 13px
+      line-height: (20/13)
+
+    @include mq($until: tablet)
+      display: block
+      border-width: 0 0 0 1px
+      margin: 0
+      text-align: left
+      position: relative
+      z-index: 2
+
+    a
+      display: block
+      border: 1px solid #cdcdcd
+      border-width: 0 0 1px
+      width: 128px
+      padding: 8px 0
+      color: #9b9b9a
+      transition: border $animation, color $animation
+
+      @include mq($until: tablet)
+        border-width: 0 0 0 1px
+        padding: 5px 8px
+      
+      &:hover
+        color: $colorTurquoiseHover
+        
+      &.active
+        border-color: $colorTurquoise
+        color: $colorTurquoise !important
+        pointer-events: none
+    
   &__items
     counter-reset: steps
 
@@ -10,6 +54,9 @@
       display: flex
       flex-wrap: wrap
       margin: -32px 0 0 -32px
+
+      & + &
+        margin-top: 32px
 
   &__item
     counter-increment: steps
