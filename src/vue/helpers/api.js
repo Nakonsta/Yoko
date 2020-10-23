@@ -49,6 +49,12 @@ export default {
                     q: string
                 }
             });
-        }
+        },
+        authSignin(l, p) {
+            return axios.post(`https://stage-auth.ec.extyl.pro/auth/signin`, {
+                login: l,
+                password: p,
+            });
+        },
     }
 }

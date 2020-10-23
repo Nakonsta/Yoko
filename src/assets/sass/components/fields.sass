@@ -1,3 +1,6 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+
 .checkbox
   display: inline-flex
   cursor: pointer
@@ -38,3 +41,132 @@
     font-size: rem(14px)
     line-height: 160%
     margin-left: rem(10px)
+
+.field
+  &__container
+    display: block
+    margin: 0 0 rem(30px)
+
+  &__label
+    display: block
+    margin: 0 0 rem(10px)
+    font-size: rem(16px)
+    line-height: (22/16)
+
+  &__error
+    display: block
+    margin-top: rem(5px)
+    font-size: .9em
+    color: $colorRed
+
+input[type="text"].field,
+input[type="password"].field,
+input[type="email"].field,
+input[type="tel"].field,
+input[type="number"].field,
+select.field,
+textarea.field
+  display: block
+  margin: 0
+  border: 1px solid #cdcdcd
+  border-radius: rem(6px)
+  padding: rem(7px) rem(11px)
+  width: 100%
+  height: rem(40px)
+  font: normal 14px/#{(24/14)} $fontFamily
+  color: $colorText
+  transition: border-color $animation
+  outline: none
+
+  &.error
+    border-color: $colorRed
+
+  &:focus
+    border-color: #9b9b9a
+
+  &::placeholder
+    color: #9b9b9a
+    opacity: 1
+
+input[type="checkbox"].field,
+input[type="radio"].field
+  position: absolute
+  top: 0
+  left: 0
+  opacity: 0
+  pointer-events: none
+
+  &:checked + .field__label
+    &::after
+      opacity: 1
+      
+  &:focus + .field__label
+    &::before
+      border-color: #9b9b9a
+
+  + .field__label
+    margin: 0
+    padding-left: rem(38px)
+    font-size: rem(14px)
+    line-height: (18/14)
+    position: relative
+
+    &::before,
+    &::after
+      content: ''
+      display: block
+      position: absolute
+      top: rem(-3px)
+      left: 0
+      cursor: pointer
+
+    &::before
+      //border: 2px solid #9b9b9a
+      border: 2px solid #cdcddc
+      width: rem(24px)
+      height: rem(24px)
+
+    &::after
+      margin: rem(4px)
+      width: rem(16px)
+      height: rem(16px)
+      background: $colorTurquoise
+      opacity: 0
+      transition: opacity $animation
+
+input[type="checkbox"].field + .field__label
+  &::before,
+  &::after
+    border-radius: 4px
+
+input[type="radio"].field + .field__label
+  &::before,
+  &::after
+    border-radius: 50%
+
+.form
+
+  &__error
+    margin: 0 0 rem(30px)
+    border: 1px solid $colorRed
+    border-radius: rem(6px)
+    padding: rem(7px) rem(11px)
+    font: normal 14px/#{(24/14)} $fontFamily
+    color: $colorRed
+    background: lighten($colorRed, 40%)
+
+  &__columns
+    @include mq($from: tablet)
+      display: flex
+      align-items: center
+      justify-content: space-between
+      margin: rem(-10px) 0 rem(30px)
+
+      .field__container
+        margin: 0 rem(40px) 0 0
+
+    @include mq($until: tablet)
+      margin: rem(-15px) 0 rem(24px)
+
+      .field__container
+        margin: 0 0 rem(15px)

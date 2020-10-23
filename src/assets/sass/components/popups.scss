@@ -1,3 +1,6 @@
+@import "../variables/variables";
+@import "../mixins/mq";
+@import "../mixins/fluid-mixin";
 // СТИЛИ ПОПАП ОКНА И ЗАТЕНЕНИЯ
 
 .ie-fix {
@@ -90,7 +93,9 @@
 		top: 0;
 		right: 0;
 		background-color: $colorTurquoise;
+		cursor: pointer;
 		svg {
+			fill: #fff;
 			width: rem(22px);
 			height: rem(22px);
 		}
@@ -98,9 +103,145 @@
 			background-color: $colorTurquoiseHover;
 		}
 	}
+
+	&__tabs {
+		display: flex;
+		margin: 0 0 rem(30px) rem(-20px);
+
+		label {
+			display: block;
+			margin-left: rem(20px);
+			text-transform: uppercase;
+			font-weight: 700;
+			font-size: rem(14px);
+			line-height: (20/14);
+			font-family: $fontGilroy;
+			position: relative;
+			cursor: pointer;
+			
+			&:hover {
+				span {
+					color: $colorText;
+				}
+			}
+
+			input {
+				position: absolute;
+				top: 0;
+				left: 0;
+				opacity: 0;
+				pointer-events: none;
+
+				&:checked {
+					+ span {
+						border-color: $colorTurquoise;
+						color: $colorText !important;
+					}
+				}
+			}
+
+			span {
+				display: block;
+				padding: 0 0 rem(12px);
+				border-bottom: 2px solid transparent;
+				color: #9b9b9a;
+				transition: border-color $animation, color $animation;
+			}
+		}
+	}
 }
 
 .popup.open .popup__content {
 	transform: translate(0px, 0%);
 	opacity: 1;
+}
+
+.popup--alt {
+	.popup__content {
+		border-radius: 0;
+		padding: 40px;
+		max-width: 485px;
+		
+		@include mq($until: tablet) {
+			padding: 40px 24px;
+			max-width: 336px;
+		}
+	}
+	.popup__close {
+		border-radius: 0;
+		top: 31px;
+		right: 31px;
+		background: transparent !important;
+
+		@include mq($until: tablet) {
+			right: 15px;
+		}
+
+		svg {
+			fill: $colorTurquoise
+		}
+
+		&:hover {
+			fill: $colorTurquoiseHover
+		}
+	}
+	.popup__title {
+		margin: 0 0 rem(36px);
+		width: calc(100% - 40px);
+		font-weight: normal;
+		font-size: rem(24px);
+		line-height: (34/24);
+	}
+	.popup__desc {
+		margin: rem(-16px) 0 rem(56px);
+	}
+	a {
+		text-decoration: underline;
+		color: $colorTurquoise;
+		&:hover {
+			text-decoration: none;
+			color: $colorTurquoiseHover;
+		}
+	}
+	p {
+		margin: rem(12px) 0;
+		a {
+			text-decoration: none;
+		}
+	}
+	.popup__problems {
+		margin: 40px -40px -40px;
+		padding: 30px 40px;
+		color: #373735;
+		background: #eaf7f8;
+
+		@include mq($until: tablet) {
+			margin: 30px -24px -40px;
+			padding: 30px;
+		}
+		
+		a[href^="tel:"] {
+			text-decoration: none;
+			color: #373735;
+			&:hover {
+				color: $colorTurquoiseHover;
+			}
+		}
+	}
+
+
+}
+
+#singin,
+#forgot {
+	.btn {
+		margin: 0 0 rem(12px);
+		min-width: rem(125px);
+		width: 100%;
+	}
+	.btn--bdr {
+		margin: rem(24px) 0;
+		display: block;
+		//width: 100%;
+	}
 }
