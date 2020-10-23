@@ -27,6 +27,11 @@ module.exports = {
         path: PATHS.dist,
         publicPath: ''
     },
+    resolve: {
+        alias: {
+            'vue': 'vue/dist/vue.esm',
+        }
+    },
     optimization: {
       splitChunks: {
         cacheGroups: {

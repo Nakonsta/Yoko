@@ -1,4 +1,4 @@
-const popupLinks = document.querySelectorAll('.popup-link');
+const popupLinksClass = 'popup-link';
 const body = document.querySelector('body');
 const lockPadding = document.querySelectorAll(".lock-padding");
 
@@ -12,16 +12,14 @@ function openPopupById(id) {
 	popupOpen(curentPopup);
 }
 
-if (popupLinks.length > 0) {
-	for (let index = 0; index < popupLinks.length; index++) {
-		const popupLink = popupLinks[index];
-		popupLink.addEventListener("click", function (e) {
-			const href = popupLink.getAttribute('href')
-			openPopupById(href);
-			e.preventDefault();
-		});
-	}
-}
+document.addEventListener('click', function(e) {
+	if( ! e.target.classList.contains(popupLinksClass) ) return;
+	e.preventDefault();
+	const href = e.target.getAttribute('href');
+	openPopupById(href);
+	e.preventDefault();
+});
+
 const popupCloseIcon = document.querySelectorAll('.close-popup');
 if (popupCloseIcon.length > 0) {
 	for (let index = 0; index < popupCloseIcon.length; index++) {
@@ -54,6 +52,9 @@ function popupOpen(curentPopup) {
 			if ($(body).height() > $(window).height()) {
 				curentPopup.classList.add('popup--fix-ie');
 			}
+		}
+		if( document.querySelector('.mobile-nav') ) {
+			document.querySelector('.mobile-nav').classList.remove('mobile-nav--open')
 		}
 	}
 }
