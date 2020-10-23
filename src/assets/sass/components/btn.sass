@@ -1,18 +1,36 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+
 .btn
-  transition: .3s background-color
   display: inline-flex
   align-items: center
   justify-content: center
-  color: #fff
+  color: #fff !important
+  text-decoration: none !important
   font-family: "Gilroy-SemiBold", sans-serif
   font-weight: 500
   font-size: rem(16px)
-  line-height: 160%
-  height: rem(52px)
+  line-height: (22/16)
   min-width: rem(200px)
-  padding: 0 rem(20px)
+  text-align: center
+  border: 1px solid $colorTurquoise
   border-radius: rem(6px)
+  padding: rem(14px) rem(20px)
+  min-height: rem(52px)
   background-color: $colorTurquoise
   cursor: pointer
+  transition: border $animation, color $animation, background-color $animation
+  outline: none
   &:hover
+    border-color: $colorTurquoiseHover
+    color: #ffffff !important
     background-color: $colorTurquoiseHover
+
+  &--bdr
+    border-color: $colorTurquoise
+    color: $colorTurquoise !important
+    background-color: #fff
+    &:hover
+      border-color: $colorTurquoise
+      color: $colorTurquoise !important
+      background-color: #e5f1f3
