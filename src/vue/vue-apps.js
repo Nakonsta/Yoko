@@ -57,3 +57,13 @@ if (forgotBlock) {
         render: function(h) { return h(Forgot)}
     })
 }
+
+// Форма на странице Заказчикам
+import CustomersForm from './customers.vue'
+const customersForm = document.querySelector('#customers-form');
+if (customersForm) {
+    let appCustomersForm = new Vue({
+        el: customersForm,
+        render: function(h) { return h(CustomersForm); }
+    })
+}
