@@ -49,11 +49,13 @@
                     if (!success) {
                         return;
                     }
+                    window.openLoader()
                     // todo this.type = 'customer' || 'supplier'
                     this.authSignin(this.login, this.password)
                         .then((data) => {
                             const user = data.data.data.user;
                             const token = data.data.data.token;
+                            window.closeLoader()
                             // todo
                             if (!this.rememberMe) {
                                 document.cookie = `auth._token.local=Bearer%20${token};domain=${process.env.AUTH_DOMAIN};path=/`
