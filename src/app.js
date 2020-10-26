@@ -13,5 +13,3 @@ import './assets/js/index.js';
 
 // vue
 import './vue/vue-apps';
-
-console.log(process.env.API_URL_CONTENT_SERVICE)

@@ -50,8 +50,6 @@
                         return;
                     }
                     // todo this.type = 'customer' || 'supplier'
-                    console.log(process.env.AUTHORIZATION_COOKIE_LIFETIME)
-                    console.log(process.env.AUTH_DOMAIN)
                     this.authSignin(this.login, this.password)
                         .then((data) => {
                             const user = data.data.data.user;
