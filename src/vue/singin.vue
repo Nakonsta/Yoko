@@ -56,12 +56,14 @@
                             const token = data.data.data.token;
                             // todo
                             if (!this.rememberMe) {
-                                document.cookie = `auth._token.local=Bearer%20${token};domain=ec.extyl.pro`
+                                document.cookie = `auth._token.local=Bearer%20${token};domain=ec.extyl.pro;path=/`
                             } else {
-                                document.cookie = `auth._token.local=Bearer%20${token};domain=ec.extyl.pro`
-                                // localStorage.setItem('auth._token.local', `Bearer ${token}`)
+                                const now = new Date()
+                                now.setDate(now.getDate() + 7)
+
+                                document.cookie = `auth._token.local=Bearer%20${token};domain=ec.extyl.pro;expires=${now};path=/`
                             }
-                            // window.location.href = 'https://stage-fr-supp.ec.extyl.pro/'
+                            window.location.href = 'https://stage-fr-supp.ec.extyl.pro/'
                         })
                         .catch((response) => {
                             if (
