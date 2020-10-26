@@ -59,6 +59,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "dotenv-webpack": "^4.0.0",
     "dragula": "^3.7.2",
     "glightbox": "^3.0.5",
     "nouislider": "^14.2.0",
