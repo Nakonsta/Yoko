@@ -31,3 +31,18 @@
         </ValidationObserver>
     </div>
 </template>
+
+<script>
+export default {
+    name: 'CustomersForm',
+
+    data() {
+        return {
+            customersFio: null,
+            customersEmail: null,
+            customersPhone: null,
+            customersConfident: null,
+        }
+    }
+}
+</script>
