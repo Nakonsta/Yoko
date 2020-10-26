@@ -38,8 +38,8 @@
             return {
                 type: 'customer',
                 error: '',
-                login: '',
-                password: '',
+                login: 'test@test.ru',
+                password: '1234567',
                 rememberMe: false,
             }
         },
@@ -54,10 +54,14 @@
                         .then((data) => {
                             const user = data.data.data.user;
                             const token = data.data.data.token;
-                            if (!this.rememberMe) {
-                                localStorage.setItem('auth._token.local', '')
-                            }
                             // todo
+                            if (!this.rememberMe) {
+                                document.cookie = `auth._token.local=Bearer%20${token};domain=ec.extyl.pro`
+                            } else {
+                                document.cookie = `auth._token.local=Bearer%20${token};domain=ec.extyl.pro`
+                                // localStorage.setItem('auth._token.local', `Bearer ${token}`)
+                            }
+                            // window.location.href = 'https://stage-fr-supp.ec.extyl.pro/'
                         })
                         .catch((response) => {
                             if (
