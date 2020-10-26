@@ -4,6 +4,9 @@ import './modules/polyfill.js';
 //ie-fix
 import './modules/ie-fix.js';
 
+//Отрытие/закрытие прелоадера
+import './modules/global-loader.js';
+
 //Отрытие/закрытие мобильного меню
 import './modules/mobile-menu.js';
 

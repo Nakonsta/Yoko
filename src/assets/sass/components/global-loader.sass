@@ -1,0 +1,17 @@
+.global-loader
+  transition: .5s opacity, 0s .5s width, 0s .5s height, .5s backdrop-filter
+  position: fixed
+  left: 0
+  top: 0
+  height: 0
+  width: 0
+  z-index: 99
+  background-color: rgba(255, 255, 255, 0.5)
+  opacity: 0
+  backdrop-filter: blur(0)
+  &--show
+    transition: .5s opacity, 0s 0s width, 0s 0s height, .5s backdrop-filter
+    opacity: 1
+    height: 100%
+    width: 100%
+    backdrop-filter: blur(2px)

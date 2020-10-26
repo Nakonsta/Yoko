@@ -1,7 +1,7 @@
 //base config
-
 const path = require('path');
 const fs = require('fs');
+// require('dotenv').config()
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlBeautifyPlugin = require('html-beautify-webpack-plugin');
@@ -9,6 +9,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const Dotenv = require('dotenv-webpack');
 
 const PATHS = {
     src: path.join(__dirname, 'src'),
@@ -110,6 +111,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new Dotenv(),
         ...pages.map(page => new HtmlWebpackPlugin({
             template: `${pages_dir}/${page}`,
             filename: `./${page.replace(/\.pug/,'.html')}`,

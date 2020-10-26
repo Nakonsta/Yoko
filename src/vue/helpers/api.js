@@ -15,7 +15,7 @@ export default {
         },
 
         fetchFilter() {
-            return axios.get(`https://stage-content.ec.extyl.pro/api/catalog/filter/`);
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/filter/`);
         },
         fetchCatalog(filter, page = 1) {
             let body = {}
@@ -25,7 +25,7 @@ export default {
                 body.filter = filter
             }
 
-            return axios.post(`https://stage-content.ec.extyl.pro/api/catalog/`,
+            return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/`,
                 body,
                 { cancelToken: this.CancelTokens.catalogCancelToken.token },
             );
@@ -38,20 +38,20 @@ export default {
                 body.filter = filter
             }
 
-            return axios.post(`https://stage-content.ec.extyl.pro/api/catalog/total/`,
+            return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/total/`,
                 body,
                 { cancelToken: this.CancelTokens.catalogCancelToken.token },
             );
         },
         fetchListSearchCatalog(string) {
-            return axios.get(`https://stage-content.ec.extyl.pro/api/catalog/search/`, {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/`, {
                 params: {
                     q: string
                 }
             });
         },
         authSignin(l, p) {
-            return axios.post(`https://stage-auth.ec.extyl.pro/auth/signin`, {
+            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/auth/signin`, {
                 login: l,
                 password: p,
             });
