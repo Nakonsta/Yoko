@@ -21,12 +21,12 @@
                     <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                 </ValidationProvider>
                 <div class="form__columns">
-                    <label class="field__container">
+                    <label class="field__container field__container--large">
                         <input class="field" type="checkbox" name="confident" v-model="customersConfident">
-                        <span class="field__label">Я согласен с <a href="#">Политикой конфиденциальности</a></span>
+                        <span class="field__label">Я согласен с <a href="#" class="customers-form__link">Политикой конфиденциальности</a></span>
                     </label>
                 </div>
-                <button type="submit" class="btn">Отправить</button>
+                <button type="submit" class="btn customers-form__submit">Отправить</button>
             </form>
         </ValidationObserver>
     </div>
