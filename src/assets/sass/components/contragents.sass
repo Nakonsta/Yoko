@@ -90,5 +90,8 @@
     &__link
         color: $colorTurquoise
     &__submit
+        &:disabled
+            background-color: #9B9B9A
+            border-color: #9B9B9A
         @include mq($until: tablet)
             width: 100%

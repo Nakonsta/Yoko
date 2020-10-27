@@ -4,7 +4,7 @@
             Остались вопросы?
         </div>
         <ValidationObserver ref="form" tag="div" mode="eager">
-            <form class="feedback__form">
+            <form class="feedback__form" @submit.prevent="onSubmit" slot-scope="{ valid }">
                 <ValidationProvider name="ФИО" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
                     <span class="field__label">ФИО</span>
                     <input :class="{field: true, error: failed}" type="text" name="fio" v-model="customersFio">
@@ -33,28 +33,37 @@
                           type="checkbox"
                           name="confident"
                           v-model="customersConfident"
-                          @change="(e) => changeFilter(item.id, value, e.target.checked)"
+                          @change="isChecked = !isChecked"
                         >
                         <span class="checkbox__body"></span>
                         <span class="checkbox__text">Я согласен с <a href="#" class="feedback__link">Политикой конфиденциальности</a></span>
                     </label>
                 </div>
-                <button type="submit" class="btn feedback__submit">Отправить</button>
+                <button type="submit" class="btn feedback__submit" :disabled="!valid || !customersConfident">Отправить</button>
             </form>
         </ValidationObserver>
     </div>
 </template>
 
 <script>
+import api from './helpers/api'
+
 export default {
     name: 'Feedback',
 
     data() {
         return {
-            customersFio: null,
-            customersEmail: null,
-            customersPhone: null,
-            customersConfident: null,
+            customersFio: '',
+            customersEmail: '',
+            customersPhone: '',
+            customersConfident: false,
+            isChecked: false,
+        }
+    },
+
+    methods: {
+        onSubmit() {
+
         }
     }
 }
