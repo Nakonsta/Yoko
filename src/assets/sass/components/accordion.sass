@@ -1,0 +1,52 @@
+.accordeon
+    &__inner
+        display: flex
+        align-items: flex-start
+        flex-wrap: wrap
+    &__item
+        margin-bottom: rem(52px)
+        width: calc((100% - 116px)/2)
+        margin-right: rem(116px)
+        color: #373735
+        border-bottom: 1px solid #CDCDCC
+        @include mq($until: widescreen)
+            width: 100%
+            margin-right: 0
+        @include mq($until: tablet)
+            margin-bottom: rem(36px)
+        &:nth-child(2n + 2)
+            margin-right: 0
+        &:last-child
+            @include mq($until: widescreen)
+                margin-bottom: 0
+    &__title
+        width: 100%
+        display: block
+        font-weight: 500
+        font-size: rem(18px)
+        line-height: 160%
+        color: #373735
+        padding: rem(12px) rem(30px) rem(12px) 0
+        transition: background 0.3s ease
+        position: relative
+        @include mq($until: tablet)
+            font-weight: 400
+            font-size: rem(16px)
+        &.active
+            .icon-more
+                transform: rotateX(180deg) translateY(-50%)
+        .icon-more
+            position: absolute
+            top: 24px
+            right: 0
+            width: 12px
+            height: 6px
+            transition: all .5s ease-in
+    &__answer
+        line-height: 160%
+        overflow: hidden
+        display: none
+        margin: 0
+        padding: 0 rem(30px) rem(12px) 0
+        @include mq($until: tablet)
+            font-size: rem(13px)

@@ -23,6 +23,10 @@ import './modules/slider-steps';
 import './modules/slider-gallery-about';
 import './modules/more-button-menu';
 
+// accordion
+
+import './modules/accordion';
+
 /**
  * Полифил для object-fit
  */
