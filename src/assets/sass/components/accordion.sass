@@ -1,6 +1,7 @@
 .accordeon
     &__inner
         display: flex
+        align-items: flex-start
         flex-wrap: wrap
     &__item
         margin-bottom: rem(52px)
@@ -33,7 +34,7 @@
             font-size: rem(16px)
         &.active
             .icon-more
-                transform: rotate(180deg) translateY(-50%)
+                transform: rotateX(180deg) translateY(-50%)
         .icon-more
             position: absolute
             top: 24px

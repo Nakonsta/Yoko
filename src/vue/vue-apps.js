@@ -59,11 +59,11 @@ if (forgotBlock) {
 }
 
 // Форма на странице Заказчикам
-import CustomersForm from './customers.vue'
-const customersForm = document.querySelector('#customers-form');
-if (customersForm) {
-    let appCustomersForm = new Vue({
-        el: customersForm,
-        render: function(h) { return h(CustomersForm); }
+import Feedback from './feedback.vue'
+const feedback = document.querySelector('#feedback');
+if (feedback) {
+    let appFeedback = new Vue({
+        el: feedback,
+        render: function(h) { return h(Feedback); }
     })
 }
