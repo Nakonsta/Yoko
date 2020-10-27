@@ -3,22 +3,23 @@ include ../blocks/bread-crumbs
 include ../blocks/page-banner
 
 block default
-    - let title = 'Заказчикам';
+    - let title = 'Поставщикам';
 
 block content
 
     +breadCrumbs([
         'Главная',
-        'Заказчикам'
+        'Поставщикам'
     ])
 
-    +pageBanner('Заказчикам', '/content/customers.jpg')
+    +pageBanner('Поставщикам', '/content/suppliers.jpg')
 
-    .section.section--green.section--customers-about.customers-about
+    .section.section--green.section--contragents-about.contragents-about
         .container
-            .customers-about__description
+            .contragents-about__description
                 p.typography.typography--accent Электронная площадка «АБТРЕЙД» предназначена для осуществления закупок для обеспечения государственных и муниципальных нужд и функционирует в полном соответствии с положениями Федерального закона от 05 апреля 2013 г. N 44-ФЗ О контрактной системе в сфере закупок товаров, работ, услуг для обеспечения государственных и муниципальных нужд.
-                .btn.customers-about__btn Регистрация
+                .btn.contragents-about__btn Регистрация
+
     .section.section--green.section--customers-slider.customers-slider
         .container
             .section__head
@@ -62,8 +63,8 @@ block content
     .section.section--steps.steps
         .container
             .section__head
-                .section__title Как стать заказчиком
-            #customer.steps__items.js-slider
+                .section__title Как стать поставщиком
+            #supplier.steps__items.js-slider
                 .steps__item.steps__item--shadow
                     img(src="./content/steps-1.jpg")
                     .steps__item-title #[a(href="#") Зарегистрируйтесь] на&nbsp;площадке
@@ -71,19 +72,20 @@ block content
                     img(src="./content/steps-2.jpg")
                     .steps__item-title #[a(href="#") Получите] электронную&nbsp;подпись
                 .steps__item.steps__item--shadow
-                    img(src="./content/steps-3.jpg")
-                    .steps__item-title Разместите извещение в системе
+                    img(src="./content/steps-4.jpg")
+                    .steps__item-title Участвуйте в наших<br />тендерах
     
-    .section.section--green.section--customers-form.customers-form
+    .section.section--green.section--feedback.feedback
         .container
-            .customers-form__inner
-                #customers-form
-                .customers-form__questions
-                    .customers-form__title.customers-form__title--light Ответим на любые интересующие Вас вопросы
-                    .customers-form__contacts
-                        a.customers-form__phone(href="tel:+74952486670") +7 (495) 248-66-70
-                        .customers-form__hours Пн - Пт: 09:00 - 20:00,<br />Сб - Вс: 10:00 - 16:00
-                        a.customers-form__email(href="mailto:sale@expert-cable.ru") sale@expert-cable.ru
+            .feedback__inner
+                #feedback
+                .feedback__questions
+                    .feedback__title.feedback__title--light Ответим на любые интересующие Вас вопросы
+                    .feedback__contacts
+                        a.feedback__phone(href="tel:+74952486670") +7 (495) 248-66-70
+                        .feedback__hours Пн - Пт: 09:00 - 20:00,<br />Сб - Вс: 10:00 - 16:00
+                        a.feedback__email(href="mailto:sale@expert-cable.ru") sale@expert-cable.ru
+    
     .section.section--accordeon.accordeon
         .container
             .section__head
