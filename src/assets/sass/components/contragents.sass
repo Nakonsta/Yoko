@@ -1,7 +1,7 @@
 @import "../mixins/fluid-mixin"
     
-.customers-about
-    &.section--customers-about
+.contragents-about
+    &.section--contragents-about
         padding-bottom: 0
     &__description
         max-width: 920px
@@ -10,6 +10,9 @@
         @include mq($until: tablet)
             padding: 1rem 2rem
             width: 100%
+    .typography--accent
+        @include mq($until: tablet)
+        margin-top: 0
 
 .feedback
     &__inner
@@ -87,5 +90,8 @@
     &__link
         color: $colorTurquoise
     &__submit
+        &:disabled
+            background-color: #9B9B9A
+            border-color: #9B9B9A
         @include mq($until: tablet)
             width: 100%
