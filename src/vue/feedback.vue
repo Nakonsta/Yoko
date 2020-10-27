@@ -1,10 +1,10 @@
 <template>
-    <div class="customers-form__block">
-        <div class="customers-form__title">
+    <div class="feedback__block">
+        <div class="feedback__title">
             Остались вопросы?
         </div>
         <ValidationObserver ref="form" tag="div" mode="eager">
-            <form class="customers-form__form">
+            <form class="feedback__form">
                 <ValidationProvider name="ФИО" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
                     <span class="field__label">ФИО</span>
                     <input :class="{field: true, error: failed}" type="text" name="fio" v-model="customersFio">
@@ -23,10 +23,10 @@
                 <div class="form__columns">
                     <label class="field__container field__container--large">
                         <input class="field" type="checkbox" name="confident" v-model="customersConfident">
-                        <span class="field__label">Я согласен с <a href="#" class="customers-form__link">Политикой конфиденциальности</a></span>
+                        <span class="field__label">Я согласен с <a href="#" class="feedback__link">Политикой конфиденциальности</a></span>
                     </label>
                 </div>
-                <button type="submit" class="btn customers-form__submit">Отправить</button>
+                <button type="submit" class="btn feedback__submit">Отправить</button>
             </form>
         </ValidationObserver>
     </div>
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-    name: 'CustomersForm',
+    name: 'Feedback',
 
     data() {
         return {
