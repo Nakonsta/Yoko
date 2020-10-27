@@ -17,13 +17,26 @@
                 </ValidationProvider>
                 <ValidationProvider name="Телефон" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
                     <span class="field__label">Телефон</span>
-                    <input :class="{field: true, error: failed}" type="tel" name="phone" v-model="customersPhone">
+                    <input 
+                        :class="{field: true, error: failed}"
+                        type="text"
+                        name="phone"
+                        v-model="customersPhone"
+                        v-mask="`+7 (###) ###-##-##`"
+                        placeholder="+7 (___) ___-__-__">
                     <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                 </ValidationProvider>
                 <div class="form__columns">
-                    <label class="field__container field__container--large">
-                        <input class="field" type="checkbox" name="confident" v-model="customersConfident">
-                        <span class="field__label">Я согласен с <a href="#" class="feedback__link">Политикой конфиденциальности</a></span>
+                    <label class="checkbox">
+                        <input 
+                          class=""
+                          type="checkbox"
+                          name="confident"
+                          v-model="customersConfident"
+                          @change="(e) => changeFilter(item.id, value, e.target.checked)"
+                        >
+                        <span class="checkbox__body"></span>
+                        <span class="checkbox__text">Я согласен с <a href="#" class="feedback__link">Политикой конфиденциальности</a></span>
                     </label>
                 </div>
                 <button type="submit" class="btn feedback__submit">Отправить</button>

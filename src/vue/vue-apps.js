@@ -7,6 +7,9 @@ Vue.component('InfiniteLoading', InfiniteLoading)
 import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate)
 
+import VueTheMask from 'vue-the-mask'
+Vue.use(VueTheMask)
+
 // validate
 import {configure, setInteractionMode, ValidationObserver, ValidationProvider, extend, localize} from 'vee-validate'
 import ru from 'vee-validate/dist/locale/ru.json';
