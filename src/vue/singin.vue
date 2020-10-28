@@ -16,10 +16,17 @@
                 <input :class="{field: true, error: failed}" type="password" name="password" v-model="password">
                 <span v-show="failed" class="field__error">{{ errors[0] }}</span>
             </ValidationProvider>
-            <div class="form__columns">
-                <label class="field__container">
-                    <input class="field" type="checkbox" name="remember" v-model="rememberMe">
-                    <span class="field__label">Запомнить меня</span>
+            <div class="form__columns form__columns--remember">
+<!--                <label class="field__container">-->
+<!--                    <input class="field" type="checkbox" name="remember" v-model="rememberMe">-->
+<!--                    <span class="field__label">Запомнить меня</span>-->
+<!--                </label>-->
+                <label class="checkbox">
+                    <input type="checkbox" name="remember" v-model="rememberMe">
+                    <span class="checkbox__body"></span>
+                    <span class="checkbox__text">
+                            Запомнить меня
+                        </span>
                 </label>
                 <a href="#forgot" class="popup-link">Восстановить пароль</a>
             </div>
@@ -82,3 +89,15 @@
         },
     }
 </script>
+
+<style lang="scss">
+    .form__columns--remember {
+        @media (max-width: 768px) {
+            display: flex;
+            flex-direction: column;
+            .checkbox {
+                margin-bottom: .5rem;
+            }
+        }
+    }
+</style>

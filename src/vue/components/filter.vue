@@ -25,8 +25,8 @@
                                     <input type="checkbox" @change="(e) => changeFilter(item.id, value, e.target.checked)">
                                     <span class="checkbox__body"></span>
                                     <span class="checkbox__text">
-                            {{ value }}
-                        </span>
+                                        {{ value }}
+                                    </span>
                                 </label>
                             </div>
                         </div>
