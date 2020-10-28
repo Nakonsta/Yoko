@@ -149,5 +149,6 @@ module.exports = {
     devServer: {
         //contentBase: 'src',
         port: 3000,
+        disableHostCheck: true,
     }
 };

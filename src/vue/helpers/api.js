@@ -56,5 +56,8 @@ export default {
                 password: p,
             });
         },
+        fetchUser() {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/auth/me`);
+        },
     }
 }

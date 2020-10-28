@@ -1,3 +1,5 @@
+import store from './store/index'
+
 import Multiselect from 'vue-multiselect'
 Vue.component('multiselect', Multiselect)
 
@@ -37,6 +39,7 @@ const catalogBlock = document.querySelector('#catalog');
 if (catalogBlock) {
     let appCatalog = new Vue({
         el: catalogBlock,
+        store: store,
         render: function(h) { return h(Catalog); }
     })
 }
@@ -47,6 +50,7 @@ const singinBlock = document.querySelector('#singin .popup__content-container');
 if (singinBlock) {
     let singinApp = new Vue({
         el: singinBlock,
+        store: store,
         render: function(h) { return h(Singin)}
     })
 }
@@ -57,6 +61,7 @@ const forgotBlock = document.querySelector('#forgot .popup__content-container');
 if (forgotBlock) {
     let forgotApp = new Vue({
         el: forgotBlock,
+        store: store,
         render: function(h) { return h(Forgot)}
     })
 }
@@ -67,6 +72,7 @@ const feedback = document.querySelector('#feedback');
 if (feedback) {
     let appFeedback = new Vue({
         el: feedback,
+        store: store,
         render: function(h) { return h(Feedback); }
     })
 }
