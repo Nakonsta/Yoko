@@ -3,6 +3,9 @@ global.$ = global.jQuery = jquery;
 
 import "core-js";
 
+import Cookies from 'js-cookie'
+window.Cookies = Cookies
+
 import axios from 'axios';
 global.axios = axios;
 

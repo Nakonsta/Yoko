@@ -65,7 +65,8 @@
 
                                 document.cookie = `auth._token.local=Bearer%20${token};domain=${process.env.AUTH_DOMAIN};expires=${now};path=/`
                             }
-                            window.location.href = `${process.env.LK_SUPP}`
+                            // window.location.href = `${process.env.LK_SUPP}`
+                            this.$store.commit('getUser')
                         })
                         .catch((response) => {
                             if (
