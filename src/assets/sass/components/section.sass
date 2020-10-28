@@ -37,6 +37,11 @@
             &.with-slider
                 padding-right: 120px !important
 
+        &--only-mobile
+            display: none
+            @include mq($until: tablet)
+                display: flex
+
     &__title
         margin: 0 0 rem(32px)
         font-size: rem(32px)
