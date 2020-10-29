@@ -1,6 +1,72 @@
 <template>
     <div class="support-block">
-        <div class="support-form"></div>
+        <div class="support-form">
+            <div class="support-form__item">
+                <label class="support-form__label">Выбрать тему</label>
+                <multiselect
+                v-model="formForSend.theme"
+                deselect-label="Can't remove this value" 
+                track-by="name"
+                label="name" 
+                selectedLabel=""
+                selectLabel=""
+                deselectLabel=""
+                placeholder="Выбрать тему" 
+                :options="supportForm.topics" 
+                :searchable="false" 
+                :allow-empty="false"
+                >
+                    <template
+                    slot="singleLabel" 
+                    slot-scope="{ option }"
+                    >
+                    {{ option.name }}
+                    </template>
+                </multiselect>
+            </div>
+            <div v-if="formForSend.theme && formForSend.theme.value === 'auth'" class="support-form__item">
+                <label class="support-form__label">Уточнить тему</label>
+                <multiselect
+                v-model="formForSend.login_to_system"
+                deselect-label="Can't remove this value" 
+                track-by="name" 
+                label="name"
+                selectedLabel=""
+                selectLabel=""
+                deselectLabel=""
+                placeholder="Уточнить тему" 
+                :options="supportForm.topicsAuth" 
+                :searchable="false" 
+                :allow-empty="false"
+                >
+                    <template
+                    slot="singleLabel" 
+                    slot-scope="{ option }"
+                    >
+                    {{ option.name }}
+                    </template>
+                </multiselect>
+            </div>
+            <div v-if="
+                formForSend.theme &&
+                (formForSend.theme.value === 'bidding' ||
+                formForSend.theme.value === 'technical' ||
+                formForSend.theme.value === 'autonomous')
+                " 
+                class="support-form__item"
+            >
+                <ValidationProvider name="Номер торговой процедуры" :rules="{ regex: /^[0-9]+$/ }" v-slot="{ errors, failed }" tag="label" class="field__container">
+                    <span class="field__label">Номер торговой процедуры</span>
+                    <input 
+                        :class="{field: true, error: failed}"
+                        type="tel"
+                        name="trade_procedure_number"
+                        v-model="formForSend.trade_procedure_number"
+                        placeholder="Номер торговой процедуры">
+                    <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                </ValidationProvider>
+            </div>
+        </div>
         <div class="support-info">
             <div class="support-info__title">
                 У компании OOO “ПРИМЕР” есть учетная запись.
@@ -45,6 +111,34 @@ export default {
 
     data() {
         return {
+            supportForm: {
+                topics: [
+                    { name: '223-ФЗ. Проблемы выгрузки на ЕИС', value: '223' },
+                    { name: 'Вопросы по оплате и подключению', value: 'payment' },
+                    { name: 'Оформление договора, реорганизация', value: 'agreement' },
+                    { name: 'Смена наименования, смена ОПФ', value: 'rename' },
+                    { name: 'Смена юридического адреса и КПП', value: 'change-address' },
+                    { name: 'Акт, счет-фактура', value: 'invoice' },
+                    { name: 'Акты-сверки и авансовые счета-фактуры', value: 'reconciliation' },
+                    { name: 'Вход в систему', value: 'auth' },
+                    { name: 'НСИ', value: 'law' },
+                    { name: 'Организация и участие в торгах', value: 'bidding' },
+                    { name: 'Предложения и отзывы о работе Системы', value: 'reviews' },
+                    { name: 'Работа ЭЦП', value: 'EDS' },
+                    { name: 'Регистрация компании в Системе', value: 'registration' },
+                    { name: 'Техническое проблемы', value: 'technical' },
+                    { name: 'Автономная отрасль', value: 'autonomous' },
+                ],
+                topicsAuth: [
+                    { name: 'Запросить контакты главного пользователя', value: 'request-contacts' },
+                    { name: 'Сменить главного пользователя', value: 'change-main-user' },
+                ]
+            },
+            formForSend: {
+                theme: null,
+                login_to_system: null,
+                trade_procedure_number: null,
+            },
             supportInfo: {
                 reference_block: null,
                 download_link: null,
