@@ -59,5 +59,8 @@ export default {
         fetchUser() {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/auth/me`);
         },
+        fetchSupportInfo() {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/settings/feedback/`);
+        },
     }
 }

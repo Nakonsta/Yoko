@@ -66,7 +66,7 @@ if (forgotBlock) {
     })
 }
 
-// Форма на странице Заказчикам
+// Форма на странице Заказчикам / Поставщикам
 import Feedback from './feedback.vue'
 const feedback = document.querySelector('#feedback');
 if (feedback) {
@@ -74,5 +74,16 @@ if (feedback) {
         el: feedback,
         store: store,
         render: function(h) { return h(Feedback); }
+    })
+}
+
+// Форма обратной связи
+import Support from './support.vue'
+const support = document.querySelector('#support');
+if (support) {
+    let supportBlock = new Vue({
+        el: support,
+        store: store,
+        render: function(h) { return h(Support); }
     })
 }
