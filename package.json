@@ -64,6 +64,7 @@
     "dragula": "^3.7.2",
     "glightbox": "^3.0.5",
     "js-cookie": "^2.2.1",
+    "moment": "^2.29.1",
     "nouislider": "^14.2.0",
     "object-fit-images": "3.2.4",
     "sass-mq": "^5.0.1",

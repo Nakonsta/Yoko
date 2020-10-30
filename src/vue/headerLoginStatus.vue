@@ -23,7 +23,7 @@
                     № {{ $store.state.auth.user.company.id }}
                 </div>
                 <div class="user-info__time">
-                    12<span class="user-info__time-dots">:</span>00 MSK
+                    {{ hours }}<span class="user-info__time-dots">:</span>{{ minutes }} MSK
                 </div>
             </div>
             <div class="user-info__menu">
@@ -86,11 +86,34 @@
 </template>
 
 <script>
+    import moment from 'moment'
+
     export default {
         name: 'UserInfo',
+        created() {
+            this.startTime()
+        },
+        data() {
+          return {
+              hours: null,
+              minutes: null,
+          }
+        },
         methods: {
             logout() {
                 this.$store.commit('logout', true)
+            },
+            startTime() {
+                const timestamp = document.body.getAttribute('data-timestamp')
+                let time = moment()
+                if (timestamp) {
+                    time = moment.unix(timestamp)
+                }
+                setInterval(() => {
+                    time.add(2, 'seconds')
+                    this.hours = time.format('H')
+                    this.minutes = time.format('mm')
+                }, 1000)
             }
         }
     }
