@@ -5,7 +5,7 @@
         </div>
         <ValidationObserver ref="form" tag="div" mode="eager">
             <form class="feedback__form" @submit.prevent="onSubmit" slot-scope="{ valid }">
-                <ValidationProvider name="ФИО" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
+                <ValidationProvider name="ФИО" v-slot="{ errors, failed }" :rules="{ required: true, min: 2 }" tag="label" class="field__container">
                     <span class="field__label">ФИО</span>
                     <input :class="{field: true, error: failed}" type="text" name="fio" v-model="customersFio">
                     <span v-show="failed" class="field__error">{{ errors[0] }}</span>
@@ -15,7 +15,7 @@
                     <input :class="{field: true, error: failed}" type="text" name="email" v-model="customersEmail">
                     <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                 </ValidationProvider>
-                <ValidationProvider name="Телефон" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
+                <ValidationProvider name="Телефон" v-slot="{ errors, failed }" :rules="{ required: true, min: 18 }" tag="label" class="field__container">
                     <span class="field__label">Телефон</span>
                     <input 
                         :class="{field: true, error: failed}"

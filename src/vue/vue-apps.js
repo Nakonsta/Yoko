@@ -66,7 +66,7 @@ if (forgotBlock) {
     })
 }
 
-// Форма на странице Заказчикам
+// Форма на странице Заказчикам / Поставщикам
 import Feedback from './feedback.vue'
 const feedback = document.querySelector('#feedback');
 if (feedback) {
@@ -76,3 +76,32 @@ if (feedback) {
         render: function(h) { return h(Feedback); }
     })
 }
+
+// Форма обратной связи
+import Support from './support.vue'
+const support = document.querySelector('#support');
+if (support) {
+    let supportBlock = new Vue({
+        el: support,
+        store: store,
+        render: function(h) { return h(Support); }
+    })
+}
+
+// Информация об авторизованном пользователе в хедере десктоп и кнопки вход и регистрация
+import HeaderLoginStatus from './headerLoginStatus.vue'
+const headerLoginStatus = document.querySelectorAll('.header-login-status');
+headerLoginStatus.forEach((el) => {
+    new Vue({
+        el: el,
+        store: store,
+        render: function(h) { return h(HeaderLoginStatus); }
+    })
+})
+// if (headerLoginStatus) {
+//     let headerLoginStatusBlock = new Vue({
+//         el: headerLoginStatus,
+//         store: store,
+//         render: function(h) { return h(HeaderLoginStatus); }
+//     })
+// }

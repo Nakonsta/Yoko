@@ -11,28 +11,51 @@ const store = new Vuex.Store({
             user: null,
             loggedIn: false,
         },
-        token: null
+        token: null,
+        env: {
+            LK_SUPP: process.env.LK_SUPP
+        }
     },
     mutations: {
         authorization(state) {
             const token = Cookies.get('auth._token.local')
+            const storageUser = sessionStorage.getItem('user')
 
-            if (token && !axios.defaults.headers.common.Authorization) {
+            if (token && token !== 'false' && !axios.defaults.headers.common.Authorization) {
                 axios.defaults.headers.common.Authorization = `${token}`
-            }
-
-            api.methods.fetchUser()
-                .then((response) => {
-                    console.log(state)
-                    state.token = token
-                    state.auth.user = response.data.data
+                if (storageUser) {
+                    state.auth.user = JSON.parse(storageUser)
                     state.auth.loggedIn = true
-                })
-                .catch((e) => {
-                    console.log(e)
-                    state.auth.user = null
-                    state.auth.loggedIn = false
-                })
+                } else {
+                    window.openLoader()
+                }
+                api.methods.fetchUser()
+                    .then((response) => {
+                        console.log(state)
+                        state.token = token
+                        state.auth.user = response.data.data
+                        state.auth.loggedIn = true
+                        sessionStorage.setItem('user', JSON.stringify(response.data.data))
+                        window.closeLoader()
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        window.closeLoader()
+                        state.auth.user = null
+                        state.auth.loggedIn = false
+                    })
+            } else {
+                store.commit('logout')
+            }
+        },
+        logout(state, reload) {
+            Cookies.remove('auth._token.local', { domain: process.env.AUTH_DOMAIN, path: '/' })
+            state.auth.user = false
+            state.auth.loggedIn = false
+            sessionStorage.removeItem('user')
+            if (reload) {
+                document.location.reload()
+            }
         }
     }
 })
