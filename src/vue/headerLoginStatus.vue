@@ -1,14 +1,16 @@
 <template>
     <div>
         <div v-if="$store.state.auth.loggedIn" class="user-info">
-            <div class="user-info__name">
-                {{ $store.state.auth.user.company.name }}
-            </div>
-            <div class="user-info__id">
-                № {{ $store.state.auth.user.company.id }}
-            </div>
-            <div class="user-info__time">
-                12:00 MSK
+            <div class="user-info__info">
+                <div class="user-info__name">
+                    {{ $store.state.auth.user.company.name }}
+                </div>
+                <div class="user-info__id">
+                    № {{ $store.state.auth.user.company.id }}
+                </div>
+                <div class="user-info__time">
+                    12:00 MSK
+                </div>
             </div>
             <div class="user-info__menu">
                 <div class="user-info__menu-item">
@@ -17,6 +19,9 @@
                             <path d="M2.32427 23.1279C1.20427 23.1279 0.280273 22.2039 0.280273 21.0839V6.9439C0.280273 5.8239 1.20427 4.8999 2.32427 4.8999H25.6483C26.7683 4.8999 27.6923 5.8239 27.6923 6.9439V21.0559C27.6923 22.1759 26.7683 23.0999 25.6483 23.0999H2.32427V23.1279ZM24.7803 21.4759L17.7243 15.0639L15.5123 17.0239C15.0923 17.3879 14.5603 17.6119 14.0003 17.6119C13.4403 17.6119 12.9083 17.4159 12.4883 17.0239L10.2763 15.0639L3.22027 21.4759H24.7803ZM26.0683 20.3839V7.5879L18.9563 13.9439L26.0683 20.3839ZM1.93227 20.3839L9.04427 13.9439L1.93227 7.5879V20.3839ZM13.5803 15.7919C13.6643 15.8759 13.8323 15.9039 14.0003 15.9039C14.1683 15.9039 14.3363 15.8479 14.4203 15.7919L24.7803 6.5239H3.22027L13.5803 15.7919Z" fill="#31ACB8"/>
                         </svg>
                     </a>
+                    <div class="user-info__menu-counter">
+                        3
+                    </div>
                 </div>
                 <div class="user-info__menu-item">
                     <a href="#">
@@ -75,10 +80,42 @@
         display: flex;
         font-family: "Gilroy-SemiBold", sans-serif;
         align-items: center;
+        @media(max-width: 1588px) {
+            display: block;
+        }
+        @media(max-width: 1250px) {
+            max-width: 20rem;
+        }
+        @media(max-width: 1000px) {
+            max-width: 14rem;
+        }
+        &__info {
+            display: flex;
+            align-items: center;
+            @media(max-width: 1250px) {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+        }
         &__name {
             font-weight: 600;
             font-size: rem(18px);
             line-height: 160%;
+            max-width: 25rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            @media(max-width: 1776px) {
+                max-width: 15rem;
+            }
+            @media(max-width: 1588px) {
+
+            }
+            @media(max-width: 1250px) {
+                max-width: none;
+                width: 100%;
+                text-align: right;
+            }
         }
         &__id {
             font-weight: 600;
@@ -95,8 +132,32 @@
         &__menu {
             display: flex;
             align-items: center;
+            @media(max-width: 1588px) {
+                justify-content: flex-end;
+            }
+        }
+        &__menu-counter {
+            transition: .3s background-color;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            right: 0;
+            width: rem(16px);
+            height: rem(16px);
+            border-radius: rem(50px);
+            background-color: $colorCrimson;
+            color: #fff;
+            transform: translate(50%, -25%);
+            font-size: 10px;
+            line-height: 12px;
+            font-family: "Roboto", sans-serif;
+            font-weight: 400;
+            z-index: 3;
         }
         &__menu-item {
+            position: relative;
             margin-left: rem(24px);
             & > a {
                 display: block;
@@ -106,9 +167,13 @@
             svg {
                 display: block;
             }
+            &:hover {
+                .user-info__menu-counter {
+                    background-color: $colorCrimsonLight;
+                }
+            }
         }
         &__menu-item--sub {
-            position: relative;
             &:hover {
                 .user-info__submenu {
                     transform: translateY(0);
