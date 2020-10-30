@@ -27,6 +27,7 @@ const store = new Vuex.Store({
                     state.token = token
                     state.auth.user = response.data.data
                     state.auth.loggedIn = true
+                    closePopupById('#singin')
                 })
                 .catch((e) => {
                     console.log(e)

@@ -87,3 +87,21 @@ if (support) {
         render: function(h) { return h(Support); }
     })
 }
+
+// Информация об авторизованном пользователе в хедере десктоп и кнопки вход и регистрация
+import HeaderLoginStatus from './headerLoginStatus.vue'
+const headerLoginStatus = document.querySelectorAll('.header-login-status');
+headerLoginStatus.forEach((el) => {
+    new Vue({
+        el: el,
+        store: store,
+        render: function(h) { return h(HeaderLoginStatus); }
+    })
+})
+// if (headerLoginStatus) {
+//     let headerLoginStatusBlock = new Vue({
+//         el: headerLoginStatus,
+//         store: store,
+//         render: function(h) { return h(HeaderLoginStatus); }
+//     })
+// }

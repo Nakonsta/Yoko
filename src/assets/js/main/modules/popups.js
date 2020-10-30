@@ -12,6 +12,12 @@ function openPopupById(id) {
 	popupOpen(curentPopup);
 }
 
+function closePopupById(id) {
+	const name = id.replace('#', '');
+	const curentPopup = document.getElementById(name);
+	popupClose(curentPopup);
+}
+
 document.addEventListener('click', function(e) {
 	if( ! e.target.classList.contains(popupLinksClass) ) return;
 	e.preventDefault();
@@ -160,3 +166,4 @@ function popupOpenUniversalForm(title = '', text = '') {
 
 window.popupOpen = popupOpenUniversalForm;
 window.openPopupById = openPopupById;
+window.closePopupById = closePopupById;
