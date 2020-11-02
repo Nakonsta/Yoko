@@ -3,7 +3,63 @@
 
 .support-form
     width: 52%
-    padding-right: rem(148px)
+    margin-right: rem(148px)
+    background-color: #fff
+    border-radius: 6px
+    padding: rem(32px) rem(32px) rem(47px)
+    &__label
+        display: inline-block
+        padding-bottom: 4px
+    &__item
+        &--file
+            outline-offset: -12px
+            margin-bottom: 24px
+        .field__label
+            font-size: rem(14px)
+            line-height: 140%
+            padding-bottom: 4px
+            margin-bottom: 0
+        &-info
+            padding-top: 8px
+            font-size: rem(14px)
+            line-height: 140%
+            color: $colorGray
+            &--padding-top
+                padding-top: 16px
+    &__input-file
+        width: 0.1px
+        height: 0.1px
+        opacity: 0
+        position: absolute
+        z-index: -10
+    &__label-file
+        border: 1px solid $colorTurquoise
+        border-radius: 6px
+        padding: rem(9px) rem(32px)
+        font-weight: 500
+        font-size: 14px
+        line-height: 160%
+        color: $colorTurquoise
+        text-align: center
+        cursor: pointer
+    &__textarea.field
+        resize: none
+        height: 96px
+    &__application
+        color: $colorTurquoise
+        text-decoration: underline
+    &__size
+        margin-bottom: 24px
+    &__policy
+        padding: rem(12px) 0 rem(24px)
+    &__link
+        color: $colorTurquoise
+        text-decoration: underline
+    &__submit
+        padding-left: rem(67px)
+        padding-right: rem(67px)
+        &[disabled="disabled"]
+            background-color: $colorGray
 
 .support-info
     width: 48%
@@ -21,3 +77,22 @@
             padding-left: rem(14px)
     &__link
         color: $lightcolorText
+
+.file-listing
+    display: flex
+    align-items: center
+    padding: rem(10px) 0 0
+    &__info
+        margin-right: rem(16px)
+    &__delete
+        display: inline-block
+        width: 12px
+        height: 12px
+        position: relative
+        cursor: pointer
+        svg
+            position: absolute
+            top: 0
+            bottom: 0
+            left: 0
+            right: 0
