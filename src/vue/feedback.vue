@@ -51,6 +51,8 @@ import api from './helpers/api'
 export default {
     name: 'Feedback',
 
+    mixins: [api],
+
     data() {
         return {
             customersFio: '',
@@ -61,9 +63,30 @@ export default {
         }
     },
 
+    computed: {
+        contragent() {
+            let type = document.querySelector('.feedback').getAttribute('data-js');
+            return type
+        }       
+    },
+
     methods: {
         onSubmit() {
+            let feedbackForm = {
+                subject: this.contragent,
+                fio: this.customersFio,
+                email: this.customersEmail,
+                phone: this.customersPhone,
+                consent: this.isChecked,
+            }
+            this.fetchContragentFeedbackForm(
+                this.contragent, this.customersFio, this.customersEmail, this.customersPhone, this.isChecked
+            ).then(() => {
 
+            })
+            .catch((response) => {
+                console.log(response.message)
+            });
         }
     }
 }

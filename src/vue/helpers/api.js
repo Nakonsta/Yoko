@@ -69,5 +69,19 @@ export default {
         fetchSupportInfo() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/settings/feedback/`);
         },
+        fetchContragentFeedbackForm(s, f, e, p, c) {
+            return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/forms/call`, {
+                subject: s,
+                fio: f,
+                email: e,
+                phone: p,
+                consent: c,
+            });
+        },
+        fetchSupportForm(data) {
+            return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/email/feedback/send`, {
+                data: data
+            });
+        },
     }
 }
