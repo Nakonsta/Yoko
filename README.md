@@ -15,3 +15,7 @@ AUTH_DOMAIN=ec.extyl.pro
 ## Запуск и остановка глобального прелоадера
 **openLoader** - Запуск
 **closeLoader** - Остановка
+
+## Нотификации
+**notificationSuccess(text)** - Нотификация успеха
+**notificationError(text)** - Нотификация ошибки
