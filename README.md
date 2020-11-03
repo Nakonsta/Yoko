@@ -8,6 +8,8 @@ AUTH_DOMAIN=ec.extyl.pro
 **Для локальной работы**  
 **Файл hosts windows**  
 127.0.0.1 ec.extyl.pro
+**Файл hosts mac os**  
+sudo vi /etc/hosts, далее I, далее вставить строчку и сохранить через Esc:w
 
 Домены должны одинаковые  
 После этого работать с авторизацией на ec.extyl.pro

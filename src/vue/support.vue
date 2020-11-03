@@ -1,15 +1,18 @@
 <template>
     <div class="support-block">
         <div class="support-form">
+            <div class="support-form__title">
+                Связаться с поддержкой
+            </div>
         <ValidationObserver ref="form" tag="div" mode="eager">
             <form class="support-form__form" @submit.prevent="sendForm" slot-scope="{ valid }">
-                <div class="support-form__item">
+                <div v-if="supportForm.topics" class="support-form__item">
                     <label class="support-form__label">Выбрать тему</label>
                     <multiselect
                     v-model="formForSend.theme"
                     deselect-label="Can't remove this value" 
-                    track-by="name"
-                    label="name" 
+                    track-by="value"
+                    label="value" 
                     selectedLabel=""
                     selectLabel=""
                     deselectLabel=""
@@ -22,17 +25,17 @@
                         slot="singleLabel" 
                         slot-scope="{ option }"
                         >
-                        {{ option.name }}
+                        {{ option.value }}
                         </template>
                     </multiselect>
                 </div>
-                <div v-if="formForSend.theme && formForSend.theme.value === 'auth'" class="support-form__item">
+                <div v-if="formForSend.theme && formForSend.theme.id === 'login_to_system'" class="support-form__item">
                     <label class="support-form__label">Уточнить тему</label>
                     <multiselect
                     v-model="formForSend.login_to_system"
                     deselect-label="Can't remove this value" 
-                    track-by="name" 
-                    label="name"
+                    track-by="value" 
+                    label="value"
                     selectedLabel=""
                     selectLabel=""
                     deselectLabel=""
@@ -45,15 +48,15 @@
                         slot="singleLabel" 
                         slot-scope="{ option }"
                         >
-                        {{ option.name }}
+                        {{ option.value }}
                         </template>
                     </multiselect>
                 </div>
                 <div v-if="
                     formForSend.theme &&
-                    (formForSend.theme.value === 'bidding' ||
-                    formForSend.theme.value === 'technical' ||
-                    formForSend.theme.value === 'autonomous')
+                    (formForSend.theme.id === 'organization_and_participation_in_tenders' ||
+                    formForSend.theme.id === 'technical_problems' ||
+                    formForSend.theme.id === 'autonomous_industry')
                     " 
                     class="support-form__item"
                 >
@@ -68,16 +71,15 @@
                         <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                     </ValidationProvider>
                 </div>
-                <div v-if="formForSend.theme && formForSend.theme.value === 'auth'" class="support-form__item">
+                <div v-if="formForSend.theme && formForSend.theme.id === 'login_to_system'" class="support-form__item">
                     <a href="#" class="support-form__application">Скачайте заявление на смену главного пользователя организации</a>
                     <div class="support-form__size">(47  КБ)</div>
                 </div>
-                <div v-if="formForSend.theme && formForSend.theme.value === 'auth'" class="support-form__item support-form__item--file">
+                <div v-if="formForSend.theme && formForSend.theme.id === 'login_to_system'" class="support-form__item support-form__item--file">
                 <input
                   id="file-input"
                   type="file" 
                   name="file" 
-                  multiple 
                   class="support-form__input-file" 
                   @change="attachApplication"
                 >
@@ -99,7 +101,7 @@
                 </div>
                 
                 </div>
-                <div v-if="formForSend.theme" class="support-form__item">
+                <div class="support-form__item">
                     <ValidationProvider name="Введите текст обращения" :rules="{ max: 1000 }" v-slot="{ errors, failed }" tag="label" class="field__container">
                         <span class="field__label">Введите текст обращения</span>
                         <textarea 
@@ -116,45 +118,44 @@
                         </div>
                     </ValidationProvider>
                 </div>
-                <div v-if="formForSend.theme" class="support-form__item">
+                <div class="support-form__item">
                     <ValidationProvider name="E-mail" v-slot="{ errors, failed }" rules="required|email" tag="label" class="field__container">
                         <span class="field__label">E-mail</span>
                         <input :class="{field: true, error: failed}" type="text" name="email" v-model="formForSend.email">
                         <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                     </ValidationProvider>
                 </div>
-                <div v-if="formForSend.theme" class="support-form__item">
+                <div class="support-form__item">
                     <ValidationProvider name="Имя" v-slot="{ errors, failed }" :rules="{ required: true, min: 2 }" tag="label" class="field__container">
                         <span class="field__label">Имя</span>
                         <input :class="{field: true, error: failed}" type="text" name="name" v-model="formForSend.name">
                         <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                     </ValidationProvider>
                 </div>
-                <div v-if="formForSend.theme" class="support-form__item">
-                    <ValidationProvider name="Телефон" v-slot="{ errors, failed }" :rules="{ required: true, min: 18 }" tag="label" class="field__container">
+                <div class="support-form__item">
+                    <ValidationProvider name="Телефон" v-slot="{ errors, failed }" :rules="{ required: true }" tag="label" class="field__container">
                         <span class="field__label">Телефон</span>
                         <input 
                             :class="{field: true, error: failed}"
                             type="text"
                             name="phone"
-                            v-model="formForSend.phone"
                             v-mask="`+7 (###) ###-##-##`"
+                            v-model="formForSend.phone"
                             placeholder="+7 (___) ___-__-__">
                         <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                     </ValidationProvider>
                 </div>
-                <div v-if="formForSend.theme" class="support-form__item">
+                <div class="support-form__item">
                     <ValidationProvider name="ИНН Компании" v-slot="{ errors, failed }" :rules="{ required: true }" tag="label" class="field__container">
                         <span class="field__label">ИНН Компании</span>
                         <input :class="{field: true, error: failed}" type="text" name="inn" v-model="formForSend.inn">
                         <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                     </ValidationProvider>
                 </div>
-                <div v-if="formForSend.theme" class="support-form__policy">
+                <div class="support-form__policy">
                     Нажимая на кнопку «Сохранить и продолжить», вы принимаете условия <a href="#" class="support-form__link">Пользовательского соглашения</a>, соглашаетесь на <a href="#" class="support-form__link">обработку персональных данных</a> и получение сообщений
                 </div>
                 <button 
-                  v-if="formForSend.theme" 
                   type="submit" 
                   class="btn support-form__submit" 
                   :disabled="!valid"
@@ -164,7 +165,7 @@
             </form>
         </ValidationObserver>
         </div>
-        <div class="support-info">
+        <div v-if="!$store.state.auth.loggedIn" class="support-info">
             <div class="support-info__title">
                 У компании OOO “ПРИМЕР” есть учетная запись.
             </div>
@@ -202,6 +203,7 @@
 
 <script>
 import api from './helpers/api'
+import $store from './store/index'
 
 export default {
     name: 'Support',
@@ -209,27 +211,8 @@ export default {
     data() {
         return {
             supportForm: {
-                topics: [
-                    { name: '223-ФЗ. Проблемы выгрузки на ЕИС', value: '223' },
-                    { name: 'Вопросы по оплате и подключению', value: 'payment' },
-                    { name: 'Оформление договора, реорганизация', value: 'agreement' },
-                    { name: 'Смена наименования, смена ОПФ', value: 'rename' },
-                    { name: 'Смена юридического адреса и КПП', value: 'change-address' },
-                    { name: 'Акт, счет-фактура', value: 'invoice' },
-                    { name: 'Акты-сверки и авансовые счета-фактуры', value: 'reconciliation' },
-                    { name: 'Вход в систему', value: 'auth' },
-                    { name: 'НСИ', value: 'law' },
-                    { name: 'Организация и участие в торгах', value: 'bidding' },
-                    { name: 'Предложения и отзывы о работе Системы', value: 'reviews' },
-                    { name: 'Работа ЭЦП', value: 'EDS' },
-                    { name: 'Регистрация компании в Системе', value: 'registration' },
-                    { name: 'Техническое проблемы', value: 'technical' },
-                    { name: 'Автономная отрасль', value: 'autonomous' },
-                ],
-                topicsAuth: [
-                    { name: 'Запросить контакты главного пользователя', value: 'request-contacts' },
-                    { name: 'Сменить главного пользователя', value: 'change-main-user' },
-                ]
+                topics: [],
+                topicsAuth: []
             },
             formForSend: {
                 theme: null,
@@ -259,10 +242,23 @@ export default {
     mixins: [api],
 
     created() {
-       this.getSupportInfo() 
+       this.getSupportInfo()
+       this.getSupportTopics()
+       this.fillUserData()
     },
 
     methods: {
+        getSupportTopics() {
+            this.fetchSupportTopics()
+                .then((response) => {
+                    console.log(response);
+                    this.supportForm.topics = response.data.data.theme
+                    this.supportForm.topicsAuth = response.data.data.login_to_system
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
         getSupportInfo() {
             this.fetchSupportInfo()
                 .then((response) => {
@@ -278,6 +274,15 @@ export default {
                     console.log(e)
                 })
         },
+        fillUserData() {
+            if ($store.state.auth.loggedIn) {
+                this.formForSend.email = $store.state.auth.user.email
+                this.formForSend.name = $store.state.auth.user.name + ' ' + $store.state.auth.user.lastName
+                this.formForSend.phone = $store.state.auth.user.phone
+                this.formForSend.inn = $store.state.auth.user.company.inn
+            }
+            return false
+        },
         countSymbols() {
             this.formForSend.text.length <= this.maxSymbolForType ?
               this.actualSymbolForType = this.maxSymbolForType - this.formForSend.text.length :
@@ -292,38 +297,69 @@ export default {
         removeFile(key) {
             this.formForSend.statement.splice(key, 1)
         },
-        appendFormData(data, root, formDataObj) {
-            root = root || ''
-            if (data instanceof File) {
+        objectToFormData(data) {
+            const fData = new FormData()
+
+            function appendFormData(data, root, formDataObj) {
+                root = root || ''
+                if (data instanceof File) {
                 formDataObj.append(root, data)
-            } else if (Array.isArray(data)) {
+                } else if (Array.isArray(data)) {
+                console.log('fdsf')
+                console.log(data)
                 for (let i = 0; i < data.length; i++) {
-                    this.appendFormData(data[i], root + '[' + i + ']', formDataObj)
+                    appendFormData(data[i], root + '[' + i + ']', formDataObj)
                 }
-            } else if (typeof data === 'object' && data) {
-            for (const key in data) {
-                if (data.hasOwnProperty(key)) {
-                    if (root === '') {
-                        this.appendFormData(data[key], key, formDataObj)
-                    } else {
-                        this.appendFormData(
-                        data[key],
-                        root + '[' + key + ']',
-                        formDataObj,
-                        )
+                } else if (typeof data === 'object' && data) {
+                for (const key in data) {
+                    // eslint-disable-next-line
+                    if (data.hasOwnProperty(key)) {
+                        if (root === '') {
+                            appendFormData(data[key], key, formDataObj)
+                        } else {
+                            appendFormData(data[key], root + '[' + key + ']', formDataObj)
+                        }
                     }
                 }
-            }
-            } else if (data !== null && typeof data !== 'undefined') {
+                } else if (data !== null && typeof data !== 'undefined') {
                 formDataObj.append(root, data)
+                }
             }
+
+            appendFormData(data, '', fData)
+
+            return fData
         },
         sendForm(evt) {
             evt.preventDefault()
-            const formDataObj = new FormData()
-            this.appendFormData(this.formForSend, '', formDataObj)
+            const fData = {
+                theme: this.formForSend.theme.id,
+                text: this.formForSend.text,
+                email: this.formForSend.email,
+                name: this.formForSend.name,
+                phone: this.formForSend.phone,
+                inn: this.formForSend.inn,
+            }
+            if (this.formForSend.theme.id === "login_to_system") {
+                fData.login_to_system = this.formForSend.login_to_system.id
+                fData.statement = this.formForSend.statement[0]
+            }
+            if (this.formForSend.theme.id === "organization_and_participation_in_tenders" ||
+                this.formForSend.theme.id === "technical_problems" ||
+                this.formForSend.theme.id === "autonomous_industry"
+            ) {
+                fData.trade_procedure_number = this.formForSend.trade_procedure_number
+            }
+            const formDataObj = this.objectToFormData(fData)
+            console.log(fData);
             console.log(formDataObj)
-            this.fetchSupportForm(formDataObj) 
+            this.fetchSupportForm(formDataObj)
+                .then(() => {
+
+                })
+                .catch((response) => {
+                    console.log(response.message)
+                });
         }
     }
 }
