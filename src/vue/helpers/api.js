@@ -62,6 +62,9 @@ export default {
         fetchSupportInfo() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/settings/feedback/`);
         },
+        fetchSupportTopics() {
+            return axios.get(`${process.env.API_URL_NOTICE_SERVICE}/api/email/feedback/properties`);
+        },
         fetchContragentFeedbackForm(s, f, e, p, c) {
             return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/forms/call`, {
                 subject: s,
@@ -72,9 +75,7 @@ export default {
             });
         },
         fetchSupportForm(data) {
-            return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/email/feedback/send`, {
-                data: data
-            });
+            return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/email/feedback/send`, data);
         },
     }
 }
