@@ -30,15 +30,17 @@
                     if (!success) {
                         return;
                     }
-                    alert('Send');
-                    // todo send
-                    // this.___(this.email)
-                    //     .then((data) => {
-                    //
-                    //     })
-                    //     .catch((response) => {
-                    //
-                    //     })
+                    window.openLoader()
+                    this.forgotPass(this.email)
+                        .then(() => {
+                          window.closeLoader()
+                          closePopupById('#forgot')
+                        })
+                        .catch((e) => {
+                          window.closeLoader()
+                          console.log(e)
+                          //todo вывести ошибку
+                        })
                 });
             },
         },

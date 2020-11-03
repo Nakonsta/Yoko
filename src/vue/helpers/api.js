@@ -59,6 +59,13 @@ export default {
         fetchUser() {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/auth/me`);
         },
+        forgotPass(email) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/restore_password_request`, {
+                params: {
+                    email
+                }
+            });
+        },
         fetchSupportInfo() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/settings/feedback/`);
         },
