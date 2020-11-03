@@ -1,6 +1,9 @@
 import * as jquery from 'jquery';
 global.$ = global.jQuery = jquery;
 
+import Toastify from 'toastify-js';
+window.Toastify = Toastify
+
 import "core-js";
 
 import Cookies from 'js-cookie'

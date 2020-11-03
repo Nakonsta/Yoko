@@ -73,7 +73,7 @@ document.querySelectorAll('.steps').forEach(steps => {
     if( stepsTabs.length ) {
         let link = steps.querySelector('.section__title-tabs a.active') || steps.querySelector('.section__title-tabs a:nth-child(1)');
         if (link) {
-            link.dispatchEvent(new Event('click'));
+            link.click();
         }
     }
 });

@@ -109,7 +109,10 @@
         },
         methods: {
             logout() {
-                this.$store.commit('logout', true)
+                this.$store.commit('logout', {
+                  reload: true,
+                  mute: false,
+                })
             },
             startTime() {
                 const timestamp = document.body.getAttribute('data-timestamp')

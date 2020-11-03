@@ -37,24 +37,37 @@ const store = new Vuex.Store({
                         state.auth.loggedIn = true
                         sessionStorage.setItem('user', JSON.stringify(response.data.data))
                         window.closeLoader()
+                        if (!storageUser) {
+                            window.notificationSuccess('Вы вошли в систему')
+                        }
                     })
                     .catch((e) => {
                         console.log(e)
                         window.closeLoader()
                         state.auth.user = null
                         state.auth.loggedIn = false
+                        window.notificationError('Ошибка сервера')
                     })
             } else {
-                store.commit('logout')
+                store.commit('logout', {
+                    reload: false,
+                    mute: true,
+                })
             }
         },
-        logout(state, reload) {
+        logout(state, {reload, mute}) {
             Cookies.remove('auth._token.local', { domain: process.env.AUTH_DOMAIN, path: '/' })
             state.auth.user = false
             state.auth.loggedIn = false
             sessionStorage.removeItem('user')
+            if (!mute) {
+                window.notificationSuccess('Вы вышли из системы')
+            }
             if (reload) {
-                document.location.reload()
+                window.openLoader()
+                setTimeout(() => {
+                    document.location.reload()
+                }, 1000)
             }
         }
     }

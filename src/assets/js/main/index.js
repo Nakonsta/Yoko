@@ -7,6 +7,8 @@ import './modules/ie-fix.js';
 //Отрытие/закрытие прелоадера
 import './modules/global-loader.js';
 
+import './modules/notifications';
+
 //Отрытие/закрытие мобильного меню
 import './modules/mobile-menu.js';
 
