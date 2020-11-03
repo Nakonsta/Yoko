@@ -1,12 +1,30 @@
 .support-block
     display: flex
+    @include mq($until: desktop)
+        flex-direction: column-reverse
 
 .support-form
-    width: 52%
+    width: 48%
     margin-right: rem(148px)
     background-color: #fff
     border-radius: 6px
     padding: rem(32px) rem(32px) rem(47px)
+    @include mq($until: widescreen)
+        margin-right: rem(104px)
+        width: 55%
+    @include mq($until: desktop)
+        width: 100%
+        margin-right: 0
+    @include mq($until: tablet)
+        padding: rem(32px) rem(16px) rem(40px)
+    &__title
+        font-family: "Gilroy-SemiBold", sans-serif
+        font-size: rem(32px)
+        line-height: 120%
+        padding-bottom: rem(24px)
+        color: $lightcolorText
+        @include mq($until: tablet)
+            font-size: rem(28px)
     &__label
         display: inline-block
         padding-bottom: 4px
@@ -60,10 +78,16 @@
         padding-right: rem(67px)
         &[disabled="disabled"]
             background-color: $colorGray
+            border-color: $colorGray
 
 .support-info
-    width: 48%
+    width: 52%
     color: $lightcolorText
+    @include mq($until: widescreen)
+        width: 45%
+    @include mq($until: desktop)
+        width: 100%
+        margin-bottom: rem(40px)
     &__title
         font-weight: 500
         font-size: rem(24px)
