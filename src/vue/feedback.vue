@@ -82,10 +82,11 @@ export default {
             this.fetchContragentFeedbackForm(
                 this.contragent, this.customersFio, this.customersEmail, this.customersPhone, this.isChecked
             ).then(() => {
-
+                notificationSuccess('Сообщение успешно отправлено!')
             })
             .catch((response) => {
                 console.log(response.message)
+                notificationError('Возникли проблемы с отправкой сообщения, попробуйте повторить отправку позже')
             });
         }
     }
