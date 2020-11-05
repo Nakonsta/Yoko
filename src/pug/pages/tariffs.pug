@@ -1,0 +1,96 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-banner
+
+block default
+    - let title = 'Тарифы';
+    - locals.currentPage = 'Тарифы';
+
+block content
+
+    +breadCrumbs([
+        'Главная',
+        'Тарифы'
+    ])
+
+    +pageBanner('Тарифы', '/content/tariffs.jpg')
+
+    .section.section--green.section--tariffs
+        .container
+            .tabs.js-tabs
+                ul
+                    li.active: a(href="#commercial") Коммерческие торги
+                    li: a(href="#223-f3") Торги по 223-ФЗ
+            -
+                let itemsCommercial = [
+                    {
+                        title: '14 дней',
+                        price: 'Бесплатно',
+                        desc: [
+                            'Полный доступ к системе',
+                            'Полный доступ к аналитике',
+                            'Безлимитные ключи и метки',
+                            'Работа в команде',
+                            'Персональная поддержка',
+                        ],
+                    },
+                    {
+                        class: 'active',
+                        title: '2 месяца',
+                        price: '7 500 ₽',
+                        desc: [
+                            'Полный доступ к системе',
+                            'Полный доступ к аналитике',
+                            'Безлимитные ключи и метки',
+                            'Персональная поддержка',
+                        ],
+                    },
+                    {
+                        title: '6 месяцев',
+                        price: '12 500 ₽',
+                        desc: [
+                            'Полный доступ к системе',
+                            'Полный доступ к аналитике',
+                            'Безлимитные ключи и метки',
+                            'Работа в команде',
+                            'Персональная поддержка',
+                        ],
+                        },
+                    {
+                        title: '12 месяцев',
+                        price: '20 500 ₽',
+                        desc: [
+                            'Полный доступ к системе',
+                            'Полный доступ к аналитике',
+                            'Безлимитные ключи и метки',
+                            'Работа в команде',
+                            'Персональная поддержка',
+                        ],
+                    },
+                ];
+                let items223f3 = itemsCommercial.slice(1);
+                items223f3.push(itemsCommercial[0]);
+            .tariffs__items#commercial
+                each item in itemsCommercial
+                    .tariffs__item(class= item.class ? item.class : false)
+                        .tariffs__item-title #{item.title}
+                        .tariffs__item-price #{item.price}
+                        if( Array.isArray(item.desc) )
+                            ul
+                                each desc in item.desc
+                                    li #{desc}
+                        else
+                            p #{item.desc}
+                        a.tariffs__item-button(href="#") Купить
+            .tariffs__items#223-f3
+                each item in items223f3
+                    .tariffs__item(class= item.class ? item.class : false)
+                        .tariffs__item-title #{item.title}
+                        .tariffs__item-price #{item.price}
+                        if(Array.isArray(item.desc))
+                            ul
+                                each desc in item.desc
+                                    li #{desc}
+                        else
+                            p #{item.desc}
+                        a.tariffs__item-button(href="#") Купить

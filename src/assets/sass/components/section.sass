@@ -26,6 +26,34 @@
         @include mq($until: widescreen)
             padding-top: rem(92px)
             padding-bottom: rem(98px)
+    &--laws,
+    &--tariffs
+        border-bottom: rem(104px) solid $colorWhite
+        @include mq($until: widescreen)
+            border-bottom-width: rem(56px)
+
+    &--columns
+        .container
+            display: flex
+            justify-content: space-between
+            @include mq($until: tablet)
+                flex-direction: column
+        .section__nav
+            align-self: flex-start
+            order: 1
+            width: 282px
+            @include mq($until: desktop)
+                width: 200px
+            @include mq($until: tablet)
+                order: -1
+                margin: 0 0 rem(40px)
+                width: 100%
+        .section__content
+            width: calc(100% - 306px)
+            @include mq($until: desktop)
+                width: calc(100% - 224px)
+            @include mq($until: tablet)
+                width: 100%
 
     &__head
         display: flex
@@ -80,3 +108,79 @@
 
             svg
                 fill: $colorTurquoiseHover
+
+    &__nav
+        padding: rem(16px) 0
+        border-radius: 6px
+        background: $colorWhite
+
+        @include mq($until: tablet)
+            padding: 54px 0 0
+            position: relative
+
+        ul
+            list-style: none
+            margin: 0
+            padding: 0
+
+            @include mq($until: tablet)
+                border-radius: 6px
+                background: $colorWhite
+                padding: 54px 0 0
+                position: absolute
+                top: 0
+                left: 0
+                right: 0
+
+                &:hover
+                    box-shadow: 0 0 10px #cdcdcd
+                    z-index: 2
+
+                    li
+                        display: block !important
+
+                        &.active a
+                            border-radius: 6px 6px 0 0
+
+        li
+            &.active
+                @include mq($until: tablet)
+                    position: absolute
+                    top: 0
+                    left: 0
+                    right: 0
+                a
+                    background: $colorTurquoise
+                    color: $colorWhite
+                    @include mq($until: tablet)
+                        border-radius: 6px
+                        padding-right: 54px
+                        position: relative
+                        white-space: nowrap
+                        overflow: hidden
+                        text-overflow: ellipsis
+                        &::after
+                            content: ''
+                            display: block
+                            margin-top: -11px
+                            width: 22px
+                            height: 22px
+                            background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 9L11 13L15 9' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A")
+                            position: absolute
+                            top: 50%
+                            right: 16px
+            @include mq($until: tablet)
+                &:not(.active)
+                    display: none
+
+        a
+            display: block
+            padding: rem(16px) rem(24px)
+            font-weight: 500
+            font-size: 14px
+            line-height: (22/14)
+            color: $colorText
+            transition: color $animation, background $animation
+
+            &:hover
+                color: $colorTurquoiseHover

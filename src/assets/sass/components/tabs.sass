@@ -1,0 +1,100 @@
+@import "../variables/variables"
+@import "../mixins/mq"
+@import "../mixins/fluid-mixin"
+
+.tabs
+  margin: 0 0 rem(60px)
+  padding: 0
+
+  @include mq($until: desktop)
+    margin: 0 0 rem(40px)
+
+  @include mq($until: tablet)
+    padding: 60px 0 0
+    position: relative
+
+  ul
+    display: flex
+    list-style: none
+    margin: 0
+    padding: 0
+
+    @include mq($until: tablet)
+      display: block
+      border-radius: 6px
+      background: $colorWhite
+      padding: 60px 0 0
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+
+      &:hover
+        box-shadow: 0 0 10px #cdcdcd
+        z-index: 2
+
+        li
+          display: block !important
+
+          &.active a
+            border-radius: 6px 6px 0 0
+
+  li
+    @include mq($from: tablet)
+      &:first-child a
+        border-radius: 6px 0 0 6px
+
+      &:last-child a
+        border-radius: 0 6px 6px 0
+
+    &.active
+      @include mq($until: tablet)
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+
+      a
+        border-color: $colorTurquoise
+        color: $colorWhite !important
+        background: $colorTurquoise
+
+        @include mq($until: tablet)
+          border-radius: 6px
+          padding-right: 54px
+          position: relative
+          white-space: nowrap
+          overflow: hidden
+          text-overflow: ellipsis
+          &::after
+            content: ''
+            display: block
+            margin-top: -11px
+            width: 22px
+            height: 22px
+            background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 9L11 13L15 9' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A")
+            position: absolute
+            top: 50%
+            right: 16px
+
+    @include mq($until: tablet)
+      &:not(.active)
+        display: none
+
+  a
+    display: block
+    border: 1px solid #cdcdcd
+    padding: rem(16px) rem(66px)
+    font-size: rem(24px)
+    line-height: (28/24)
+    text-align: center
+    color: $colorGray
+    transition: border $animation, color $animation, background $animation
+    
+    @include mq($until: tablet)
+      border: 0 !important
+      padding: rem(16px) rem(54px) rem(16px) rem(24px)
+      text-align: left
+
+    &:hover
+      color: $colorTurquoiseHover

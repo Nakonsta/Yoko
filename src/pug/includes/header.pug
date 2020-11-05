@@ -19,8 +19,8 @@ header.header
                         .header__rate-share -0.05% (спот 408 487.25 ₽)
             .header__links
                 .header__links-container
-                    a(href="#" data-menu="#solutions") О нас
-                    a(href="#" data-menu="#applications") Новости
+                    a(href="./about-us.html" data-menu="#solutions") О нас
+                    a(href="./news.html" data-menu="#applications") Новости
                 .header__links-container
                     a(href="#" data-menu="#company")
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,25 +58,53 @@ header.header
         .container
             .more-js
                 ul.header__nav
-                    li.more-js__item
-                        a(href="#solutions") Поставщикам
-                    li.more-js__item
-                        a.active(href="#applications") Заказчикам
-                    li.more-js__item
-                        a(href="#company") Каталог
-                    li.more-js__item
-                        a(href="#support") Электронная подпись
-                    li.more-js__item
-                        a(href="#contacts") 223-ФЗ
-                    li.more-js__item
-                        a(href="#contacts") Торговая площадка
-                    li.more-js__item
-                        a(href="#contacts") Реестр компаний
-                    li.more-js__item
-                        a(href="#contacts") Котировки
-                    li.more-js__item
-                        a(href="#contacts") Сервисы
-                    li.more-js__item
-                        a(href="#contacts") Остатки
-                    li.more-js__item
-                        a(href="#contacts") Тарифы
+                    -
+                        nav = [
+                            {
+                                href: './suppliers.html',
+                                title: 'Поставщикам',
+                            },
+                            {
+                                href: './customers.html',
+                                title: 'Заказчикам',
+                            },
+                            {
+                                href: './catalog.html',
+                                title: 'Каталог',
+                            },
+                            {
+                                href: '#',
+                                title: 'Электронная подпись',
+                            },
+                            {
+                                href: './laws.html',
+                                title: '223-ФЗ',
+                            },
+                            {
+                                href: '#',
+                                title: 'Торговая площадка',
+                            },
+                            {
+                                href: '#',
+                                title: 'Реестр компаний',
+                            },
+                            {
+                                href: '#',
+                                title: 'Котировки',
+                            },
+                            {
+                                href: '#',
+                                title: 'Сервисы',
+                            },
+                            {
+                                href: '#',
+                                title: 'Остатки',
+                            },
+                            {
+                                href: './tariffs.html',
+                                title: 'Тарифы',
+                            },
+                        ];
+                    for item in nav
+                        li.more-js__item
+                            a(href=item.href class= currentPage === item.title ? 'active' : '') #{item.title}

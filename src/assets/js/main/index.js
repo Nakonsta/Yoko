@@ -1,3 +1,6 @@
+// Признак того что у нас есть javascript
+document.documentElement.classList.add('js');
+
 //Полифилы
 import './modules/polyfill.js';
 
@@ -26,8 +29,10 @@ import './modules/slider-gallery-about';
 import './modules/more-button-menu';
 
 // accordion
-
 import './modules/accordion';
+
+// tabs
+import './modules/tabs';
 
 /**
  * Полифил для object-fit
