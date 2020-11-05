@@ -4,7 +4,7 @@ global.sliderNextBtn = '<div class="swiper-button-next"><svg width="12" height="
 global.sliderAdd = function(items) {
     // добавляем класс для юsection__head чтобы было куда выводить навигацию слайдеров на планшетах
     let head = items.closest('.section').querySelector('.section__head');
-    if( head !== undefined ) head.classList.add('with-slider');
+    if( head ) head.classList.add('with-slider');
     // wrap slider & add classes
     let swiper = document.createElement("div");
     swiper.classList.add('swiper');

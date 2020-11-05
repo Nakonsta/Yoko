@@ -1,0 +1,45 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+
+.hint
+  border: 1px solid #cdcdcd
+  border-radius: 50%
+  width: 20px
+  height: 20px
+  background: #f4f4f4
+  position: absolute
+  cursor: help
+  transition: border $animation
+
+  &:hover
+    border-color: $colorTurquoiseHover
+
+    svg
+      fill: $colorTurquoiseHover
+
+  svg
+    display: block
+    margin: -5px 0 0 -3px
+    width: 6px
+    height: 10px
+    fill: $colorGray
+    position: absolute
+    top: 50%
+    left: 50%
+    transition: fill $animation
+
+.hint__content
+  display: none
+  border: 1px solid #cdcdcd
+  border-radius: 6px
+  padding: rem(16px)
+  font-size: rem(12px)
+  max-width: 300px
+  color: $colorGray
+  background: $colorWhite
+  box-shadow: 0 0 10px #cdcdcd
+  position: fixed
+  z-index: 9
+
+  &[data-show]
+    display: block
