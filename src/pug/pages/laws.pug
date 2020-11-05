@@ -1,0 +1,49 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-banner
+
+block default
+    - let title = 'Нормативная база ГК и 223-ФЗ';
+    - locals.currentPage = '223-ФЗ';
+
+block content
+
+    +breadCrumbs([
+        'Главная',
+        'Нормативная база Гражданского кодекса и 223 Федерального закона'
+    ])
+
+    +pageBanner('Нормативная база Гражданского кодекса и 223 Федерального закона', '/content/laws.jpg')
+
+    .section.section--green.section--laws
+        .container
+            .tabs
+                ul
+                    li.active: a(href="#") Гражданский кодекс
+                    li: a(href="#") 223 Федеральный закон
+            -
+                let folders = [
+                    {
+                        title: 'Федеральные законы',
+                    },
+                    {
+                        title: 'Постановления Правительства РФ',
+                    },
+                    {
+                        title: 'Наименование папки в 2 строки',
+                    },
+                    {
+                        title: 'Наименование папки в 2 строки',
+                    },
+                    {
+                        title: 'Распоряжения Правительства РФ',
+                    },
+                    {
+                        title: 'Наименование папки',
+                    },
+                ];
+            .laws__folders
+                each item in folders
+                    a.laws__folder(href="./laws-detail.html" class= item.class ? item.class : false)
+                        .laws__folder-icon: svg.sprite-folder: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#folder")
+                        .laws__folder-title #{item.title}

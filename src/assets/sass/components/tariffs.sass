@@ -1,0 +1,106 @@
+@import "../variables/variables"
+@import "../mixins/mq"
+@import "../mixins/fluid-mixin"
+
+.tariffs
+  &__item
+    &s
+      display: flex
+      flex-wrap: wrap
+      margin: -32px 0 0 -32px
+
+      @include mq($until: widescreen)
+        margin: -24px 0 0 -24px
+
+      html:not(.js) & + &
+        margin-top: rem(32px)
+
+        @include mq($until: widescreen)
+          margin-top: rem(24px)
+
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    margin: 32px 0 0 32px
+    border-radius: 6px
+    padding: rem(45px) rem(32px) 0
+    width: calc(25% - 32px)
+    background: $colorWhite
+
+    @include mq($until: large)
+      width: calc(33.33% - 32px)
+
+    @include mq($until: widescreen)
+      margin: 24px 0 0 24px
+      width: calc(50% - 24px)
+
+    @include mq($until: tablet)
+      width: calc(100% - 24px)
+
+    &.active
+      background: $lightcolorText
+
+      .tariffs__item-title
+        border-color: $colorWhite
+        color: $colorWhite
+
+      .tariffs__item-price,
+      ul,
+      p
+        color: $colorWhite
+
+      li
+        background-image: url("data:image/svg+xml,%3Csvg width='16' height='12' viewBox='0 0 16 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6.5105L5.4791 12.0001L16 1.48956L14.4896 0L5.4791 8.99999L1.48953 5.01045L0 6.5105Z' fill='%23ffffff'/%3E%3C/svg%3E%0A")
+
+      .tariffs__item-button
+        background: $colorCrimson
+
+        &:hover
+          background: $colorCrimsonLight
+
+    &-title
+      margin: 0 0 rem(40px)
+      border: 1px solid #cdcdcd
+      border-radius: 4px
+      padding: rem(3px) rem(15px)
+      font-family: $fontGilroy
+      font-size: rem(24px)
+      line-height: (34/24)
+      text-align: center
+
+    &-price
+      margin: 0 0 rem(42px)
+      font-family: $fontGilroy
+      font-size: rem(36px)
+      line-height: (50/36)
+      text-align: center
+
+    ul,
+    p
+      margin: 0 0 auto
+      color: $colorGray
+
+    ul
+      list-style: none
+      padding: 0
+
+    li
+      padding-left: 27px
+      background: url("data:image/svg+xml,%3Csvg width='16' height='12' viewBox='0 0 16 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6.5105L5.4791 12.0001L16 1.48956L14.4896 0L5.4791 8.99999L1.48953 5.01045L0 6.5105Z' fill='%2331ACB8'/%3E%3C/svg%3E%0A") no-repeat 0 #{rem(6px)}
+      + li
+        margin-top: rem(6px)
+    &-button
+      margin: rem(40px) rem(-32px) 0
+      border-radius: 0 0 6px 6px
+      padding: rem(13px) rem(32px)
+      font-weight: 500
+      text-decoration: none
+      font-size: 16px
+      line-height: (26/16)
+      text-align: center
+      color: $colorWhite
+      background: $colorTurquoise
+      transition: background $animation
+
+      &:hover
+        background: $colorTurquoiseHover

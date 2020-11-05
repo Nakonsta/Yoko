@@ -1,0 +1,43 @@
+.page
+  &-banner
+    position: relative
+    background-size: cover
+    background-position: center center
+    .container
+      display: flex
+      align-items: center
+      min-height: rem(340px)
+      @include mq($until: widescreen)
+        min-height: rem(240px)
+      @include mq($until: mobile)
+        min-height: rem(216px)
+    &__title
+      padding: rem(40px) 0
+      position: relative
+      color: #fff
+      font-size: rem(48px)
+      line-height: 120%
+      z-index: 2
+      font-family: $fontGilroy
+      @include mq($from: desktop)
+        max-width: 75%
+      @include mq($until: tablet)
+        font-size: rem(30px)
+    &:after
+      content: " "
+      position: absolute
+      height: 100%
+      width: 100%
+      top: 0
+      left: 0
+      background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)
+      opacity: .7
+
+  &-title
+    margin: 0 0 rem(32px)
+    &__title
+      font-size: rem(48px)
+      line-height: 120%
+      font-family: $fontGilroy
+      @include mq($until: tablet)
+        font-size: rem(30px)
