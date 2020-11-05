@@ -84,5 +84,13 @@ export default {
         fetchSupportForm(data) {
             return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/email/feedback/send`, data);
         },
+        fetchCountries() {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries`);
+        },
+        // fetchCountries() {
+        //     return this.$axios.$get(
+        //       `${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries/`,
+        //     )
+        // },
     }
 }
