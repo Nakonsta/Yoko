@@ -27,12 +27,16 @@ import './modules/slider-clients';
 import './modules/slider-steps';
 import './modules/slider-gallery-about';
 import './modules/more-button-menu';
+import './modules/company';
 
 // accordion
 import './modules/accordion';
 
 // tabs
 import './modules/tabs';
+
+// tooltips
+import './modules/hint';
 
 /**
  * Полифил для object-fit

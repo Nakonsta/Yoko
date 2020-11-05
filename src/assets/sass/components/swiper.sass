@@ -5,7 +5,8 @@
 .swiper
   position: relative
   @include mq($until: tablet)
-    margin-top: -72px
+    .section__head + &
+      margin-top: -72px
   &-container
     position: static
     &-initialized

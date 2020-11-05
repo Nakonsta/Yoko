@@ -1,0 +1,75 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-title
+
+block default
+    - let title = 'Реестр компаний - Компания';
+    - locals.currentPage = 'Реестр компаний';
+
+block content
+
+    +breadCrumbs([
+        'Главная',
+        'Реестр компаний',
+        'Страхование'
+    ])
+
+    +pageTitle('ПАО «Группа Компаний ПИК»', 'Вернуться в список компаний')
+
+    .section.section--green.section--company
+        .container
+            .company__contacts
+                p: a(href="#") www.pik.ru
+                p 123242, Россия, г. Москва, ул. Баррикадная, 19 стр. 1
+                p #[a(href="tel:+7 (495) 505-97-33") +7 (495) 505-97-33], #[a(href="tel:+7 (495) 116-76-97") +7 (495) 116-76-97]
+                p: a(href="mailto:info@pik.ru") info@pik.ru
+            .company__info.js-slider
+                .company__block.company__block--alt
+                    dl
+                        dt Внутренний рейтинг
+                        dd 8,2
+                    dl.alt
+                        dt Рейтинг компании
+                        dd 9,8
+                    dl
+                        dt Индекс активности
+                        dd 7,4
+                .company__block
+                    .company__block-title Общая сумма закупок
+                    .company__block-value 4.5 млн. ₽
+                .company__block
+                    a.hint(href="#hint-1"): svg.sprite-hint: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#hint")
+                    .company__block-title СМП
+                    .company__block-value Микропредприятие
+                .company__block
+                    a.hint(href="#hint-2"): svg.sprite-hint: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#hint")
+                    .company__block-title РНП
+                    .company__block-value Нет
+            .company__nav.js-tabs
+                ul
+                    li: a(href="#products") Продукция
+                    li: a(href="#hierarchy") Иерархия
+                    li: a(href="#verification") Проверка компании
+                    li: a(href="#requisites") Реквизиты
+            .company__content#products Продукция
+            .company__content#hierarchy Иерархия
+            .company__content#verification Проверка компании
+            .company__content.company__content--requisites#requisites
+                dl
+                    dt ИНН
+                    dd 7713011336
+                dl
+                    dt ОГРН
+                    dd 1027739137084
+                dl
+                    dt КПП
+                    dd 997450001
+                dl
+                    dt ОКПО
+                    dd 40032777
+                a.btn.btn--with-icon(href="#")
+                    svg.sprite-download: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#download")
+                    | Скачать реквизиты
+
+    .hint__content#hint-1 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat interdum augue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam faucibus, augue efficitur volutpat consequat, leo est lacinia est, non laoreet arcu justo ornare nunc. Sed nulla arcu, malesuada at sapien vitae, pellentesque finibus erat.
+    .hint__content#hint-2 Etiam aliquam feugiat nunc, id efficitur neque egestas sit amet.

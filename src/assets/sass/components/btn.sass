@@ -34,3 +34,25 @@
       border-color: $colorTurquoise
       color: $colorTurquoise !important
       background-color: #e5f1f3
+
+  &--with-icon
+    padding-left: rem(78px)
+    padding-right: rem(40px)
+    position: relative
+    
+    @include mq($until: mobileLandscape)
+      padding-left: rem(68px)
+      padding-right: rem(24px)
+
+    svg
+      display: block
+      margin-top: -10px
+      width: 20px
+      height: 20px
+      fill: $colorWhite
+      position: absolute
+      top: 50%
+      left: rem(40px)
+
+      @include mq($until: mobileLandscape)
+        left: rem(24px)
