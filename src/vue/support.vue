@@ -8,51 +8,60 @@
                 <form class="support-form__form" @submit.prevent="sendForm" slot-scope="{ valid }">
                     <div v-if="supportForm.topics" class="support-form__item">
                         <label class="support-form__label">Выбрать тему</label>
-                        <multiselect
-                        v-model="formForSend.theme"
-                        class="form-select"
-                        deselect-label="Can't remove this value" 
-                        track-by="value"
-                        label="value" 
-                        selectedLabel=""
-                        selectLabel=""
-                        deselectLabel=""
-                        placeholder="Выбрать тему" 
-                        :options="supportForm.topics" 
-                        :searchable="false" 
-                        :allow-empty="false"
-                        >
-                            <template
-                            slot="singleLabel" 
-                            slot-scope="{ option }"
+                        <ValidationProvider tag="div" :rules="{ required: true }" name="theme" v-slot="{ errors }">
+                            <input type="hidden" v-model="formForSend.theme">
+                            <multiselect
+                                v-model="formForSend.theme"
+                                class="form-select"
+                                deselect-label="Can't remove this value"
+                                track-by="id"
+                                label="value"
+                                selectedLabel=""
+                                selectLabel=""
+                                deselectLabel=""
+                                placeholder="Выбрать тему"
+                                :options="supportForm.topics"
+                                :searchable="false"
+                                :allow-empty="false"
                             >
-                            {{ option.value }}
-                            </template>
-                        </multiselect>
+                              <template
+                                  slot="singleLabel"
+                                  slot-scope="{ option }"
+                              >
+                                {{ option.value }}
+                              </template>
+                            </multiselect>
+                            <p class="message-error">
+                              <span v-if="errors[0]" class="label-secondary-fail">{{ errors[0] }}</span>
+                            </p>
+                        </ValidationProvider>
                     </div>
                     <div v-if="formForSend.theme && formForSend.theme.id === 'login_to_system'" class="support-form__item">
                         <label class="support-form__label">Уточнить тему</label>
-                        <multiselect
-                        v-model="formForSend.login_to_system"
-                        class="form-select"
-                        deselect-label="Can't remove this value" 
-                        track-by="value" 
-                        label="value"
-                        selectedLabel=""
-                        selectLabel=""
-                        deselectLabel=""
-                        placeholder="Уточнить тему" 
-                        :options="supportForm.topicsAuth" 
-                        :searchable="false" 
-                        :allow-empty="false"
-                        >
+                        <ValidationProvider tag="div" :rules="{ required: true }" name="login_to_system" v-slot="{ errors }">
+                          <input type="hidden" v-model="formForSend.login_to_system">
+                          <multiselect
+                              v-model="formForSend.login_to_system"
+                              class="form-select"
+                              deselect-label="Can't remove this value"
+                              track-by="id"
+                              label="value"
+                              selectedLabel=""
+                              selectLabel=""
+                              deselectLabel=""
+                              placeholder="Уточнить тему"
+                              :options="supportForm.topicsAuth"
+                              :searchable="false"
+                              :allow-empty="false"
+                          >
                             <template
-                            slot="singleLabel" 
-                            slot-scope="{ option }"
+                                slot="singleLabel"
+                                slot-scope="{ option }"
                             >
-                            {{ option.value }}
+                              {{ option.value }}
                             </template>
-                        </multiselect>
+                          </multiselect>
+                        </ValidationProvider>
                     </div>
                     <div v-if="
                         formForSend.theme &&
@@ -80,9 +89,9 @@
                     <div v-if="formForSend.theme && formForSend.theme.id === 'login_to_system'" class="support-form__item support-form__item--file">
                         <input
                             id="file-input"
-                            type="file" 
-                            name="file" 
-                            class="support-form__input-file" 
+                            type="file"
+                            name="file"
+                            class="support-form__input-file"
                             @change="attachApplication"
                         >
                         <label for="file-input" class="support-form__label-file">Прикрепить заявление</label>
