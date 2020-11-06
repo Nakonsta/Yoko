@@ -424,12 +424,16 @@ export default {
             const formDataObj = this.objectToFormData(fData)
             console.log(fData);
             console.log(formDataObj)
+            window.openLoader()
             this.fetchSupportForm(formDataObj)
                 .then(() => {
-
+                  window.closeLoader()
+                  window.notificationSuccess('Ваше обращение отправлено')
                 })
                 .catch((response) => {
                     console.log(response.message)
+                    window.closeLoader()
+                    window.notificationError('Ошибка сервера')
                 });
         }
     }
