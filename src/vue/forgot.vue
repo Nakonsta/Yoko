@@ -34,10 +34,24 @@
                     this.forgotPass(this.email)
                         .then(() => {
                           window.closeLoader()
+                          window.notificationSuccess(`Письмо с информацией для восстановления пароля отправлено на ${this.email}`)
                           closePopupById('#forgot')
                         })
                         .catch((e) => {
                           window.closeLoader()
+                          if (e.response) {
+                            switch (e.response.status) {
+                              case 400:
+                                window.notificationError('Такой e-mail не зарегестрирован')
+                                break
+                              case 500:
+                                window.notificationError('Ошибка сервера')
+                                break
+                              default:
+                                window.notificationError('Неизвестная ошибка')
+                                break
+                            }
+                          }
                           console.log(e)
                           //todo вывести ошибку
                         })
