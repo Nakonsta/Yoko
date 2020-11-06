@@ -1,5 +1,4 @@
 .multiselect
-    margin-bottom: rem(24px)
     &__tags
         padding: 10px 40px 3px 20px
         border-radius: 4px
@@ -28,3 +27,15 @@
 .multiselect--active .multiselect
     &__select
         transform: translateY(-50%) rotate(180deg)
+
+.form-select
+    .multiselect__tags
+        padding: rem(6px) rem(40px) rem(3px) rem(10px)
+    .multiselect__placeholder
+        margin-bottom: rem(4px)
+    .multiselect__single
+        margin-top: rem(2px)
+        margin-bottom: rem(4px)
+    .multiselect__option--highlight
+        background: #f7fbfb
+        color: #2C2C2C

@@ -17,6 +17,8 @@
         margin-right: 0
     @include mq($until: tablet)
         padding: rem(32px) rem(16px) rem(40px)
+    &__phone
+        width: 100%
     &__title
         font-family: "Gilroy-SemiBold", sans-serif
         font-size: rem(32px)
@@ -45,7 +47,7 @@
             &--padding-top
                 padding-top: 16px
     &__phone
-        padding-top: 20px
+        padding-top: rem(23px)
         input[type="tel"].field
             height: 43px
     &__input-file
