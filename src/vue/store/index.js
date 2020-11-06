@@ -39,6 +39,10 @@ const store = new Vuex.Store({
                         window.closeLoader()
                         if (!storageUser) {
                             window.notificationSuccess('Вы вошли в систему')
+                            // todo: перазагрузка страницы после авторизации
+                            setTimeout(() => {
+                                document.location.reload()
+                            }, 1000)
                         }
                     })
                     .catch((e) => {

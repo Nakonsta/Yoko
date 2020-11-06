@@ -10,6 +10,7 @@
                         <label class="support-form__label">Выбрать тему</label>
                         <multiselect
                         v-model="formForSend.theme"
+                        class="form-select"
                         deselect-label="Can't remove this value" 
                         track-by="value"
                         label="value" 
@@ -33,6 +34,7 @@
                         <label class="support-form__label">Уточнить тему</label>
                         <multiselect
                         v-model="formForSend.login_to_system"
+                        class="form-select"
                         deselect-label="Can't remove this value" 
                         track-by="value" 
                         label="value"
@@ -135,24 +137,24 @@
                     <div class="phone-container">
                         <div class="support-form__item">
                             <span class="field__label">Телефон</span>
-                            <PhoneCodeCountries 
+                            <PhoneCodeCountries
                                 :countries="lists.countries"
-                                :startCountry="startCountry"
-                                @changePhoneCode="changePhoneCode"
+                                v-model="startCountry"
                             />
                         </div>
                         <div class="support-form__item support-form__phone">                            
-                            <input 
+                            <input
+                                v-model="formForSend.phone"
                                 type="tel"
                                 name="phone"
                                 class="field"
-                                v-mask="`+${codePhone.phone_code} (###) ###-####`">
+                                v-mask="`+${startCountry.phone_code} (###) ###-####`">
                         </div>
                     </div>
                     <div class="support-form__item">
                         <ValidationProvider name="ИНН Компании" v-slot="{ errors, failed }" :rules="{ required: true }" tag="label" class="field__container">
                             <span class="field__label">ИНН Компании</span>
-                            <input :class="{field: true, error: failed}" type="text" name="inn" v-model="formForSend.inn">
+                            <input :class="{field: true, error: failed}" type="text" name="inn" v-model="formForSend.inn" v-mask="`############`">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                     </div>
@@ -207,7 +209,6 @@
 
 <script>
 import api from './helpers/api'
-import $store from './store/index'
 import PhoneCodeCountries from './components/phoneCodeCountries.vue'
 
 export default {
@@ -272,11 +273,7 @@ export default {
        this.fetchCountries()
         .then((data) => {
           this.lists.countries = data.data.data
-          this.setStartValueCountries(
-            this.lists.countries.find((country) => {
-              return country.phone_code === 7
-            }),
-          )
+          this.fillUserPhone()
         })
         .catch((e) => {
           console.log(e)
@@ -316,18 +313,35 @@ export default {
                     console.log(e)
                 })
         },
-        changePhoneCode(phoneCode) {
-            this.formForSend.currentPhoneCode = phoneCode
-        },
         setStartValueCountries(country) {
             this.startCountry = country
         },
+        fillUserPhone() {
+          if (this.$store.state.auth.loggedIn) {
+            const phone = this.$store.state.auth.user.phone
+            const code = phone.slice(0, -10)
+            const number = phone.substr(phone.length - 10, 10)
+            console.log(code, number)
+            this.setStartValueCountries(
+                this.lists.countries.find((country) => {
+                  return country.phone_code === parseInt(code)
+                }),
+            )
+            this.formForSend.phone = number
+          } else {
+            this.setStartValueCountries(
+                this.lists.countries.find((country) => {
+                  return country.phone_code === 7
+                }),
+            )
+          }
+        },
         fillUserData() {
-            if ($store.state.auth.loggedIn) {
-                this.formForSend.email = $store.state.auth.user.email
-                this.formForSend.name = $store.state.auth.user.name + ' ' + $store.state.auth.user.lastName
-                this.formForSend.phone = $store.state.auth.user.phone
-                this.formForSend.inn = $store.state.auth.user.company.inn
+            if (this.$store.state.auth.loggedIn) {
+                this.formForSend.email = this.$store.state.auth.user.email
+                this.formForSend.name = this.$store.state.auth.user.name + ' ' + this.$store.state.auth.user.lastName
+                this.formForSend.phone = this.$store.state.auth.user.phone
+                this.formForSend.inn = this.$store.state.auth.user.company.inn
             }
             return false
         },
@@ -412,3 +426,11 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+@import "../assets/sass/variables/fluid-variables";
+@import "../assets/sass/mixins/fluid-mixin";
+.support-form__item {
+  margin-bottom: rem(24px)
+}
+</style>
