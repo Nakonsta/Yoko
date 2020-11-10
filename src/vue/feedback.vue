@@ -36,7 +36,7 @@
                           @change="isChecked = !isChecked"
                         >
                         <span class="checkbox__body"></span>
-                        <span class="checkbox__text">Я согласен с <a href="#" class="feedback__link">Политикой конфиденциальности</a></span>
+                        <span class="checkbox__text">Я согласен с <a href="/info/consent" target="_blank" class="feedback__link">Политикой конфиденциальности</a></span>
                     </label>
                 </div>
                 <button type="submit" class="btn feedback__submit" :disabled="!valid || !customersConfident">Отправить</button>

@@ -1,7 +1,7 @@
 let burgerButton = document.querySelector('.mobile-header__burger-button')
 let closeButton = document.querySelector('.mobile-nav__close')
 let bgMenu = document.querySelector('.mobile-nav__bg')
-let mobileMenu = document.querySelector('.mobile-nav')
+let mobileMenu = document.documentElement
 let activeClassMenu = 'mobile-nav--open'
 
 if (burgerButton) {

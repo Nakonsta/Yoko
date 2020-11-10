@@ -78,6 +78,7 @@
                                 type="tel"
                                 name="trade_procedure_number"
                                 v-model="formForSend.trade_procedure_number"
+                                @keydown="onlyDigits($event)"
                                 placeholder="Номер торговой процедуры">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
@@ -93,6 +94,7 @@
                             name="file"
                             class="support-form__input-file"
                             @change="attachApplication"
+                            accept="application/pdf, image/jpeg, image/png"
                         >
                         <label for="file-input" class="support-form__label-file">Прикрепить заявление</label>
                         <div v-for="(file, key) in formForSend.statement" :key="key" class="file-listing">
@@ -120,7 +122,7 @@
                                 row="4"
                                 name="text"
                                 v-model="formForSend.text"
-                                @input="countSymbols"
+                                @keydown="countSymbols($event)"
                                 class="support-form__textarea"
                             ></textarea>
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
@@ -311,10 +313,38 @@ export default {
             }
             return false
         },
-        countSymbols() {
+        countSymbols(evt) {
             this.formForSend.text.length <= this.maxSymbolForType ?
               this.actualSymbolForType = this.maxSymbolForType - this.formForSend.text.length :
-              this.actualSymbolForType = 'Превышено допустимое количество символов'
+              this.actualSymbolForType = 0;
+            if (! this.actualSymbolForType) {
+                this.formForSend.text = this.formForSend.text.substring(0,this.maxSymbolForType);
+                if (evt.keyCode >= 48 && evt.keyCode <= 90) {
+                    evt.preventDefault();
+                }
+            }
+        },
+        onlyDigits(evt) {
+            let key = evt.keyCode;
+            if (
+                // numbers
+                key >= 48 && key <= 57 ||
+                // Numeric keypad
+                key >= 96 && key <= 105 ||
+                // comma, period and minus, . on keypad
+                // key == 190 || key == 188 || key == 109 || key == 110 ||
+                // Backspace and Tab and Enter
+                key == 8 || key == 9 || key == 13 ||
+                // Home and End
+                key == 35 || key == 36 ||
+                // left and right arrows
+                key == 37 || key == 39 ||
+                // Del and Ins
+                key == 46 || key == 45) {
+                    return true;
+            } else {
+                evt.preventDefault();
+            }
         },
         attachApplication(evt) {
             var files = evt.target.files || evt.dataTransfer.files;
@@ -402,5 +432,8 @@ export default {
 @import "../assets/sass/mixins/fluid-mixin";
 .support-form__item {
   margin-bottom: rem(24px)
+}
+.multiselect__option--selected {
+    background: #cbeaed;
 }
 </style>

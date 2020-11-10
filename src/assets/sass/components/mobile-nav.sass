@@ -64,17 +64,6 @@
     right: rem(4px)
     cursor: pointer
 
-  &--open
-    transition: 0s height, 0s width
-    height: 100%
-    width: 100%
-    .mobile-nav__bg
-      transition: 1s opacity
-      opacity: .7
-    .mobile-nav__body
-      transition: 1s .5s transform
-      transform: translateX(0%)
-
   &__menu
     overflow: auto
     //height: calc(100% - 150px)
@@ -92,3 +81,17 @@
         color: $colorText
         &.active
           color: $colorTurquoise
+
+html.mobile-nav--open
+  body
+    overflow: hidden
+  .mobile-nav
+    transition: 0s height, 0s width
+    height: 100%
+    width: 100%
+    .mobile-nav__bg
+      transition: 1s opacity
+      opacity: .7
+    .mobile-nav__body
+      transition: 1s .5s transform
+      transform: translateX(0%)
