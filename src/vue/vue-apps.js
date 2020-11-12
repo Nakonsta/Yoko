@@ -105,3 +105,14 @@ headerLoginStatus.forEach((el) => {
 //         render: function(h) { return h(HeaderLoginStatus); }
 //     })
 // }
+
+// Структура компании
+import Structure from './components/blocks/structure.vue'
+const structure = document.querySelector('#structure');
+if (structure) {
+    let structureBlock = new Vue({
+        el: structure,
+        // store: store,
+        render: function(h) { return h(Structure); }
+    })
+}
