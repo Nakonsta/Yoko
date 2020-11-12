@@ -64,16 +64,7 @@ block content
         .container
             .section__head
                 .section__title Как стать поставщиком
-            #supplier.steps__items.js-slider
-                .steps__item.steps__item--shadow
-                    img(src="./content/steps-1.jpg")
-                    .steps__item-title #[a(href="https://stage-fr-supp.ec.extyl.pro/registration", target="_blank") Зарегистрируйтесь] на&nbsp;площадке
-                .steps__item.steps__item--shadow
-                    img(src="./content/steps-2.jpg")
-                    .steps__item-title #[a(href="#") Получите] электронную&nbsp;подпись
-                .steps__item.steps__item--shadow
-                    img(src="./content/steps-4.jpg")
-                    .steps__item-title Участвуйте в наших<br />тендерах
+            include ../blocks/steps-supplier
 
     .section.section--green.section--feedback.feedback(data-js="suppliers")
         .container
