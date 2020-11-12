@@ -14,6 +14,10 @@ document.addEventListener('click', (e) => {
             if( tab ) tab.style.display = 'none';
             link.closest('li').classList.remove('active');
         }
+        // инициализируем изменение окна для пересчёта слайдеров, иерархии и всего прочего
+        let resizeEvent = window.document.createEvent('UIEvents');
+        resizeEvent.initUIEvent('resize', true, false, window, 0);
+        window.dispatchEvent(resizeEvent);
     });
     if( e.isTrusted ) {
         // ставим хеш ТОЛЬКО при реальном клике
