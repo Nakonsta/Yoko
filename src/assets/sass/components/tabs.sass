@@ -2,7 +2,7 @@
 @import "../mixins/mq"
 @import "../mixins/fluid-mixin"
 
-.tabs
+.tabs.tabs--btns
   margin: 0 0 rem(60px)
   padding: 0
 
@@ -99,3 +99,143 @@
 
     &:hover
       color: $colorTurquoiseHover
+
+.tabs.tabs--line
+  border-bottom: 1px solid #cdcdcd
+
+  @include mq($until: tablet)
+    margin: rem(48px) 0 rem(32px)
+    border: 0
+    padding: 60px 0 0
+    position: relative
+
+  ul:not(.js-more__secondary)
+    list-style: none
+    display: flex
+    margin: 0
+    padding: 0
+
+    @include mq($until: tablet)
+      display: block
+      border-radius: 6px
+      background: $colorWhite
+      padding: 60px 0 0
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+
+      &:hover
+        box-shadow: 0 0 10px #cdcdcd
+        z-index: 2
+
+        li
+          display: block !important
+
+          &.active a
+            border-radius: 6px 6px 0 0
+
+    li
+      white-space: nowrap
+      + li
+        @include mq($from: tablet)
+          a
+            margin-left: rem(16px)
+
+      &.active
+        @include mq($until: tablet)
+          position: absolute
+          top: 0
+          left: 0
+          right: 0
+
+        a
+          color: $colorTurquoise
+
+          &::after
+            transform: scaleX(1)
+
+          @include mq($until: tablet)
+            border-radius: 6px
+            padding-right: 54px
+            position: relative
+            color: $colorWhite
+            background: $colorTurquoise
+            white-space: nowrap
+            overflow: hidden
+            text-overflow: ellipsis
+
+            &::after
+              content: ''
+              display: block
+              margin-top: -11px
+              border: 0
+              width: 22px
+              height: 22px
+              background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 9L11 13L15 9' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A")
+              position: absolute
+              top: 50%
+              right: 16px
+              left: auto !important
+              transform: none !important
+
+      @include mq($until: tablet)
+        &:not(.active)
+          display: none
+
+    a
+      display: block
+      padding: rem(15px) rem(5px)
+      position: relative
+      font-family: $fontGilroy
+      color: $colorGray
+
+      @include mq($from: tablet)
+        text-transform: uppercase
+
+      @include mq($until: tablet)
+        border: 0 !important
+        padding: rem(16px) rem(54px) rem(16px) rem(24px)
+        font-size: rem(22px)
+        text-align: left
+
+      &:hover
+        @include mq($from: tablet)
+          &::after
+            transform: scaleX(1)
+
+        @include mq($until: tablet)
+          color: $colorTurquoiseHover
+
+      &::after
+        content: ''
+        display: block
+        border-bottom: 1px solid $colorTurquoise
+        position: absolute
+        top: 100%
+        left: 0
+        right: 0
+        transform: scaleX(0)
+        transition: transform $animation
+
+    ul.js-more__secondary
+      a
+        margin-left: 0
+        padding-top: rem(5px)
+        padding-bottom: rem(5px)
+
+    .js-more__btn
+      margin-left: auto
+      flex: 0 0 20px
+
+      button
+        svg.sprite-dropdown
+          width: 20px
+          height: 20px
+          stroke-width: 2
+          stroke: $colorGray
+          transition: stroke $animation
+
+        &:hover
+          svg.sprite-dropdown
+            stroke: $colorTurquoiseHover

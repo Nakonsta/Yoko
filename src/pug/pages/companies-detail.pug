@@ -44,8 +44,16 @@ block content
                 .company__block
                     a.hint(href="#hint-2"): svg.sprite-hint: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#hint")
                     .company__block-title РНП
-                    .company__block-value Нет
-            .company__nav.js-tabs
+            //.company__nav.tabs.tabs--line.js-tabs.js-more
+                ul.js-more__items
+                    li.js-more__item: a(href="#products") Продукция
+                    li.js-more__item: a(href="#hierarchy") Иерархия
+                    li.js-more__item: a(href="#verification") Проверка компании
+                    li.js-more__item: a(href="#requisites") Реквизиты
+                    li.js-more__btn
+                        button(type="button" aria-haspopup="true" aria-expanded="false")
+                            svg.sprite-dropdown: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#dropdown")
+            .company__nav.tabs.tabs--line.js-tabs
                 ul
                     li: a(href="#products") Продукция
                     li: a(href="#hierarchy") Иерархия

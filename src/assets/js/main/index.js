@@ -26,7 +26,7 @@ import './modules/slider-info';
 import './modules/slider-clients';
 import './modules/slider-steps';
 import './modules/slider-gallery-about';
-import './modules/more-button-menu';
+import './modules/more';
 import './modules/company';
 
 // accordion
