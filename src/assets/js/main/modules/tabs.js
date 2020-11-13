@@ -36,3 +36,11 @@ document.querySelectorAll('.js-tabs').forEach((tabs) => {
         link.click();
     }
 });
+
+document.addEventListener('click', (e) => {
+    let el = e.target;
+    let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    if (vw > 767 || el.tagName !== 'A' || !el.closest('li.active')) return;
+    e.preventDefault();
+    el.closest('.js-tabs').classList.toggle('hover');
+});

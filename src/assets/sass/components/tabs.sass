@@ -29,7 +29,9 @@
       left: 0
       right: 0
 
-      &:hover
+  &.hover
+    @include mq($until: tablet)
+      ul
         box-shadow: 0 0 10px #cdcdcd
         z-index: 2
 
@@ -125,7 +127,9 @@
       left: 0
       right: 0
 
-      &:hover
+  &.hover
+    @include mq($until: tablet)
+      ul:not(.js-more__secondary)
         box-shadow: 0 0 10px #cdcdcd
         z-index: 2
 
