@@ -53,16 +53,16 @@ block content
                     li.js-more__btn
                         button(type="button" aria-haspopup="true" aria-expanded="false")
                             svg.sprite-dropdown: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#dropdown")
-            .company__nav.tabs.tabs--line.js-tabs
+            .tabs.tabs--line.js-tabs.company__nav
                 ul
                     li: a(href="#products") Продукция
                     li: a(href="#hierarchy") Иерархия
                     li: a(href="#verification") Проверка компании
                     li: a(href="#requisites") Реквизиты
-            .company__content#products Продукция
-            .company__content#hierarchy: #structure
-            .company__content#verification Проверка компании
-            .company__content.company__content--requisites#requisites
+            .tabs__content.company__content#products Продукция
+            .tabs__content.company__content#hierarchy: #structure
+            .tabs__content.company__content#verification Проверка компании
+            .tabs__content.company__content--requisites#requisites
                 dl
                     dt ИНН
                     dd 7713011336
