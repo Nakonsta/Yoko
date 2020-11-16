@@ -166,7 +166,7 @@
                         </div>
                     </div>
                     <div class="support-form__item">
-                        <ValidationProvider name="ИНН Компании" v-slot="{ errors, failed }" :rules="{ required: true }" tag="label" class="field__container">
+                        <ValidationProvider name="ИНН Компании" v-slot="{ errors, failed }" :rules="{ required: true, min: 10 }" tag="label" class="field__container">
                             <span class="field__label">ИНН Компании</span>
                             <input :class="{field: true, error: failed}" type="text" name="inn" v-model="formForSend.inn" v-mask="`############`">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
