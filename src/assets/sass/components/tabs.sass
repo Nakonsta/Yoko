@@ -96,7 +96,9 @@
     
     @include mq($until: tablet)
       border: 0 !important
-      padding: rem(16px) rem(54px) rem(16px) rem(24px)
+      padding: rem(13px) rem(24px)
+      font-size: rem(22px)
+      line-height: (34/22)
       text-align: left
 
     &:hover
@@ -139,107 +141,125 @@
           &.active a
             border-radius: 6px 6px 0 0
 
-    li
-      white-space: nowrap
-      + li
-        @include mq($from: tablet)
-          a
-            margin-left: rem(16px)
-
-      &.active
-        @include mq($until: tablet)
-          position: absolute
-          top: 0
-          left: 0
-          right: 0
-
-        a
-          color: $colorTurquoise
-
-          &::after
-            transform: scaleX(1)
-
-          @include mq($until: tablet)
-            border-radius: 6px
-            padding-right: 54px
-            position: relative
-            color: $colorWhite
-            background: $colorTurquoise
-            white-space: nowrap
-            overflow: hidden
-            text-overflow: ellipsis
-
-            &::after
-              content: ''
-              display: block
-              margin-top: -11px
-              border: 0
-              width: 22px
-              height: 22px
-              background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 9L11 13L15 9' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A")
-              position: absolute
-              top: 50%
-              right: 16px
-              left: auto !important
-              transform: none !important
-
-      @include mq($until: tablet)
-        &:not(.active)
-          display: none
-
-    a
-      display: block
-      padding: rem(15px) rem(5px)
-      position: relative
-      font-family: $fontGilroy
-      color: $colorGray
-
+  li
+    white-space: nowrap
+    + li
       @include mq($from: tablet)
-        text-transform: uppercase
+        a
+          margin-left: rem(16px)
 
+    &.active
       @include mq($until: tablet)
-        border: 0 !important
-        padding: rem(16px) rem(54px) rem(16px) rem(24px)
-        font-size: rem(22px)
-        text-align: left
-
-      &:hover
-        @include mq($from: tablet)
-          &::after
-            transform: scaleX(1)
-
-        @include mq($until: tablet)
-          color: $colorTurquoiseHover
-
-      &::after
-        content: ''
-        display: block
-        border-bottom: 1px solid $colorTurquoise
         position: absolute
-        top: 100%
+        top: 0
         left: 0
         right: 0
-        transform: scaleX(0)
-        transition: transform $animation
 
-    ul.js-more__secondary
       a
-        margin-left: 0
-        padding-top: rem(5px)
-        padding-bottom: rem(5px)
+        color: $colorTurquoise
 
-    .js-more__btn
-      margin-left: auto
-      flex: 0 0 20px
+        &::after
+          transform: scaleX(1)
 
-      button
+        @include mq($until: tablet)
+          border-radius: 6px
+          padding-right: 54px
+          position: relative
+          color: $colorWhite
+          background: $colorTurquoise
+          white-space: nowrap
+          overflow: hidden
+          text-overflow: ellipsis
+
+          &::after
+            content: ''
+            display: block
+            margin-top: -11px
+            border: 0
+            width: 22px
+            height: 22px
+            background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 9L11 13L15 9' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A")
+            position: absolute
+            top: 50%
+            right: 16px
+            left: auto !important
+            transform: none !important
+
+    @include mq($until: tablet)
+      &:not(.active)
+        display: none
+
+  a
+    display: block
+    padding: rem(15px) rem(5px)
+    position: relative
+    font-family: $fontGilroy
+    color: $colorGray
+
+    @include mq($from: tablet)
+      text-transform: uppercase
+      white-space: nowrap
+
+    @include mq($until: tablet)
+      border: 0 !important
+      padding: rem(13px) rem(24px) rem(13px)
+      font-size: rem(22px)
+      line-height: (34/22)
+      text-align: left
+
+    &:hover
+      @include mq($from: tablet)
+        &::after
+          transform: scaleX(1)
+
+      @include mq($until: tablet)
+        color: $colorTurquoiseHover
+
+    &::after
+      content: ''
+      display: block
+      border-bottom: 1px solid $colorTurquoise
+      position: absolute
+      top: 100%
+      left: 0
+      right: 0
+      transform: scaleX(0)
+      transition: transform $animation
+
+  ul.js-more__secondary
+    a
+      margin-left: 0
+      padding-top: rem(5px)
+      padding-bottom: rem(5px)
+
+  .js-more__btn
+    margin-left: auto
+    flex: 0 0 20px
+
+    button
+      svg.sprite-dropdown
+        width: 20px
+        height: 20px
+        stroke-width: 2
+        stroke: $colorGray
+        transition: stroke $animation
+
+      &:hover
         svg.sprite-dropdown
-          width: 20px
-          height: 20px
-          stroke-width: 2
-          stroke: $colorGray
-          transition: stroke $animation
+          stroke: $colorTurquoiseHover
 
-        &:hover
-          svg.sprite-dropdown
-            stroke: $colorTurquoiseHover
+.tabs
+  &__content
+    .section--green &
+      border-radius: 6px
+      padding: rem(40px) rem(64px)
+      background: $colorWhite
+
+      @include mq($until: widescreen)
+        padding: rem(40px)
+
+      @include mq($until: tablet)
+        padding: rem(32px) rem(20px)
+
+      html:not(.js) & + &
+        margin-top: rem(40px)

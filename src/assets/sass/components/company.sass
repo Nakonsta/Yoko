@@ -100,23 +100,10 @@
         > dd
           font-size: rem(24px)
 
-  &__nav
+  &__nav.tabs.tabs--line
     margin: rem(40px) 0
 
   &__content
-    border-radius: 6px
-    padding: rem(40px) rem(64px)
-    background: $colorWhite
-
-    @include mq($until: widescreen)
-      padding: rem(40px)
-
-    @include mq($until: tablet)
-      padding: rem(32px) rem(20px)
-
-    html:not(.js) & + &
-      margin-top: rem(40px)
-
     &--requisites
       dl
         display: flex

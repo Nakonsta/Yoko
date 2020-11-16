@@ -27,37 +27,40 @@
     .hidden
       display: none
 
-    &__btn button
-      display: flex
-      align-items: center
-      line-height: 160%
-      height: 100%
-      outline: none
-      background-color: transparent
-      border: none
-      margin-left: rem(15px)
-      padding: 0
-      font-family: $fontGilroy
-      span
-        position: relative
-        padding-bottom: rem(10px)
-        &:after
-          transition: .3s transform
-          position: absolute
-          content: " "
-          width: 100%
-          height: rem(4px)
-          bottom: 0
-          left: 50%
-          background-color: $colorTurquoise
-          transform: translateX(-50%) scaleX(0)
-        &:hover
-          &:after
-            transform: translateX(-50%) scaleX(1)
-
-      &[aria-expanded="true"]
+    &__btn
+      @include mq($until: tablet)
+        display: none
+      button
+        display: flex
+        align-items: center
+        line-height: 160%
+        height: 100%
+        outline: none
+        background-color: transparent
+        border: none
+        margin-left: rem(15px)
+        padding: 0
+        font-family: $fontGilroy
         span
           position: relative
           padding-bottom: rem(10px)
           &:after
-            transform: translateX(-50%) scaleX(1)
+            transition: .3s transform
+            position: absolute
+            content: " "
+            width: 100%
+            height: rem(4px)
+            bottom: 0
+            left: 50%
+            background-color: $colorTurquoise
+            transform: translateX(-50%) scaleX(0)
+          &:hover
+            &:after
+              transform: translateX(-50%) scaleX(1)
+
+        &[aria-expanded="true"]
+          span
+            position: relative
+            padding-bottom: rem(10px)
+            &:after
+              transform: translateX(-50%) scaleX(1)
