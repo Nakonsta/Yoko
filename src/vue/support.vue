@@ -115,14 +115,14 @@
                     
                     </div>
                     <div class="support-form__item">
-                        <ValidationProvider name="Введите текст обращения" :rules="{ max: 1000 }" v-slot="{ errors, failed }" tag="label" class="field__container">
+                        <ValidationProvider name="Введите текст обращения" :rules="{ required: true, max: 1000 }" v-slot="{ errors, failed }" tag="label" class="field__container">
                             <span class="field__label">Введите текст обращения</span>
                             <textarea 
                                 :class="{field: true, error: failed}"
                                 row="4"
                                 name="text"
                                 v-model="formForSend.text"
-                                @keydown="countSymbols($event)"
+                                @input="countSymbols($event)"
                                 class="support-form__textarea"
                             ></textarea>
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
@@ -212,7 +212,7 @@ export default {
                 login_to_system: null,
                 trade_procedure_number: null,
                 statement: [],
-                text: null,
+                text: '',
                 email: null,
                 name: null,
                 phone: null,
