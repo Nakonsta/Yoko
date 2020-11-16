@@ -14,6 +14,7 @@ Vue.use(VueTheMask)
 
 // validate
 import {configure, setInteractionMode, ValidationObserver, ValidationProvider, extend, localize} from 'vee-validate'
+import customRules from './helpers/custom-rules'
 import ru from 'vee-validate/dist/locale/ru.json';
 import * as rules from 'vee-validate/dist/rules';
 setInteractionMode('eager');
@@ -21,6 +22,9 @@ setInteractionMode('eager');
 Object.keys(rules).forEach(rule => {
     extend(rule, rules[rule]);
 });
+for (const key in customRules) {
+    extend(key, customRules[key])
+}
 localize('ru', ru);
 // Install components globally
 Vue.component('ValidationObserver', ValidationObserver);
@@ -30,6 +34,7 @@ configure({
     classes: {
         valid: 'valid',
         invalid: 'error',
+        events: 'input',
     }
 });
 

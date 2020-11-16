@@ -21,3 +21,10 @@ sudo vi /etc/hosts, далее I, далее вставить строчку и 
 ## Нотификации
 **notificationSuccess(text)** - Нотификация успеха
 **notificationError(text)** - Нотификация ошибки
+
+## Кастомная валидация для ValidationProvider
+Кастомные роли валидации лежат в /src/vue/helpers/custom-rules.js
+
+Образец применения: `:rules="{ customPhone: true }"`
+    
+    <ValidationProvider name="Телефон" v-slot="{ errors, failed }" :rules="{ required: true, customPhone: true }" tag="label" class="field__container">

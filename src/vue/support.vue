@@ -153,13 +153,16 @@
                                 v-model="startCountry"
                             />
                         </div>
-                        <div class="support-form__item support-form__phone">                            
+                        <div class="support-form__item support-form__phone">
+                          <ValidationProvider name="Телефон" v-slot="{ errors, failed }" :rules="{ required: true, customPhone: true }" tag="label" class="field__container">
                             <input
                                 v-model="formForSend.phone"
                                 type="tel"
                                 name="phone"
                                 class="field"
                                 v-mask="`+${startCountry.phone_code} (###) ###-####`">
+                            <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                          </ValidationProvider>
                         </div>
                     </div>
                     <div class="support-form__item">
