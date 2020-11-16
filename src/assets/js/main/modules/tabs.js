@@ -14,6 +14,10 @@ document.addEventListener('click', (e) => {
             if( tab ) tab.style.display = 'none';
             link.closest('li').classList.remove('active');
         }
+        // инициализируем изменение окна для пересчёта слайдеров, иерархии и всего прочего
+        let resizeEvent = window.document.createEvent('UIEvents');
+        resizeEvent.initUIEvent('resize', true, false, window, 0);
+        window.dispatchEvent(resizeEvent);
     });
     if( e.isTrusted ) {
         // ставим хеш ТОЛЬКО при реальном клике
@@ -31,4 +35,12 @@ document.querySelectorAll('.js-tabs').forEach((tabs) => {
     if (link) {
         link.click();
     }
+});
+
+document.addEventListener('click', (e) => {
+    let el = e.target;
+    let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    if (vw > 767 || el.tagName !== 'A' || !el.closest('li.active')) return;
+    e.preventDefault();
+    el.closest('.js-tabs').classList.toggle('hover');
 });

@@ -17,10 +17,10 @@ block content
 
     .section.section--green.section--tariffs
         .container
-            .tabs.js-tabs
+            .tabs.tabs--btns.js-tabs
                 ul
                     li.active: a(href="#commercial") Коммерческие торги
-                    li: a(href="#223-f3") Торги по 223-ФЗ
+                    li: a(href="#federal") Торги по 223-ФЗ
             -
                 let itemsCommercial = [
                     {
@@ -82,7 +82,7 @@ block content
                         else
                             p #{item.desc}
                         a.tariffs__item-button(href="#") Купить
-            .tariffs__items#223-f3
+            .tariffs__items#federal
                 each item in items223f3
                     .tariffs__item(class= item.class ? item.class : false)
                         .tariffs__item-title #{item.title}

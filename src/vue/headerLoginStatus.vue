@@ -88,7 +88,7 @@
         </div>
         <div v-if="!$store.state.auth.loggedIn" class="header__login">
             <a class="header__singin popup-link" href="#singin">Войти</a>
-            <a class="header__registration" href="https://stage-fr-supp.ec.extyl.pro/registration">Регистрация</a>
+            <a class="header__registration" :href="`${$store.state.env.LK_SUPP}/registration`">Регистрация</a>
         </div>
     </div>
 </template>

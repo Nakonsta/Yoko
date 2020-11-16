@@ -17,10 +17,10 @@ block content
 
     .section.section--green.section--laws
         .container
-            .tabs
+            .tabs.tabs--btns.js-tabs
                 ul
-                    li.active: a(href="#") Гражданский кодекс
-                    li: a(href="#") 223 Федеральный закон
+                    li.active: a(href="#civil") Гражданский кодекс
+                    li: a(href="#federal") 223 Федеральный закон
             -
                 let folders = [
                     {
@@ -42,7 +42,14 @@ block content
                         title: 'Наименование папки',
                     },
                 ];
-            .laws__folders
+            .laws__folders#civil
+                each item in folders
+                    a.laws__folder(href="./laws-detail.html" class= item.class ? item.class : false)
+                        .laws__folder-icon: svg.sprite-folder: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#folder")
+                        .laws__folder-title #{item.title}
+            -
+                folders = folders.slice(1);
+            .laws__folders#federal
                 each item in folders
                     a.laws__folder(href="./laws-detail.html" class= item.class ? item.class : false)
                         .laws__folder-icon: svg.sprite-folder: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#folder")

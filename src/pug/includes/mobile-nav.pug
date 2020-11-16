@@ -17,17 +17,61 @@
 
         .mobile-nav__menu
             ul.mobile-nav__nav
-                li: a(href="#") Поставщикам
-                li: a.active(href="#") Заказчикам
-                li: a(href="#") Каталог
-                li: a(href="#") Электронная подпись
-                li: a(href="#") Реестр компаний
-                li: a(href="#") Торговая площадка
-                li: a(href="#") Реестр компаний
-                li: a(href="#") Котировки
-                //li: a(href="#") Сервисы
-                li: a(href="#") Остатки
-                li: a(href="#") Тарифы
-                li: a(href="#") Нормативная база ГК и 223 ФЗ
-                li: a(href="#") О нас
-                li: a(href="#") Новости
+                -
+                    nav = [
+                        {
+                            href: './suppliers.html',
+                            title: 'Поставщикам',
+                        },
+                        {
+                            href: './customers.html',
+                            title: 'Заказчикам',
+                        },
+                        {
+                            href: './catalog.html',
+                            title: 'Каталог',
+                        },
+                        {
+                            href: '#',
+                            title: 'Электронная подпись',
+                        },
+                        {
+                            href: './companies.html',
+                            title: 'Реестр компаний',
+                        },
+                        {
+                            href: '#',
+                            title: 'Торговая площадка',
+                        },
+                        {
+                            href: '#',
+                            title: 'Котировки',
+                        },
+                        // {
+                        //     href: '#',
+                        //     title: 'Сервисы',
+                        // },
+                        {
+                            href: '#',
+                            title: 'Остатки',
+                        },
+                        {
+                            href: './tariffs.html',
+                            title: 'Тарифы',
+                        },
+                        {
+                            href: './laws.html',
+                            title: 'Нормативная база ГК и 223 ФЗЗ',
+                        },
+                        {
+                            href: './about-us.html',
+                            title: 'О нас',
+                        },
+                        {
+                            href: './news.html',
+                            title: 'Новости',
+                        },
+                    ];
+                for item in nav
+                    li
+                        a(href=item.href class= currentPage === item.title ? 'active' : '') #{item.title}

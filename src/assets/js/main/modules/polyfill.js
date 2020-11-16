@@ -8,3 +8,18 @@ if ('objectFit' in document.documentElement.style === false) {
         });
     });
 }
+
+Element.prototype.parents = function(selector) {
+    let elements = [];
+    let elem = this;
+    let ishaveselector = selector !== undefined;
+    while ((elem = elem.parentElement) !== null) {
+        if (elem.nodeType !== Node.ELEMENT_NODE) {
+            continue;
+        }
+        if (!ishaveselector || elem.matches(selector)) {
+            elements.push(elem);
+        }
+    }
+    return elements;
+};

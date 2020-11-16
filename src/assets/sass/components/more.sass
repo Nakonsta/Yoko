@@ -1,59 +1,63 @@
-.more-js
-  position: relative
-  width: 100%
-
-.more-js .secondary
-  display: none
-  position: absolute
-  top: 100%
-  right: 0
-
-.more-js.show-secondary .secondary
-  display: block
-  list-style-type: none
-  box-shadow: 0 0 4px #00000038
-  border-radius: rem(6px)
-  padding: rem(10px) rem(15px)
-  background-color: #fff
-  z-index: 4
-  a
-    margin: 0
-  .more-js__item
-    margin-bottom: 8px
-    &:last-child
-      margin-bottom: 0
-
-.more-js .hidden
-  display: none
-
-.more-js .more button
-  line-height: 160%
-  outline: none
-  background-color: transparent
-  border: none
-  margin-left: rem(15px)
-  padding: 0
-  font-family: $fontGilroy
-  span
+.js-more
+  @include mq($from: tablet)
     position: relative
-    padding-bottom: rem(10px)
-    &:after
-      transition: .3s transform
-      position: absolute
-      content: " "
-      width: 100%
-      height: rem(4px)
-      bottom: 0
-      left: 50%
-      background-color: $colorTurquoise
-      transform: translateX(-50%) scaleX(0)
-    &:hover
-      &:after
-        transform: translateX(-50%) scaleX(1)
+    width: 100%
 
-  &[aria-expanded="true"]
-    span
-      position: relative
-      padding-bottom: rem(10px)
-      &:after
-        transform: translateX(-50%) scaleX(1)
+    &__secondary
+      display: none
+      position: absolute
+      top: 100%
+      right: 0
+
+    &.show-secondary .js-more__secondary
+      display: block
+      list-style-type: none
+      box-shadow: 0 0 4px #00000038
+      border-radius: rem(6px)
+      padding: rem(10px) rem(15px)
+      background-color: #fff
+      z-index: 4
+      a
+        margin: 0
+      .js-more__item
+        margin-bottom: 8px
+        &:last-child
+          margin-bottom: 0
+
+    .hidden
+      display: none
+
+    &__btn button
+      display: flex
+      align-items: center
+      line-height: 160%
+      height: 100%
+      outline: none
+      background-color: transparent
+      border: none
+      margin-left: rem(15px)
+      padding: 0
+      font-family: $fontGilroy
+      span
+        position: relative
+        padding-bottom: rem(10px)
+        &:after
+          transition: .3s transform
+          position: absolute
+          content: " "
+          width: 100%
+          height: rem(4px)
+          bottom: 0
+          left: 50%
+          background-color: $colorTurquoise
+          transform: translateX(-50%) scaleX(0)
+        &:hover
+          &:after
+            transform: translateX(-50%) scaleX(1)
+
+      &[aria-expanded="true"]
+        span
+          position: relative
+          padding-bottom: rem(10px)
+          &:after
+            transform: translateX(-50%) scaleX(1)
