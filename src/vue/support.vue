@@ -437,6 +437,6 @@ export default {
   margin-bottom: rem(24px)
 }
 .multiselect__option--selected {
-    background: #cbeaed;
+    background: #cbeaed !important;
 }
 </style>
