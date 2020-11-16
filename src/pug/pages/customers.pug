@@ -19,7 +19,7 @@ block content
         .container
             .contragents-about__description
                 p.typography.typography--accent Электронная площадка «АБТРЕЙД» предназначена для осуществления закупок для обеспечения государственных и муниципальных нужд и функционирует в полном соответствии с положениями Федерального закона от 05 апреля 2013 г. N 44-ФЗ О контрактной системе в сфере закупок товаров, работ, услуг для обеспечения государственных и муниципальных нужд.
-                a.btn.contragents-about__btn(href="https://stage-fr-supp.ec.extyl.pro/registration", target="_blank") Регистрация
+                a.btn.contragents-about__btn(href=locals.env.LK_SUPP+"/registration", target="_blank") Регистрация
 
     .section.section--green.section--customers-slider.customers-slider
         .container
@@ -64,16 +64,7 @@ block content
         .container
             .section__head
                 .section__title Как стать заказчиком
-            #customer.steps__items.js-slider
-                .steps__item.steps__item--shadow
-                    img(src="./content/steps-1.jpg")
-                    .steps__item-title #[a(href="https://stage-fr-supp.ec.extyl.pro/registration", target="_blank") Зарегистрируйтесь] на&nbsp;площадке
-                .steps__item.steps__item--shadow
-                    img(src="./content/steps-2.jpg")
-                    .steps__item-title #[a(href="#") Получите] электронную&nbsp;подпись
-                .steps__item.steps__item--shadow
-                    img(src="./content/steps-3.jpg")
-                    .steps__item-title Разместите извещение в системе
+            include ../blocks/steps-customer
 
     .section.section--green.section--feedback.feedback(data-js="customers")
         .container

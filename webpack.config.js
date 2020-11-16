@@ -1,7 +1,7 @@
 //base config
 const path = require('path');
 const fs = require('fs');
-// require('dotenv').config()
+require('dotenv').config();
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlBeautifyPlugin = require('html-beautify-webpack-plugin');
@@ -115,7 +115,8 @@ module.exports = {
         ...pages.map(page => new HtmlWebpackPlugin({
             template: `${pages_dir}/${page}`,
             filename: `./${page.replace(/\.pug/,'.html')}`,
-            minify: false
+            minify: false,
+            env: process.env,
         })),
         new HtmlBeautifyPlugin({
             config: {

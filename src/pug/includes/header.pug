@@ -56,8 +56,8 @@ header.header
             .header-login-status
     .header__bottom
         .container
-            .more-js
-                ul.header__nav
+            .js-more
+                ul.header__nav.js-more__items
                     -
                         nav = [
                             {
@@ -106,5 +106,5 @@ header.header
                             },
                         ];
                     for item in nav
-                        li.more-js__item
+                        li.js-more__item
                             a(href=item.href class= currentPage === item.title ? 'active' : '') #{item.title}

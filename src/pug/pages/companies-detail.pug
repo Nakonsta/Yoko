@@ -44,15 +44,23 @@ block content
                 .company__block
                     a.hint(href="#hint-2"): svg.sprite-hint: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#hint")
                     .company__block-title РНП
-                    .company__block-value Нет
-            .company__nav.js-tabs
+            //.company__nav.tabs.tabs--line.js-tabs.js-more
+                ul.js-more__items
+                    li.js-more__item: a(href="#products") Продукция
+                    li.js-more__item: a(href="#hierarchy") Иерархия
+                    li.js-more__item: a(href="#verification") Проверка компании
+                    li.js-more__item: a(href="#requisites") Реквизиты
+                    li.js-more__btn
+                        button(type="button" aria-haspopup="true" aria-expanded="false")
+                            svg.sprite-dropdown: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#dropdown")
+            .company__nav.tabs.tabs--line.js-tabs
                 ul
                     li: a(href="#products") Продукция
                     li: a(href="#hierarchy") Иерархия
                     li: a(href="#verification") Проверка компании
                     li: a(href="#requisites") Реквизиты
             .company__content#products Продукция
-            .company__content#hierarchy Иерархия
+            .company__content#hierarchy: #structure
             .company__content#verification Проверка компании
             .company__content.company__content--requisites#requisites
                 dl
@@ -71,5 +79,5 @@ block content
                     svg.sprite-download: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#download")
                     | Скачать реквизиты
 
-    .hint__content#hint-1 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat interdum augue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam faucibus, augue efficitur volutpat consequat, leo est lacinia est, non laoreet arcu justo ornare nunc. Sed nulla arcu, malesuada at sapien vitae, pellentesque finibus erat.
-    .hint__content#hint-2 Etiam aliquam feugiat nunc, id efficitur neque egestas sit amet.
+    .hint__content#hint-1 Форма бизнеса
+    .hint__content#hint-2 Реестр недобросовестных поставщиков
