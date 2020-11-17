@@ -112,7 +112,7 @@
                         <div class="support-form__item-info support-form__item-info--padding-top">
                             Загрузите заявления в формате:  pdf, jpeg, png
                         </div>
-                    
+
                     </div>
                     <div class="support-form__item">
                         <ValidationProvider name="Введите текст обращения" :rules="{ required: true, max: 1000 }" v-slot="{ errors, failed }" tag="label" class="field__container">
@@ -353,7 +353,11 @@ export default {
             var files = evt.target.files || evt.dataTransfer.files;
             if (!files.length)
                 return;
-            this.formForSend.statement.push(files[0]);
+            if (['application/pdf', 'image/jpeg', 'image/png'].includes(files[0].type)) {
+              this.formForSend.statement.push(files[0]);
+            } else {
+              notificationError('Загружаемый файл должен быть форматов: pdf, jpeg, png')
+            }
         },
         removeFile(key) {
             this.formForSend.statement.splice(key, 1)
