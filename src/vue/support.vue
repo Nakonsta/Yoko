@@ -78,7 +78,7 @@
                                 type="tel"
                                 name="trade_procedure_number"
                                 v-model="formForSend.trade_procedure_number"
-                                @keydown="onlyDigits($event)"
+                                v-mask="`####################`"
                                 placeholder="Номер торговой процедуры">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
