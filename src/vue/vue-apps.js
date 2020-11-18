@@ -112,6 +112,17 @@ headerLoginStatus.forEach((el) => {
 // }
 
 // Структура компании
+import Products from './components/blocks/products.vue'
+const products = document.querySelector('#products-info');
+if (products) {
+    let productsBlock = new Vue({
+        el: products,
+        // store: store,
+        render: function(h) { return h(Products); }
+    })
+}
+
+// Структура компании
 import Structure from './components/blocks/structure.vue'
 const structure = document.querySelector('#structure');
 if (structure) {
