@@ -2,9 +2,9 @@
   <div class="quotes">
     <div class="quotes__header">
       <div class="btn-group">
-        <a @click.prevent="setType('copper')" class="btn" :class="{ active: this.type === 'copper' }">Медь
+        <a @click.prevent="setType('copper')" class="btn" :class="{ active: type === 'copper' }">Медь
           <span>copper</span></a>
-        <a @click.prevent="setType('alum')" class="btn" :class="{ active: this.type === 'alum' }">Алюминий
+        <a @click.prevent="setType('alum')" class="btn" :class="{ active: type === 'alum' }">Алюминий
           <span>alum</span></a>
       </div>
       <div class="switch-box-container">
