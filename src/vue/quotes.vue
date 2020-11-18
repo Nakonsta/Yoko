@@ -317,6 +317,7 @@
     color: $lightcolorText !important;
     font-size: rem(24px);
     font-weight: 600;
+    margin-bottom: 1rem;
 
     span {
       font-weight: 500;
@@ -358,6 +359,9 @@
       display: flex;
       margin-left: rem(40px);
       align-items: center;
+      @media(max-width: 767px) {
+        margin-left: 0;
+      }
     }
 
     &__switch {
@@ -393,9 +397,15 @@
 
     &__header {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       margin-bottom: 2rem;
       width: 100%;
+      @media(max-width: 767px) {
+        > * {
+          width: 100%;
+        }
+      }
     }
   }
 </style>

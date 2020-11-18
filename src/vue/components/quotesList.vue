@@ -99,16 +99,38 @@ export default {
 
     &__list {
       border: 1px solid $colorTurquoise;
-      padding: rem(24px) rem(18px);
+      padding: rem(24px) rem(18px) 0;
       border-radius: 6px;
       font-size: rem(14px);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
 
       li {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-bottom: rem(24px);
-        &:last-child {
-          margin-bottom: 0;
+        width: 100%;
+        @media(max-width: 1024px) {
+          &:not(:first-child) {
+            width: 29%;
+          }
+        }
+        @media(max-width: 890px) {
+          &:not(:first-child) {
+            width: 31%;
+          }
+        }
+        @media(max-width: 767px) {
+          &:not(:first-child) {
+            width: 47%;
+          }
+        }
+        @media(max-width: 550px) {
+          &:not(:first-child) {
+            width: 100%;
+          }
         }
       }
 
@@ -144,10 +166,8 @@ export default {
 
     &__latest {
       width: 20rem;
-      @media(max-width: 768px) {
+      @media(max-width: 1024px) {
         width: 100%;
-        max-width: 22rem;
-        margin-left: auto;
       }
 
       .quotes__spot {

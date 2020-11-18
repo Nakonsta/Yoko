@@ -295,6 +295,13 @@ ul {
   margin-bottom: 2rem;
   display: flex;
   align-items: center;
+  @media(max-width: 767px) {
+    flex-wrap: wrap;
+    > * {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+  }
 }
 
 .tabs {
@@ -338,6 +345,9 @@ ul {
   &-dash {
     margin: 0 1rem;
     color: $colorGray;
+    @media(max-width: 767px) {
+      display: none;
+    }
   }
 }
 
@@ -393,7 +403,7 @@ ul {
     width: calc(100% - 22rem);
     position: relative;
     margin-bottom: 2rem;
-    @media(max-width: 768px) {
+    @media(max-width: 1024px) {
       width: 100%;
     }
   }
