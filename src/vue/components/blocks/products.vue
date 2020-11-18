@@ -40,7 +40,7 @@ export default {
 
     data() {
         return {
-            id: null,
+            companyId: null,
             items: [],
             page: 1,
         }
@@ -53,13 +53,11 @@ export default {
 
     methods: {
         fillUserData() {
-            if (this.$store.state.auth.loggedIn) {
-                this.id = this.$store.state.auth.user.company.id
-            }
+            this.companyId = document.querySelector('.section--company').getAttribute('data-id');
             return false;
         },
         getCompanyData() {
-            this.fetchCompany(this.id)
+            this.fetchCompany(this.companyId)
                 .then((response) => {
                     this.items = response.data.data.items;
                     console.log(response);
