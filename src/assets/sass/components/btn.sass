@@ -39,7 +39,7 @@
     padding-left: rem(78px)
     padding-right: rem(40px)
     position: relative
-    
+
     @include mq($until: mobileLandscape)
       padding-left: rem(68px)
       padding-right: rem(24px)
@@ -56,3 +56,15 @@
 
       @include mq($until: mobileLandscape)
         left: rem(24px)
+  &-group
+    display: flex
+    .btn
+      &:last-child
+        border-top-left-radius: 0
+        border-bottom-left-radius: 0
+        border-left: 0
+      &:first-child
+        border-top-right-radius: 0
+        border-bottom-right-radius: 0
+        border-right: 0
+

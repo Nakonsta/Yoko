@@ -6,6 +6,9 @@ Vue.component('multiselect', Multiselect)
 import InfiniteLoading from 'vue-infinite-loading'
 Vue.component('InfiniteLoading', InfiniteLoading)
 
+import Datepicker from 'vuejs-datepicker';
+Vue.component('datepicker', Datepicker)
+
 import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate)
 
@@ -32,6 +35,17 @@ configure({
         invalid: 'error',
     }
 });
+
+// Котировки
+import Quotes from './quotes.vue'
+const quotesBlock = document.querySelector('#quotes');
+if (quotesBlock) {
+    let appCatalog = new Vue({
+        el: quotesBlock,
+        store: store,
+        render: function(h) { return h(Quotes); }
+    })
+}
 
 // Каталог
 import Catalog from './catalog.vue'
