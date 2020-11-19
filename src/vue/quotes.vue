@@ -71,6 +71,7 @@
           disabledTo: moment().subtract(1, 'year').add(1, 'days').toDate(),
         },
         activeItem: 'month',
+        setMode: location.search === '?mode=demo' ? 'demo' : null,
         type: 'copper',
         currency: 'quote',
         isFirstLoad: false,
@@ -102,86 +103,10 @@
         latestQuotes: [],
         latestQuote: {},
         chartData: null,
-        chartOptions: {
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: {
-            display: false
-          },
-          scales: {
-            xAxes: [{
-              gridLines: {
-                display: false
-              },
-              ticks: {
-                callback: function(value) {
-                  return moment(value, "MM-DD-YYYY").format('MM.DD');
-                }
-              }
-            }],
-            yAxes: [{
-              gridLines: {
-                display: true,
-                color: '#CBEAED'
-              },
-              ticks: {
-                callback: function(value) {
-                  return parseFloat(value).toFixed(2);
-                }
-              }
-            }]
-          },
-          tooltips: {
-            callbacks: {
-              label: function (tooltipItem) {
-                return tooltipItem.yLabel;
-              }
-            },
-            enabled: false,
-            custom: function (tooltipModel) {
-              let tooltipEl = document.getElementById('chartjs-tooltip');
-              if (!tooltipEl) {
-                tooltipEl = document.createElement('div');
-                tooltipEl.id = 'chartjs-tooltip';
-                tooltipEl.innerHTML = '<div class="chartjs-tooltip"></div>';
-                document.body.appendChild(tooltipEl);
-              }
-
-              if (tooltipModel.opacity === 0) {
-                tooltipEl.style.opacity = 0;
-                return;
-              }
-
-              function getBody(bodyItem) {
-                return bodyItem.lines;
-              }
-
-              if (tooltipModel.body) {
-                const titleLines = tooltipModel.title || [];
-                const bodyLines = tooltipModel.body.map(getBody);
-                let innerHtml = '';
-                titleLines.forEach(function (title) {
-                  innerHtml += '<span style="color: #9B9B9A" class="chartjs-tooltip__title">' + title + ' </span>';
-                });
-                bodyLines.forEach(function (body) {
-                  innerHtml += ' <span class="chartjs-tooltip__body">' + body + '</span>';
-                });
-                const tableRoot = tooltipEl.querySelector('div');
-                tableRoot.innerHTML = innerHtml;
-              }
-              const position = this._chart.canvas.getBoundingClientRect();
-
-              tooltipEl.style.opacity = 1;
-              tooltipEl.style.position = 'absolute';
-              tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX - tooltipEl.offsetWidth / 2 + 'px';
-              tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY - tooltipEl.offsetHeight * 1.4 + 'px';
-            }
-          }
-        }
       }
     },
     created() {
-      this.getQuotesData(this.type, this.dates[this.activeItem], this.dates.now, 'demo')
+      this.getQuotesData(this.type, this.dates[this.activeItem], this.dates.now)
       this.getLatestQuotesData(this.type)
     },
     methods: {
@@ -218,16 +143,16 @@
       },
       setType(menuItem) {
         this.type = menuItem
-        this.getQuotesData(menuItem, this.dates[this.activeItem], this.dates.now, 'demo')
+        this.getQuotesData(menuItem, this.dates[this.activeItem], this.dates.now)
         this.getLatestQuotesData(menuItem)
       },
       setActive(menuItem) {
         this.activeItem = menuItem
         this.picker.start_date = moment(this.dates[menuItem]).toDate()
         this.picker.end_date = moment().toDate()
-        this.getQuotesData(this.type, this.dates[menuItem], this.dates.now, 'demo')
+        this.getQuotesData(this.type, this.dates[menuItem], this.dates.now)
       },
-      getQuotesData(type, date_start, date_end, mode) {
+      getQuotesData(type, date_start, date_end) {
         this.chartData = {
           labels: [],
           datasets: [
@@ -243,7 +168,7 @@
           ]
         }
         this.loadingQuotes = true
-        this.fetchQuotes(type, date_start, date_end, mode)
+        this.fetchQuotes(type, date_start, date_end, this.setMode)
           .then(({data}) => {
             const response = data.data
             this.quotes = response
@@ -254,7 +179,7 @@
             })
           })
           .then(() => {
-            this.fetchQuotesDates(mode)
+            this.fetchQuotesDates(this.setMode)
               .then(({data}) => {
                 const response = data.data
                 this.range = response
@@ -275,9 +200,9 @@
             this.loadingQuotes = false
           })
       },
-      getLatestQuotesData(type, mode) {
+      getLatestQuotesData(type) {
         this.loadingLatestQuotes = true
-        this.fetchLatestQuotes(type, mode)
+        this.fetchLatestQuotes(type, this.setMode)
           .then(({data}) => {
             const response = data.data
             this.latestQuotes = response
