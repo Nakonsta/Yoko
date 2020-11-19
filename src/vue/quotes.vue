@@ -71,7 +71,7 @@
           disabledTo: moment().subtract(1, 'year').add(1, 'days').toDate(),
         },
         activeItem: 'month',
-        setMode: location.search === '?mode=demo' ? 'demo' : null,
+        setDemoMode: location.search === '?mode=demo' ? 'demo' : null,
         type: 'copper',
         currency: 'quote',
         isFirstLoad: false,
@@ -168,7 +168,7 @@
           ]
         }
         this.loadingQuotes = true
-        this.fetchQuotes(type, date_start, date_end, this.setMode)
+        this.fetchQuotes(type, date_start, date_end, this.setDemoMode)
           .then(({data}) => {
             const response = data.data
             this.quotes = response
@@ -179,7 +179,7 @@
             })
           })
           .then(() => {
-            this.fetchQuotesDates(this.setMode)
+            this.fetchQuotesDates(this.setDemoMode)
               .then(({data}) => {
                 const response = data.data
                 this.range = response
@@ -202,7 +202,7 @@
       },
       getLatestQuotesData(type) {
         this.loadingLatestQuotes = true
-        this.fetchLatestQuotes(type, this.setMode)
+        this.fetchLatestQuotes(type, this.setDemoMode)
           .then(({data}) => {
             const response = data.data
             this.latestQuotes = response
