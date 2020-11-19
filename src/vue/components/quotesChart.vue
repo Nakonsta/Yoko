@@ -317,6 +317,9 @@ ul {
     cursor: pointer;
     display: block;
     color: $colorGray;
+    @media(max-width: 350px) {
+      font-size: rem(12px);
+    }
 
     &.active {
       color: $colorTurquoise;
