@@ -1,11 +1,13 @@
 <template>
   <div class="quotes">
     <div class="quotes__header">
-      <div class="btn-group">
-        <a @click.prevent="setType('copper')" class="btn" :class="{ active: type === 'copper' }">Медь
-          <span>copper</span></a>
-        <a @click.prevent="setType('alum')" class="btn" :class="{ active: type === 'alum' }">Алюминий
-          <span>alum</span></a>
+      <div class="btn-group btn-group-select" :class="{active: showSelect}">
+        <a @click.prevent="setType('copper')" class="btn" :class="{ active: type === 'copper' }">
+          Медь <span>copper</span>
+        </a>
+        <a @click.prevent="setType('alum')" class="btn" :class="{ active: type === 'alum' }">
+          Алюминий <span>alum</span>
+        </a>
       </div>
       <div class="switch-box-container">
         <span class="switch-box-false-name">
@@ -71,12 +73,14 @@
           disabledTo: moment().subtract(1, 'year').add(1, 'days').toDate(),
         },
         activeItem: 'month',
+        windowWidth: window.innerWidth,
         setDemoMode: location.search === '?mode=demo' ? 'demo' : null,
         type: 'copper',
         currency: 'quote',
         isFirstLoad: false,
         currencyChecked: false,
         loadingQuotes: true,
+        showSelect: false,
         loadingLatestQuotes: true,
         dates: {
           now: moment().format('YYYY-MM-DD'),
@@ -108,6 +112,11 @@
     created() {
       this.getQuotesData(this.type, this.dates[this.activeItem], this.dates.now)
       this.getLatestQuotesData(this.type)
+    },
+    mounted() {
+      this.$nextTick(() => {
+        window.addEventListener('resize', this.onResize);
+      })
     },
     methods: {
       setCurrency(e) {
@@ -141,10 +150,18 @@
           moment(this.picker.end_date).format('YYYY-MM-DD'),
         )
       },
+      onResize() {
+        this.windowWidth = window.innerWidth
+      },
       setType(menuItem) {
-        this.type = menuItem
-        this.getQuotesData(menuItem, this.dates[this.activeItem], this.dates.now)
-        this.getLatestQuotesData(menuItem)
+        if (this.windowWidth > 767 || this.showSelect === true) {
+          this.type = menuItem
+          this.showSelect = false
+          this.getQuotesData(menuItem, this.dates[this.activeItem], this.dates.now)
+          this.getLatestQuotesData(menuItem)
+        } else {
+          this.showSelect = true
+        }
       },
       setActive(menuItem) {
         this.activeItem = menuItem
@@ -259,6 +276,48 @@
       background: $colorTurquoise;
       span {
         color: #98D5DB;
+      }
+    }
+
+    &-group {
+      &-select {
+        @media(max-width: 767px) {
+          margin-bottom: 1rem;
+          max-height: rem(63px);
+          transition: max-height .5s;
+          overflow: hidden;
+          .btn {
+            margin-bottom: 0;
+            order: 0;
+            position: relative;
+          }
+          &.active {
+            max-height: rem(200px);
+            .btn {
+              border-top-left-radius: 0;
+              border-top-right-radius: 0;
+            }
+            .btn.active {
+              border-radius: rem(6px) rem(6px) 0 0;
+
+              &:after {
+                content: '\e75f';
+              }
+            }
+          }
+          .btn.active {
+            order: -1;
+            &:after {
+              content: '\e75c';
+              font-family: 'fontello';
+              color: white;
+              position: absolute;
+              right: rem(25px);
+              top: rem(22px);
+              font-size: rem(14px);
+            }
+          }
+        }
       }
     }
   }

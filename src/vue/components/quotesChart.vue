@@ -191,9 +191,17 @@ export default {
               tooltipEl.innerHTML = '<div class="chartjs-tooltip"></div>';
               document.body.appendChild(tooltipEl);
             }
+            let tooltipElLine = document.getElementById('chartjs-tooltip-line');
+            if (!tooltipElLine) {
+              tooltipElLine = document.createElement('div');
+              tooltipElLine.id = 'chartjs-tooltip-line';
+              document.body.appendChild(tooltipElLine);
+            }
 
             if (tooltipModel.opacity === 0) {
+              tooltipElLine.style.opacity = 0;
               tooltipEl.style.opacity = 0;
+              tooltipElLine.style.zIndex = -1;
               tooltipEl.style.zIndex = -1;
               return;
             }
@@ -215,7 +223,19 @@ export default {
               const tableRoot = tooltipEl.querySelector('div');
               tableRoot.innerHTML = innerHtml;
             }
-            const position = this._chart.canvas.getBoundingClientRect();
+            const position = this._chart.canvas.getBoundingClientRect()
+
+            tooltipElLine.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+
+            if(window.innerWidth > 1230 || (window.innerWidth > 886 && window.innerWidth < 1024)) {
+              tooltipElLine.style.height = position.height - tooltipModel.caretY - 35 + 'px';
+            } else {
+              tooltipElLine.style.height = position.height - tooltipModel.caretY - 40 + 'px';
+            }
+            tooltipElLine.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 5 + 'px';
+            tooltipElLine.style.position = 'absolute';
+            tooltipElLine.style.opacity = 1;
+            tooltipElLine.style.zIndex = 1;
 
             tooltipEl.style.opacity = 1;
             tooltipEl.style.zIndex = 1;
@@ -239,14 +259,20 @@ export default {
     height: rem(52px) !important;
     background: transparent;
   }
+  #chartjs-tooltip-line {
+    border-left: 1px dashed $colorTurquoise;
+    width: 1px;
+  }
   .chartjs-tooltip {
-    padding: 0.5rem;
+    padding: 0.7rem;
     background-color: white;
     position: relative;
     font-size: rem(14px);
+    border-radius: 6px;
     filter: drop-shadow(5px 10px 15px rgba(55, 55, 53, 0.1));
     &__title {
       color: $colorGray;
+      margin-right: 0.4rem;
     }
     &__body {
       color: $colorText;
@@ -391,9 +417,15 @@ ul {
     margin-bottom: 2rem;
     color: $colorGray;
     font-size: rem(14px);
+    @media(max-width: 550px) {
+      font-size: rem(12px);
+    }
 
     li {
       margin-right: 1.1rem;
+      @media(max-width: 350px) {
+        margin-right: 0.4rem;
+      }
     }
 
     b {
