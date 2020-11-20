@@ -1,11 +1,13 @@
 <template>
   <div class="quotes">
     <div class="quotes__header">
-      <div class="btn-group">
-        <a @click.prevent="setType('copper')" class="btn" :class="{ active: type === 'copper' }">Медь
-          <span>copper</span></a>
-        <a @click.prevent="setType('alum')" class="btn" :class="{ active: type === 'alum' }">Алюминий
-          <span>alum</span></a>
+      <div class="btn-group btn-group-select" :class="{active: showSelect}">
+        <a @click.prevent="setType('copper')" class="btn" :class="{ active: type === 'copper' }">
+          Медь <span>copper</span>
+        </a>
+        <a @click.prevent="setType('alum')" class="btn" :class="{ active: type === 'alum' }">
+          Алюминий <span>alum</span>
+        </a>
       </div>
       <div class="switch-box-container">
         <span class="switch-box-false-name">
@@ -71,11 +73,14 @@
           disabledTo: moment().subtract(1, 'year').add(1, 'days').toDate(),
         },
         activeItem: 'month',
+        windowWidth: window.innerWidth,
+        setDemoMode: location.search === '?mode=demo' ? 'demo' : null,
         type: 'copper',
         currency: 'quote',
         isFirstLoad: false,
         currencyChecked: false,
         loadingQuotes: true,
+        showSelect: false,
         loadingLatestQuotes: true,
         dates: {
           now: moment().format('YYYY-MM-DD'),
@@ -102,87 +107,16 @@
         latestQuotes: [],
         latestQuote: {},
         chartData: null,
-        chartOptions: {
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: {
-            display: false
-          },
-          scales: {
-            xAxes: [{
-              gridLines: {
-                display: false
-              },
-              ticks: {
-                callback: function(value) {
-                  return moment(value, "MM-DD-YYYY").format('MM.DD');
-                }
-              }
-            }],
-            yAxes: [{
-              gridLines: {
-                display: true,
-                color: '#CBEAED'
-              },
-              ticks: {
-                callback: function(value) {
-                  return parseFloat(value).toFixed(2);
-                }
-              }
-            }]
-          },
-          tooltips: {
-            callbacks: {
-              label: function (tooltipItem) {
-                return tooltipItem.yLabel;
-              }
-            },
-            enabled: false,
-            custom: function (tooltipModel) {
-              let tooltipEl = document.getElementById('chartjs-tooltip');
-              if (!tooltipEl) {
-                tooltipEl = document.createElement('div');
-                tooltipEl.id = 'chartjs-tooltip';
-                tooltipEl.innerHTML = '<div class="chartjs-tooltip"></div>';
-                document.body.appendChild(tooltipEl);
-              }
-
-              if (tooltipModel.opacity === 0) {
-                tooltipEl.style.opacity = 0;
-                return;
-              }
-
-              function getBody(bodyItem) {
-                return bodyItem.lines;
-              }
-
-              if (tooltipModel.body) {
-                const titleLines = tooltipModel.title || [];
-                const bodyLines = tooltipModel.body.map(getBody);
-                let innerHtml = '';
-                titleLines.forEach(function (title) {
-                  innerHtml += '<span style="color: #9B9B9A" class="chartjs-tooltip__title">' + title + ' </span>';
-                });
-                bodyLines.forEach(function (body) {
-                  innerHtml += ' <span class="chartjs-tooltip__body">' + body + '</span>';
-                });
-                const tableRoot = tooltipEl.querySelector('div');
-                tableRoot.innerHTML = innerHtml;
-              }
-              const position = this._chart.canvas.getBoundingClientRect();
-
-              tooltipEl.style.opacity = 1;
-              tooltipEl.style.position = 'absolute';
-              tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX - tooltipEl.offsetWidth / 2 + 'px';
-              tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY - tooltipEl.offsetHeight * 1.4 + 'px';
-            }
-          }
-        }
       }
     },
     created() {
-      this.getQuotesData(this.type, this.dates[this.activeItem], this.dates.now, 'demo')
+      this.getQuotesData(this.type, this.dates[this.activeItem], this.dates.now)
       this.getLatestQuotesData(this.type)
+    },
+    mounted() {
+      this.$nextTick(() => {
+        window.addEventListener('resize', this.onResize);
+      })
     },
     methods: {
       setCurrency(e) {
@@ -216,18 +150,26 @@
           moment(this.picker.end_date).format('YYYY-MM-DD'),
         )
       },
+      onResize() {
+        this.windowWidth = window.innerWidth
+      },
       setType(menuItem) {
-        this.type = menuItem
-        this.getQuotesData(menuItem, this.dates[this.activeItem], this.dates.now, 'demo')
-        this.getLatestQuotesData(menuItem)
+        if (this.windowWidth > 767 || this.showSelect === true) {
+          this.type = menuItem
+          this.showSelect = false
+          this.getQuotesData(menuItem, this.dates[this.activeItem], this.dates.now)
+          this.getLatestQuotesData(menuItem)
+        } else {
+          this.showSelect = true
+        }
       },
       setActive(menuItem) {
         this.activeItem = menuItem
         this.picker.start_date = moment(this.dates[menuItem]).toDate()
         this.picker.end_date = moment().toDate()
-        this.getQuotesData(this.type, this.dates[menuItem], this.dates.now, 'demo')
+        this.getQuotesData(this.type, this.dates[menuItem], this.dates.now)
       },
-      getQuotesData(type, date_start, date_end, mode) {
+      getQuotesData(type, date_start, date_end) {
         this.chartData = {
           labels: [],
           datasets: [
@@ -243,7 +185,7 @@
           ]
         }
         this.loadingQuotes = true
-        this.fetchQuotes(type, date_start, date_end, mode)
+        this.fetchQuotes(type, date_start, date_end, this.setDemoMode)
           .then(({data}) => {
             const response = data.data
             this.quotes = response
@@ -254,7 +196,7 @@
             })
           })
           .then(() => {
-            this.fetchQuotesDates(mode)
+            this.fetchQuotesDates(this.setDemoMode)
               .then(({data}) => {
                 const response = data.data
                 this.range = response
@@ -275,9 +217,9 @@
             this.loadingQuotes = false
           })
       },
-      getLatestQuotesData(type, mode) {
+      getLatestQuotesData(type) {
         this.loadingLatestQuotes = true
-        this.fetchLatestQuotes(type, mode)
+        this.fetchLatestQuotes(type, this.setDemoMode)
           .then(({data}) => {
             const response = data.data
             this.latestQuotes = response
@@ -334,6 +276,48 @@
       background: $colorTurquoise;
       span {
         color: #98D5DB;
+      }
+    }
+
+    &-group {
+      &-select {
+        @media(max-width: 767px) {
+          margin-bottom: 1rem;
+          max-height: rem(63px);
+          transition: max-height .5s;
+          overflow: hidden;
+          .btn {
+            margin-bottom: 0;
+            order: 0;
+            position: relative;
+          }
+          &.active {
+            max-height: rem(200px);
+            .btn {
+              border-top-left-radius: 0;
+              border-top-right-radius: 0;
+            }
+            .btn.active {
+              border-radius: rem(6px) rem(6px) 0 0;
+
+              &:after {
+                content: '\e75f';
+              }
+            }
+          }
+          .btn.active {
+            order: -1;
+            &:after {
+              content: '\e75c';
+              font-family: 'fontello';
+              color: white;
+              position: absolute;
+              right: rem(25px);
+              top: rem(22px);
+              font-size: rem(14px);
+            }
+          }
+        }
       }
     }
   }
