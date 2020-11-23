@@ -59,6 +59,39 @@
     font-size: .9em
     color: $colorRed
 
+  &__add
+    margin: 0 0 rem(32px)
+
+    a
+      text-decoration: underline
+      color: $colorTurquoise
+
+      &:hover
+        text-decoration: none
+        color: $colorTurquoiseHover
+
+  &__remove
+    margin: rem(32px) 0 0 // .field__label line-height + .field__label margin-bottom
+
+    a
+      display: flex
+      justify-content: center
+      //justify-content: flex-end
+      align-items: center
+      width: rem(40px)
+      height: rem(40px)
+
+      &:hover
+        svg
+          fill: $colorTurquoiseHover
+
+      svg
+        display: block
+        width: 24px
+        height: 24px
+        fill: $colorGray
+        transition: fill $animation
+
 input[type="text"].field,
 input[type="password"].field,
 input[type="email"].field,
@@ -144,29 +177,8 @@ input[type="radio"].field + .field__label
   &::after
     border-radius: 50%
 
-.form
+textarea.field
+  height: auto
+  min-height: rem(104px)
+  resize: vertical
 
-  &__error
-    margin: 0 0 rem(30px)
-    border: 1px solid $colorRed
-    border-radius: rem(6px)
-    padding: rem(7px) rem(11px)
-    font: normal 14px/#{(24/14)} $fontFamily
-    color: $colorRed
-    background: lighten($colorRed, 40%)
-
-  &__columns
-    @include mq($from: tablet)
-      display: flex
-      align-items: center
-      justify-content: space-between
-      margin: rem(-10px) 0 rem(30px)
-
-      .field__container
-        margin: 0 rem(40px) 0 0
-
-    @include mq($until: tablet)
-      margin: rem(-15px) 0 rem(24px)
-
-      .field__container
-        margin: 0 0 rem(15px)

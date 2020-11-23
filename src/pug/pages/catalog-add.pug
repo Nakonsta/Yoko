@@ -1,0 +1,27 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-title
+
+block default
+    - let title = 'Каталог - Добавление продукции в каталог';
+    - locals.currentPage = 'Каталог';
+
+block content
+
+    +breadCrumbs([
+        'Главная',
+        'Каталог',
+        'Добавить продукцию'
+    ])
+
+    +pageTitle('Добавить продукцию', 'Вернуться назад')
+
+    .section.section--green.section--form
+        .container
+            .test
+                .tabs.tabs--line.js-tabs
+                    ul
+                        li: a(href="#form") Заполнить форму
+                        li: a(href="#import") Импортировать Файл
+                .tabs__content#form: #catalog-add
+                .tabs__content#import: #catalog-import

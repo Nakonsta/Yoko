@@ -87,6 +87,12 @@ export default {
         fetchCountries() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries`);
         },
+        fetchCatalogAdd(data) {
+            return axios.post(`${process.env.API_URL_NOTICE_SERVICE}`, data); // todo url
+        },
+        fetchCatalogImport(data, config) {
+            return axios.post(`${process.env.API_URL_NOTICE_SERVICE}`, data, config); // todo url
+        },
         // fetchCountries() {
         //     return this.$axios.$get(
         //       `${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries/`,

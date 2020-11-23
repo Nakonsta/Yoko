@@ -44,6 +44,28 @@ if (catalogBlock) {
     })
 }
 
+// Каталог - добавление - заполнить форму
+import CatalogAdd from './catalog-add.vue'
+const catalogAddBlock = document.querySelector('#catalog-add');
+if (catalogAddBlock) {
+    let appCatalogAdd = new Vue({
+        el: catalogAddBlock,
+        store: store,
+        render: function(h) { return h(CatalogAdd); }
+    })
+}
+
+// Каталог - добавление - импортировать файл
+import CatalogImport from './catalog-import.vue'
+const catalogImportBlock = document.querySelector('#catalog-import');
+if (catalogImportBlock) {
+    let appCatalogAdd = new Vue({
+        el: catalogImportBlock,
+        store: store,
+        render: function(h) { return h(CatalogImport); }
+    })
+}
+
 // Форма авторизции
 import Singin from './singin.vue'
 const singinBlock = document.querySelector('#singin .popup__content-container');
