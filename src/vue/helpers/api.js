@@ -27,7 +27,7 @@ export default {
 
             return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/`,
                 body,
-                { cancelToken: this.CancelTokens.catalogCancelToken.token },
+                {cancelToken: this.CancelTokens.catalogCancelToken.token},
             );
         },
         fetchTotalCatalog(group, filter) {
@@ -40,7 +40,7 @@ export default {
 
             return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/total/`,
                 body,
-                { cancelToken: this.CancelTokens.catalogCancelToken.token },
+                {cancelToken: this.CancelTokens.catalogCancelToken.token},
             );
         },
         fetchListSearchCatalog(string) {
@@ -93,10 +93,34 @@ export default {
         fetchCatalogImport(data, config) {
             return axios.post(`${process.env.API_URL_NOTICE_SERVICE}`, data, config); // todo url
         },
+        fetchQuotes(quote, date_start, date_end, mode) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/quotes`, {
+                params: {
+                    quote, date_start, date_end, mode
+                }
+            });
+        },
+        fetchLatestQuotes(quote, mode) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/quotes/latest/`, {
+                params: { quote, mode }
+            });
+        },
+        fetchQuotesDates(mode) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/quotes/dates/`, {
+                params: { mode }
+            });
+        },
         // fetchCountries() {
         //     return this.$axios.$get(
         //       `${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries/`,
         //     )
         // },
+        fetchCompany(id) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company`, {
+                params: {
+                    company_id: id
+                }
+            });
+        },
     }
 }

@@ -60,6 +60,7 @@
   "dependencies": {
     "@popperjs/core": "^2.5.4",
     "axios": "^0.20.0",
+    "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "dotenv-webpack": "^4.0.0",
     "dragula": "^3.7.2",
@@ -76,11 +77,13 @@
     "toastify-js": "^1.9.3",
     "vee-validate": "^3.4.3",
     "vue": "^2.6.12",
+    "vue-chartjs": "^3.5.1",
     "vue-infinite-loading": "^2.4.5",
     "vue-loader": "^15.9.3",
     "vue-multiselect": "^2.1.6",
     "vue-slide-up-down": "^2.0.1",
     "vue-template-compiler": "^2.6.12",
+    "vuejs-datepicker": "^1.6.2",
     "vuejs-paginate": "^2.1.0",
     "vuex": "^3.5.1"
   }

@@ -1,0 +1,20 @@
+extends ../layouts/default
+include ../blocks/page-banner
+include ../blocks/bread-crumbs
+
+block default
+    - let title = 'Котировки';
+    - locals.currentPage = 'Котировки';
+
+block content
+
+block content
+    +breadCrumbs([
+        'Главная',
+        title
+    ])
+
+    +pageBanner(title, '/content/quotes.jpg')
+    .section.section--support.quotes
+        .container
+            #quotes

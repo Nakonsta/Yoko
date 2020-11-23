@@ -6,6 +6,9 @@ Vue.component('multiselect', Multiselect)
 import InfiniteLoading from 'vue-infinite-loading'
 Vue.component('InfiniteLoading', InfiniteLoading)
 
+import Datepicker from 'vuejs-datepicker';
+Vue.component('datepicker', Datepicker)
+
 import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate)
 
@@ -14,6 +17,7 @@ Vue.use(VueTheMask)
 
 // validate
 import {configure, setInteractionMode, ValidationObserver, ValidationProvider, extend, localize} from 'vee-validate'
+import customRules from './helpers/custom-rules'
 import ru from 'vee-validate/dist/locale/ru.json';
 import * as rules from 'vee-validate/dist/rules';
 setInteractionMode('eager');
@@ -21,6 +25,9 @@ setInteractionMode('eager');
 Object.keys(rules).forEach(rule => {
     extend(rule, rules[rule]);
 });
+for (const key in customRules) {
+    extend(key, customRules[key])
+}
 localize('ru', ru);
 // Install components globally
 Vue.component('ValidationObserver', ValidationObserver);
@@ -30,8 +37,20 @@ configure({
     classes: {
         valid: 'valid',
         invalid: 'error',
+        events: 'input',
     }
 });
+
+// Котировки
+import Quotes from './quotes.vue'
+const quotesBlock = document.querySelector('#quotes');
+if (quotesBlock) {
+    let appCatalog = new Vue({
+        el: quotesBlock,
+        store: store,
+        render: function(h) { return h(Quotes); }
+    })
+}
 
 // Каталог
 import Catalog from './catalog.vue'
@@ -127,6 +146,17 @@ headerLoginStatus.forEach((el) => {
 //         render: function(h) { return h(HeaderLoginStatus); }
 //     })
 // }
+
+// Структура компании
+import Products from './components/blocks/products.vue'
+const products = document.querySelector('#products-info');
+if (products) {
+    let productsBlock = new Vue({
+        el: products,
+        // store: store,
+        render: function(h) { return h(Products); }
+    })
+}
 
 // Структура компании
 import Structure from './components/blocks/structure.vue'

@@ -78,7 +78,7 @@
                                 type="tel"
                                 name="trade_procedure_number"
                                 v-model="formForSend.trade_procedure_number"
-                                @keydown="onlyDigits($event)"
+                                v-mask="`####################`"
                                 placeholder="Номер торговой процедуры">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
@@ -112,17 +112,17 @@
                         <div class="support-form__item-info support-form__item-info--padding-top">
                             Загрузите заявления в формате:  pdf, jpeg, png
                         </div>
-                    
+
                     </div>
                     <div class="support-form__item">
-                        <ValidationProvider name="Введите текст обращения" :rules="{ max: 1000 }" v-slot="{ errors, failed }" tag="label" class="field__container">
+                        <ValidationProvider name="Введите текст обращения" :rules="{ required: true, max: 1000 }" v-slot="{ errors, failed }" tag="label" class="field__container">
                             <span class="field__label">Введите текст обращения</span>
                             <textarea 
                                 :class="{field: true, error: failed}"
                                 row="4"
                                 name="text"
                                 v-model="formForSend.text"
-                                @keydown="countSymbols($event)"
+                                @input="countSymbols($event)"
                                 class="support-form__textarea"
                             ></textarea>
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
@@ -153,17 +153,20 @@
                                 v-model="startCountry"
                             />
                         </div>
-                        <div class="support-form__item support-form__phone">                            
+                        <div class="support-form__item support-form__phone">
+                          <ValidationProvider name="Телефон" v-slot="{ errors, failed }" :rules="{ required: true, customPhone: true }" tag="label" class="field__container">
                             <input
                                 v-model="formForSend.phone"
                                 type="tel"
                                 name="phone"
                                 class="field"
                                 v-mask="`+${startCountry.phone_code} (###) ###-####`">
+                            <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                          </ValidationProvider>
                         </div>
                     </div>
                     <div class="support-form__item">
-                        <ValidationProvider name="ИНН Компании" v-slot="{ errors, failed }" :rules="{ required: true }" tag="label" class="field__container">
+                        <ValidationProvider name="ИНН Компании" v-slot="{ errors, failed }" :rules="{ required: true, min: 10 }" tag="label" class="field__container">
                             <span class="field__label">ИНН Компании</span>
                             <input :class="{field: true, error: failed}" type="text" name="inn" v-model="formForSend.inn" v-mask="`############`">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
@@ -209,7 +212,7 @@ export default {
                 login_to_system: null,
                 trade_procedure_number: null,
                 statement: [],
-                text: null,
+                text: '',
                 email: null,
                 name: null,
                 phone: null,
@@ -350,7 +353,11 @@ export default {
             var files = evt.target.files || evt.dataTransfer.files;
             if (!files.length)
                 return;
-            this.formForSend.statement.push(files[0]);
+            if (['application/pdf', 'image/jpeg', 'image/png'].includes(files[0].type)) {
+              this.formForSend.statement.push(files[0]);
+            } else {
+              notificationError('Загружаемый файл должен быть форматов: pdf, jpeg, png')
+            }
         },
         removeFile(key) {
             this.formForSend.statement.splice(key, 1)
@@ -434,6 +441,6 @@ export default {
   margin-bottom: rem(24px)
 }
 .multiselect__option--selected {
-    background: #cbeaed;
+    background: #cbeaed !important;
 }
 </style>
