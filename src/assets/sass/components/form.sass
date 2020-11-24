@@ -1,0 +1,106 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+
+.form
+  &__title
+    margin: 0 0 rem(32px)
+    font-weight: 500
+    font-size: rem(24px)
+
+  &__error
+    margin: 0 0 rem(30px)
+    border: 1px solid $colorRed
+    border-radius: rem(6px)
+    padding: rem(7px) rem(11px)
+    font: normal 14px/#{(24/14)} $fontFamily
+    color: $colorRed
+    background: lighten($colorRed, 40%)
+
+  &__note
+    margin: rem(16px) 0 0
+
+  &__columns
+    @include mq($from: tablet)
+      display: flex
+      flex-wrap: wrap
+      align-items: center
+      justify-content: space-between
+      margin: rem(-10px) 0 rem(30px)
+
+      .field__container
+        margin: 0 rem(40px) 0 0
+
+    @include mq($until: tablet)
+      margin: rem(-15px) 0 rem(24px)
+
+      .field__container
+        margin: 0 0 rem(15px)
+
+  &__grid
+    @include mq($from: tablet)
+      display: flex
+      flex-wrap: wrap
+      justify-content: space-between
+      margin: 0 0 0 rem(-40px)
+
+      > .field__container
+        margin-left: rem(40px)
+        width: calc(100% - #{rem(40px)})
+
+        &--w50
+          width: calc(50% - #{rem(40px)})
+          
+        &--short
+          width: 50px
+
+        &--long
+          width: calc(100% - #{rem(130px)})
+
+  &__line
+    display: flex
+    margin: 0 0 0 rem(-40px)
+
+    > .field__container
+      margin-left: rem(40px)
+      width: calc(100% - #{rem(40px)})
+
+      &--short
+        flex-shrink: 0
+        width: 50px
+
+      &--long
+        flex-grow: 1
+        position: relative
+
+        &::before
+          content: ''
+          display: block
+          margin: rem(52px) 0 0 // .field__label line-height + .field__label margin-bottom + .field height/2
+          border-top: 1px solid $colorText
+          width: rem(10px)
+          height: 0
+          position: absolute
+          top: 0
+          left: rem(-25px)
+
+    > .field__remove
+      flex-shrink: 0
+      width: rem(40px)
+
+fieldset
+  margin: 0
+  border: 0
+  padding: 0
+
+  .form__grid > &
+    margin-left: rem(40px)
+    width: calc(100% - #{rem(40px)})
+
+  legend
+    display: block
+    margin: 0 0 rem(24px)
+    border-bottom: 1px solid $colorTurquoise
+    padding: 0 0 rem(8px)
+    width: 100%
+    font-weight: 500
+    font-size: rem(18px)

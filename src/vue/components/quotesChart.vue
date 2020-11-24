@@ -255,6 +255,11 @@ export default {
   @import "../../assets/sass/variables/variables";
   @import "../../assets/sass/mixins/fluid-mixin";
 
+
+  .quotes__body .field {
+    height: rem(52px) !important;
+    background: transparent;
+  }
   #chartjs-tooltip-line {
     border-left: 1px dashed $colorTurquoise;
     width: 1px;
