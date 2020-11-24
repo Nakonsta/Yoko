@@ -18,9 +18,13 @@
                 {{ item.price }} &#8381;
             </span>
         </div>
-        <div v-if="item.documents" class="table-cell__certificates cable-info__certificates">
-            <span v-if="item.documents">
-                <!-- Здесь надо написать вывод сертификатов, пока они не приходят -->
+        <div v-if="item.documents && item.documents.certificates" class="table-cell__certificates cable-info__certificates">
+            <span v-for="(document, key) in item.documents.certificates" :key="key" class="cable-info__certificate">
+                <a :href="document.url" class="cable-info__certificate-link">
+                    <img :src="`img/sprite.svg#${chooseCertificatePic(document.properties.date_end)}-usage`" class="cable-info__certificate-pic" alt="Сертификат продукции">
+                    {{ document.properties.number }}
+                    <span class="cable-info__certificate-tooltip">{{chooseCertificateToolTip(document.properties.date_end)}}</span>
+                </a>
             </span>
         </div>
     </div>
@@ -34,6 +38,49 @@ export default {
         item: {
             type: Object,
             required: true,
+        }
+    },
+
+    data() {
+        return {
+            today: new Date(),
+        }
+    },
+
+    methods: {
+        chooseCertificatePic(date_end) {
+            const expiringDate = new Date(date_end)
+            if (this.today > expiringDate) {
+                return 'expiring-certificate'
+            }
+            // 2,628e+9 - число миллисекунд в месяце
+            if ((this.today - expiringDate) < 2,628e+9) {
+                return 'expiring-soon-certificate'
+            }
+            return 'actual-certificate'
+        },
+        chooseCertificateToolTip(date_end) {
+            const expiringDate = new Date(date_end)
+            if (this.today > expiringDate) {
+                return 'срок сертификата истек'
+            }
+            // 2,628e+9 - число миллисекунд в месяце
+            if ((this.today - expiringDate) < 2,628e+9) {
+                return `срок сертификата закончится ${this.formatDate(expiringDate)}`
+            }
+            return `сертификат действует до ${this.formatDate(expiringDate)}`
+        },
+        formatDate(date) {
+            var dd = date.getDate();
+            if (dd < 10) dd = '0' + dd;
+
+            var mm = date.getMonth() + 1;
+            if (mm < 10) mm = '0' + mm;
+
+            var yy = date.getFullYear() % 100;
+            if (yy < 10) yy = '0' + yy;
+
+            return dd + '.' + mm + '.' + yy;
         }
     }
 }
@@ -65,6 +112,38 @@ export default {
         &__price {
             font-size: rem(16px);
             color: $colorTurquoise;
+        }
+        &__certificate {
+            display: inline-block;
+            margin-right: rem(12px);
+            &-link {
+                display: inline-block;
+                position: relative;
+                color: $lightcolorText;
+                font-size: rem(14px);
+                font-weight: 500;
+                &:hover .cable-info__certificate-tooltip,
+                &:focus .cable-info__certificate-tooltip {
+                    display: block;
+                }
+            }
+            &-tooltip {
+                display: none;
+                position: absolute;
+                box-shadow: 0px 4px 24px rgba(55, 31, 31, 0.25);
+                padding: rem(10px);
+                background-color: $colorWhite;
+                color: $colorGray;
+                font-size: rem(14px);
+                white-space: nowrap;
+                border-radius: 4px;
+                top: -50px;
+                left: -80px;
+            }
+            &-pic {
+                width: 12px;
+                height: 12px;
+            }
         }
     }
         
