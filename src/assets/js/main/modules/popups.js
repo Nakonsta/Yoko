@@ -8,14 +8,14 @@ const timeout = 800;
 
 function openPopupById(id) {
 	const name = id.replace('#', '');
-	const curentPopup = document.getElementById(name);
-	popupOpen(curentPopup);
+	const currentPopup = document.getElementById(name);
+	popupOpen(currentPopup);
 }
 
 function closePopupById(id) {
 	const name = id.replace('#', '');
-	const curentPopup = document.getElementById(name);
-	popupClose(curentPopup);
+	const currentPopup = document.getElementById(name);
+	popupClose(currentPopup);
 }
 
 document.addEventListener('click', function(e) {
@@ -37,26 +37,26 @@ if (popupCloseIcon.length > 0) {
 	}
 }
 
-function popupOpen(curentPopup) {
-	if (curentPopup && unlock) {
+function popupOpen(currentPopup) {
+	if (currentPopup && unlock) {
 		const popupActive = document.querySelector('.popup.open');
 		if (popupActive) {
 			popupClose(popupActive, false);
 		} else {
 			bodyLock();
 		}
-		curentPopup.classList.add('open');
-		curentPopup.addEventListener("click", function (e) {
+		currentPopup.classList.add('open');
+		currentPopup.addEventListener("click", function (e) {
 			if (!e.target.closest('.popup__content')) {
 				popupClose(e.target.closest('.popup'));
 			}
 		});
 		if (getInternetExplorerVersion() !== -1) {
 			// IE обнаружен
-			let body = curentPopup.querySelector(".popup__content");
+			let body = currentPopup.querySelector(".popup__content");
 			console.log($(body).height(), $(window).height())
 			if ($(body).height() > $(window).height()) {
-				curentPopup.classList.add('popup--fix-ie');
+				currentPopup.classList.add('popup--fix-ie');
 			}
 		}
 		if( document.querySelector('.mobile-nav') ) {
@@ -137,8 +137,6 @@ function popupOpenUniversalForm(title = '', text = '') {
 	let modal = document.getElementById('universal-form');
 	let titleModal = modal ? modal.querySelector('.advantages__title') : null;
 	let textModal = modal ? modal.querySelector('.advantages__text') : null;
-
-	console.log(titleModal)
 
 	titleModal.innerHTML = title;
 	if (titleModal) {
