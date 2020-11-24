@@ -61,14 +61,31 @@
 
   &__add
     margin: 0 0 rem(32px)
+    font-weight: 500
 
     a
-      text-decoration: underline
+      padding-left: 30px
+      //text-decoration: underline
       color: $colorTurquoise
+      position: relative
 
       &:hover
-        text-decoration: none
+        //text-decoration: none
         color: $colorTurquoiseHover
+
+        svg
+          fill: $colorTurquoiseHover
+
+      svg
+        display: block
+        width: 24px
+        height: 24px
+        fill: $colorTurquoise
+        transition: fill $animation
+        position: absolute
+        top: 50%
+        margin-top: -12px
+
 
   &__remove
     margin: rem(32px) 0 0 // .field__label line-height + .field__label margin-bottom
@@ -182,3 +199,30 @@ textarea.field
   min-height: rem(104px)
   resize: vertical
 
+div.field__range
+  display: flex
+  justify-content: space-between
+
+  > span
+    align-self: center
+
+  .field__range-start,
+  .field__range-end
+    flex: 0 1 calc(50% - 20px)
+    margin: 0
+    border: 0
+    padding: 0
+
+  .field
+    padding-right: rem(58px)
+
+  .sprite-calendar
+    display: block
+    margin-top: -8px
+    width: 16px
+    height: 16px
+    position: absolute
+    top: 50%
+    right: rem(22px)
+    fill: $colorTurquoise
+    pointer-events: none

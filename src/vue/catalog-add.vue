@@ -58,7 +58,10 @@
                         </div>
                     </template>
                     <div class="field__add" v-show="formForSend.marksize_description.length < 10">
-                        <a href="javascript:{}" @click="layerAdd($event)">Добавить слой</a>
+                        <a href="javascript:{}" @click="layerAdd($event)">
+                            <svg class="sprite-field-add"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#field-add"></use></svg>
+                            Добавить слой
+                        </a>
                     </div>
                     <ValidationProvider name="Дополнительная информация" v-slot="{ errors, failed }" tag="label" class="field__container">
                         <span class="field__label">Дополнительная информация о маркоразмере</span>
@@ -168,22 +171,50 @@
                         <div class="form__grid">
                             <ValidationProvider name="Номер сертификата" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
                                 <span class="field__label">Номер сертификата</span>
-                                <input :class="{field: true, error: failed}" type="text" v-model="item.number" placeholder="Введите номер">
+                                <input :class="{field: true, error: failed}" type="text" v-model="item.properties.number" placeholder="Введите номер">
                                 <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                             </ValidationProvider>
-                            <ValidationProvider name="Дата начала и окончания сертификата" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
+                            <div class="field__container field__container--w50">
                                 <span class="field__label">Выберите дату начала и окончания сертификата</span>
-                                <input :class="{field: true, error: failed}" type="text" v-model="item.name" placeholder="Введите период">
-                                <span v-show="failed" class="field__error">{{ errors[0] }}</span>
-                            </ValidationProvider>
+                                <div class="field__range">
+                                    <ValidationProvider name="Дата начала сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-start">
+                                        <datepicker
+                                            placeholder="Дата начала"
+                                            :monday-first=true
+                                            :input-class="{field: true, error: failed}"
+                                            v-model="item.properties.date_start"
+                                            :disabled-dates="{ from: item.properties.date_end, to: picker.disabledTo }"
+                                        >
+                                            <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                                        </datepicker>
+                                        <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                                    </ValidationProvider>
+                                    <span>&mdash;</span>
+                                    <ValidationProvider name="Дата окончания сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-end">
+                                        <datepicker
+                                            placeholder="Дата окончания"
+                                            :monday-first=true
+                                            :input-class="{field: true, error: failed}"
+                                            v-model="item.properties.date_end"
+                                            :disabled-dates="{ from: picker.disabledFrom, to: item.properties.date_start }"
+                                        >
+                                            <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                                        </datepicker>
+                                        <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                                    </ValidationProvider>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                 </template>
                 <div class="field__add">
-                    <a href="javascript:{}" @click="certificateAdd($event)">Добавить Сертификат</a>
+                    <a href="javascript:{}" @click="certificateAdd($event)">
+                        <svg class="sprite-field-add"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#field-add"></use></svg>
+                        Добавить Сертификат
+                    </a>
                 </div>
                 <div class="btns">
-                    <button type="submit" class="btn">Добавить</button>
+                    <button type="submit" class="btn" :disabled="!valid">Добавить</button>
                     <a href="#" class="btn btn--bdr">Отменить</a>
                 </div>
                 <div class="form__note">Обратите внимание, добавленный вами маркоразмер отправится на модерацию</div>
@@ -195,6 +226,8 @@
 <script>
     import api from './helpers/api';
     import Uploader from "./components/uploder.vue";
+    import moment from 'moment';
+    import {ru} from "vuejs-datepicker/src/locale";
 
     export default {
         name: 'CatalogAdd',
@@ -205,7 +238,14 @@
         data: function () {
             return {
                 companies: [],
-                cable_type: [],
+                picker: {
+                    start_date: '',
+                    end_date: '',
+                    format: "yyyy-MM-dd",
+                    locale: ru,
+                    disabledFrom: null,
+                    disabledTo: null,
+                },
                 formForSend: {
                     company_id: null,
                     mark: null,
@@ -288,6 +328,9 @@
             certificateRemove: function (evt, layer, index) {
                 evt.preventDefault();
                 this.formForSend.documents.certificates.splice(index, 1);
+            },
+            certificateDates: function (evt, layer, index) {
+
             },
             countSymbols(evt, max) {
                 if ( evt.target.value.length >= max ) {
@@ -403,18 +446,18 @@
                     property_cable_type: this.formForSend.property_cable_type,
                     property_protective_cover: this.formForSend.property_protective_cover,
                     property_veins_type: this.formForSend.property_veins_type,
-                    property_caliber: this.formForSend.property_caliber,
+                    property_caliber: parseInt(this.formForSend.property_caliber),
                     property_veins_count: this.formForSend.property_veins_count,
                     property_fiber_count: this.formForSend.property_fiber_count,
                     property_execution: this.formForSend.property_execution,
                     property_fiber_size: this.formForSend.property_fiber_size,
                     property_use: this.formForSend.property_use,
                     property_laying_conditions: this.formForSend.property_laying_conditions,
-                    property_voltage_allowable: this.formForSend.property_voltage_allowable,
+                    property_voltage_allowable: parseInt(this.formForSend.property_voltage_allowable),
                     property_isolation: this.formForSend.property_isolation,
-                    property_power: this.formForSend.property_power,
-                    property_resistance_wave: this.formForSend.property_resistance_wave,
-                    property_section: this.formForSend.property_section,
+                    property_power: parseInt(this.formForSend.property_power),
+                    property_resistance_wave: parseInt(this.formForSend.property_resistance_wave),
+                    property_section: parseInt(this.formForSend.property_section),
                     property_fiber_type: this.formForSend.property_fiber_type,
                     property_material_shell: this.formForSend.property_material_shell,
                     documents: this.formForSend.documents,

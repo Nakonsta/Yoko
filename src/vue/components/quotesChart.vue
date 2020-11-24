@@ -255,7 +255,7 @@ export default {
   @import "../../assets/sass/variables/variables";
   @import "../../assets/sass/mixins/fluid-mixin";
 
-  .field {
+  .quotes__body .field {
     height: rem(52px) !important;
     background: transparent;
   }
