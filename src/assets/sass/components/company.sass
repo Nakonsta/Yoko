@@ -166,6 +166,12 @@
     color: $colorText
     transition: border $animation, color $animation, background $animation
 
+    @include mq($until: desktop)
+        width: calc(50% - 32px)
+
+    @include mq($until: mobileLandscape)
+        width: calc(100% - 32px)
+
     @at-root
       a#{&}:hover
         border-color: $colorTurquoiseHover
@@ -190,6 +196,9 @@
     margin: 32px 0 0 32px
     width: calc(50% - 32px)
     position: relative
+
+    @include mq($until: mobileLandscape)
+      width: calc(100% - 32px)
 
     input
       position: absolute
