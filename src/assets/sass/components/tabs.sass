@@ -13,6 +13,17 @@
     padding: 60px 0 0
     position: relative
 
+    &.hover
+      ul
+        box-shadow: 0 0 10px #cdcdcd
+        z-index: 2
+
+        li
+          display: block !important
+
+          &.active a
+            border-radius: 6px 6px 0 0
+
   ul
     display: flex
     list-style: none
@@ -28,18 +39,6 @@
       top: 0
       left: 0
       right: 0
-
-  &.hover
-    @include mq($until: tablet)
-      ul
-        box-shadow: 0 0 10px #cdcdcd
-        z-index: 2
-
-        li
-          display: block !important
-
-          &.active a
-            border-radius: 6px 6px 0 0
 
   li
     @include mq($from: tablet)
@@ -106,12 +105,24 @@
 
 .tabs.tabs--line
   border-bottom: 1px solid #cdcdcd
+  margin: 0 0 rem(40px)
 
   @include mq($until: tablet)
     margin: rem(48px) 0 rem(32px)
     border: 0
     padding: 60px 0 0
     position: relative
+
+    &.hover
+      ul:not(.js-more__secondary)
+        box-shadow: 0 0 10px #cdcdcd
+        z-index: 2
+
+        li
+          display: block !important
+
+          &.active a
+            border-radius: 6px 6px 0 0
 
   ul:not(.js-more__secondary)
     list-style: none
