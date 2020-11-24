@@ -255,10 +255,6 @@ export default {
   @import "../../assets/sass/variables/variables";
   @import "../../assets/sass/mixins/fluid-mixin";
 
-  .field {
-    height: rem(52px) !important;
-    background: transparent;
-  }
   #chartjs-tooltip-line {
     border-left: 1px dashed $colorTurquoise;
     width: 1px;
@@ -296,6 +292,11 @@ export default {
 @import "../../assets/sass/variables/fluid-variables";
 @import "../../assets/sass/variables/variables";
 @import "../../assets/sass/mixins/fluid-mixin";
+
+.field {
+  height: rem(52px) !important;
+  background: transparent;
+}
 
 ul {
   list-style-type: none;
