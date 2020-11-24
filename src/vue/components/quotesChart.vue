@@ -334,6 +334,9 @@ ul {
       margin-bottom: 1rem;
     }
   }
+  @media(max-width: 425px) {
+    width: 100%;
+  }
 }
 
 .tabs {
@@ -424,7 +427,10 @@ ul {
     color: $colorGray;
     font-size: rem(14px);
     @media(max-width: 550px) {
-      font-size: rem(12px);
+      //font-size: rem(12px);
+    }
+    @media(max-width: 425px) {
+      justify-content: center;
     }
 
     li {
