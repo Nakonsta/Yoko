@@ -1,11 +1,11 @@
 <template>
     <div class="cable-info">
-        <div class="table-cell__title cable-info__title">
+        <div class="table-cell__title cable-info__title" data-name="Маркоразмер">
             <span class="cable-info__title-text">
                 {{ item.title }}
             </span>
         </div>
-        <div class="table-cell__quantity cable-info__quantity">
+        <div class="table-cell__quantity cable-info__quantity" :data-name="item.quantity ? 'Остаток, м' : ''">
             <span v-if="item.quantity">
                 {{ item.quantity }} м
             </span>
@@ -13,12 +13,12 @@
                 под заказ
             </span>
         </div>
-        <div class="table-cell__price cable-info__price">
+        <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : ''">
             <span v-if="item.price">
                 {{ item.price }} &#8381;
             </span>
         </div>
-        <div v-if="item.documents && item.documents.certificates" class="table-cell__certificates cable-info__certificates">
+        <div v-if="item.documents && item.documents.certificates" class="table-cell__certificates cable-info__certificates" :data-name="item.documents && item.documents.certificates ? 'Сертификаты' : ''">
             <span v-for="(document, key) in item.documents.certificates" :key="key" class="cable-info__certificate">
                 <a :href="document.url" class="cable-info__certificate-link">
                     <img :src="`img/sprite.svg#${chooseCertificatePic(document.properties.date_end)}-usage`" class="cable-info__certificate-pic" alt="Сертификат продукции">
@@ -159,6 +159,63 @@ export default {
         }
         &__certificates {
             width: 35%;
+        }
+    }
+
+    @include mq($until: desktop) {
+        .table-cell {
+            &__title {
+                width: 35%;
+            }
+            &__quantity {
+                width: 20%;
+            }
+            &__price {
+                width: 20%;
+            }
+            &__certificates {
+                width: 25%;
+            }
+        } 
+    }
+
+    @include mq($until: tablet) {
+        .cable-info {
+            flex-direction: column;
+            align-items: flex-start;
+            &__title,
+            &__quantity,
+            &__price,
+            &__certificates {
+                position: relative;
+                padding: rem(8px) 0 rem(8px) rem(128px);
+                &::before {
+                    content: attr(data-name);
+                    position: absolute;
+                    top: rem(8px);
+                    left: 0;
+                    font-size: rem(14px);
+                    font-weight: 500;
+                    color: $colorGray;
+                }
+            }
+            &__title-text {
+                padding: rem(10px);
+            }
+        }
+        .table-cell {
+            &__title {
+                width: 100%;
+            }
+            &__quantity {
+                width: 100%;
+            }
+            &__price {
+                width: 100%;
+            }
+            &__certificates {
+                width: 100%;
+            }
         }
     }
 

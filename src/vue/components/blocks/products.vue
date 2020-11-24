@@ -101,4 +101,29 @@ export default {
         }
     }
 
+    @include mq($until: desktop) {
+        .table-cell {
+            &__title {
+                width: 35%;
+            }
+            &__quantity {
+                width: 20%;
+            }
+            &__price {
+                width: 20%;
+            }
+            &__certificates {
+                width: 25%;
+            }
+        } 
+    }
+
+    @include mq($until: tablet) {
+        .company-products {
+            &__thead {
+                display: none;
+            }
+        }
+    }
+
 </style>
