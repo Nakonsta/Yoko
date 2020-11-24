@@ -109,10 +109,14 @@ export default {
         //       `${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries/`,
         //     )
         // },
-        fetchCompany(id) {
+        fetchCompany(id, filter) {
+            let body = {}
+            if (filter) {
+                body.filter = filter
+            }
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company`, {
                 params: {
-                    company_id: id
+                    company_id: id,
                 }
             });
         },

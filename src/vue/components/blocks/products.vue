@@ -1,7 +1,7 @@
 <template>
     <div class="company-products">
         <div class="company-products__filters">
-            
+            <ProductsFilters @changeFilter="changeFilter(filtersData)"/>
         </div>
         <div class="company-products__table">
             <div class="company-products__thead">
@@ -22,24 +22,42 @@
                 <MarkSizeCard :item="item" />
             </div>
         </div>
+        <div class="company-products__pagination">
+            <paginate
+                v-if="isFirstLoad && totalPages"
+                :page-count="totalPages"
+                :click-handler="pagination"
+                prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                :prev-class="'catalog-pagination__prev'"
+                :next-class="'catalog-pagination__next'"
+                :container-class="'catalog-pagination'"
+                :page-class="'catalog-pagination__item'"
+                :value="page"
+            >
+            </paginate>
+        </div>
     </div>
 </template>
 
 <script>
 import api from '../../helpers/api'
 import MarkSizeCard from './markSizeCardLarge.vue'
+import ProductsFilters from './ProductsFilters.vue'
 
 export default {
     name: 'Products',
 
     components: {
-        MarkSizeCard
+        MarkSizeCard,
+        ProductsFilters
     },
 
     mixins: [api],
 
     data() {
         return {
+            isFirstLoad: false,
             companyId: null,
             items: [],
             page: 1,
@@ -51,20 +69,33 @@ export default {
         this.getCompanyData()
     },
 
+    computed: {
+        totalPages() {
+            return Math.ceil(this.items.length / 5)
+        },
+    },
+
     methods: {
+        pagination(page) {
+            this.page = page
+            this.getCompanyData()
+        },
         fillUserData() {
             this.companyId = document.querySelector('.section--company').getAttribute('data-id');
             return false;
         },
-        getCompanyData() {
-            this.fetchCompany(this.companyId)
+        getCompanyData(filterValues = null) {
+            this.fetchCompany(this.companyId, filterValues)
                 .then((response) => {
                     this.items = response.data.data.items;
-                    console.log(response);
+                    this.isFirstLoad = true
                 })
                 .catch((e) => {
                     console.log(e)
                 })
+        },
+        changeFilter(filtersData) {
+            this.getCompanyData(filtersData)
         }
     }
 }
