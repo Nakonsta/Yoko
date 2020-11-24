@@ -255,7 +255,8 @@ export default {
   @import "../../assets/sass/variables/variables";
   @import "../../assets/sass/mixins/fluid-mixin";
 
-  .field {
+
+  .quotes__body .field {
     height: rem(52px) !important;
     background: transparent;
   }
@@ -297,6 +298,11 @@ export default {
 @import "../../assets/sass/variables/variables";
 @import "../../assets/sass/mixins/fluid-mixin";
 
+.field {
+  height: rem(52px) !important;
+  background: transparent;
+}
+
 ul {
   list-style-type: none;
   margin: 0;
@@ -327,6 +333,9 @@ ul {
       width: 100%;
       margin-bottom: 1rem;
     }
+  }
+  @media(max-width: 425px) {
+    width: 100%;
   }
 }
 
@@ -418,7 +427,10 @@ ul {
     color: $colorGray;
     font-size: rem(14px);
     @media(max-width: 550px) {
-      font-size: rem(12px);
+      //font-size: rem(12px);
+    }
+    @media(max-width: 425px) {
+      justify-content: center;
     }
 
     li {

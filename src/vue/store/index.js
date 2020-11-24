@@ -46,11 +46,18 @@ const store = new Vuex.Store({
                         }
                     })
                     .catch((e) => {
-                        console.log(e)
-                        window.closeLoader()
-                        state.auth.user = null
-                        state.auth.loggedIn = false
-                        window.notificationError('Ошибка сервера')
+                        if (e.response.status === 403) {
+                            store.commit('logout', {
+                                reload: true,
+                                mute: true,
+                            })
+                        } else {
+                            console.log(e)
+                            window.closeLoader()
+                            state.auth.user = null
+                            state.auth.loggedIn = false
+                            window.notificationError('Ошибка сервера')
+                        }
                     })
             } else {
                 store.commit('logout', {

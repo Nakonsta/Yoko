@@ -21,19 +21,33 @@
   cursor: pointer
   transition: border $animation, color $animation, background-color $animation
   outline: none
+
   &:hover
     border-color: $colorTurquoiseHover
     color: #ffffff !important
     background-color: $colorTurquoiseHover
 
+  &:disabled,
+  &.btn--disabled
+    border-color: $colorGray
+    background: $colorGray
+    pointer-events: none
+
   &--bdr
     border-color: $colorTurquoise
     color: $colorTurquoise !important
-    background-color: #fff
+    background-color: transparent !important
+
     &:hover
       border-color: $colorTurquoise
       color: $colorTurquoise !important
       background-color: #e5f1f3
+
+    &:disabled,
+    &.btn--disabled
+      border-color: #cdcdcd
+      color: $colorGray !important
+      pointer-events: none
 
   &--with-icon
     padding-left: rem(78px)
@@ -56,6 +70,7 @@
 
       @include mq($until: mobileLandscape)
         left: rem(24px)
+
   &-group
     display: flex
     flex-wrap: wrap
@@ -72,3 +87,10 @@
           border-bottom-right-radius: 0
           border-right: 0
 
+.btns
+  display: flex
+  flex-wrap: wrap
+  margin: rem(-24px) 0 0 rem(-24px)
+
+  > .btn
+    margin: rem(24px) 0 0 rem(24px)

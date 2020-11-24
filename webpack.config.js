@@ -48,8 +48,20 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            {
                 test: /\.pug$/,
-                loader: 'pug-loader'
+                oneOf: [
+                    {
+                        resourceQuery: /^\?vue/,
+                        use: ['pug-plain-loader']
+                    },
+                    {
+                        use: ['pug-loader']
+                    }
+                ]
             },
             {
                 test: /\.m?js$/,
@@ -60,10 +72,6 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
-            },
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader'
             },
             {
                 test: /\.(sass|scss)$/,
