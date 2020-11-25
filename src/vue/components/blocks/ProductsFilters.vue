@@ -249,4 +249,23 @@ export default {
     ::v-deep .search__input .multiselect__single {
         margin-bottom: 0;
     }
+
+    @include mq($until: tablet) {
+        .products-filters {
+            &__filters {
+                flex-wrap: wrap;
+                &-flex {
+                    .field__container {
+                        width: 50%;
+                        margin-bottom: 0;
+                    }
+                }
+            }
+            &__filter {
+                margin-right: 0;
+                margin-bottom: rem(24px);
+                width: 100%;
+            }
+        }
+    }
 </style>
