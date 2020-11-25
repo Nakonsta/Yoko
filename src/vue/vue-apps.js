@@ -147,7 +147,7 @@ headerLoginStatus.forEach((el) => {
 //     })
 // }
 
-// Структура компании
+// Продукция компании
 import Products from './components/blocks/products.vue'
 const products = document.querySelector('#products-info');
 if (products) {
@@ -166,5 +166,16 @@ if (structure) {
         el: structure,
         // store: store,
         render: function(h) { return h(Structure); }
+    })
+}
+
+// Проверка компании
+import CompanyReports from './company-reports.vue'
+const CompanyReportsBlock = document.querySelector('#company-reports');
+if (CompanyReportsBlock) {
+    let appCompanyReports = new Vue({
+        el: CompanyReportsBlock,
+        store: store,
+        render: function(h) { return h(CompanyReports); }
     })
 }

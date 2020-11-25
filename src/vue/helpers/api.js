@@ -122,5 +122,8 @@ export default {
                 }
             });
         },
+        fetchCompanyReportForm(data) {
+            return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/`, data); // todo поставить url "проверка компании"
+        },
     }
 }
