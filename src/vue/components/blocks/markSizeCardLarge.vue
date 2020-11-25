@@ -14,17 +14,23 @@
             </span>
         </div>
         <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : ''">
-            <span v-if="item.price">
-                {{ item.price }} &#8381;
+            <span v-if="item.price && $store.state.auth.loggedIn">
+                {{ item.price }} 
+            </span>
+            <span v-else-if="item.price && !$store.state.auth.loggedIn">
+                &#8381;
+            </span>
+            <span v-else>
+                не указана
             </span>
         </div>
         <div v-if="item.documents && item.documents.certificates" class="table-cell__certificates cable-info__certificates" :data-name="item.documents && item.documents.certificates ? 'Сертификаты' : ''">
             <span v-for="(document, key) in item.documents.certificates" :key="key" class="cable-info__certificate">
-                <a :href="document.url" class="cable-info__certificate-link">
+                <a class="cable-info__certificate-link">
                     <img :src="`img/sprite.svg#${chooseCertificatePic(document.properties.date_end)}-usage`" class="cable-info__certificate-pic" alt="Сертификат продукции">
-                    {{ document.properties.number }}
                     <span class="cable-info__certificate-tooltip">{{chooseCertificateToolTip(document.properties.date_end)}}</span>
                 </a>
+                {{ document.properties.number }}
             </span>
         </div>
     </div>
@@ -53,8 +59,8 @@ export default {
             if (this.today > expiringDate) {
                 return 'expiring-certificate'
             }
-            // 2,628e+9 - число миллисекунд в месяце
-            if ((this.today - expiringDate) < 2,628e+9) {
+            // число миллисекунд в месяце
+            if ((expiringDate - this.today) < 3600 * 24 * 30 * 1000) {
                 return 'expiring-soon-certificate'
             }
             return 'actual-certificate'
@@ -64,8 +70,10 @@ export default {
             if (this.today > expiringDate) {
                 return 'срок сертификата истек'
             }
-            // 2,628e+9 - число миллисекунд в месяце
-            if ((this.today - expiringDate) < 2,628e+9) {
+            console.log(expiringDate - this.today);
+            console.log(2,628e+9);
+            // число миллисекунд в месяце
+            if ((expiringDate - this.today) < 3600 * 24 * 30 * 1000) {
                 return `срок сертификата закончится ${this.formatDate(expiringDate)}`
             }
             return `сертификат действует до ${this.formatDate(expiringDate)}`
