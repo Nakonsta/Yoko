@@ -8,7 +8,7 @@
                         <span class="field__label">Юридическое лицо</span>
                         <input type="hidden" v-model="formForSend.company_id">
                         <multiselect
-                                v-model="formForSend.company_id"
+                                v-model="company"
                                 class="form-select"
                                 deselect-label="Can't remove this value"
                                 track-by="id"
@@ -20,13 +20,8 @@
                                 :options="companies"
                                 :searchable="false"
                                 :allow-empty="false"
+                                @select="companySelect"
                         >
-                            <template
-                                    slot="singleLabel"
-                                    slot-scope="{ option }"
-                            >
-                                {{ option.name }}
-                            </template>
                         </multiselect>
                         <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                     </ValidationProvider>
@@ -167,7 +162,10 @@
                             </a>
                         </div>
                         <legend>Загрузить сертификат</legend>
-                        <Uploader v-model="item.file" :preview="true" extensions=".pdf, .jpg, .png" :metatypes="['application/pdf','image/jpeg','image/png']"></Uploader>
+                        <ValidationProvider name="Сертификат" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
+                            <Uploader v-model="item.file" :preview="true" :required="true" extensions=".pdf, .jpg, .png" :metatypes="['application/pdf','image/jpeg','image/png']"></Uploader>
+                            <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                        </ValidationProvider>
                         <div class="form__grid">
                             <ValidationProvider name="Номер сертификата" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
                                 <span class="field__label">Номер сертификата</span>
@@ -177,26 +175,32 @@
                             <div class="field__container field__container--w50">
                                 <span class="field__label">Выберите дату начала и окончания сертификата</span>
                                 <div class="field__range">
-                                    <ValidationProvider name="Дата начала сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-start">
+                                    <ValidationProvider name="Дата начала сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-start" :mode="validateDate">
                                         <datepicker
                                             placeholder="Дата начала"
                                             :monday-first=true
+                                            :format="picker.format"
+                                            :language="picker.locale"
                                             :input-class="{field: true, error: failed}"
                                             v-model="item.properties.date_start"
                                             :disabled-dates="{ from: item.properties.date_end, to: picker.disabledTo }"
+                                            :required="true"
                                         >
                                             <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
                                         </datepicker>
                                         <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                                     </ValidationProvider>
                                     <span>&mdash;</span>
-                                    <ValidationProvider name="Дата окончания сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-end">
+                                    <ValidationProvider name="Дата окончания сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-end" :mode="validateDate">
                                         <datepicker
                                             placeholder="Дата окончания"
                                             :monday-first=true
+                                            :format="picker.format"
+                                            :language="picker.locale"
                                             :input-class="{field: true, error: failed}"
                                             v-model="item.properties.date_end"
                                             :disabled-dates="{ from: picker.disabledFrom, to: item.properties.date_start }"
+                                            :required="true"
                                         >
                                             <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
                                         </datepicker>
@@ -237,6 +241,7 @@
         mixins: [api],
         data: function () {
             return {
+                company: null,
                 companies: [],
                 picker: {
                     start_date: '',
@@ -288,9 +293,9 @@
                                 // url: '',
                                 file: null,
                                 properties: {
-                                    number: '',
-                                    date_start: '',
-                                    date_end: '',
+                                    number: null,
+                                    date_start: null,
+                                    date_end: null,
                                 }
                             },
                         ],
@@ -302,6 +307,9 @@
             this.companies = this.$store.state.auth.loggedIn ? this.$store.state.auth.user.companies : [];
         },
         methods: {
+            companySelect: function (selectedCompany, id) {
+                this.formForSend.company_id = selectedCompany.id;
+            },
             layerAdd: function (evt) {
                 evt.preventDefault();
                 this.formForSend.marksize_description.push({
@@ -316,12 +324,13 @@
             certificateAdd: function (evt) {
                 evt.preventDefault();
                 this.formForSend.documents.certificates.push({
-                    name: '',
-                    url: '',
+                    // name: '',
+                    // url: '',
+                    file: null,
                     properties: {
-                        number: '',
-                        date_start: '',
-                        date_end: '',
+                        number: null,
+                        date_start: null,
+                        date_end: null,
                     }
                 });
             },
@@ -474,7 +483,13 @@
                         window.closeLoader();
                         window.notificationError('Ошибка сервера');
                     });
-            }
+            },
+            validateDate() {
+                return { on: ['blur', 'input', 'change'] };
+            },
+            validateFile() {
+                return { on: ['blur', 'input', 'change'] };
+            },
         }
     }
 </script>
@@ -487,6 +502,9 @@
 
     .uploader {
         margin: 0 0 rem(32px);
+        + .field__error {
+            margin: rem(-27px) 0 rem(32px);
+        }
     }
 
     .certificate {

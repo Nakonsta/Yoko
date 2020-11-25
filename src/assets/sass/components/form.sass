@@ -48,7 +48,8 @@
         width: calc(100% - #{rem(40px)})
 
         &--w50
-          width: calc(50% - #{rem(40px)})
+          @include mq($from: desktop)
+            width: calc(50% - #{rem(40px)})
           
         &--short
           width: 50px
