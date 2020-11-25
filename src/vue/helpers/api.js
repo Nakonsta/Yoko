@@ -115,16 +115,10 @@ export default {
         //       `${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries/`,
         //     )
         // },
-        fetchCompany(id, filter) {
-            let body = {}
-            if (filter) {
-                body.filter = filter
-            }
-            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company`, {
-                params: {
-                    company_id: id,
-                }
-            });
+        fetchCompany(data) {
+            return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company`,
+                data,
+            );
         },
         fetchCompanyReportForm(data) {
             return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/`, data); // todo поставить url "проверка компании"

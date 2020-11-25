@@ -1,10 +1,10 @@
 <template>
     <div class="company-products">
         <div class="company-products__filters">
-            <ProductsFilters @changeFilter="changeFilter(filtersData)"/>
+            <ProductsFilters @changeFilter="changeFilter" @resetFilter="resetFilter"/>
         </div>
         <div class="company-products__table">
-            <div class="company-products__thead">
+            <div v-if="items.length" class="company-products__thead">
                 <div class="table-cell__title">
                     Маркоразмер
                 </div>
@@ -20,6 +20,9 @@
             </div>
             <div v-for="(item, key) in items" :key="key">
                 <MarkSizeCard :item="item" />
+            </div>
+            <div v-if="!items.length">
+                Ничего не найдено
             </div>
         </div>
         <div class="company-products__pagination">
@@ -42,6 +45,7 @@
 
 <script>
 import api from '../../helpers/api'
+import functions from '../../helpers/functions'
 import MarkSizeCard from './markSizeCardLarge.vue'
 import ProductsFilters from './ProductsFilters.vue'
 
@@ -61,6 +65,18 @@ export default {
             companyId: null,
             items: [],
             page: 1,
+            totalPages: null,
+            currentFilter: {
+                q: null,
+                quantity: {
+                    from: null,
+                    to: null,
+                },
+                price: {
+                    from: null,
+                    to: null,
+                }
+            },
         }
     },
 
@@ -69,25 +85,26 @@ export default {
         this.getCompanyData()
     },
 
-    computed: {
-        totalPages() {
-            return Math.ceil(this.items.length / 5)
-        },
-    },
-
     methods: {
         pagination(page) {
             this.page = page
-            this.getCompanyData()
+            this.getCompanyData(this.currentFilter)
         },
         fillUserData() {
             this.companyId = document.querySelector('.section--company').getAttribute('data-id');
             return false;
         },
         getCompanyData(filterValues = null) {
-            this.fetchCompany(this.companyId, filterValues)
+            const companyInfo = {
+                company_id: this.companyId,
+                page: this.page,
+                filter: filterValues
+            }
+            const fData = functions.objectToFormData(companyInfo)
+            this.fetchCompany(fData)
                 .then((response) => {
                     this.items = response.data.data.items;
+                    this.totalPages = Math.ceil(response.data.data.total / 8);
                     this.isFirstLoad = true
                 })
                 .catch((e) => {
@@ -95,7 +112,47 @@ export default {
                 })
         },
         changeFilter(filtersData) {
-            this.getCompanyData(filtersData)
+            this.page = 1
+            if(filtersData.cable) {
+                this.currentFilter.q = filtersData.cable.title.toString()
+            } else {
+                this.currentFilter.q = null
+            }
+            if(filtersData.metresFrom) {
+                this.currentFilter.quantity.from = filtersData.metresFrom
+            } else {
+                this.currentFilter.quantity.from = null
+            }
+            if(filtersData.metresTo) {
+                this.currentFilter.quantity.to = filtersData.metresTo
+            } else {
+                this.currentFilter.quantity.to = null 
+            }
+            if(filtersData.priceFrom) {
+                this.currentFilter.price.from = filtersData.priceFrom
+            } else {
+                this.currentFilter.price.from = null
+            }
+            if(filtersData.priceTo) {
+                this.currentFilter.price.to = filtersData.priceTo
+            } else {
+                this.currentFilter.price.to = null
+            }
+            this.getCompanyData(this.currentFilter)
+        },
+        resetFilter() {
+            this.currentFilter = {
+                q: null,
+                quantity: {
+                    from: null,
+                    to: null,
+                },
+                price: {
+                    from: null,
+                    to: null,
+                }
+            }
+            this.getCompanyData(this.currentFilter)
         }
     }
 }

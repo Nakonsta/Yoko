@@ -13,7 +13,7 @@
                             </div>
                             <div class="search__input">
                                 <multiselect
-                                    v-model="value"
+                                    v-model="filtersData.cable"
                                     :options="options"
                                     placeholder=""
                                     selectedLabel=""
@@ -74,8 +74,8 @@
                     </div>
                 </div>
                 <div class="products-filters__buttons">
-                    <span class="products-filters__apply" @click="changeFilter">Применить</span>
-                    <span class="products-filters__reset">Сбросить</span>
+                    <a href="#" class="products-filters__apply" @click="changeFilter">Применить</a>
+                    <a href="#" class="products-filters__reset" @click="resetFilter">Сбросить</a>
                 </div>
             </form>
         </ValidationObserver>
@@ -95,6 +95,7 @@ export default {
             isLoading: false,
             searchCounter: null,
             filtersData: {
+                cable: null,
                 metresFrom: null,
                 metresTo: null,
                 priceFrom: null,
@@ -155,8 +156,20 @@ export default {
                 }
             })
         },
-        changeFilter() {
-            this.$emit('changeFilter', filtersData)
+        changeFilter(evt) {
+            evt.preventDefault()
+            this.$emit('changeFilter', this.filtersData)
+        },
+        resetFilter(evt) {
+            evt.preventDefault()
+            this.filtersData = {
+                cable: null,
+                metresFrom: null,
+                metresTo: null,
+                priceFrom: null,
+                priceTo: null,
+            }
+            this.$emit('resetFilter')
         }
     }
 }
@@ -189,6 +202,9 @@ export default {
             &-search {
                 width: 48%;
             }
+            .field {
+                height: rem(48px);
+            }
         }
         &__label {
             display: inline-block;
@@ -204,9 +220,19 @@ export default {
         &__apply {
             color: $colorTurquoise;
             margin-right: rem(24px);
+            cursor: pointer;
+            &:hover,
+            &:focus {
+                color: $colorTurquoiseHover;
+            }
         }
         &__reset {
             color: $colorGray;
+            cursor: pointer;
+            &:hover,
+            &:focus {
+                color: $colorText;
+            }
         }
     }
     .search {
@@ -217,6 +243,10 @@ export default {
         border-radius: 4px;
     }
     ::v-deep .search__input .multiselect__tags {
-        padding: rem(14px) rem(21px) rem(14px) rem(48px);
+        padding: rem(12px) rem(21px) rem(12px) rem(48px);
+        height: auto;
+    }
+    ::v-deep .search__input .multiselect__single {
+        margin-bottom: 0;
     }
 </style>
