@@ -88,6 +88,7 @@ export default {
     methods: {
         pagination(page) {
             this.page = page
+            this.cancelCompanyRequest()
             this.getCompanyData(this.currentFilter)
         },
         fillUserData() {
@@ -138,6 +139,7 @@ export default {
             } else {
                 this.currentFilter.price.to = null
             }
+            this.cancelCompanyRequest()
             this.getCompanyData(this.currentFilter)
         },
         resetFilter() {
