@@ -4,7 +4,7 @@
             <ProductsFilters @changeFilter="changeFilter" @resetFilter="resetFilter"/>
         </div>
         <div class="company-products__table">
-            <div v-if="items.length" class="company-products__thead">
+            <div v-if="items.length && !isLoading" class="company-products__thead">
                 <div class="table-cell__title">
                     Маркоразмер
                 </div>
@@ -21,9 +21,21 @@
             <div v-for="(item, key) in items" :key="key">
                 <MarkSizeCard :item="item" />
             </div>
-            <div v-if="!items.length">
+            <div v-if="!items.length && !isLoading">
                 Ничего не найдено
             </div>
+            <transition name="fade-loader">
+                <div
+                    v-if="isLoading"
+                    class="card__loader card__loader--absolute"
+                >
+                    <div class="preloader">
+                        <div class="preloader__preloader">
+                            <div class="preloader__loader"></div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
         </div>
         <div class="company-products__pagination">
             <paginate
@@ -66,6 +78,7 @@ export default {
             items: [],
             page: 1,
             totalPages: null,
+            isLoading: true,
             currentFilter: {
                 q: null,
                 quantity: {
@@ -87,6 +100,7 @@ export default {
 
     methods: {
         pagination(page) {
+            this.isLoading = true
             this.page = page
             this.cancelCompanyRequest()
             this.getCompanyData(this.currentFilter)
@@ -107,12 +121,14 @@ export default {
                     this.items = response.data.data.items;
                     this.totalPages = Math.ceil(response.data.data.total / 8);
                     this.isFirstLoad = true
+                    this.isLoading = false
                 })
                 .catch((e) => {
                     console.log(e)
                 })
         },
         changeFilter(filtersData) {
+            this.isLoading = true
             this.page = 1
             if(filtersData.cable) {
                 this.currentFilter.q = filtersData.cable.title.toString()
@@ -143,6 +159,7 @@ export default {
             this.getCompanyData(this.currentFilter)
         },
         resetFilter() {
+            this.isLoading = true
             this.currentFilter = {
                 q: null,
                 quantity: {
@@ -167,6 +184,9 @@ export default {
     @import "../../../assets/sass/mixins/mq";
 
     .company-products {
+        &__table {
+            position: relative;
+        }
         &__thead {
             display: flex;
             align-items: flex-start;
@@ -188,6 +208,44 @@ export default {
         }
         &__certificates{
             width: 35%;
+        }
+    }
+
+    .card {
+        &__loader {
+            position: relative;
+            height: 400px;
+            animation: blur 1s linear forwards;
+            &--absolute {
+                position: absolute;
+                z-index: 10;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 100%;
+                width: 100%;
+                padding: 10px;
+                box-sizing: content-box;
+                .preloader {
+                    background-color: transparent;
+                }
+                .preloader__loader {
+                    position: static;
+                }
+                .preloader__preloader {
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+    }
+
+    @keyframes blur {
+        0%   {
+            backdrop-filter: blur(0px);
+        }
+        100% {
+            backdrop-filter: blur(2px);
         }
     }
 
