@@ -175,37 +175,41 @@
                             <div class="field__container field__container--w50">
                                 <span class="field__label">Выберите дату начала и окончания сертификата</span>
                                 <div class="field__range">
-                                    <ValidationProvider name="Дата начала сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-start" :mode="validateDate">
-                                        <datepicker
-                                            placeholder="Дата начала"
-                                            :monday-first=true
-                                            :format="picker.format"
-                                            :language="picker.locale"
-                                            :input-class="{field: true, error: failed}"
-                                            v-model="item.properties.date_start"
-                                            :disabled-dates="{ from: item.properties.date_end, to: picker.disabledTo }"
-                                            :required="true"
-                                        >
-                                            <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
-                                        </datepicker>
-                                        <span v-show="failed" class="field__error">{{ errors[0] }}</span>
-                                    </ValidationProvider>
+                                    <div class="field__range-from">
+                                        <ValidationProvider name="Дата начала сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-start" :mode="validateDate">
+                                            <datepicker
+                                                    placeholder="Дата начала"
+                                                    :monday-first=true
+                                                    :format="picker.format"
+                                                    :language="picker.locale"
+                                                    :input-class="{field: true, error: failed}"
+                                                    v-model="item.properties.date_start"
+                                                    :disabled-dates="{ from: item.properties.date_end, to: picker.disabledTo }"
+                                                    :required="true"
+                                            >
+                                                <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                                            </datepicker>
+                                            <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                                        </ValidationProvider>
+                                    </div>
                                     <span>&mdash;</span>
-                                    <ValidationProvider name="Дата окончания сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-end" :mode="validateDate">
-                                        <datepicker
-                                            placeholder="Дата окончания"
-                                            :monday-first=true
-                                            :format="picker.format"
-                                            :language="picker.locale"
-                                            :input-class="{field: true, error: failed}"
-                                            v-model="item.properties.date_end"
-                                            :disabled-dates="{ from: picker.disabledFrom, to: item.properties.date_start }"
-                                            :required="true"
-                                        >
-                                            <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
-                                        </datepicker>
-                                        <span v-show="failed" class="field__error">{{ errors[0] }}</span>
-                                    </ValidationProvider>
+                                    <div class="field__range-to">
+                                        <ValidationProvider name="Дата окончания сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-end" :mode="validateDate">
+                                            <datepicker
+                                                placeholder="Дата окончания"
+                                                :monday-first=true
+                                                :format="picker.format"
+                                                :language="picker.locale"
+                                                :input-class="{field: true, error: failed}"
+                                                v-model="item.properties.date_end"
+                                                :disabled-dates="{ from: picker.disabledFrom, to: item.properties.date_start }"
+                                                :required="true"
+                                            >
+                                                <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                                            </datepicker>
+                                            <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                                        </ValidationProvider>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -10,8 +10,7 @@
                 <div class="uploader__file-or">или</div>
                 <label class="uploader__file-btn btn btn--bdr">
                     Загрузите файл
-<!--                    <input type="file" :name="name" :value="value" @input="$emit('input', $event.target.value)" :accept="extensions.length ? extensions : null" @change="change($event)" :multiple="multiple ? 'multiple' : null" :required="required ? 'required' : null"/>-->
-                    <input type="file" :name="name" :accept="extensions.length ? extensions : null" @change="change($event)" :multiple="multiple ? 'multiple' : null" :required="required ? 'required' : null"/>
+                    <input type="file" :name="name" :accept="extensions.length ? extensions : null" @change="change($event)" :multiple="multiple ? 'multiple' : null" :required="required"/>
                 </label>
                 <div class="uploader__file-extensions" v-show="extensions.length">{{extensions}}</div>
             </div>
@@ -119,7 +118,7 @@
                 // types = JSON.parse(this.type) || null,
                 types = this.type || null;
             if( types ) {
-                for (var ext in types) {
+                for (let ext in types) {
                     if (!types.hasOwnProperty(ext)) continue;
                     exts.push('.' + ext);
                     this.metatype.push(types[ext]);
@@ -137,7 +136,7 @@
                         // types = JSON.parse(newType);
                         types = newType || null;
                     if( types ) {
-                        for (var ext in types) {
+                        for (let ext in types) {
                             if (!types.hasOwnProperty(ext)) continue;
                             exts.push('.' + ext);
                             this.metatype.push(types[ext]);
@@ -183,6 +182,7 @@
                     }
                 });
                 if (!this.multiple) this.files.splice(1);
+                evt.target.value = '';
                 this.$emit('input', this.files.length ? true : '');
                 if( this.submit ) this.uploadFiles();
                 else if( this.preview) this.previewFiles();
