@@ -84,27 +84,27 @@
                         </ValidationProvider>
                         <ValidationProvider name="Калибр" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Калибр</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_caliber" placeholder="Введите значение" @keypress="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_caliber" placeholder="Введите значение" @keydown="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Количество жил" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Количество жил</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_veins_count" placeholder="Введите значение" @keypress="onlyDecimal">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_veins_count" placeholder="Введите значение" @keydown="onlyDecimal">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Количество волокон" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Количество волокон</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_fiber_count" placeholder="Введите значение" @keypress="onlyDecimal">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_fiber_count" placeholder="Введите значение" @keydown="onlyDecimal">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Сечение" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Сечение</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_execution" placeholder="Введите значение" @keypress="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_execution" placeholder="Введите значение" @keydown="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Размер волокон" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Размер волокон</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_fiber_size" placeholder="Введите значение" maxlength="6" @keypress="onlyDigitsWithSlash">
+                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_fiber_size" placeholder="Введите значение" maxlength="6" @keydown="onlyDigitsWithSlash">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Применение" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
@@ -119,7 +119,7 @@
                         </ValidationProvider>
                         <ValidationProvider name="Допустимое напряжение" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Допустимое напряжение</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_voltage_allowable" placeholder="Введите значение" @keypress="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_voltage_allowable" placeholder="Введите значение" @keydown="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Изоляция" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
@@ -129,12 +129,12 @@
                         </ValidationProvider>
                         <ValidationProvider name="Мощность" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Мощность</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_power" placeholder="Введите значение" @keypress="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_power" placeholder="Введите значение" @keydown="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Волновое сопротивление" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Волновое сопротивление</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_resistance_wave" placeholder="Введите значение" @keypress="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_resistance_wave" placeholder="Введите значение" @keydown="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Исполнение" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
@@ -175,37 +175,41 @@
                             <div class="field__container field__container--w50">
                                 <span class="field__label">Выберите дату начала и окончания сертификата</span>
                                 <div class="field__range">
-                                    <ValidationProvider name="Дата начала сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-start" :mode="validateDate">
-                                        <datepicker
-                                            placeholder="Дата начала"
-                                            :monday-first=true
-                                            :format="picker.format"
-                                            :language="picker.locale"
-                                            :input-class="{field: true, error: failed}"
-                                            v-model="item.properties.date_start"
-                                            :disabled-dates="{ from: item.properties.date_end, to: picker.disabledTo }"
-                                            :required="true"
-                                        >
-                                            <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
-                                        </datepicker>
-                                        <span v-show="failed" class="field__error">{{ errors[0] }}</span>
-                                    </ValidationProvider>
+                                    <div class="field__range-from">
+                                        <ValidationProvider name="Дата начала сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-start" :mode="validateDate">
+                                            <datepicker
+                                                    placeholder="Дата начала"
+                                                    :monday-first=true
+                                                    :format="picker.format"
+                                                    :language="picker.locale"
+                                                    :input-class="{field: true, error: failed}"
+                                                    v-model="item.properties.date_start"
+                                                    :disabled-dates="{ from: item.properties.date_end, to: picker.disabledTo }"
+                                                    :required="true"
+                                            >
+                                                <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                                            </datepicker>
+                                            <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                                        </ValidationProvider>
+                                    </div>
                                     <span>&mdash;</span>
-                                    <ValidationProvider name="Дата окончания сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-end" :mode="validateDate">
-                                        <datepicker
-                                            placeholder="Дата окончания"
-                                            :monday-first=true
-                                            :format="picker.format"
-                                            :language="picker.locale"
-                                            :input-class="{field: true, error: failed}"
-                                            v-model="item.properties.date_end"
-                                            :disabled-dates="{ from: picker.disabledFrom, to: item.properties.date_start }"
-                                            :required="true"
-                                        >
-                                            <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
-                                        </datepicker>
-                                        <span v-show="failed" class="field__error">{{ errors[0] }}</span>
-                                    </ValidationProvider>
+                                    <div class="field__range-to">
+                                        <ValidationProvider name="Дата окончания сертификата" v-slot="{ errors, failed }" rules="required" tag="div" class="field__range-end" :mode="validateDate">
+                                            <datepicker
+                                                placeholder="Дата окончания"
+                                                :monday-first=true
+                                                :format="picker.format"
+                                                :language="picker.locale"
+                                                :input-class="{field: true, error: failed}"
+                                                v-model="item.properties.date_end"
+                                                :disabled-dates="{ from: picker.disabledFrom, to: item.properties.date_start }"
+                                                :required="true"
+                                            >
+                                                <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                                            </datepicker>
+                                            <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                                        </ValidationProvider>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -396,8 +400,6 @@
             onlyDigitsWithSlash(evt) {
                 let key = evt.keyCode;
                 if (
-                    // Slash
-                    key == 47 ||
                     // numbers
                     key >= 48 && key <= 57 ||
                     // Numeric keypad
@@ -411,7 +413,9 @@
                     // left and right arrows
                     key == 37 || key == 39 ||
                     // Del and Ins
-                    key == 46 || key == 45) {
+                    key == 46 || key == 45 ||
+                    // Slash
+                    key == 111 || key == 191) {
                     return true;
                 } else {
                     evt.preventDefault();
