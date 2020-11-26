@@ -14,14 +14,19 @@
             </span>
         </div>
         <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : ''">
-            <span v-if="item.price && $store.state.auth.loggedIn">
-                {{ item.price }} 
-            </span>
-            <span v-else-if="item.price && !$store.state.auth.loggedIn">
+            <template v-if=" $store.state.auth.loggedIn">
+                <span v-if="item.price">
+                    {{ item.price }} &#8381;
+                </span>
+                <span v-else>
+                    не указана
+                </span>
+            </template>
+            <span v-else class="cable-info__price--unauthorized">
                 &#8381;
-            </span>
-            <span v-else>
-                не указана
+                <span class="cable-info__price-tooltip">
+                    Для просмотра цен необходимо авторизоваться
+                </span>
             </span>
         </div>
         <div v-if="item.documents && item.documents.certificates" class="table-cell__certificates cable-info__certificates" :data-name="item.documents && item.documents.certificates ? 'Сертификаты' : ''">
@@ -113,6 +118,7 @@ export default {
             border: 1px solid #D3D3D3;
             border-radius: 4px;
             padding: rem(10px) rem(32px);
+            margin-right: rem(12px);
         }
         &__quantity {
             font-size: rem(14px);
@@ -120,6 +126,25 @@ export default {
         &__price {
             font-size: rem(16px);
             color: $colorTurquoise;
+            &--unauthorized {
+                position: relative;
+                &:hover .cable-info__price-tooltip,
+                &:focus .cable-info__price-tooltip {
+                    display: block;
+                }
+            }
+            &-tooltip {
+                display: none;
+                position: absolute;
+                box-shadow: 0px 4px 24px rgba(55, 31, 31, 0.25);
+                padding: rem(10px) rem(20px);
+                background-color: $colorWhite;
+                color: $colorGray;
+                font-size: rem(14px);
+                border-radius: 4px;
+                top: -120px;
+                left: -80px;
+            }
         }
         &__certificate {
             display: inline-block;
