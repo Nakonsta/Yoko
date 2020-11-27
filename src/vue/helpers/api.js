@@ -72,6 +72,12 @@ export default {
                 }
             });
         },
+        forgotPassChange(data) {
+            return axios.post(
+                `${process.env.API_URL_AUTH_SERVICE}/restore_password`,
+                data,
+            );
+        },
         fetchSupportInfo() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/settings/feedback/`);
         },

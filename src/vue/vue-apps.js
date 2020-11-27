@@ -107,6 +107,17 @@ if (forgotBlock) {
     })
 }
 
+// Форма изменения пароля для востановления
+import ForgotRestore from './forgot-restore.vue';
+const forgotRestoreBlock = document.querySelector('#forgotRestore');
+if (forgotRestoreBlock) {
+    let forgotRestoreApp = new Vue({
+        el: forgotRestoreBlock,
+        store: store,
+        render: function(h) { return h(ForgotRestore)}
+    })
+}
+
 // Форма на странице Заказчикам / Поставщикам
 import Feedback from './feedback.vue'
 const feedback = document.querySelector('#feedback');
