@@ -153,7 +153,7 @@ const products = document.querySelector('#products-info');
 if (products) {
     let productsBlock = new Vue({
         el: products,
-        // store: store,
+        store: store,
         render: function(h) { return h(Products); }
     })
 }
