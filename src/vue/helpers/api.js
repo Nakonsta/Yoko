@@ -136,5 +136,8 @@ export default {
         fetchCompanyReportForm(data) {
             return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/`, data); // todo поставить url "проверка компании"
         },
+        fetchTenderItem(id) {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
+        },
     }
 }
