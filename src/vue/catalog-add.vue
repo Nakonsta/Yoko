@@ -27,12 +27,12 @@
                     </ValidationProvider>
                     <ValidationProvider name="Название" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
                         <span class="field__label">Название</span>
-                        <input :class="{field: true, error: failed}" type="text" v-model="formForSend.mark">
+                        <input :class="{field: true, error: failed}" type="text" v-model="formForSend.mark" readonly="readonly">
                         <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                     </ValidationProvider>
                 </div>
                 <fieldset>
-                    <legend>Описание Маркоразмера:</legend>
+                    <div class="legend">Описание Маркоразмера:</div>
                     <template v-for="(item, index) in formForSend.marksize_description">
                         <div class="form__line">
                             <ValidationProvider name="Слой" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--short">
@@ -65,7 +65,7 @@
                     </ValidationProvider>
                 </fieldset>
                 <fieldset>
-                    <legend>Характеристики Маркоразмера:</legend>
+                    <div class="legend">Характеристики Маркоразмера:</div>
                     <div class="form__grid">
                         <ValidationProvider name="Тип кабеля" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Тип кабеля</span>
@@ -161,9 +161,9 @@
                                 <svg class="sprite-cancel"><use xmlns\:xlink="http://www.w3.org/1999/xlink" xlink\:href="./img/sprite.svg#cancel"></use></svg>
                             </a>
                         </div>
-                        <legend>Загрузить сертификат</legend>
+                        <div class="legend">Загрузить сертификат</div>
                         <ValidationProvider name="Сертификат" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
-                            <Uploader v-model="item.file" :preview="true" :required="true" extensions=".pdf, .jpg, .png" :metatypes="['application/pdf','image/jpeg','image/png']"></Uploader>
+                            <Uploader v-model="item.file" :preview="true" extensions=".pdf, .jpg, .png" :metatypes="['application/pdf','image/jpeg','image/png']"></Uploader>
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <div class="form__grid">
@@ -306,6 +306,24 @@
                     },
                 },
             }
+        },
+        watch: {
+            formForSend: {
+                handler: function(newValue, oldValue) {
+                    let mark = '';
+                    for( let i=0; i<this.formForSend.marksize_description.length; i++ ) {
+                        mark += this.formForSend.marksize_description[i].layer || '';
+                    }
+                    mark += ' ';
+                    mark += this.formForSend.property_veins_count || '';
+                    mark += 'x';
+                    mark += this.formForSend.property_execution || '';
+                    mark += '-';
+                    mark += this.formForSend.property_voltage_allowable || '';
+                    this.formForSend.mark = mark;
+                },
+                deep: true,
+            },
         },
         created() {
             this.companies = this.$store.state.auth.loggedIn ? this.$store.state.auth.user.companies : [];
@@ -514,7 +532,8 @@
     .certificate {
         position: relative;
 
-        legend {
+        legend,
+        .legend {
             margin-right: rem(60px);
         }
 
@@ -523,7 +542,7 @@
             margin: 0 0 rem(24px);
             padding: 0 0 rem(8px);
             right: 0;
-            bottom: 100%;
+            top: 0;
 
             a {
                 justify-content: center;
