@@ -2,6 +2,7 @@
     <div class="tender-item">
         <div class="tender-item__top">
             <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" />
+            <TenderItemMenu />
             <transition name="fade-loader">
                 <div
                     v-if="isLoading"
@@ -27,12 +28,14 @@
 <script>
 import api from './helpers/api'
 import TenderItemCard from './components/blocks/tenderItemCard.vue'
+import TenderItemMenu from './components/blocks/tenderItemMenu.vue'
 
 export default {
     name: 'TenderItem',
 
     components: {
-        TenderItemCard
+        TenderItemCard,
+        TenderItemMenu
     },
 
     mixins: [api],
@@ -136,3 +139,11 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+    .tender-item {
+        &__top {
+            position: relative;
+        }
+    }
+</style>
