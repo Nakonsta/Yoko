@@ -190,3 +190,14 @@ if (CompanyReportsBlock) {
         render: function(h) { return h(CompanyReports); }
     })
 }
+
+// Форма обратной связи
+import TenderItem from './tenderItem.vue'
+const tenderItem = document.querySelector('#tender-item');
+if (tenderItem) {
+    let tenderItemBlock = new Vue({
+        el: tenderItem,
+        store: store,
+        render: function(h) { return h(TenderItem); }
+    })
+}

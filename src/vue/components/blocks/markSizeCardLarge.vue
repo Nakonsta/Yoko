@@ -32,7 +32,7 @@
         <div v-if="item.documents && item.documents.certificates" class="table-cell__certificates cable-info__certificates" :data-name="item.documents && item.documents.certificates ? 'Сертификаты' : ''">
             <span v-for="(document, key) in item.documents.certificates" :key="key" class="cable-info__certificate">
                 <a class="cable-info__certificate-link">
-                    <img :src="`img/sprite.svg#${chooseCertificatePic(document.properties.date_end)}-usage`" class="cable-info__certificate-pic" alt="Сертификат продукции">
+                    <img :src="`/img/sprite.svg#${chooseCertificatePic(document.properties.date_end)}-usage`" class="cable-info__certificate-pic" alt="Сертификат продукции">
                     <span class="cable-info__certificate-tooltip">{{chooseCertificateToolTip(document.properties.date_end)}}</span>
                 </a>
                 {{ document.properties.number }}
