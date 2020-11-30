@@ -1,28 +1,28 @@
 <template>
   <div class="phone-container__item phone-container__item--select">
     <multiselect
-        :value="value"
-        deselect-label="Can't remove this value" 
-        track-by="phone_code"
-        label="phone_code"
-        class="phone-code form-select"
-        selectedLabel=""
-        selectLabel=""
-        deselectLabel=""
-        placeholder="Выберите страну"
-        item-value="id"
-        return-object
-        :options="countries"
-        :searchable="false"
-        :allow-empty="false"
-        @input="changeCurrentPhoneCode"
+      :value="value"
+      deselect-label="Can't remove this value"
+      track-by="phone_code"
+      label="phone_code"
+      class="phone-code form-select"
+      selectedLabel=""
+      selectLabel=""
+      deselectLabel=""
+      placeholder="Выберите страну"
+      item-value="id"
+      return-object
+      :options="countries"
+      :searchable="false"
+      :allow-empty="false"
+      @input="changeCurrentPhoneCode"
     >
       <template v-slot:singleLabel="prop">
         <div class="phone-code-block">
           <img :src="`data:image/png;base64,${prop.option.flag}`" alt="">
-          <div>
-            +{{ prop.option.phone_code }}
-          </div>
+<!--          <div>-->
+<!--            +{{ prop.option.phone_code }}-->
+<!--          </div>-->
         </div>
       </template>
       <template v-slot:option="prop">

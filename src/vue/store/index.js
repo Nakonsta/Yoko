@@ -17,6 +17,11 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
+        setUser(state, payload) {
+            state.token = payload.token
+            state.auth.user = payload.user
+            state.auth.loggedIn = true
+        },
         authorization(state) {
             const token = Cookies.get('auth._token.local')
             const storageUser = sessionStorage.getItem('user')

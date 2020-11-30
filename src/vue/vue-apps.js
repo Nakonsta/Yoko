@@ -41,11 +41,22 @@ configure({
     }
 });
 
+// Регистрация
+import Registration from './registration.vue'
+const registrationBlock = document.querySelector('#registration');
+if (registrationBlock) {
+    let appRegistration = new Vue({
+        el: registrationBlock,
+        store: store,
+        render: function(h) { return h(Registration); }
+    })
+}
+
 // Котировки
 import Quotes from './quotes.vue'
 const quotesBlock = document.querySelector('#quotes');
 if (quotesBlock) {
-    let appCatalog = new Vue({
+    let appQuotes = new Vue({
         el: quotesBlock,
         store: store,
         render: function(h) { return h(Quotes); }
