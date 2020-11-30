@@ -1,6 +1,14 @@
 @import "../variables/variables"
 @import "../mixins/fluid-mixin"
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button
+  -webkit-appearance: none
+  margin: 0
+
+input[type=number]
+  -moz-appearance: textfield
+
 .checkbox
   display: inline-flex
   align-items: center
@@ -231,8 +239,8 @@ div.field__range
   > span
     align-self: center
 
-  .field__range-start,
-  .field__range-end
+  .field__range-from,
+  .field__range-to
     flex: 0 1 calc(50% - 20px)
     margin: 0
     border: 0

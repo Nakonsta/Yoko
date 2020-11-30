@@ -118,6 +118,17 @@ if (forgotBlock) {
     })
 }
 
+// Форма изменения пароля для востановления
+import ForgotRestore from './forgot-restore.vue';
+const forgotRestoreBlock = document.querySelector('#forgotRestore');
+if (forgotRestoreBlock) {
+    let forgotRestoreApp = new Vue({
+        el: forgotRestoreBlock,
+        store: store,
+        render: function(h) { return h(ForgotRestore)}
+    })
+}
+
 // Форма на странице Заказчикам / Поставщикам
 import Feedback from './feedback.vue'
 const feedback = document.querySelector('#feedback');
@@ -158,13 +169,13 @@ headerLoginStatus.forEach((el) => {
 //     })
 // }
 
-// Структура компании
+// Продукция компании
 import Products from './components/blocks/products.vue'
 const products = document.querySelector('#products-info');
 if (products) {
     let productsBlock = new Vue({
         el: products,
-        // store: store,
+        store: store,
         render: function(h) { return h(Products); }
     })
 }
@@ -177,5 +188,27 @@ if (structure) {
         el: structure,
         // store: store,
         render: function(h) { return h(Structure); }
+    })
+}
+
+// Проверка компании
+import CompanyReports from './company-reports.vue'
+const CompanyReportsBlock = document.querySelector('#company-reports');
+if (CompanyReportsBlock) {
+    let appCompanyReports = new Vue({
+        el: CompanyReportsBlock,
+        store: store,
+        render: function(h) { return h(CompanyReports); }
+    })
+}
+
+// Форма обратной связи
+import TenderItem from './tenderItem.vue'
+const tenderItem = document.querySelector('#tender-item');
+if (tenderItem) {
+    let tenderItemBlock = new Vue({
+        el: tenderItem,
+        store: store,
+        render: function(h) { return h(TenderItem); }
     })
 }

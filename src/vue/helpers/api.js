@@ -3,6 +3,7 @@ export default {
         return {
             CancelTokens: {
                 catalogCancelToken: axios.CancelToken.source(),
+                companyCancelToken: axios.CancelToken.source(),
             },
         }
     },
@@ -13,9 +14,14 @@ export default {
             )
             this.CancelTokens.catalogCancelToken = axios.CancelToken.source()
         },
-
         fetchInn(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies`, { params: { inn } })
+        },
+        cancelCompanyRequest() {
+            this.CancelTokens.companyCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.companyCancelToken = axios.CancelToken.source()
         },
         fetchFilter() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/filter/`);
@@ -81,6 +87,12 @@ export default {
                 }
             });
         },
+        forgotPassChange(data) {
+            return axios.post(
+                `${process.env.API_URL_AUTH_SERVICE}/restore_password`,
+                data,
+            );
+        },
         fetchSupportInfo() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/settings/feedback/`);
         },
@@ -139,12 +151,17 @@ export default {
         //       `${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries/`,
         //     )
         // },
-        fetchCompany(id) {
-            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company`, {
-                params: {
-                    company_id: id
-                }
-            });
+        fetchCompany(data) {
+            return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company`,
+                data,
+                {cancelToken: this.CancelTokens.companyCancelToken.token},
+            );
+        },
+        fetchCompanyReportForm(data) {
+            return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/`, data); // todo поставить url "проверка компании"
+        },
+        fetchTenderItem(id) {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
         },
     }
 }

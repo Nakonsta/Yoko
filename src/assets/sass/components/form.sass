@@ -48,7 +48,8 @@
         width: calc(100% - #{rem(40px)})
 
         &--w50
-          width: calc(50% - #{rem(40px)})
+          @include mq($from: desktop)
+            width: calc(50% - #{rem(40px)})
           
         &--short
           width: 50px
@@ -96,7 +97,8 @@ fieldset
     margin-left: rem(40px)
     width: calc(100% - #{rem(40px)})
 
-  legend
+  legend,
+  .legend
     display: block
     margin: 0 0 rem(24px)
     border-bottom: 1px solid $colorTurquoise
