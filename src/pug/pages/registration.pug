@@ -1,0 +1,19 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-title
+
+block default
+    - let title = 'Регистрация';
+
+block content
+
+    +breadCrumbs([
+        'Главная',
+        'Регистрация'
+    ])
+
+    +pageTitle('Регистрация')
+
+    .section.section--green.section--registration.registration
+        .container
+            #registration

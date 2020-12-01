@@ -1,0 +1,30 @@
+@import "../mixins/grid"
+@import "../variables/variables"
+
+
+.row
+	@include make-row
+
+.col
+	@include make-column
+
+@include make-grid(xs)
+
+@media screen and (min-width: $screen-sm-min)
+	@include make-grid(sm)
+
+
+// Medium grid
+@media screen and (min-width: $screen-md-min)
+	@include make-grid(md)
+
+
+// Large grid
+@media screen and (min-width: $screen-lg-min)
+	@include make-grid(lg)
+
+
+// XLarge grid
+@media screen and (min-width: $screen-xl-min)
+	@include make-grid(xl)
+

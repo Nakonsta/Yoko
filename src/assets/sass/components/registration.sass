@@ -1,0 +1,137 @@
+@import "../variables/variables"
+@import "../mixins/mq"
+@import "../mixins/fluid-mixin"
+
+.registration
+  h4
+    font-size: rem(16px)
+  h3
+    font-size: rem(24px)
+    font-weight: 500
+  p
+    margin: 1.5rem 0
+  .radio
+    display: flex
+  .phone-container__item .multiselect__tags
+    border-top-right-radius: 0
+    border-bottom-right-radius: 0
+  .support-form__phone .field
+    border-top-left-radius: 0
+    border-bottom-left-radius: 0
+  .multiselect__tags,
+  .field
+    //background-color: #fff
+    font-size: rem(16px)
+    border-radius: 6px
+    border-color: #fff !important
+    height: rem(48px) !important
+    &.error
+      border-color: $colorRed !important
+      .multiselect__tags
+        border-color: $colorRed !important
+        .multiselect__placeholder
+          color: $colorRed
+  .field
+    background-color: #fff
+  .checkbox + .checkbox
+    margin-top: rem(16px)
+  .phone-container__item--select
+    margin-right: 0
+    .multiselect__single
+      margin-top: 0.14286rem
+  .phone-code
+    width: 6rem
+  .custom
+    &__tag
+      &:not(:last-child)
+        &:after
+          content: ', '
+          display: inline-block
+          vertical-align: middle
+          margin-right: rem(5px)
+  .multiselect
+    .checkbox
+      align-items: flex-start
+      &__body
+        transform: translateY(0)
+    &--disabled .multiselect__current,
+    &--disabled .multiselect__select
+      background-color: transparent
+    &__spinner
+      height: rem(48px)
+    &--active
+      .multiselect__input
+        //display: none
+    &__placeholder
+      font-size: rem(16px)
+      color: $lightcolorText
+    &__single
+      margin-top: 0.3rem
+      padding: 0
+    &__content
+      &-wrapper
+        border: none
+    &__input
+      padding: 0
+    &__option
+      white-space: normal
+      &--highlight
+        background-color: $colorLight
+      &--selected
+        font-style: italic
+        font-weight: 400
+        color: #373735 !important
+        background-color: transparent !important
+    &__tags
+      padding: 10px 40px 3px 10px
+      .chk
+        width: 20px
+        height: 20px
+        border: 2px solid $colorGray
+        border-radius: 4px
+        &:checked
+
+      &-wrap
+        text-overflow: ellipsis
+        overflow: hidden
+        white-space: nowrap
+        display: block
+        font-style: italic
+        margin-top: 0.2rem
+
+  &__tab
+    background: white
+    box-shadow: 5px 10px 15px rgba(55, 55, 53, 0.1)
+    border-radius: rem(8px)
+    padding: rem(35px) rem(50px)
+    margin-bottom: 50px
+  .field__container
+    &--single
+      .multiselect--active
+        .multiselect__tags
+          border-radius: rem(6px)
+      .multiselect__content-wrapper
+        top: 110%
+        border-radius: 5px
+  a
+    color: $colorTurquoise
+    text-decoration: underline
+    &:hover
+      text-decoration: none
+  &-form
+    &__title
+      text-transform: uppercase
+      margin-top: rem(45px)
+      margin-bottom: rem(26px)
+      font-size: rem(16px)
+      font-weight: 700
+
+
+ul.dashed
+  list-style-type: none
+  padding: 0
+  margin-top: 0
+  > li
+    &:before
+      content: "-"
+      margin-right: 1rem
