@@ -215,7 +215,9 @@ export default {
               const bodyLines = tooltipModel.body.map(getBody);
               let innerHtml = '';
               titleLines.forEach(function (title) {
-                innerHtml += '<span style="color: #9B9B9A" class="chartjs-tooltip__title">' + title + ' </span>';
+                innerHtml += '<span style="color: #9B9B9A" class="chartjs-tooltip__title">'
+                    + moment(title, "MM.DD.YYYY").format('YYYY-MM-DD')
+                    + ' </span>';
               });
               bodyLines.forEach(function (body) {
                 innerHtml += ' <span class="chartjs-tooltip__body">' + body + '</span>';
