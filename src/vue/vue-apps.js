@@ -212,3 +212,16 @@ if (tenderItem) {
         render: function(h) { return h(TenderItem); }
     })
 }
+
+// Личный кабинет
+import Personal from './admin/personal.vue'
+import personalRouter from './admin/router/index'
+const personalItem = document.querySelector('#personal');
+if (personalItem) {
+    let tenderItemBlock = new Vue({
+        el: personalItem,
+        store: store,
+        router: personalRouter,
+        render: function(h) { return h(Personal); }
+    })
+}
