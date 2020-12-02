@@ -139,5 +139,8 @@ export default {
         fetchTenderItem(id) {
             return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
         },
+        fetchCompanyById(id) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies/${id}`);
+        },
     }
 }

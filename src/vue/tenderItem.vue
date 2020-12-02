@@ -1,8 +1,8 @@
 <template>
     <div class="tender-item">
         <div class="tender-item__top">
-            <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" />
-            <TenderItemMenu />
+            <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" :company="company" />
+            <TenderItemMenu v-if="!isLoading" />
             <transition name="fade-loader">
                 <div
                     v-if="isLoading"
@@ -15,9 +15,6 @@
                     </div>
                 </div>
             </transition>
-            <div class="tender-item__menu">
-
-            </div>
         </div>
         <div class="tender-item__tabs">
 
@@ -27,6 +24,7 @@
 
 <script>
 import api from './helpers/api'
+import functions from './helpers/functions'
 import TenderItemCard from './components/blocks/tenderItemCard.vue'
 import TenderItemMenu from './components/blocks/tenderItemMenu.vue'
 
@@ -109,6 +107,13 @@ export default {
                 timing_comment: null,
                 updated_at: null,
                 user_id: null,
+            },
+            company: {
+                id: null,
+                inn: null,
+                kpp: null,
+                name: null,
+                shortName: null,
             }
         }
     },
@@ -131,11 +136,21 @@ export default {
                 .then((response) => {
                     this.fillTenderItemData(response.data.data)
                     this.isLoading = false
+                    this.getCompanyData()
                 })
                 .catch((e) => {
                     console.log(e)
                 })
-        }
+        },
+        getCompanyData() {
+            this.fetchCompanyById(this.tenderItemData.company_id)
+                .then((response) => {
+                    this.company = response.data.data;
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
     }
 }
 </script>
@@ -144,6 +159,9 @@ export default {
     .tender-item {
         &__top {
             position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
     }
 </style>
