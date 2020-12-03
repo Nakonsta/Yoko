@@ -15,7 +15,7 @@
       <text-input
           v-model="dataForm.passwordRepeat"
           label="Повторите пароль"
-          rules="required|confirmed:password"
+          :rules="{required: true, repeatPass: dataForm.password}"
           type="password"
           vid="password"
       ></text-input>

@@ -44,7 +44,7 @@
         v-model="innerValue"
         class="form-select"
         :placeholder="placeholder"
-        :class="{field: true, error: failed}"
+        :class="{field: true, error: failed, 'form-select--multiple': multiple}"
         deselect-label=""
         track-by="id"
         label="name"
@@ -63,11 +63,11 @@
         @remove=remove
         @search-change="search"
     >
-      <template slot="tag" slot-scope="{ option }">
-        <span class="custom__tag">
-          <span>{{ option.name }}</span>
-        </span>
-      </template>
+<!--      <template slot="tag" slot-scope="{ option }">-->
+<!--        <span class="custom__tag">-->
+<!--          <span>{{ option.name }}</span>-->
+<!--        </span>-->
+<!--      </template>-->
       <template slot="option" slot-scope="{ option }">
         <span
           class="checkbox"
