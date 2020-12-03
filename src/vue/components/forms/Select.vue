@@ -9,7 +9,7 @@
     <span v-if="$attrs.label" class="field__label">{{ $attrs.label }}</span>
     <input type="hidden" v-model="innerValue">
     <multiselect
-        v-if="!multiple && !close"
+        v-if="isSingle"
         v-model="innerValue"
         class="form-select"
         :placeholder="placeholder"
@@ -40,7 +40,7 @@
       </template>
     </multiselect>
     <multiselect
-        v-if="multiple"
+        v-if="isMultiple"
         v-model="innerValue"
         class="form-select"
         :placeholder="placeholder"
@@ -94,6 +94,14 @@ export default {
       default: () => {}
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    isSingle: {
+      type: Boolean,
+      default: false
+    },
+    isMultiple: {
       type: Boolean,
       default: false
     },

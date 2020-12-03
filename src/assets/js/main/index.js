@@ -25,6 +25,7 @@ import './modules/sliders';
 import './modules/slider-info';
 import './modules/slider-clients';
 import './modules/slider-steps';
+import './modules/slider-catalog';
 import './modules/slider-gallery-about';
 import './modules/more';
 import './modules/company';

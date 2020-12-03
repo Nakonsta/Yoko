@@ -8,7 +8,7 @@ document.addEventListener('click', (e) => {
     el.closest('.js-tabs').querySelectorAll('a').forEach((link) => {
         let tab = document.getElementById(link.getAttribute('href').substr(1));
         if( el === link ) {
-            if( tab ) tab.style.display = '';
+            if( tab ) tab.style.display = 'block';
             link.closest('li').classList.add('active');
         } else {
             if( tab ) tab.style.display = 'none';

@@ -1,0 +1,49 @@
+@import "../variables/variables"
+@import "../mixins/mq"
+@import "../mixins/fluid-mixin"
+
+.catalog-mark
+  .link
+    font-weight: 500
+    display: inline-block
+    margin-right: rem(15px)
+    &:hover
+      text-decoration: underline
+    &--success
+      color: $colorTurquoise
+    &--info
+      color: $colorGray
+  &__info
+    .gallery-top
+      .swiper-slide
+        overflow: hidden
+        border-radius: rem(6px)
+    .gallery-thumbs
+      //width: 100px
+      .swiper-wrapper
+        //display: block
+        //width: 100px
+      img
+        border-radius: rem(4px)
+    .swiper-container-initialized
+      margin: 0
+
+    .gallery-thumbs .swiper-slide
+      padding: rem(6px)
+
+    .gallery-thumbs .swiper-slide-active
+      border: 1px solid $colorTurquoise
+  &__el
+    &:not(:last-child)
+      margin-bottom: rem(24px)
+    .catalog-mark__title
+      font-weight: 700
+      letter-spacing: 0.05em
+      text-transform: uppercase
+      margin-bottom: rem(6px)
+    .catalog-mark__desc
+  .filter
+    &-header
+    &-body
+      padding-top: rem(24px)
+      border-top: 1px solid #D3D3D3
