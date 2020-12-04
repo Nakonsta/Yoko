@@ -4,6 +4,7 @@ export default {
             CancelTokens: {
                 catalogCancelToken: axios.CancelToken.source(),
                 companyCancelToken: axios.CancelToken.source(),
+                proceduresCancelToken: axios.CancelToken.source(),
             },
         }
     },
@@ -19,6 +20,12 @@ export default {
                 'Предыдущий запрос отменен',
             )
             this.CancelTokens.companyCancelToken = axios.CancelToken.source()
+        },
+        cancelMarketplaceProceduresRequest() {
+            this.CancelTokens.proceduresCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.proceduresCancelToken = axios.CancelToken.source()
         },
         fetchFilter() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/filter/`);
@@ -99,6 +106,9 @@ export default {
         fetchCountries() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries`);
         },
+        fetchRegions() {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/regions`);
+        },
         fetchCatalogAdd(data) {
             return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, data);
         },
@@ -122,19 +132,49 @@ export default {
                 params: { mode }
             });
         },
-        // fetchCountries() {
-        //     return this.$axios.$get(
-        //       `${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries/`,
-        //     )
-        // },
         fetchCompany(data) {
             return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company`,
                 data,
                 {cancelToken: this.CancelTokens.companyCancelToken.token},
             );
         },
+        fetchCompanysByIds(ids) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies`,{
+                params: {
+                    ids: ids.join(','),
+                },
+            });
+        },
+        fetchCompaniesByName(name) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies`, {
+                params: {
+                    name: name
+                },
+            });
+        },
         fetchCompanyReportForm(data) {
             return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/`, data); // todo поставить url "проверка компании"
+        },
+        fetchMarketplaceProceduresFilter() {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/filter`)
+        },
+        fetchMarketplaceProcedures(filter = null, page = 1) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/list`,
+                {
+                    ...filter,
+                    page,
+                },
+                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+            );
+        },
+        addMarketplaceProcedureMark(id, mark) {
+            const fData = new FormData();
+            fData.append('mark_code', mark);
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/mark`, fData);
+        },
+        removeMarketplaceProcedureMark(id, mark) {
+            return axios.delete(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/mark/${mark}`)
         },
     }
 }

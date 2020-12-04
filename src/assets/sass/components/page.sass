@@ -1,12 +1,28 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
 .page
   &-banner
     position: relative
     background-size: cover
     background-position: center center
+    &:after
+      content: " "
+      position: absolute
+      height: 100%
+      width: 100%
+      top: 0
+      left: 0
+      background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)
+      opacity: .7
+      pointer-events: none
     .container
       display: flex
       align-items: center
       min-height: rem(340px)
+      position: relative
+      z-index: 2
       @include mq($until: widescreen)
         min-height: rem(270px)
       @include mq($until: mobile)
@@ -17,21 +33,33 @@
       color: #fff
       font-size: rem(48px)
       line-height: 120%
-      z-index: 2
       font-family: $fontGilroy
       @include mq($from: desktop)
         max-width: 75%
       @include mq($until: tablet)
         font-size: rem(30px)
-    &:after
-      content: " "
-      position: absolute
-      height: 100%
-      width: 100%
-      top: 0
-      left: 0
-      background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)
-      opacity: .7
+    &__btn
+      @extend .btn
+
+      @include mq($from: tablet)
+        border-color: $colorWhite
+        width: 200px
+        color: $colorTurquoise !important
+        background: $colorWhite
+        position: absolute
+        right: 4%
+        bottom: rem(32px)
+
+        &:hover
+          border-color: $colorTurquoiseHover
+          color: $colorWhite !important
+          background: $colorTurquoiseHover
+
+      @include mq($from: large)
+        right: 8%
+          
+      @include mq($until: tablet)
+        display: none
 
   &-title
     margin: 0 0 rem(32px)

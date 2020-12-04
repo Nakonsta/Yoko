@@ -81,6 +81,7 @@
     @import "../../assets/sass/variables/variables";
     @import "../../assets/sass/variables/fluid-variables";
     @import "../../assets/sass/mixins/fluid-mixin";
+    @import "../../assets/sass/mixins/mq";
 
     .card {
         &__items {
@@ -189,7 +190,7 @@
             display: none;
             align-items: center;
             cursor: pointer;
-            @media(max-width: 768px) {
+            @include mq($until: tablet) {
                 display: flex;
             }
             span {
