@@ -1,16 +1,16 @@
 <template>
     <div class="spoiler">
         <div
-            class="spoiler__header"
             :class="{
+                'spoiler__header': true,
                 'spoiler__header--show': show
             }"
             @click="show = !show"
         >
             <slot name="header"></slot>
             <div
-                class="spoiler__header-arrow"
                 :class="{
+                    'spoiler__header-arrow': true,
                     'spoiler__header-arrow--top' : show
                 }"
             >
@@ -20,21 +20,14 @@
             </div>
         </div>
         <div
-            class="spoiler__body"
             :class="{
+                'spoiler__body': true,
                 'spoiler__body--show': show
             }"
         >
-<!--            <simplebar ref="simplebarEl" class="body-container" data-simplebar-auto-hide="false">-->
-<!--                <slideUpDown :active="show" :duration="500">-->
-<!--                    <slot name="body"></slot>-->
-<!--                </slideUpDown>-->
-<!--            </simplebar>-->
-            <div class="body-container">
-                <slideUpDown :active="show" :duration="500">
-                    <slot name="body"></slot>
-                </slideUpDown>
-            </div>
+            <slideUpDown :active="show" :duration="500">
+                <slot name="body"></slot>
+            </slideUpDown>
         </div>
     </div>
 </template>
@@ -47,7 +40,7 @@
         name: 'Spoiler',
         components: {
             slideUpDown,
-            simplebar
+            simplebar,
         },
         data() {
             return {
@@ -62,27 +55,6 @@
     @import "../../../assets/sass/variables/variables";
     @import "../../../assets/sass/variables/fluid-variables";
     @import "../../../assets/sass/mixins/fluid-mixin";
-
-    .body-container {
-        max-height: rem(303px);
-        overflow: auto;
-        /* полоса прокрутки (скроллбар) */
-        &::-webkit-scrollbar {
-            width: 4px; /* ширина для вертикального скролла */
-            height: 4px; /* высота для горизонтального скролла */
-            background-color: rgba(155, 155, 154, 0.3);
-        }
-
-        /* ползунок скроллбара */
-        &::-webkit-scrollbar-thumb {
-            background-color: $colorTurquoise;
-            border-radius: 9em;
-        }
-
-        &::-webkit-scrollbar-thumb:hover {
-            background-color: $colorTurquoiseHover;
-        }
-    }
 
     .spoiler {
         border-bottom: 1px solid #CDCDCC;

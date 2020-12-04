@@ -1,0 +1,22 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-banner
+
+block default
+    - let title = 'Торговая площадка';
+    - locals.currentPage = 'Торговая площадка';
+
+block content
+
+    +breadCrumbs([
+        'Главная',
+        'Торговая площадка'
+    ])
+
+    //+pageBanner('Торговая площадка', '/content/marketplace-procedures.jpg')
+    .page-banner.page-banner--with-btn(style=`background-image:url(/content/marketplace-procedures.jpg)`)
+        .container
+            .page-banner__title Торговая площадка
+            a.page-banner__btn(href="#") Создать процедуру
+
+    #marketplace-procedures

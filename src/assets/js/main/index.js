@@ -38,6 +38,9 @@ import './modules/tabs';
 // tooltips
 import './modules/hint';
 
+// dropdown
+import './modules/dropdown';
+
 /**
  * Полифил для object-fit
  */

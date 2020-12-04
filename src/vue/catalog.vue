@@ -1,7 +1,7 @@
 <template>
     <div class="catalog">
         <div class="catalog__search">
-            <search />
+            <search placeholder="Найти кабель" />
         </div>
         <div class="catalog__flex">
             <div ref="filterContainer" class="catalog__filter">
@@ -16,9 +16,9 @@
             <div class="catalog__body">
                 <catalogBlock
                     :isFirstLoad="isFirstLoad"
-                    :loadingCatalog="loadingCatalog"
-                    :catalog-item="catalog"
-                    :totalProducts="totalProducts"
+                    :loadingItems="loadingItems"
+                    :catalog-item="items"
+                    :totalProducts="totalItems"
                 />
                 <paginate
                     v-if="isFirstLoad && totalPages"
@@ -42,7 +42,7 @@
     import api from './helpers/api'
     import filterBlock from "./components/filter.vue";
     import catalogBlock from "./components/catalog.vue";
-    import search from "./components/search.vue";
+    import search from "./components/searchSelect.vue";
 
     export default {
         name: 'App',
@@ -56,11 +56,11 @@
             return {
                 isFirstLoad: false,
                 loadingFilter: true,
-                loadingCatalog: true,
+                loadingItems: true,
                 currentFilter: {},
                 filter: [],
-                catalog: [],
-                totalProducts: 0,
+                items: [],
+                totalItems: 0,
                 weightFilter: [],
                 page: 1,
                 tMark: 4,
@@ -89,8 +89,8 @@
             getFilterData() {
                 this.totalProducts = -1
                 this.fetchFilter()
-                    .then((data) => {
-                        this.setFilterData(data.data.data)
+                    .then((responsive) => {
+                        this.setFilterData(responsive.data.data)
                         this.getCatalogData(null, true)
                         this.loadingFilter = false
                     })
@@ -100,7 +100,7 @@
                     })
             },
             getCatalogData(filterValues = null) {
-                this.loadingCatalog = true
+                this.loadingItems = true
 
                 this.fetchCatalog(filterValues, this.page)
                     .then((data) => {
@@ -114,23 +114,37 @@
                         this.setCatalogData(catalogItem)
                         this.setTotalCounterProducts(total)
 
-                        this.loadingCatalog = false
+                        this.loadingItems = false
                     })
                     .catch((e) => {
                         console.log(e)
                     })
             },
             setFilterData(data) {
-                this.filter = data
+                function parseObjToArr(obj) {
+                    const arr = [];
+                    for (const key in obj) {
+                        arr.push({
+                            id: obj[key],
+                            name: obj[key],
+                        });
+                    }
+                    return arr;
+                }
+                for( const block in data) {
+                    data[block].type = 'checkbox';
+                    data[block].values = parseObjToArr(data[block].values);
+                }
+                this.filter = data;
             },
             clearCatalog() {
-                this.catalog = []
+                this.items = []
             },
             setCatalogData(data) {
-                this.catalog = data
+                this.items = data
             },
             setTotalCounterProducts(total) {
-                this.totalProducts = total
+                this.totalItems = total
             },
         },
     }
@@ -139,6 +153,7 @@
 <style lang="scss" scoped>
     @import "../assets/sass/variables/fluid-variables";
     @import "../assets/sass/mixins/fluid-mixin";
+    @import "../assets/sass/mixins/mq";
 
     .news-list__more {
         margin-top: rem(24px);
@@ -153,7 +168,7 @@
             width: rem(276px);
             flex: none;
             transform: translateY(rem(-15px));
-            @media(max-width: 768px) {
+            @include mq($until: tablet) {
                 display: none;
             }
         }

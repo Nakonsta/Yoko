@@ -255,7 +255,7 @@
             right: 0;
             min-width: rem(285px);
             background-color: #fff;
-            z-index: 2;
+            z-index: 3;
             box-shadow: 5px 10px 15px rgba(55, 55, 53, 0.1);
             transform: translateY(#{rem(-15px)});
             pointer-events: none;
