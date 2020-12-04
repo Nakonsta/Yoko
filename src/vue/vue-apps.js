@@ -41,11 +41,22 @@ configure({
     }
 });
 
+// Регистрация
+import Registration from './registration.vue'
+const registrationBlock = document.querySelector('#registration');
+if (registrationBlock) {
+    let appRegistration = new Vue({
+        el: registrationBlock,
+        store: store,
+        render: function(h) { return h(Registration); }
+    })
+}
+
 // Котировки
 import Quotes from './quotes.vue'
 const quotesBlock = document.querySelector('#quotes');
 if (quotesBlock) {
-    let appCatalog = new Vue({
+    let appQuotes = new Vue({
         el: quotesBlock,
         store: store,
         render: function(h) { return h(Quotes); }
@@ -199,5 +210,29 @@ if (marketplaceProceduresBlock) {
         el: marketplaceProceduresBlock,
         store: store,
         render: function(h) { return h(marketplaceProcedures)}
+    })
+}
+
+// Форма обратной связи
+import TenderItem from './tenderItem.vue'
+const tenderItem = document.querySelector('#tender-item');
+if (tenderItem) {
+    let tenderItemBlock = new Vue({
+        el: tenderItem,
+        store: store,
+        render: function(h) { return h(TenderItem); }
+    })
+}
+
+// Личный кабинет
+import Personal from './admin/personal.vue'
+import personalRouter from './admin/router/index'
+const personalItem = document.querySelector('#personal');
+if (personalItem) {
+    let tenderItemBlock = new Vue({
+        el: personalItem,
+        store: store,
+        router: personalRouter,
+        render: function(h) { return h(Personal); }
     })
 }

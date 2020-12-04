@@ -1,0 +1,68 @@
+@import "../variables/variables";
+
+@mixin make-row($gutter: $grid-gutter-width) {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -$grid-gutter-width;
+    margin-right: -$grid-gutter-width;
+}
+
+@mixin make-column($gutter: $grid-gutter-width) {
+    padding-left: $grid-gutter-width;
+    padding-right: $grid-gutter-width;
+}
+
+@mixin calc-grid-column($index, $class, $type) {
+    @if ($type == width) and ($index > 0) {
+        .col-#{$class}-#{$index} {
+            width: percentage(($index / $grid-columns));
+        }
+    }
+}
+
+@mixin loop-grid-columns($columns, $class, $type) {
+    @for $i from 0 through $columns {
+        @include calc-grid-column($i, $class, $type);
+    }
+
+    @for $i from 0 through 0 {
+        @include calc-prop-column($i, $class, $type);
+    }
+}
+
+@mixin calc-prop-column($index, $class, $type) {
+    @if ($type == top) {
+        .top-#{$class} {
+            align-items: flex-start;
+        }
+    }
+    @if ($type == middle) {
+        .middle-#{$class} {
+            align-items: center;
+        }
+    }
+    @if ($type == between) {
+        .between-#{$class} {
+            justify-content: space-between;
+        }
+    }
+    @if ($type == first) {
+        .first-#{$class} {
+            order: -1;
+        }
+    }
+    @if ($type == last) {
+        .last-#{$class} {
+            order: 1;
+        }
+    }
+}
+
+@mixin make-grid($class) {
+    @include loop-grid-columns($grid-columns, $class, width);
+
+    @include loop-grid-columns($grid-columns, $class, end);
+    @include loop-grid-columns($grid-columns, $class, top);
+    @include loop-grid-columns($grid-columns, $class, middle);
+    @include loop-grid-columns($grid-columns, $class, between);
+}

@@ -15,6 +15,9 @@ export default {
             )
             this.CancelTokens.catalogCancelToken = axios.CancelToken.source()
         },
+        fetchInn(inn) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies`, { params: { inn } })
+        },
         cancelCompanyRequest() {
             this.CancelTokens.companyCancelToken.cancel(
                 'Предыдущий запрос отменен',
@@ -55,6 +58,18 @@ export default {
                 body,
                 {cancelToken: this.CancelTokens.catalogCancelToken.token},
             );
+        },
+        searchProceduresOKPD2(string) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/digests/okpd/search/`,
+                { params: { q: string } },
+            )
+        },
+        searchProceduresOKVED(string) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/digests/okved/search/`,
+                { params: { q: string } },
+            )
         },
         fetchListSearchCatalog(string) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/`, {
@@ -100,6 +115,9 @@ export default {
                 consent: c,
             });
         },
+        fetchProceduresOKPD2(field) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/${field}`)
+        },
         fetchSupportForm(data) {
             return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/email/feedback/send`, data);
         },
@@ -108,6 +126,12 @@ export default {
         },
         fetchRegions() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/regions`);
+        },
+        fetchRegisteredCompanyFull(id) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/full/data/companies/${id}`)
+        },
+        sendRegistrationData(data) {
+            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/auth/register`, data)
         },
         fetchCatalogAdd(data) {
             return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, data);
@@ -175,6 +199,9 @@ export default {
         },
         removeMarketplaceProcedureMark(id, mark) {
             return axios.delete(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/mark/${mark}`)
+        },
+        fetchTenderItem(id) {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
         },
     }
 }

@@ -26,7 +26,7 @@ module.exports = {
     output: {
         filename: `js/[name].min.js`,
         path: PATHS.dist,
-        publicPath: ''
+        publicPath: '/'
     },
     resolve: {
         alias: {
@@ -159,5 +159,11 @@ module.exports = {
         //contentBase: 'src',
         port: 3000,
         disableHostCheck: true,
+        historyApiFallback: {
+            rewrites: [
+                { from: /\/personal/, to: '/personal.html' },
+                // { from: /\/personal\/[A-Za-z0-9\-\/]+/, to: '/personal.html' },
+            ]
+        }
     }
 };

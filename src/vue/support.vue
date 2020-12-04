@@ -68,12 +68,12 @@
                         (formForSend.theme.id === 'organization_and_participation_in_tenders' ||
                         formForSend.theme.id === 'technical_problems' ||
                         formForSend.theme.id === 'autonomous_industry')
-                        " 
+                        "
                         class="support-form__item"
                     >
                         <ValidationProvider name="Номер торговой процедуры" :rules="{ regex: /^[0-9]+$/ }" v-slot="{ errors, failed }" tag="label" class="field__container">
                             <span class="field__label">Номер торговой процедуры</span>
-                            <input 
+                            <input
                                 :class="{field: true, error: failed}"
                                 type="tel"
                                 name="trade_procedure_number"
@@ -117,7 +117,7 @@
                     <div class="support-form__item">
                         <ValidationProvider name="Введите текст обращения" :rules="{ required: true, max: 1000 }" v-slot="{ errors, failed }" tag="label" class="field__container">
                             <span class="field__label">Введите текст обращения</span>
-                            <textarea 
+                            <textarea
                                 :class="{field: true, error: failed}"
                                 row="4"
                                 name="text"
@@ -175,9 +175,9 @@
                     <div class="support-form__policy">
                         Нажимая на кнопку «Сохранить и продолжить», вы принимаете условия <a href="#" class="support-form__link">Пользовательского соглашения</a>, соглашаетесь на <a href="#" class="support-form__link">обработку персональных данных</a> и получение сообщений
                     </div>
-                    <button 
-                    type="submit" 
-                    class="btn support-form__submit" 
+                    <button
+                    type="submit"
+                    class="btn support-form__submit"
                     :disabled="!valid"
                     >
                     Отправить обращение
