@@ -62,7 +62,7 @@
       //padding: rem(18px) rem(104px) rem(16px) rem(48px)
       @include fluid-property('padding-top', 1024px, 1024px, 1440px, 15px, 15px, 18px)
       @include fluid-property('padding-left', 1024px, 1024px, 1440px, 20px, 20px, 48px)
-      @include fluid-property('padding-right', 1024px, 1024px, 1440px, 56px, 56px, 104px)
+      @include fluid-property('padding-right', 1024px, 1024px, 1440px, 120px, 120px, 168px)
       @include fluid-property('padding-bottom', 1024px, 1024px, 1440px, 13px, 13px, 16px)
       width: 100%
       font-size: rem(14px)
@@ -77,6 +77,26 @@
       &::placeholder
         color: $colorGray
         opacity: 1
+
+    a
+      display: none
+      margin-top: rem(-12px)
+      margin-right: rem(20px)
+      width: rem(24px)
+      height: rem(24px)
+      position: absolute
+      top: 50%
+      @include fluid-property('right', 1024px, 1024px, 1440px, 56px, 56px, 104px)
+
+      &:hover
+        svg
+          fill: $colorTurquoiseHover
+
+      svg
+        width: 100%
+        height: 100%
+        fill: $colorTurquoise
+        transition: fill $animation
 
     button
       outline: none

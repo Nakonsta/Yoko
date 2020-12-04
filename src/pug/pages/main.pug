@@ -9,8 +9,9 @@ block content
         .container
             .welcome__title Корпоративные закупки и продажи онлайн
             .welcome__wrap
-                form.welcome__search.js-search
-                    input(type="text" placeholder="Введите номер процедуры или ключевое слово")
+                form.welcome__search.js-search(method="get" action="./marketplace-procedures.html")
+                    input(type="text" name="q" data-minlength="3" placeholder="Введите номер процедуры или ключевое слово")
+                    a(href="javascript"): svg.sprite-cancel: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#cancel")
                     button(type="submit"): svg.sprite-search: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#search")
                 .welcome__counters
                     p #[span > 10 тыс.] новых закупок каждый день

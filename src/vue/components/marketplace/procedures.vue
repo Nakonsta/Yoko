@@ -50,7 +50,10 @@
             </div>
         </div>
         <div class="procedures__items">
-            <div v-for="(item, index) in items" :key="item.id" class="procedures__item" v-if="isFirstLoad">
+            <div class="procedures__item procedures__item--empty" v-if="isFirstLoad && !items.length">
+                По вашему запросу ничего не найдено
+            </div>
+            <div v-for="(item, index) in items" :key="item.id" class="procedures__item" v-if="isFirstLoad && items.length">
                 <div class="procedures__item-head">
                     <div class="procedures__item-flex">
                         <div class="procedures__item-title">№{{ item.id }}</div>
@@ -482,6 +485,10 @@
 
             & + & {
                 margin-top: rem(24px);
+            }
+
+            &--empty {
+
             }
 
             @include mq($until: widescreen) {
