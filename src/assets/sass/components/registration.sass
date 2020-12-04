@@ -31,6 +31,15 @@
         border-color: $colorRed !important
         .multiselect__placeholder
           color: $colorRed
+  .multiselect__tags
+    height: auto !important
+  .multiselect__tag
+    background: #31acb8
+  .multiselect__tag-icon
+    &:hover
+      background: #1cc8d8
+  .form-select--multiple
+    height: auto !important
   .field
     background-color: #fff
   .checkbox + .checkbox
@@ -40,7 +49,7 @@
     .multiselect__single
       margin-top: 0.14286rem
   .phone-code
-    width: 6rem
+    width: 8rem
   .custom
     &__tag
       &:not(:last-child)
@@ -94,7 +103,7 @@
       &-wrap
         text-overflow: ellipsis
         overflow: hidden
-        white-space: nowrap
+        //white-space: nowrap
         display: block
         font-style: italic
         margin-top: 0.2rem

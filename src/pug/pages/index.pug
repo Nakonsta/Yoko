@@ -9,6 +9,7 @@ block content
                     | Верстка десктопная
                 .page-list-progress-title
                     | Верстка мобильная
+            .page-list-title Публичная часть
             .page-list-body
                 -
                     var pages = [
@@ -40,3 +41,17 @@ block content
                                 | #{page.desktop}
                             .page-list-progress-item
                                 | #{page.mobile}
+
+            -
+                var admin = {title: 'Личный кабинет', href: '/personal', desktop: '-', mobile: '-'};
+            .page-list-title Личный кабинет Заказчика/Поставщика (роут работает только на локальном сервере или сервере для показа)
+            .page-list-body
+                .page-list-item
+                    .page-list-link-box
+                        a.page-list-link(href = admin.href)
+                            | #{admin.title}
+                    .page-list-progress
+                        .page-list-progress-item
+                            | #{admin.desktop}
+                        .page-list-progress-item
+                            | #{admin.mobile}
