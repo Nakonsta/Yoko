@@ -26,6 +26,22 @@ export default {
         fetchFilter() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/filter/`);
         },
+        sendSettingsData(string, data) {
+            if (!this.CancelTokens.catalogProceduresCancelToken) {
+                this.CancelTokens.catalogProceduresCancelToken = axios.CancelToken.source()
+            } else {
+                this.CancelTokens.catalogProceduresCancelToken.cancel(
+                    'Предыдущий запрос отменен запрос',
+                )
+                this.CancelTokens.catalogProceduresCancelToken = axios.CancelToken.source()
+            }
+
+            return axios.post(
+                `${process.env.API_URL_AUTH_SERVICE}/auth/settings/${string}`,
+                data,
+                { cancelToken: this.CancelTokens.catalogProceduresCancelToken.token },
+            )
+        },
         fetchCatalog(filter, page = 1) {
             let body = {}
             body.page = page
@@ -38,6 +54,11 @@ export default {
                 body,
                 {cancelToken: this.CancelTokens.catalogCancelToken.token},
             );
+        },
+        getSettingsData(string) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/auth/settings/${string}`,
+            )
         },
         fetchTotalCatalog(group, filter) {
             let body = {}
