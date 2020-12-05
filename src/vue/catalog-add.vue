@@ -84,27 +84,27 @@
                         </ValidationProvider>
                         <ValidationProvider name="Калибр" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Калибр</span>
-                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_caliber" placeholder="Введите значение" @keydown="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_caliber" placeholder="Введите значение" @keyup="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Количество жил" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Количество жил</span>
-                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_veins_count" placeholder="Введите значение" @keydown="onlyDecimal">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_veins_count" placeholder="Введите значение"  @keyup="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Количество волокон" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Количество волокон</span>
-                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_fiber_count" placeholder="Введите значение" @keydown="onlyDecimal">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_fiber_count" placeholder="Введите значение"  @keyup="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Сечение" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Сечение</span>
-                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_execution" placeholder="Введите значение" @keydown="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_execution" placeholder="Введите значение" @keyup="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Размер волокон" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Размер волокон</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_fiber_size" placeholder="Введите значение" maxlength="6" @keydown="onlyDigitsWithSlash">
+                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_fiber_size" placeholder="Введите значение" @keyup="onlyDigitsWithSlash">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Применение" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
@@ -119,7 +119,7 @@
                         </ValidationProvider>
                         <ValidationProvider name="Допустимое напряжение" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Допустимое напряжение</span>
-                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_voltage_allowable" placeholder="Введите значение" @keydown="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_voltage_allowable" placeholder="Введите значение" @keyup="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Изоляция" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
@@ -129,12 +129,12 @@
                         </ValidationProvider>
                         <ValidationProvider name="Мощность" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Мощность</span>
-                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_power" placeholder="Введите значение" @keydown="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_power" placeholder="Введите значение" @keyup="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Волновое сопротивление" v-slot="{ errors, failed }" rules="required|max_value:99999" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Волновое сопротивление</span>
-                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_resistance_wave" placeholder="Введите значение" @keydown="onlyDigits">
+                            <input :class="{field: true, error: failed}" type="number" v-model="formForSend.property_resistance_wave" placeholder="Введите значение" @keyup="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Исполнение" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
@@ -372,72 +372,28 @@
                 }
             },
             onlyDigits(evt) {
-                let key = evt.keyCode;
-                if (
-                    // numbers
-                    key >= 48 && key <= 57 ||
-                    // Numeric keypad
-                    key >= 96 && key <= 105 ||
-                    // comma, period and minus, . on keypad
-                    key == 190 || key == 188 || key == 109 || key == 110 ||
-                    // Backspace and Tab and Enter
-                    key == 8 || key == 9 || key == 13 ||
-                    // Home and End
-                    key == 35 || key == 36 ||
-                    // left and right arrows
-                    key == 37 || key == 39 ||
-                    // Del and Ins
-                    key == 46 || key == 45) {
-                    return true;
-                } else {
-                    evt.preventDefault();
-                }
-            },
-            onlyDecimal(evt) {
-                let key = evt.keyCode;
-                if (
-                    // numbers
-                    key >= 48 && key <= 57 ||
-                    // Numeric keypad
-                    key >= 96 && key <= 105 ||
-                    // comma, period and minus, . on keypad
-                    // key == 190 || key == 188 || key == 109 || key == 110 ||
-                    // Backspace and Tab and Enter
-                    key == 8 || key == 9 || key == 13 ||
-                    // Home and End
-                    key == 35 || key == 36 ||
-                    // left and right arrows
-                    key == 37 || key == 39 ||
-                    // Del and Ins
-                    key == 46 || key == 45) {
-                    return true;
-                } else {
-                    evt.preventDefault();
-                }
+                evt.target.value = evt.target.value.replace(/[^\d]+/g,'');
             },
             onlyDigitsWithSlash(evt) {
-                let key = evt.keyCode;
-                if (
-                    // numbers
-                    key >= 48 && key <= 57 ||
-                    // Numeric keypad
-                    key >= 96 && key <= 105 ||
-                    // comma, period and minus, . on keypad
-                    // key == 190 || key == 188 || key == 109 || key == 110 ||
-                    // Backspace and Tab and Enter
-                    key == 8 || key == 9 || key == 13 ||
-                    // Home and End
-                    key == 35 || key == 36 ||
-                    // left and right arrows
-                    key == 37 || key == 39 ||
-                    // Del and Ins
-                    key == 46 || key == 45 ||
-                    // Slash
-                    key == 111 || key == 191) {
-                    return true;
-                } else {
-                    evt.preventDefault();
+                function parse(d) {
+                    if( d.toString().indexOf(',') === -1 ) return d;
+                    d = d.split(',');
+                    d.splice(2);
+                    d[0] = d[0].replace(/^0+/,'');
+                    d[1] = d[1].replace(/0+$/,'').substr(0,2);
+                    return d.join(',');
                 }
+                let v = evt.target.value.replace(/[^\d,\/]+/g,'');
+                if( v.toString().indexOf('/') !== -1 ) {
+                    v = v.split('/');
+                    v.splice(2);
+                    v[0] = parse(v[0]);
+                    v[1] = parse(v[1]);
+                    v = v.join('/');
+                } else {
+                    v = parse(v);
+                }
+                evt.target.value = v;
             },
             objectToFormData(data) {
                 const fData = new FormData();
@@ -445,6 +401,8 @@
                     root = root || '';
                     if (data instanceof File) {
                         formDataObj.append(root, data);
+                    } else if (data instanceof Date) {
+                        formDataObj.append(root, moment(data).format('YYYY-MM-DD'));
                     } else if (Array.isArray(data)) {
                         for (let i = 0; i < data.length; i++) {
                             appendFormData(data[i], root + '[' + i + ']', formDataObj);
@@ -470,7 +428,8 @@
             sendForm(evt) {
                 evt.preventDefault();
                 const fData = {
-                    company_id: this.formForSend.company_id,
+                    // company_id: this.formForSend.company_id,
+                    company_id: 7, // todo TEST data
                     mark: this.formForSend.mark,
                     marksize_description: this.formForSend.marksize_description,
                     marksize_description_additional: this.formForSend.marksize_description_additional,

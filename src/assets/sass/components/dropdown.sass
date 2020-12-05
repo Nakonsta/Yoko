@@ -1,0 +1,50 @@
+@import "../variables/variables"
+@import "../mixins/mq"
+@import "../mixins/fluid-mixin"
+
+.dropdown
+  display: inline-block
+  position: relative
+
+  &__value
+    color: $colorTurquoise
+    transition: color $animation
+    cursor: pointer
+
+    &:hover
+      color: $colorTurquoiseHover
+
+  &__list
+    border-radius: rem(6px)
+    box-shadow: 5px 10px 15px rgba(55, 55, 53, 0.1)
+    background: $colorWhite
+    position: absolute
+    top: 100%
+    //left: 0
+    right: 0
+    z-index: 2
+    visibility: hidden
+    opacity: 0
+    transition: visibility 0s $animation, opacity $animation 0s
+
+    .dropdown.opened &
+      visibility: visible
+      opacity: 1
+
+    ul
+      list-style: none
+      margin: 0
+      padding: 0
+
+    //li
+
+    a
+      display: block
+      padding: rem(5px) rem(14px)
+      color: $colorText
+
+      &:hover
+        color: $colorTurquoiseHover
+
+      &.active
+        color: $colorTurquoise !important

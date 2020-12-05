@@ -9,26 +9,99 @@
         <template v-if="!loading">
             <transition-group name="fade-left">
                 <spoiler
-                    v-for="item in showFullFilter ? filter : filter.slice(0, 5)"
+                    v-for="(item, index) in showFullFilter || full ? filter : filter.slice(0, 5)"
                     :key="item.id"
                 >
                     <template v-slot:header>
                         <b>{{ item.value }}</b>
                     </template>
                     <template v-slot:body>
-                        <div>
+                        <div class="body-container body-container--scroll" v-if="item.type === 'checkbox'">
                             <div
-                                    v-for="value in item.values"
-                                    class="filter__checkbox"
+                                v-for="value in item.values"
+                                class="filter__checkbox"
                             >
                                 <label class="checkbox">
-                                    <input type="checkbox" @change="(e) => changeFilter(item.id, value, e.target.checked)">
+                                    <input type="checkbox" @change="(e) => changeFilter(item.id, value.id, e.target.checked)" :checked="currentFilter[item.id] && currentFilter[item.id].indexOf(value.id) !== -1">
                                     <span class="checkbox__body"></span>
                                     <span class="checkbox__text">
-                                        {{ value }}
+                                        {{ value.name }}
                                     </span>
                                 </label>
                             </div>
+                        </div>
+                        <div class="body-container" v-if="item.type === 'period'">
+                            <div class="filter__period">
+                                <div class="filter__period-from">
+                                    <datepicker
+                                        placeholder="c"
+                                        :monday-first=true
+                                        :format="picker.format"
+                                        :language="picker.locale"
+                                        input-class="field"
+                                        v-model="picker.start_date"
+                                        :disabled-dates="{ to: picker.disabledTo }"
+                                        @input="changePeriod(item.id)"
+                                    >
+                                        <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                                    </datepicker>
+                                </div>
+                                <div class="filter__period-to">
+                                    <datepicker
+                                        placeholder="по"
+                                        :monday-first=true
+                                        :format="picker.format"
+                                        :language="picker.locale"
+                                        input-class="field"
+                                        v-model="picker.end_date"
+                                        :disabled-dates="{ from: picker.disabledFrom }"
+                                        @input="changePeriod(item.id)"
+                                    >
+                                        <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                                    </datepicker>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="body-container" v-if="item.type === 'select'">
+                            <multiselect
+                                v-model="item.currentValues"
+                                class="form-select"
+                                track-by="id"
+                                label="name"
+                                :placeholder="item.placeholder"
+                                selectedLabel=""
+                                selectLabel=""
+                                deselectLabel=""
+                                tagPlaceholder=""
+                                :options="item.values"
+                                :allow-empty="true"
+                                :multiple="true"
+                                :taggable="true"
+                                @input="multiselectChange($event, item.id)"
+                                @addTag="multiselectAddTag"
+                            >
+                            </multiselect>
+                        </div>
+                        <div class="body-container" v-if="item.type === 'search'">
+                            <multiselect
+                                v-model="item.currentValues"
+                                class="form-select"
+                                track-by="id"
+                                label="name"
+                                :placeholder="item.placeholder"
+                                selectedLabel=""
+                                selectLabel=""
+                                deselectLabel=""
+                                tagPlaceholder=""
+                                :options="item.values"
+                                :allow-empty="true"
+                                :multiple="true"
+                                :taggable="true"
+                                @input="multiselectChange($event, item.id)"
+                                @addTag="multiselectAddTag"
+                                @search-change="callFilterSearch(item.search, index, $event)"
+                            >
+                            </multiselect>
                         </div>
                     </template>
                 </spoiler>
@@ -36,6 +109,7 @@
             <div
                 class="filter__more"
                 @click="showFullFilter = !showFullFilter"
+                v-if="!full && filter.length > 5"
             >
                 <b>{{showFullFilter ? 'Скрыть фильтры' : 'Все фильтры'}}</b>
             </div>
@@ -54,7 +128,9 @@
 </template>
 
 <script>
+    import moment from 'moment';
     import spoiler from "./blocks/spoiler.vue";
+    import {ru} from "vuejs-datepicker/src/locale";
 
     export default {
         name: 'FilterBlock',
@@ -70,6 +146,10 @@
                 default: () => [],
                 type: Array
             },
+            full: {
+                default: false,
+                type: Boolean,
+            },
             filterContainer: {
                 type: HTMLDivElement
             },
@@ -77,12 +157,29 @@
                 default: () => {},
                 type: Object
             },
+            mobileWidth: {
+                default: 767,
+                type: Number,
+            },
         },
         data() {
             return {
-                // currentFilter: {},
                 mobileFilter: false,
-                showFullFilter: false
+                showFullFilter: false,
+                picker: {
+                    start_date: '',
+                    end_date: '',
+                    format: "yyyy-MM-dd",
+                    locale: ru,
+                    disabledFrom: null,
+                    disabledTo: null,
+                },
+                val: null,
+                options: [
+                    { name: 'Vue.js', code: 'vu' },
+                    { name: 'Javascript', code: 'js' },
+                    { name: 'Open Source', code: 'os' }
+                ]
             }
         },
         mounted() {
@@ -91,21 +188,36 @@
         },
         methods: {
             toggleMobileFilter() {
-                let popupFilter = document.querySelector('#filter-modal .popup__content-container')
-
-
-
-                if (window.innerWidth < 768) {
+                let popupFilter = document.querySelector('#filter-modal .popup__content-container');
+                if (window.innerWidth < this.mobileWidth) {
                     if (!this.mobileFilter) {
-                        this.mobileFilter = true
-                        popupFilter.appendChild(this.$refs.filter)
+                        this.mobileFilter = true;
+                        popupFilter.appendChild(this.$refs.filter);
                     }
                 } else {
                     if (this.mobileFilter) {
-                        this.mobileFilter = false
-                        this.filterContainer.appendChild(this.$refs.filter)
+                        this.mobileFilter = false;
+                        this.filterContainer.appendChild(this.$refs.filter);
                     }
                 }
+            },
+            multiselectChange(value, group) {
+                this.currentFilter[group] = value.map((item)=>{return item.id});
+                this.$emit('changeFilter');
+            },
+            multiselectAddTag(value) {
+                return false;
+            },
+            changePeriod(group) {
+                if( this.picker.start_date ) {
+                    // this.currentFilter[group + '_from'] = moment(this.picker.start_date).format('YYYY-MM-DD');
+                    this.currentFilter[group + '_from'] = this.picker.start_date;
+                }
+                if( this.picker.end_date ) {
+                    // this.currentFilter[group + '_to'] = moment(this.picker.end_date).format('YYYY-MM-DD');
+                    this.currentFilter[group + '_to'] = this.picker.end_date;
+                }
+                this.$emit('changeFilter');
             },
             changeFilter(group, value, isSelected) {
                 if (isSelected) {
@@ -113,13 +225,13 @@
                 } else {
                     this.removeValue(group, value)
                 }
-                this.$emit('changeFilter')
+                this.$emit('changeFilter');
             },
             addValue(group, value) {
                 if (this.currentFilter[group]) {
-                    this.currentFilter[group].push(value)
+                    this.currentFilter[group].push(value);
                 } else {
-                    this.addGroup(group, value)
+                    this.addGroup(group, value);
                 }
             },
             removeValue(group, value) {
@@ -128,29 +240,35 @@
                     if (index > -1) {
                         this.currentFilter[group].splice(index, 1);
                         if (!this.currentFilter[group].length) {
-                            this.removeGroup(group)
+                            this.removeGroup(group);
                         }
                     }
                 }
             },
             addGroup(group, value) {
-                this.currentFilter[group] = [value]
+                this.currentFilter[group] = [value];
             },
             removeGroup(group) {
-                delete this.currentFilter[group]
-            }
+                delete this.currentFilter[group];
+            },
+            callFilterSearch(func, index, q) {
+                this.$emit(func, index, q);
+            },
         },
-
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     @import "../../assets/sass/variables/variables";
     @import "../../assets/sass/variables/fluid-variables";
     @import "../../assets/sass/mixins/fluid-mixin";
+    @import "../../assets/sass/mixins/mq";
 
     .filter {
         width: calc(100% - #{rem(68px)});
+        @include mq($until: widescreen) {
+            width: calc(100% - #{rem(38px)});
+        }
         &--mobile {
             width: 100%
         }
@@ -167,6 +285,50 @@
         &__loader {
             position: relative;
             height: 400px;
+        }
+        &__period {
+            &-to {
+                margin-top: rem(16px);
+            }
+        }
+        .vdp-datepicker {
+            input.field {
+                padding: rem(15px) rem(20px) rem(15px) rem(50px) !important;
+                height: auto;
+                background-color: transparent !important;
+            }
+            .sprite-calendar {
+                margin-top: rem(-8px);
+                width: rem(16px);
+                height: rem(16px);
+                position: absolute;
+                top: 50%;
+                left: rem(20px);
+            }
+        }
+    }
+
+    .body-container {
+        &--scroll {
+            max-height: rem(303px);
+            overflow-x: hidden;
+            overflow-y: auto;
+            /* полоса прокрутки (скроллбар) */
+            &::-webkit-scrollbar {
+                width: 4px; /* ширина для вертикального скролла */
+                height: 4px; /* высота для горизонтального скролла */
+                background-color: rgba(155, 155, 154, 0.3);
+            }
+
+            /* ползунок скроллбара */
+            &::-webkit-scrollbar-thumb {
+                background-color: $colorTurquoise;
+                border-radius: 9em;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background-color: $colorTurquoiseHover;
+            }
         }
     }
 </style>

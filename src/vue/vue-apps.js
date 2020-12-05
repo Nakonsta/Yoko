@@ -202,6 +202,17 @@ if (CompanyReportsBlock) {
     })
 }
 
+// Торговая площадка - Процедуры
+import marketplaceProcedures from './marketplace-procedures.vue';
+const marketplaceProceduresBlock = document.querySelector('#marketplace-procedures');
+if (marketplaceProceduresBlock) {
+    let marketplaceProceduresApp = new Vue({
+        el: marketplaceProceduresBlock,
+        store: store,
+        render: function(h) { return h(marketplaceProcedures)}
+    })
+}
+
 // Форма обратной связи
 import TenderItem from './tenderItem.vue'
 const tenderItem = document.querySelector('#tender-item');

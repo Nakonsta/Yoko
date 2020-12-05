@@ -169,7 +169,9 @@
                     }
                 });
                 if (!this.multiple) this.files.splice(1);
-                this.$emit('input', this.files.length ? true : '');
+                let files = this.files.map((item)=>{return item.file});
+                console.log(files);
+                this.$emit('input', this.files.length ? (this.multiple ? files : files[0]) : null);
                 if( this.submit ) this.uploadFiles();
                 else if( this.preview) this.previewFiles();
             },
@@ -183,7 +185,9 @@
                 });
                 if (!this.multiple) this.files.splice(1);
                 evt.target.value = '';
-                this.$emit('input', this.files.length ? true : '');
+                let files = this.files.map((item)=>{return item.file});
+                console.log(files);
+                this.$emit('input', this.files.length ? (this.multiple ? files : files[0]) : null);
                 if( this.submit ) this.uploadFiles();
                 else if( this.preview) this.previewFiles();
             },
