@@ -35,6 +35,14 @@
                             {{ tenderItemData.delivery_terms ? 'Требуется' : 'Не требуется' }}
                         </div>
                     </div>
+                    <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.description" class="tender-item__row">
+                        <div class="tender-item__row-name">
+                            Объект закупки
+                        </div>
+                        <div class="tender-item__row-value">
+                            {{ tenderItemData.purchase_subject.description }}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="tender-item__right">
@@ -44,12 +52,12 @@
                     </div>
                     <Actions />
                 </div>
-                <div v-if="tenderItemData.start_price" class="tender-item__start-price">
+                <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.start_price" class="tender-item__start-price">
                     <div class="tender-item__start-price-text">
                         Начальная цена:
                     </div>
                     <div class="tender-item__start-price-num">
-                        {{ tenderItemData.start_price }} &#8381;
+                        {{ tenderItemData.purchase_subject.start_price }} &#8381;
                     </div>
                 </div>
                 <div class="tender-item__dates">
@@ -61,12 +69,12 @@
                             {{ formatDateNoTime(tenderItemData.publication_date) }}
                         </div>
                     </div>
-                    <div v-if="tenderItemData.terms_tender_to" class="tender-item__date">
+                    <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.application_end_date" class="tender-item__date">
                         <div class="tender-item__date-text">
                             Дата окончания:
                         </div>
                         <div class="tender-item__date-day">
-                            {{ formatDateNoTime(tenderItemData.terms_tender_to) }}
+                            {{ formatDateNoTime(tenderItemData.purchase_term.application_end_date) }}
                         </div>
                     </div>
                 </div>
@@ -78,7 +86,7 @@
                 <a href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
             </div>
             <div class="tender-item__products-table">
-                <div v-if="tenderItemData.products.length" class="tender-item__products-thead company-products__thead">
+                <div v-if="tenderItemData.purchase_subject.products.length" class="tender-item__products-thead company-products__thead">
                     <div class="table-cell__title">
                         Наименование позиции
                     </div>
@@ -98,7 +106,7 @@
                         Аналог
                     </div>
                 </div>
-                <div v-for="(item, key) in tenderItemData.products" :key="key">
+                <div v-for="(item, key) in tenderItemData.purchase_subject.products" :key="key">
                     <TenderItemProductCard :item="item" />
                 </div>
             </div>
