@@ -1,11 +1,11 @@
 <template>
     <div class="tender-item__menu">
         <div class="tender-item__menu-inner">
-            <div class="tender-item__menu-item">
-                <a href="#" class="tender-item__menu-link">Общая информация</a>
+            <div :class="[activeTab == 'main-info' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeChange('main-info')" class="tender-item__menu-link">Общая информация</span>
             </div>
-            <div class="tender-item__menu-item">
-                <a href="#" class="tender-item__menu-link">Заказчик</a>
+            <div :class="[activeTab == 'client' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeChange('client')" class="tender-item__menu-link">Заказчик</span>
             </div>
             <div class="tender-item__menu-item">
                 <a href="#" class="tender-item__menu-link">Список лотов</a>
@@ -29,6 +29,21 @@
 <script>
 export default {
     name: 'TenderItemMenu',
+
+    props: {
+        activeTab: {
+            type: String,
+            required: true,
+        }
+    },
+
+    methods: {
+        changeChange(tab) {
+            window.location.hash = tab;
+            this.$emit('changeTab', tab);
+            return false;
+        }
+    }
 }
 </script>
 
@@ -49,11 +64,15 @@ export default {
             &:last-child {
                 border-bottom: none;
             }
+            &--active .tender-item__menu-link {
+                color: $colorTurquoise;
+            }
         }
         &-link {
             font-size: rem(14px);
             line-height: 160%;
             color: $lightcolorText;
+            cursor: pointer;
             &:hover,
             &:focus {
                 color: $colorTurquoise;

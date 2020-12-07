@@ -1,33 +1,36 @@
 <template>
     <div class="tender-item__tabs">
         <div class="tender-item__tabs-row">
-            <div class="tender-item__tab-item tender-item__tab-item--active">
-                <a href="#" class="tender-item__tab-link tender-item__tab-link--active" data-tab="main-info">
+            <div :class="[activeTab == 'main-info' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="main-info">
+                <span @click="changeActiveTab('main-info')" class="tender-item__tab-link">
                     Общая информация
-                </a>
+                </span>
+            </div>
+            <div :class="[activeTab == 'client' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="client">
+                <span @click="changeActiveTab('client')" class="tender-item__tab-link">Заказчик</span>
             </div>
             <div class="tender-item__tab-item">
-                <a href="#" class="tender-item__tab-link">Заказчик</a>
+                <span class="tender-item__tab-link">Список лотов</span>
             </div>
             <div class="tender-item__tab-item">
-                <a href="#" class="tender-item__tab-link">Список лотов</a>
+                <span class="tender-item__tab-link">Документы</span>
             </div>
             <div class="tender-item__tab-item">
-                <a href="#" class="tender-item__tab-link">Документы</a>
+                <span class="tender-item__tab-link">Разъяснения</span>
             </div>
             <div class="tender-item__tab-item">
-                <a href="#" class="tender-item__tab-link">Разъяснения</a>
+                <span class="tender-item__tab-link">Протоколы</span>
             </div>
             <div class="tender-item__tab-item">
-                <a href="#" class="tender-item__tab-link">Протоколы</a>
-            </div>
-            <div class="tender-item__tab-item">
-                <a href="#" class="tender-item__tab-link">Журнал событий</a>
+                <span class="tender-item__tab-link">Журнал событий</span>
             </div>
         </div>
         <div class="tender-item__tabs-content">
-            <div class="tender-item__tab tender-item__tab--active" data-tab="main-info">
+            <div :class="[activeTab == 'main-info' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="main-info">
                 <TenderItemMainTab :tenderItemData="tenderItemData" :company="company" />
+            </div>
+            <div :class="[activeTab == 'client' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="main-info">
+                <TenderItemClientTab :tenderItemData="tenderItemData" :company="company" />
             </div>
         </div>
     </div>
@@ -35,6 +38,8 @@
 
 <script>
 import TenderItemMainTab from './tenderItemTabs/tenderItemMainTab.vue'
+import TenderItemClientTab from './tenderItemTabs/tenderItemClientTab.vue'
+
 export default {
     name: 'TenderItemTabs',
 
@@ -46,11 +51,31 @@ export default {
         company: {
             type: Object,
             required: true,
+        },
+        activeTab: {
+            type: String,
+            required: true,
         }
     },
 
     components: {
         TenderItemMainTab,
+        TenderItemClientTab,
+    },
+
+    created() {
+
+    },
+
+    methods: {
+        changeActiveTab(tab) {
+            window.location.hash = tab;
+            this.$emit('changeTab', tab);
+            return false;
+        },
+        checkUrlHash() {
+
+        }
     }
 }
 </script>
@@ -76,12 +101,20 @@ export default {
             }
         }
         &__tab {
+            display: none;
+            &--active {
+                display: block;
+            }
             &-item {
                 margin-right: rem(16px);
                 padding: 0 rem(20px) rem(15px);
                 border-bottom: 1px solid transparent;
                 &--active {
                     border-bottom-color: $colorTurquoise;
+                    .tender-item__tab-link {
+                        color: $colorTurquoise;
+                        cursor: default;
+                    }
                 }
             }
             &-link {
@@ -91,9 +124,7 @@ export default {
                 line-height: 160%;
                 letter-spacing: 0.05em;
                 color: $colorGray;
-                &--active {
-                    color: $colorTurquoise;
-                }
+                cursor: pointer;
                 &:hover,
                 &:focus {
                     color: $colorTurquoise;

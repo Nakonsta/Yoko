@@ -2,23 +2,29 @@
     <div class="tender-item">
         <div class="tender-item__top">
             <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" :company="company" />
-            <TenderItemMenu v-if="!isLoading" />            
+            <TenderItemMenu v-if="!isLoading" :activeTab="activeTab" @changeTab = "changeTab" />            
         </div>
         <div class="tender-item__tabs">
-            <TenderItemTabs v-if="!isLoading" :tenderItemData="tenderItemData" :company="company" />
+            <TenderItemTabs 
+                v-if="!isLoading"
+                :tenderItemData="tenderItemData"
+                :company="company"
+                :activeTab="activeTab"
+                @changeTab = "changeTab"
+            />
         </div>
         <transition name="fade-loader">
-                <div
-                    v-if="isLoading"
-                    class="card__loader card__loader--absolute"
-                >
-                    <div class="preloader">
-                        <div class="preloader__preloader">
-                            <div class="preloader__loader"></div>
-                        </div>
+            <div
+                v-if="isLoading"
+                class="card__loader card__loader--absolute"
+            >
+                <div class="preloader">
+                    <div class="preloader__preloader">
+                        <div class="preloader__loader"></div>
                     </div>
                 </div>
-            </transition>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -44,6 +50,7 @@ export default {
         return {
             tenderItemId: '',
             isLoading: true,
+            activeTab: 'main-info',
             tenderItemData: {
                 addition_information: null,
                 additional_fields: [],
@@ -295,6 +302,9 @@ export default {
                     console.log(e)
                 })
         },
+        changeTab(tab) {
+            this.activeTab = tab;
+        }
     }
 }
 </script>
