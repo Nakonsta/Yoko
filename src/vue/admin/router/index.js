@@ -5,11 +5,13 @@ Vue.use(VueRouter)
 import testPageMain from '../../components/admin/test-pageMain.vue'
 import testPage1 from '../../components/admin/test-page1.vue'
 import testPage2 from '../../components/admin/test-page2.vue'
+import ProcedureNew from '../../components/admin/procedures/form/index.vue'
 
 const routes = [
     { path: '/personal', component: testPageMain },
     { path: '/personal/page1', component: testPage1 },
-    { path: '/personal/page2', component: testPage2 }
+    { path: '/personal/page2', component: testPage2 },
+    { path: '/personal/procedure/new', component: ProcedureNew }
 ]
 
 const router = new VueRouter({

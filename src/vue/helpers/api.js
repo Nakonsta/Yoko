@@ -224,5 +224,26 @@ export default {
         fetchTenderItem(id) {
             return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
         },
+        fetchSettingsProcedures() {
+            return axios.get(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/settings/`,
+            )
+        },
+        fetchProceduresPropertyList(field) {
+            return axios.get(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/property/${field}`,
+            )
+        },
+        fetchUsersFromCompany(id) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/secured/data/companies/${id}/users`,
+            )
+        },
+        sendProcedure(data) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure`,
+                data,
+            )
+        },
     }
 }
