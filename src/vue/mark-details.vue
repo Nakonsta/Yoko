@@ -1,16 +1,23 @@
 <template>
   <div>
     <mark-info :root="rootData"></mark-info>
-    <div class="tabs tabs--line js-tabs company__nav">
-      <ul>
-        <li class="active"><a href="#description">Описание</a></li>
-        <li><a href="#markosize">Маркоразмеры</a></li>
-        <li><a href="#characters">Характеристики</a></li>
-        <li><a href="#appointment">Назначение</a></li>
-        <li><a href="#documents">Документация</a></li>
-        <li><a href="#analogs">Аналоги</a></li>
-        <li><a href="#manufacturer">Производители</a></li>
-        <li><a href="#additional">Дополнительная информация</a></li>
+    <div class="tabs tabs--line js-tabs company__nav js-more">
+      <ul class="js-more__items">
+        <li class="active js-more__item"><a href="#description">Описание</a></li>
+        <li class="js-more__item"><a href="#markosize">Маркоразмеры</a></li>
+        <li class="js-more__item"><a href="#characters">Характеристики</a></li>
+        <li class="js-more__item"><a href="#appointment">Назначение</a></li>
+        <li class="js-more__item"><a href="#documents">Документация</a></li>
+        <li class="js-more__item"><a href="#analogs">Аналоги</a></li>
+        <li class="js-more__item"><a href="#manufacturer">Производители</a></li>
+        <li class="js-more__item"><a href="#additional">Дополнительная информация</a></li>
+        <li class="js-more__btn hidden">
+          <button type="button" aria-haspopup="true" aria-expanded="false">
+            <svg class="sprite-dropdown">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#dropdown"></use>
+            </svg>
+          </button>
+        </li>
       </ul>
     </div>
     <div class="tabs__content company__content" id="description" style="display: block;">
@@ -50,6 +57,7 @@ import MarkDocuments from './components/blocks/catalog-details/mark-documents.vu
 import MarkAnalog from './components/blocks/catalog-details/mark-analogs.vue'
 import MarkManufacturer from './components/blocks/catalog-details/mark-manufacturer.vue'
 import MarkAdditional from './components/blocks/catalog-details/mark-additional.vue'
+import { initTabs } from '../assets/js/main/modules/more.js'
 
 export default {
   name: 'MarkDetails',
@@ -117,6 +125,9 @@ export default {
   created() {
     this.fillUserData()
     this.getMarkData()
+  },
+  mounted() {
+    initTabs()
   },
   methods: {
     fillUserData() {

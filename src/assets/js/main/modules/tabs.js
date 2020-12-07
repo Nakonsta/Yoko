@@ -31,6 +31,7 @@ document.addEventListener('click', (e) => {
 
 // инициализация при загрузке
 document.querySelectorAll('.js-tabs').forEach((tabs) => {
+    console.log(tabs);
     let link = tabs.querySelector('li a[href="#'+hash+'"]') || tabs.querySelector('li.active a') || tabs.querySelector('li:nth-child(1) a');
     if (link) {
         link.click();
