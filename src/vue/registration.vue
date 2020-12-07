@@ -65,7 +65,7 @@ import FormStep3 from "./components/registration/formStep3.vue"
 import demands from './components/registration/demands.vue'
 import gis from './components/registration/gis.vue'
 import api from './helpers/api'
-import mixins from './helpers/mixins'
+import authorizationMixins from "./helpers/authorizationMixins";
 
 export default {
   name: 'App',
@@ -76,7 +76,7 @@ export default {
     demands,
     gis,
   },
-  mixins: [api, mixins],
+  mixins: [api, authorizationMixins],
   data() {
     return {
       step: 1,
@@ -98,6 +98,7 @@ export default {
         form1: {
           firstName: '',
           lastName: '',
+          secondName: '',
           email: '',
           position: '',
           phone: '',
@@ -268,6 +269,7 @@ export default {
         password: this.forms.form1.password,
         lastName: this.forms.form1.lastName,
         name: this.forms.form1.firstName,
+        secondName: this.forms.form1.secondName,
         phone: this.forms.form1.phone.replace(/[+()-\s]/g, ''),
         position: this.forms.form1.position,
       }
@@ -331,7 +333,7 @@ export default {
             const user = data.data.user
             const token = data.data.token
 
-            this.authorizationMethod(user, token, false)
+            this.authorizationMethod(user, token, false, '/personal')
           })
           .catch((e) => {
             if (e.response) {

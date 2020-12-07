@@ -17,10 +17,10 @@
         <div v-if="$store.state.auth.loggedIn" class="user-info">
             <div class="user-info__info">
                 <div class="user-info__name">
-                    {{ $store.state.auth.user.company.name }}
+                    {{ $store.state.auth.user.name }} {{ $store.state.auth.user.secondName }}
                 </div>
                 <div class="user-info__id">
-                    № {{ $store.state.auth.user.company.id }}
+<!--                    № {{ $store.state.auth.user.company.id }}-->
                 </div>
                 <div class="user-info__time">
                     {{ hours }}<span class="user-info__time-dots">:</span>{{ minutes }} MSK
@@ -222,6 +222,7 @@
         &__menu-item {
             position: relative;
             margin-left: rem(24px);
+            z-index: 2;
             &--logout {
               display: none;
             }
@@ -241,6 +242,7 @@
         }
         &__menu-item--sub {
             &:hover {
+                z-index: 1;
                 .user-info__submenu {
                     transform: translateY(0);
                     pointer-events: all;
@@ -260,6 +262,7 @@
             transform: translateY(#{rem(-15px)});
             pointer-events: none;
             opacity: 0;
+            z-index: 1;
             &:after {
                 content: " ";
                 position: absolute;
