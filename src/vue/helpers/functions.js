@@ -14,6 +14,37 @@ export default {
             }
             return text_forms[2];
         },
+        objectToFormDataJava(data) {
+            const fData = new FormData()
+
+            function appendFormData(data, root, formDataObj) {
+                root = root || ''
+                if (data instanceof File) {
+                    formDataObj.append(root, data)
+                } else if (Array.isArray(data)) {
+                    for (let i = 0; i < data.length; i++) {
+                        appendFormData(data[i], root, formDataObj)
+                    }
+                } else if (typeof data === 'object' && data) {
+                    for (const key in data) {
+                        // eslint-disable-next-line
+                        if (data.hasOwnProperty(key)) {
+                            if (root === '') {
+                                appendFormData(data[key], key, formDataObj)
+                            } else {
+                                appendFormData(data[key], root + '.' + key, formDataObj)
+                            }
+                        }
+                    }
+                } else if (data !== null && typeof data !== 'undefined') {
+                    formDataObj.append(root, data)
+                }
+            }
+
+            appendFormData(data, '', fData)
+
+            return fData
+        },
         objectToFormData(data) {
             const fData = new FormData()
 

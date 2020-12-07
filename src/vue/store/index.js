@@ -17,14 +17,10 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
-        setUser(state, payload) {
-            state.token = payload.token
-            state.auth.user = payload.user
-            state.auth.loggedIn = true
-        },
-        authorization(state) {
+        authorization(state, options = {}) {
             const token = Cookies.get('auth._token.local')
             const storageUser = sessionStorage.getItem('user')
+            const redirect = options.redirect ? options.redirect : null
 
             if (token && token !== 'false' && !axios.defaults.headers.common.Authorization) {
                 axios.defaults.headers.common.Authorization = `${token}`
@@ -46,7 +42,11 @@ const store = new Vuex.Store({
                             window.notificationSuccess('Вы вошли в систему')
                             // todo: перазагрузка страницы после авторизации
                             setTimeout(() => {
-                                document.location.reload()
+                                if(redirect) {
+                                    document.location.href = redirect
+                                } else {
+                                    document.location.reload()
+                                }
                             }, 1000)
                         }
                     })
