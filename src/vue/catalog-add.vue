@@ -372,7 +372,7 @@
                 }
             },
             onlyDigits(evt) {
-                evt.target.value = evt.target.value.replace(/[^\d]+/g,'');
+                evt.target.value = evt.target.value.replace(/[^(\d | \/)]+/g,'');
             },
             onlyDigitsWithSlash(evt) {
                 function parse(d) {

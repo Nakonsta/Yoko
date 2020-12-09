@@ -37,10 +37,11 @@
 
 <script>
     import api from './helpers/api'
+    import authorizationMixins from "./helpers/authorizationMixins";
 
     export default {
         name: 'singinApp',
-        mixins: [api],
+        mixins: [api, authorizationMixins],
         data() {
             return {
                 type: 'customer',
@@ -62,19 +63,7 @@
                         .then((data) => {
                             const user = data.data.data.user;
                             const token = data.data.data.token;
-                            window.closeLoader()
-                            // todo
-                            if (!this.rememberMe) {
-                                document.cookie = `auth._token.local=Bearer%20${token};domain=${process.env.AUTH_DOMAIN};path=/`
-                            } else {
-                                const now = new Date()
-                                now.setDate(now.getDate() + parseInt(process.env.AUTHORIZATION_COOKIE_LIFETIME))
-
-                                document.cookie = `auth._token.local=Bearer%20${token};domain=${process.env.AUTH_DOMAIN};expires=${now};path=/`
-                            }
-                            // window.location.href = `${process.env.LK_SUPP}`
-                            closePopupById('#singin')
-                            this.$store.commit('authorization')
+                            this.authorizationMethod(user, token, this.rememberMe)
                         })
                         .catch((response) => {
                             if (

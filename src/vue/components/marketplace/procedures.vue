@@ -299,17 +299,7 @@
             },
             viewItems(view) {
                 this.view = view;
-                switch( view ) {
-                    case 'all':
-                        this.currentFilter.hidden = 1;
-                        break;
-                    case 'favorite':
-                        this.currentFilter.favorite = 1;
-                        break;
-                    case 'hidden':
-                        this.currentFilter.hidden = 1;
-                        break;
-                }
+                this.currentFilter.showing = view;
                 this.$emit('changeFilter');
             },
             itemMarkExist(item, mark) {
