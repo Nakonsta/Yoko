@@ -144,6 +144,8 @@
       setDates() {
         this.activeItem = 'custom'
         this.picker.disabledTo = moment(this.picker.end_date).subtract(1, 'year').add(1, 'days').toDate()
+        this.picker.disabledFrom = moment(this.picker.start_date).add(1, 'year').toDate();
+        this.picker.end_date = moment(this.picker.start_date).add(1, 'year').toDate();
         this.getQuotesData(
           this.type,
           moment(this.picker.start_date).format('YYYY-MM-DD'),
