@@ -1,14 +1,36 @@
 <template>
   <div>
-    <app-basic-information
-        :selected-data="selectedData"
-        :fields-data="fieldsData"
-        :procedure-id-data="procedureIdData"
-        :true-false-select="trueFalseSelect"
-        :is-created-procedure="isCreatedProcedure"
-        :num-validation="numValidation"
-        :clear-tender-trading-type="clearTenderTradingType"
-    ></app-basic-information>
+    <ValidationObserver ref="form" tag="div" mode="eager">
+      <form class="procedure__main" @submit.prevent="(evt) => evt.preventDefault()" slot-scope="{ valid }">
+        <app-basic-information
+            :selected-data="selectedData"
+            :fields-data="fieldsData"
+            :procedure-id-data="procedureIdData"
+            :true-false-select="trueFalseSelect"
+            :is-created-procedure="isCreatedProcedure"
+            :clear-tender-trading-type="clearTenderTradingType"
+        ></app-basic-information>
+        <app-purchase-subject
+            :selected-data="selectedData"
+            :fields-data="fieldsData"
+            :procedure-id-data="procedureIdData"
+            :is-created-procedure="isCreatedProcedure"
+            :counter-to-ten-select="counterToTenSelect"
+            :remove-position="removePosition"
+            :count-total-price="countTotalPrice"
+            :create-new-position-fieldset="createNewPositionFieldset"
+        ></app-purchase-subject>
+        <app-consideration
+            :selected-data="selectedData"
+            :fields-data="fieldsData"
+            :procedure-id-data="procedureIdData"
+            :is-created-procedure="isCreatedProcedure"
+        ></app-consideration>
+        <button class="btn" @click="validation(true)">
+          Опубликовать процедуру
+        </button>
+      </form>
+    </ValidationObserver>
   </div>
 </template>
 
@@ -19,11 +41,12 @@ import moment from 'moment'
 // import validation from '../../../plugins/mixins/validation'
 // import notifications from '../../../plugins/mixins/notifications'
 import api from '../../../../helpers/api'
+import functions from '../../../../helpers/functions'
 // import parsers from '../../../plugins/mixins/parsers'
 // import localPreloader from '../../../components/preloader/local-preloader'
 import BasicInformation from '../../../blocks/procedures/BasicInformation.vue'
-// import PurchaseSubject from '../../../components/procedures/blocks/PurchaseSubject'
-// import Consideration from '../../../components/procedures/blocks/Consideration'
+import PurchaseSubject from '../../../blocks/procedures/PurchaseSubject.vue'
+import Consideration from '../../../blocks/procedures/Consideration.vue'
 // import TermsOfPurchase from '../../../components/procedures/blocks/TermsOfPurchase'
 // import SecurityAndGuarantees from '../../../components/procedures/blocks/SecurityAndGuarantees'
 // import PaymentAndDelivery from '../../../components/procedures/blocks/PaymentAndDelivery'
@@ -38,8 +61,8 @@ export default {
   components: {
     // localPreloader,
     appBasicInformation: BasicInformation,
-    // appPurchaseSubject: PurchaseSubject,
-    // appConsideration: Consideration,
+    appPurchaseSubject: PurchaseSubject,
+    appConsideration: Consideration,
     // appTermsOfPurchase: TermsOfPurchase,
     // appSecurityAndGuarantees: SecurityAndGuarantees,
     // appPaymentAndDelivery: PaymentAndDelivery,
@@ -49,7 +72,7 @@ export default {
     // appAdditionalFields: AdditionalFields,
     // appControlElements: ControlElements,
   },
-  mixins: [api],
+  mixins: [api, functions],
   data() {
     return {
       fieldsData: {
@@ -68,12 +91,12 @@ export default {
           { id: 0, name: 'Закрытая закупка' },
         ],
         stagesProcedure: [
-          { id: 1, name: 'одноэтапная процедура' },
-          { id: 0, name: 'многоэтапная процедура' },
+          { id: 1, name: 'Одноэтапная процедура' },
+          { id: 0, name: 'Многоэтапная процедура' },
         ],
         alternativeApplications: [
-          { id: 1, name: 'возможны альтернативные заявки' },
-          { id: 0, name: 'невозможны альтернативные заявки' },
+          { id: 1, name: 'Возможны альтернативные заявки' },
+          { id: 0, name: 'Невозможны альтернативные заявки' },
         ],
         goodsAnalogs: [
           { id: 1, name: 'допускаются' },
@@ -130,8 +153,8 @@ export default {
         reviewForm: null,
         companyName: null,
         absolutTrade: 'Абсолют трейд',
-        tender_trading_format: null,
-        tender_trading_type: null,
+        tender_trading_format: {},
+        tender_trading_type: {},
         tender_framework_contract: 0,
         confidential_price: 0,
         hide_member_names: 0,
@@ -190,7 +213,7 @@ export default {
         contact_full_name: null,
         contact_phone: '',
         contact_email: null,
-        count_lots: 0,
+        count_lots: { id: 0, name: '0' },
         analog_products: null,
         purchase_positional: null,
         publication_date_menu: null,
@@ -204,6 +227,7 @@ export default {
         positions: [
           {
             name: '1',
+            code: null,
             is_product: null,
             category_okpd2: null,
             marksize_id: null,
@@ -258,8 +282,8 @@ export default {
       const setMinWeekDates = {}
       const lotsCounter = []
       const positionType = []
-      let procedureType = ''
-      if (this.selectedData.tender_trading_format === 'trading_223') {
+      let procedureType = 'Contest'
+      if (this.selectedData.tender_trading_format.id === 'trading_223') {
         this.fieldsData.tenderTradingType.forEach((item) => {
           switch (item.id) {
             case 'contest':
@@ -282,7 +306,7 @@ export default {
           }
         })
       } else if (
-          this.selectedData.tender_trading_format === 'commercial_trading'
+          this.selectedData.tender_trading_format.id === 'commercial_trading'
       ) {
         this.fieldsData.tenderTradingType.forEach((item) => {
           switch (item.id) {
@@ -298,34 +322,34 @@ export default {
         })
       }
       if (
-          this.selectedData.tender_trading_format === 'trading_223' &&
-          this.selectedData.tender_trading_type === 'contest'
+          this.selectedData.tender_trading_format.id === 'trading_223' &&
+          this.selectedData.tender_trading_type.id === 'contest'
       ) {
         procedureType = 'Contest'
       } else if (
-          this.selectedData.tender_trading_format === 'trading_223' &&
-          (this.selectedData.tender_trading_type === 'request_prices' ||
-              this.selectedData.tender_trading_type === 'request_offers')
+          this.selectedData.tender_trading_format.id === 'trading_223' &&
+          (this.selectedData.tender_trading_type.id === 'request_prices' ||
+              this.selectedData.tender_trading_type.id === 'request_offers')
       ) {
         procedureType = 'Query'
       } else if (
-          this.selectedData.tender_trading_format === 'trading_223' &&
-          this.selectedData.tender_trading_type === 'auction'
+          this.selectedData.tender_trading_format.id === 'trading_223' &&
+          this.selectedData.tender_trading_type.id === 'auction'
       ) {
         procedureType = 'Auction'
       } else if (
-          this.selectedData.tender_trading_format === 'trading_223' &&
-          this.selectedData.tender_trading_type === 'supplier_purchase'
+          this.selectedData.tender_trading_format.id === 'trading_223' &&
+          this.selectedData.tender_trading_type.id === 'supplier_purchase'
       ) {
         procedureType = 'Supplier'
       } else if (
-          this.selectedData.tender_trading_format === 'trading_223' &&
-          this.selectedData.tender_trading_type === 'purchase_from_supplier'
+          this.selectedData.tender_trading_format.id === 'trading_223' &&
+          this.selectedData.tender_trading_type.id === 'purchase_from_supplier'
       ) {
         procedureType = 'FromSupplier'
       } else if (
-          this.selectedData.tender_trading_format === 'commercial_trading' &&
-          this.selectedData.tender_trading_type
+          this.selectedData.tender_trading_format.id === 'commercial_trading' &&
+          this.selectedData.tender_trading_type.id
       ) {
         procedureType = 'Commercial'
       }
@@ -334,34 +358,35 @@ export default {
           .slice(0, 10)
 
       this.selectedData.positions.map((item, index) => {
+        const productID = this.get(item.is_product, 'id')
         if (
-            item.is_product === 1 &&
-            (item.category_okpd2 === 966 || item.category_okpd2 === 2066)
+            productID === 1 && item.code !== null && item.code.startsWith('27.32')
         ) {
           positionType[index] = { name: 'PositionLength' }
         } else if (
-            item.is_product === 1 &&
-            item.category_okpd2 &&
-            (item.category_okpd2 !== 966 || item.category_okpd2 !== 2066)
+            productID === 1 &&
+            item.code !== null && !item.code.startsWith('27.32')
         ) {
           positionType[index] = { name: 'PositionCount' }
-        } else if (item.is_product === 0) {
+        } else if (productID=== 0) {
           positionType[index] = { name: 'PositionService' }
         }
 
+
         baseCount += item.total_price && parseFloat(item.total_price)
         let count = 0
-        for (let i = 1; i <= this.selectedData.count_lots; i++) {
-          if (item.lot === i) {
+        for (let i = 1; i <= this.selectedData.count_lots.id; i++) {
+          if (item.lot && item.lot.id === i) {
             totalCount[count] +=
                 item.total_price && parseFloat(item.total_price)
+            totalCount[count] = totalCount[count].toFixed(2)
           }
           count++
         }
       })
       baseCount = !isNaN(baseCount) ? baseCount.toFixed(2) : baseCount
 
-      for (let i = 1; i < this.selectedData.count_lots + 1; i++) {
+      for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
         lotsCounter.push({ id: i, name: i })
       }
 
@@ -418,8 +443,8 @@ export default {
     countTotalPrice() {
       this.selectedData.positions.map((item, index) => {
         if (
-            get(this.procedureIdData.positionType[index], 'name') ===
-            'PositionService'
+            this.procedureIdData.positionType[index] &&
+            this.procedureIdData.positionType[index].name === 'PositionService'
         ) {
           item.quantity = 1
         }
@@ -517,12 +542,13 @@ export default {
           })
     },
     clearTenderTradingType() {
-      this.selectedData.tender_trading_type = null
+      this.selectedData.tender_trading_type = {}
     },
     createNewPositionFieldset() {
       const newPosition = {
         name: '1',
         is_product: null,
+        code: null,
         category_okpd2: null,
         lot: null,
         quantity: null,
@@ -598,15 +624,17 @@ export default {
     },
     validation(toPublish) {
       this.filesValidate()
-      if (this.$refs.form.validate() && this.filesValidate()) {
-        this.sendNewProcedureData(toPublish)
-      } else {
-        // Todo: заменить чем-то оболее умным этот скролл к ошибкам
-        clearInterval(this.scrollToErrorInstance)
-        this.scrollToErrorInstance = setTimeout(() => {
-          this.scrollToError()
-        }, 500)
-      }
+      this.$refs.form.validate().then((res) => {
+        if(res && this.filesValidate()) {
+          this.sendNewProcedureData(toPublish)
+        } else {
+          // Todo: заменить чем-то оболее умным этот скролл к ошибкам
+          clearInterval(this.scrollToErrorInstance)
+          this.scrollToErrorInstance = setTimeout(() => {
+            this.scrollToError()
+          }, 500)
+        }
+      })
     },
     setFiles(files) {
       this.selectedData.file = files

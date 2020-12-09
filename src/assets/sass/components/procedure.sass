@@ -2,7 +2,19 @@
 @import "../mixins/mq"
 @import "../mixins/fluid-mixin"
 
-.procedure-new
-  h3
-    font-size: rem(24px)
-    font-weight: 500
+.procedure
+  &-new
+    &.container-item
+      @include mq($until: 1025px)
+        padding-top: rem(80px)
+  &__main
+    h3
+      font-size: rem(24px)
+      font-weight: 500
+    .form-select .multiselect__single
+      white-space: nowrap
+      text-overflow: ellipsis
+      overflow: hidden
+
+.mt2
+  margin-top: 2rem

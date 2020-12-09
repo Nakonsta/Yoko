@@ -7,10 +7,11 @@
       :name="$attrs.label && $attrs.label.toLowerCase()"
   >
     <span v-if="$attrs.label" class="field__label">{{ $attrs.label }}</span>
-    <input type="hidden" v-model="innerValue">
+    <input type="hidden" v-model="innerValue.id">
     <multiselect
-        v-if="!multiple && !close"
+        v-if="isSingle"
         v-model="innerValue"
+        value="id"
         class="form-select"
         :placeholder="placeholder"
         :class="{field: true, error: failed}"
@@ -21,7 +22,7 @@
         selectLabel=""
         deselectLabel=""
         :options="options"
-        :multiple="multiple"
+        :multiple="false"
         :searchable="searchable"
         :allow-empty="false"
         :loading="loading"
@@ -38,9 +39,11 @@
       >
         {{ option.name }}
       </template>
+      <span slot="noOptions">Список пуст</span>
+      <span slot="noResult">{{ noResult }}</span>
     </multiselect>
     <multiselect
-        v-if="multiple"
+        v-if="isMultiple"
         v-model="innerValue"
         class="form-select"
         :placeholder="placeholder"
@@ -81,7 +84,9 @@
         </span>
       </template>
       <span slot="noResult">{{ $attrs.label }} не найдены</span>
+      <span slot="noOptions">Список пуст</span>
     </multiselect>
+    <span v-show="failed" class="field__error">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 
@@ -94,6 +99,14 @@ export default {
       default: () => {}
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    isSingle: {
+      type: Boolean,
+      default: false
+    },
+    isMultiple: {
       type: Boolean,
       default: false
     },
@@ -124,6 +137,10 @@ export default {
     placeholder: {
       type: String,
       default: 'Введите название или выберите из списка'
+    },
+    noResult: {
+      type: String,
+      default: ''
     },
     tag: {
       type: String,

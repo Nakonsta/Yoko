@@ -15,6 +15,14 @@ Vue.component('paginate', Paginate)
 import VueTheMask from 'vue-the-mask'
 Vue.use(VueTheMask)
 
+import VCalendar from 'v-calendar'
+Vue.use(VCalendar)
+// import FunctionalCalendar from 'vue-functional-calendar';
+// Vue.use(FunctionalCalendar, {
+//     dayNames: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+//     monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+// });
+
 // validate
 import {configure, setInteractionMode, ValidationObserver, ValidationProvider, extend, localize} from 'vee-validate'
 import customRules from './helpers/custom-rules'

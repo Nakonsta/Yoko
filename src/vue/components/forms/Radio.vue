@@ -5,9 +5,10 @@
       class="field__container"
       v-slot="{ errors, failed }"
   >
-    <label v-for="item in $attrs.label" class="radio">
+    <span v-if="title" class="field__label">{{ title }}</span>
+    <label v-for="item in $attrs.label" class="radio" >
       <input type="radio" :name="name" :disabled="disabled" :value="item.value" v-model="innerValue"/>
-      <span class="radio__body"></span>
+      <span class="radio__body" :class="{error: failed}"></span>
       <span class="radio__text">{{ item.label }}</span>
     </label>
   </ValidationProvider>
@@ -18,6 +19,10 @@ export default {
   name: 'Radio',
   props: {
     name: {
+      type: String,
+      default: ''
+    },
+    title: {
       type: String,
       default: ''
     },
