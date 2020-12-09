@@ -31,7 +31,8 @@ module.exports = {
     resolve: {
         alias: {
             'vue': 'vue/dist/vue.esm',
-        }
+        },
+        extensions: ['.js', '.vue']
     },
     optimization: {
       splitChunks: {
