@@ -231,13 +231,16 @@
             const response = data.data
             this.latestQuotes = response
             this.latestQuote = response[0]
-            this.latestQuote = {
-              ...this.latestQuote,
-              date: moment(this.latestQuote.date).format('HH:mm UTC Z DD.MM.YYYY')
+            console.log(this.latestQuote)
+            if (this.latestQuote) {
+              this.latestQuote = {
+                ...this.latestQuote,
+                date: moment(this.latestQuote.date).format('HH:mm UTC Z DD.MM.YYYY')
+              }
+              this.latestQuotes.map((item) => {
+                item.date = moment(item.date).format('DD.MM.YYYY')
+              })
             }
-            this.latestQuotes.map((item) => {
-              item.date = moment(item.date).format('DD.MM.YYYY')
-            })
             this.loadingLatestQuotes = false
           })
           .catch((e) => {

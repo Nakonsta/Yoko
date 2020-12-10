@@ -3,7 +3,7 @@
     <template v-if="!loadingQuotes">
       <div class="quotes__spot">
         <span>Спот, {{ dates.now }}:</span>
-        {{ latestQuote[currency] }} {{ !currencyChecked ? '$' : '₽' }}
+        {{ latestQuote && latestQuote[currency] }} {{ !currencyChecked ? '$' : '₽' }}
       </div>
       <div class="quotes__dates">
         <ul class="tabs-vue">
