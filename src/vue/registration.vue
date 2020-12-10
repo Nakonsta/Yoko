@@ -333,7 +333,10 @@ export default {
             const user = data.data.user
             const token = data.data.token
 
-            this.authorizationMethod(user, token, false, '/personal')
+            this.authorizationMethod(user, token,  {
+              rememberMe: false,
+              redirect: '/personal'
+            })
           })
           .catch((e) => {
             if (e.response) {

@@ -1,9 +1,9 @@
 export default {
     methods: {
-        authorizationMethod(user, token, rememberMe, redirect) {
+        authorizationMethod(user, token, options = {}) {
             // todo: user пока не используется здесь, но возможно потом пригодится
             window.closeLoader()
-            if (!rememberMe) {
+            if (!options.rememberMe) {
                 document.cookie = `auth._token.local=Bearer%20${token};domain=${process.env.AUTH_DOMAIN};path=/`
             } else {
                 const now = new Date()
@@ -13,14 +13,7 @@ export default {
             }
             // window.location.href = `${process.env.LK_SUPP}`
             closePopupById('#singin')
-            if (redirect) {
-                this.$store.commit('authorization', {
-                    redirect
-                })
-            } else {
-                this.$store.commit('authorization')
-            }
-
+            this.$store.commit('authorization', options)
         },
     },
 }

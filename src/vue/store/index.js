@@ -10,17 +10,65 @@ const store = new Vuex.Store({
         auth: {
             user: null,
             loggedIn: false,
+            role: localStorage.getItem('role') ? localStorage.getItem('role') : 'buyer',
         },
         token: null,
         env: {
             LK_SUPP: process.env.LK_SUPP
         }
     },
+    getters: {
+        // todo: эти дела пока не работают
+        companyBuyer(state) {
+            return state.auth.user.companies
+                ? state.auth.user.companies.filter(
+                    (company) => {
+                        return company.buyer
+                    }
+                ) : [];
+        },
+        companyContractor(state) {
+            return state.auth.user.companies
+                ? state.auth.user.companies.filter(
+                    (company) => {
+                        return company.contractor
+                    }
+                ) : [];
+        }
+    },
     mutations: {
+        selectRoleBuyer(state) {
+            window.openLoader()
+            state.auth.role = 'buyer'
+            localStorage.setItem('role', 'buyer')
+            setTimeout(() => {
+                document.location.reload()
+            }, 1000)
+        },
+        selectRoleContractor(state) {
+            window.openLoader()
+            state.auth.role = 'contractor'
+            localStorage.setItem('role', 'contractor')
+            setTimeout(() => {
+                document.location.reload()
+            }, 1000)
+        },
         authorization(state, options = {}) {
             const token = Cookies.get('auth._token.local')
             const storageUser = sessionStorage.getItem('user')
             const redirect = options.redirect ? options.redirect : null
+            const role = options.role ? options.role : null
+
+            if (role) {
+                switch (role) {
+                    case 'buyer':
+                        localStorage.setItem('role', 'buyer')
+                        break
+                    case 'contractor':
+                        localStorage.setItem('role', 'contractor')
+                        break
+                }
+            }
 
             if (token && token !== 'false' && !axios.defaults.headers.common.Authorization) {
                 axios.defaults.headers.common.Authorization = `${token}`
