@@ -7,7 +7,7 @@
       v-slot="{ errors, failed }"
   >
     <label v-for="(item, key) in $attrs.label" class="checkbox">
-      <input type="checkbox" :class="{error: failed}" :value=key+1 :disabled="disabled" :name="name" v-model="innerValue">
+      <input type="checkbox" :class="{error: failed}" :value=key+1 :disabled="disabled" @change="change" :name="name" v-model="innerValue">
       <span v-if="withIcon" class="checkbox__img">
         <svg class="sprite-customer">
           <use xmlns\:xlink="http://www.w3.org/1999/xlink" :xlink\:href=item.icon></use>
@@ -42,6 +42,10 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    change: {
+      type: Function,
+      default: () => {}
     },
     rules: {
       type: [Object, String],

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedData.tender_trading_type" class="container-item">
+  <div v-if="selectedData.tender_trading_type.id" class="container-item">
     <h3 class="procedure__main-title">Предмет закупки</h3>
     <div class="row middle-xs">
       <div class="col col-xs-12">

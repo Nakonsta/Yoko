@@ -7,6 +7,8 @@
     position: relative
     > *:last-child
         width: 100%
+        &.fullMode
+            width: 100%
         @include mq($from: 1025px)
             width: 65%
 
@@ -16,6 +18,10 @@
     position: absolute
     left: 0
     top: 0
+    &.fullMode
+        position: absolute
+        width: rem(124px)
+        min-width: inherit
     @include mq($from: 1025px)
         width: 30%
         margin-right: 5%

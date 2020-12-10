@@ -26,51 +26,85 @@
             :procedure-id-data="procedureIdData"
             :is-created-procedure="isCreatedProcedure"
         ></app-consideration>
-        <button class="btn" @click="validation(true)">
-          Опубликовать процедуру
-        </button>
+        <app-terms-of-purchase
+            :selected-data="selectedData"
+            :procedure-id-data="procedureIdData"
+        ></app-terms-of-purchase>
+        <app-security-and-guarantees
+            :selected-data="selectedData"
+            :fields-data="fieldsData"
+            :procedure-id-data="procedureIdData"
+            :is-created-procedure="isCreatedProcedure"
+        ></app-security-and-guarantees>
+        <app-payment-and-delivery
+            :selected-data="selectedData"
+            :fields-data="fieldsData"
+        ></app-payment-and-delivery>
+        <app-additional-information
+            :selected-data="selectedData"
+        ></app-additional-information>
+        <app-documentation
+            :selected-data="selectedData"
+            :is-not-files="isNotFiles"
+            :is-created-procedure="isCreatedProcedure"
+            :fields-data="fieldsData"
+            :set-files="setFiles"
+        ></app-documentation>
+        <app-contact-information
+            :selected-data="selectedData"
+            :is-created-procedure="isCreatedProcedure"
+            :fields-data="fieldsData"
+        ></app-contact-information>
+        <app-additional-fields
+            :selected-data="selectedData"
+            :fields-data="fieldsData"
+            :procedure-id-data="procedureIdData"
+            :is-created-procedure="isCreatedProcedure"
+            :create-new-fieldset="createNewFieldset"
+            :change-type-of-value="changeTypeOfValue"
+            :remove-field="removeField"
+            :save-field="saveField"
+        ></app-additional-fields>
       </form>
     </ValidationObserver>
+    <transition name="fade-loader">
+      <local-preloader v-if="isLoading" />
+    </transition>
   </div>
 </template>
 
 <script>
 // import { mapActions, mapGetters } from 'vuex'
-// import { get } from 'lodash'
 import moment from 'moment'
-// import validation from '../../../plugins/mixins/validation'
-// import notifications from '../../../plugins/mixins/notifications'
 import api from '../../../../helpers/api'
 import functions from '../../../../helpers/functions'
 // import parsers from '../../../plugins/mixins/parsers'
-// import localPreloader from '../../../components/preloader/local-preloader'
-import BasicInformation from '../../../blocks/procedures/BasicInformation.vue'
-import PurchaseSubject from '../../../blocks/procedures/PurchaseSubject.vue'
-import Consideration from '../../../blocks/procedures/Consideration.vue'
-// import TermsOfPurchase from '../../../components/procedures/blocks/TermsOfPurchase'
-// import SecurityAndGuarantees from '../../../components/procedures/blocks/SecurityAndGuarantees'
-// import PaymentAndDelivery from '../../../components/procedures/blocks/PaymentAndDelivery'
-// import AdditionalInformation from '../../../components/procedures/blocks/AdditionalInformation'
-// import Documentation from '../../../components/procedures/blocks/Documentation'
-// import ContactInformation from '../../../components/procedures/blocks/ContactInformation'
-// import AdditionalFields from '../../../components/procedures/blocks/AdditionalFields'
-// import ControlElements from '../../../components/procedures/blocks/ControlElements'
+import localPreloader from '../../../preloader'
+import BasicInformation from '../../../blocks/procedures/BasicInformation'
+import PurchaseSubject from '../../../blocks/procedures/PurchaseSubject'
+import Consideration from '../../../blocks/procedures/Consideration'
+import TermsOfPurchase from '../../../blocks/procedures/TermsOfPurchase'
+import SecurityAndGuarantees from '../../../blocks/procedures/SecurityAndGuarantees'
+import PaymentAndDelivery from '../../../blocks/procedures/PaymentAndDelivery'
+import AdditionalInformation from '../../../blocks/procedures/AdditionalInformation'
+import Documentation from '../../../blocks/procedures/Documentation'
+import ContactInformation from '../../../blocks/procedures/ContactInformation'
+import AdditionalFields from '../../../blocks/procedures/AdditionalFields'
 
 export default {
   name: 'ProcedureId',
   components: {
-    // localPreloader,
+    localPreloader,
     appBasicInformation: BasicInformation,
     appPurchaseSubject: PurchaseSubject,
     appConsideration: Consideration,
-    // appTermsOfPurchase: TermsOfPurchase,
-    // appSecurityAndGuarantees: SecurityAndGuarantees,
-    // appPaymentAndDelivery: PaymentAndDelivery,
-    // appAdditionalInformation: AdditionalInformation,
-    // appDocumentation: Documentation,
-    // appContactInformation: ContactInformation,
-    // appAdditionalFields: AdditionalFields,
-    // appControlElements: ControlElements,
+    appTermsOfPurchase: TermsOfPurchase,
+    appSecurityAndGuarantees: SecurityAndGuarantees,
+    appPaymentAndDelivery: PaymentAndDelivery,
+    appAdditionalInformation: AdditionalInformation,
+    appDocumentation: Documentation,
+    appContactInformation: ContactInformation,
+    appAdditionalFields: AdditionalFields,
   },
   mixins: [api, functions],
   data() {
@@ -282,7 +316,7 @@ export default {
       const setMinWeekDates = {}
       const lotsCounter = []
       const positionType = []
-      let procedureType = 'Contest'
+      let procedureType = ''
       if (this.selectedData.tender_trading_format.id === 'trading_223') {
         this.fieldsData.tenderTradingType.forEach((item) => {
           switch (item.id) {
@@ -392,9 +426,9 @@ export default {
 
       const datesArray = [
         'publication_date',
-        'application_submit_date',
-        'application_opening_date',
-        'application_date',
+        'application_submit_date_time',
+        'application_opening_date_time',
+        'application_date_time',
         'application_date_time_summing_up',
         'application_terms_of_contract',
       ]
@@ -430,6 +464,7 @@ export default {
     },
   },
   created() {
+    this.$emit('fullMode')
     this.getFieldsData()
   },
   mounted() {
@@ -805,4 +840,3 @@ export default {
 }
 </script>
 
-<style></style>

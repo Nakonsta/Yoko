@@ -110,15 +110,13 @@
             :label="[{label: 'Возможна переторжка'}]"
         ></checkbox-input>
       </div>
-      <div
-          v-if="selectedData.tender_trading_type.id"
-          class="col col-md-4 col-sm-6 col-xs-12"
-      >
-        <date-input
-            label="Дата публикации"
+      <div v-if="selectedData.tender_trading_type.id" class="col col-md-4 col-sm-6 col-xs-12">
+        <date-time
             v-model="selectedData.publication_date"
-            :rules="{required: true, minMaxDateCheck: 'setmin'}"
-        ></date-input>
+            label="Дата публикации"
+            placeholder="Выберите дату"
+            :min-date="new Date()"
+        ></date-time>
       </div>
       <div
           v-if="procedureIdData.procedureType === 'FromSupplier'"
@@ -263,13 +261,13 @@ import TextInput from '../../forms/Input.vue'
 import SelectInput from '../../forms/Select.vue'
 import CheckboxInput from '../../forms/Checkbox.vue'
 import RadioInput from '../../forms/Radio.vue'
-import DateInput from '../../forms/Date.vue'
+import DateTime from '../../forms/DateTime.vue'
 
 export default {
   name: 'BasicInformation',
   components: {
     TextInput,
-    DateInput,
+    DateTime,
     RadioInput,
     SelectInput,
     CheckboxInput,

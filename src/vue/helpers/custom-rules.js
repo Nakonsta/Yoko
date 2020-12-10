@@ -33,41 +33,41 @@ export default {
             return true
         }
     },
-    rangeDate(value) {
-        if (value) {
-            const datesArray = value.split(' - ')
-            const setValueFirst = moment(datesArray[0], 'DD.MM.YYYY').format(
-                'YYYY-MM-DD',
-            )
-            const setValueSec = moment(datesArray[1], 'DD.MM.YYYY').format(
-                'YYYY-MM-DD',
-            )
-            if (Date.parse(setValueFirst) > Date.parse(setValueSec)) {
-                return textError.rangeDatesStart
+    rangeDate: {
+        validate: (value) => {
+            if (value) {
+                console.log(value)
+                const datesArray = value.split(' - ')
+                const setValueFirst = moment(datesArray[0], 'DD.MM.YYYY').format(
+                    'YYYY-MM-DD',
+                )
+                const setValueSec = moment(datesArray[1], 'DD.MM.YYYY').format(
+                    'YYYY-MM-DD',
+                )
+                if (Date.parse(setValueFirst) > Date.parse(setValueSec)) {
+                    return textError.rangeDatesStart
+                }
+                if (!!Date.parse(setValueFirst) && !!Date.parse(setValueSec)) {
+                    return true
+                }
             }
-            if (!!Date.parse(setValueFirst) && !!Date.parse(setValueSec)) {
-                return true
-            }
+            return textError.rangeDates
         }
-        return textError.rangeDates
     },
     minMaxDateCheck: {
         validate: (value, min) => {
-            console.log(moment(value).format('DD.MM.YYYY'), min)
+            console.log(value, min)
             if (value) {
-                const datesArray = moment(value).toDate().split(' - ')
-                const setValue = moment(datesArray[0], 'DD.MM.YYYY').format(
-                    'YYYY-MM-DD',
-                )
+                const formatDate = moment(value).format('YYYY-MM-DD')
                 if (
-                    (min && Date.parse(setValue) >= Date.parse(min)) ||
+                    (min && Date.parse(formatDate) >= Date.parse(min)) ||
                     (min === undefined)
                 ) {
                     return true
                 }
             }
-            if (min !== undefined && min !== null) {
-                return textError.minDate + min
+            if (min !== undefined && min[0] !== undefined && min !== null) {
+                return textError.minDate + moment(min, 'YYYY-MM-DD').format('DD.MM.YYYY')
             }
             return true
         }

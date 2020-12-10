@@ -1,15 +1,15 @@
 <template>
-  <div class="nav-inner">
-    <a class="nav-inner__mobile popup-link" v-if="windowWidth < 1025" href="#menu">
+  <div class="nav-inner" :class="{fullMode: windowWidth < 1025 || fullMode}">
+    <a class="nav-inner__mobile popup-link" v-if="windowWidth < 1025 || fullMode" href="#menu">
       <svg class="sprite-menu">
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#menu"/>
       </svg>
       Меню
     </a>
-    <div id="menu" :class="{popup: windowWidth < 1025}">
+    <div id="menu" :class="{popup: windowWidth < 1025 || fullMode}">
       <div class="nav-inner__content">
-        <div :class="{popup__content: windowWidth < 1025}">
-          <div class="hide-menu-ico popup__close" @click="closeModal" v-if="windowWidth < 1025">
+        <div :class="{popup__content: windowWidth < 1025 || fullMode}">
+          <div class="hide-menu-ico popup__close" @click="closeModal" v-if="windowWidth < 1025 || fullMode">
             <svg class="sprite-close">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"/>
             </svg>
@@ -98,6 +98,10 @@ export default {
     TextInput,
   },
   props: {
+    fullMode: {
+      default: false,
+      type: Boolean
+    },
     windowWidth: {
       default: 0,
       type: Number

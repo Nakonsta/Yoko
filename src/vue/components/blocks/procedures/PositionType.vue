@@ -149,7 +149,6 @@
   import TextInput from '../../forms/Input.vue'
   import SelectInput from '../../forms/Select.vue'
   import CheckboxInput from '../../forms/Checkbox.vue'
-  import TextareaInput from '../../forms/Textarea.vue'
 
   export default {
     name: 'PositionType',
@@ -157,7 +156,6 @@
       TextInput,
       SelectInput,
       CheckboxInput,
-      TextareaInput,
     },
     mixins: [api],
     props: {
