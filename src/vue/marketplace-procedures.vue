@@ -6,6 +6,7 @@
                 <div class="marketplace__search">
                     <search
                         placeholder="Номер или название торговой процедуры"
+                        v-model="searchQuery"
                         :canClear="true"
                         @search="getItems"
                     />
@@ -73,6 +74,7 @@
         mixins: [api, formatDate],
         data: function() {
             return {
+                searchQuery: '',
                 isFirstLoad: false,
                 loadingFilter: true,
                 loadingItems: true,
@@ -98,6 +100,12 @@
             },
         },
         created() {
+            let params = new URLSearchParams(window.location.search.substring(1));
+            this.searchQuery = params.get('q') || '';
+            if( this.searchQuery.length ) {
+                // если в урле есть запрос для поиска - ставим его
+                this.currentFilter.q = this.searchQuery;
+            }
             function parseObjToArr(obj) {
                 const arr = [];
                 for (const key in obj) {

@@ -41,6 +41,9 @@ import './modules/hint';
 // dropdown
 import './modules/dropdown';
 
+// поиск по сайту
+import './modules/search';
+
 /**
  * Полифил для object-fit
  */

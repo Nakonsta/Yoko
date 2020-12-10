@@ -85,7 +85,7 @@
                 <a href="#" class="tender-item__products-show">{{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}</a>
                 <a href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
             </div>
-            <div class="tender-item__products-table">
+            <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.products" class="tender-item__products-table">
                 <div v-if="tenderItemData.purchase_subject.products.length" class="tender-item__products-thead company-products__thead">
                     <div class="table-cell__title">
                         Наименование позиции

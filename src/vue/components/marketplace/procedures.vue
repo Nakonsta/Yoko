@@ -50,7 +50,10 @@
             </div>
         </div>
         <div class="procedures__items">
-            <div v-for="(item, index) in items" :key="item.id" class="procedures__item" v-if="isFirstLoad">
+            <div class="procedures__item procedures__item--empty" v-if="isFirstLoad && !items.length">
+                По вашему запросу ничего не найдено
+            </div>
+            <div v-for="(item, index) in items" :key="item.id" class="procedures__item" v-if="isFirstLoad && items.length">
                 <div class="procedures__item-head">
                     <div class="procedures__item-flex">
                         <div class="procedures__item-title">№{{ item.id }}</div>
@@ -296,17 +299,7 @@
             },
             viewItems(view) {
                 this.view = view;
-                switch( view ) {
-                    case 'all':
-                        this.currentFilter.hidden = 1;
-                        break;
-                    case 'favorite':
-                        this.currentFilter.favorite = 1;
-                        break;
-                    case 'hidden':
-                        this.currentFilter.hidden = 1;
-                        break;
-                }
+                this.currentFilter.showing = view;
                 this.$emit('changeFilter');
             },
             itemMarkExist(item, mark) {
@@ -482,6 +475,10 @@
 
             & + & {
                 margin-top: rem(24px);
+            }
+
+            &--empty {
+
             }
 
             @include mq($until: widescreen) {

@@ -104,7 +104,7 @@
                         </ValidationProvider>
                         <ValidationProvider name="Размер волокон" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
                             <span class="field__label">Размер волокон</span>
-                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_fiber_size" placeholder="Введите значение" @keyup="onlyDigitsWithSlash">
+                            <input :class="{field: true, error: failed}" type="text" v-model="formForSend.property_fiber_size" placeholder="Введите значение" @keyup="onlyDigits">
                             <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                         </ValidationProvider>
                         <ValidationProvider name="Применение" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container field__container--w50">
@@ -372,7 +372,7 @@
                 }
             },
             onlyDigits(evt) {
-                evt.target.value = evt.target.value.replace(/[^\d]+/g,'');
+                evt.target.value = evt.target.value.replace(/[^(\d | \/)]+/g,'');
             },
             onlyDigitsWithSlash(evt) {
                 function parse(d) {

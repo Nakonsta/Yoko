@@ -83,7 +83,7 @@
                         {{ tenderItemData.payment_and_delivery.delivery_terms }}
                     </div>
                 </div>
-                <div v-if="tenderItemData.publication_date" class="tender-item__tab-row">
+                <div v-if="tenderItemData.purchase_term" class="tender-item__tab-row">
                     <div class="tender-item__tab-row-name">
                         Дата поставки
                     </div>
@@ -212,7 +212,7 @@
                 </div>
             </div>
         </div>    
-        <div v-if="tenderItemData.documents.length" class="tender-item__tab-block">
+        <div v-if="tenderItemData.documents && tenderItemData.documents.length" class="tender-item__tab-block">
             <div class="tender-item__tab-title">
                 Конкурсная документация
             </div>
@@ -234,7 +234,7 @@
                 </div>
             </div>
         </div> 
-        <div v-if="tenderItemData.additional_fields" class="tender-item__tab-block">
+        <div v-if="tenderItemData.additional_fields && tenderItemData.additional_fields.length" class="tender-item__tab-block">
             <div class="tender-item__tab-title">
                 Дополнительные поля
             </div>

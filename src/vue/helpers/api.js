@@ -33,6 +33,22 @@ export default {
         fetchFilter() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/filter/`);
         },
+        sendSettingsData(string, data) {
+            if (!this.CancelTokens.catalogProceduresCancelToken) {
+                this.CancelTokens.catalogProceduresCancelToken = axios.CancelToken.source()
+            } else {
+                this.CancelTokens.catalogProceduresCancelToken.cancel(
+                    'Предыдущий запрос отменен запрос',
+                )
+                this.CancelTokens.catalogProceduresCancelToken = axios.CancelToken.source()
+            }
+
+            return axios.post(
+                `${process.env.API_URL_AUTH_SERVICE}/auth/settings/${string}`,
+                data,
+                { cancelToken: this.CancelTokens.catalogProceduresCancelToken.token },
+            )
+        },
         fetchCatalog(filter, page = 1) {
             let body = {}
             body.page = page
@@ -45,6 +61,11 @@ export default {
                 body,
                 {cancelToken: this.CancelTokens.catalogCancelToken.token},
             );
+        },
+        getSettingsData(string) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/auth/settings/${string}`,
+            )
         },
         fetchTotalCatalog(group, filter) {
             let body = {}
@@ -203,8 +224,38 @@ export default {
         fetchTenderItem(id) {
             return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
         },
+        fetchAccreditationsList(props) {
+            const defaultProps = {
+              orderBy: "id",
+              orderDir: "DESC",
+              page: 1,
+              search: "",
+            };
+
+            const requestProps = Object.assign(defaultProps, props ?? {});
+
+            const fData = new FormData();
+
+            fData.append("page", requestProps.page);
+            fData.append("order[by]", requestProps.orderBy);
+            fData.append("order[direction]", requestProps.orderDir);
+
+            if (requestProps.search !== "") {
+              fData.append("q", requestProps.search);
+            }
+
+            return axios.post(
+              `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/list`,
+              fData
+            );
+        },
+        fetchAccreditationDetails(id) {
+            return axios.get(
+              `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`
+            );
+        },
         fetchCompanyById(id) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies/${id}`);
-        },
+        }
     }
 }
