@@ -231,7 +231,6 @@
             const response = data.data
             this.latestQuotes = response
             this.latestQuote = response[0]
-            console.log(this.latestQuote)
             if (this.latestQuote) {
               this.latestQuote = {
                 ...this.latestQuote,
