@@ -67,9 +67,9 @@
         picker: {
           start_date: moment().subtract(7, 'days').toDate(),
           end_date: moment().toDate(),
-          format: "yyyy-MM-dd",
+          format: "dd-MM-yyyy",
           locale: ru,
-          disabledFrom: null,
+          disabledFrom: moment().toDate(),
           disabledTo: moment().subtract(1, 'year').add(1, 'days').toDate(),
         },
         activeItem: 'month',
@@ -144,8 +144,12 @@
       setDates() {
         this.activeItem = 'custom'
         this.picker.disabledTo = moment(this.picker.end_date).subtract(1, 'year').add(1, 'days').toDate()
-        this.picker.disabledFrom = moment(this.picker.start_date).add(1, 'year').toDate();
-        this.picker.end_date = moment(this.picker.start_date).add(1, 'year').toDate();
+        if(moment().toDate() > moment(this.picker.start_date).add(1, 'year').toDate()) {
+          this.picker.disabledFrom = moment(this.picker.start_date).add(1, 'year').subtract(1, 'days').toDate();
+          this.picker.end_date = moment(this.picker.start_date).add(1, 'year').subtract(1, 'days').toDate();
+        } else {
+          this.picker.disabledFrom = moment().toDate()
+        }
         this.getQuotesData(
           this.type,
           moment(this.picker.start_date).format('YYYY-MM-DD'),
@@ -169,6 +173,7 @@
         this.activeItem = menuItem
         this.picker.start_date = moment(this.dates[menuItem]).toDate()
         this.picker.end_date = moment().toDate()
+        this.picker.disabledFrom = moment().toDate()
         this.getQuotesData(this.type, this.dates[menuItem], this.dates.now)
       },
       getQuotesData(type, date_start, date_end) {
