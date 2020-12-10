@@ -69,7 +69,7 @@ export default {
         ProductsFilters
     },
 
-    mixins: [api],
+    mixins: [api, functions],
 
     data() {
         return {
@@ -115,7 +115,7 @@ export default {
                 page: this.page,
                 filter: filterValues
             }
-            const fData = functions.objectToFormData(companyInfo)
+            const fData = this.objectToFormData(companyInfo)
             this.fetchCompany(fData)
                 .then((response) => {
                     this.items = response.data.data.items;
