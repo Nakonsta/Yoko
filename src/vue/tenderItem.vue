@@ -152,7 +152,8 @@ export default {
                 })
         },
         getCompanyData() {
-            this.fetchCompanyById(this.tenderItemData.company_id)
+            // this.fetchCompanyById(this.tenderItemData.company_id)
+            this.fetchCompanyById(1)
                 .then((response) => {
                     this.company = response.data.data;
                 })

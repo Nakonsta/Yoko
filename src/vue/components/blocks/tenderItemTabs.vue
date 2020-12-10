@@ -12,8 +12,8 @@
             <div class="tender-item__tab-item">
                 <span class="tender-item__tab-link">Список лотов</span>
             </div>
-            <div class="tender-item__tab-item">
-                <span class="tender-item__tab-link">Документы</span>
+            <div :class="[activeTab == 'documents' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="documents">
+                <span @click="changeActiveTab('documents')" class="tender-item__tab-link">Документы</span>
             </div>
             <div class="tender-item__tab-item">
                 <span class="tender-item__tab-link">Разъяснения</span>
@@ -30,7 +30,7 @@
                 <TenderItemMainTab :tenderItemData="tenderItemData" :company="company" />
             </div>
             <div :class="[activeTab == 'client' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="main-info">
-                <TenderItemClientTab :tenderItemData="tenderItemData" :company="company" />
+                <TenderItemClientTab :company="company" />
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="main-info">
                 <TenderItemDocumentsTab :tenderItemData="tenderItemData" :company="company" />

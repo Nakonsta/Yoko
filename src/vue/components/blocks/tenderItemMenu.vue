@@ -10,8 +10,8 @@
             <div class="tender-item__menu-item">
                 <a href="#" class="tender-item__menu-link">Список лотов</a>
             </div>
-            <div class="tender-item__menu-item">
-                <a href="#" class="tender-item__menu-link">Документы</a>
+            <div :class="[activeTab == 'documents' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeChange('documents')" class="tender-item__menu-link">Документы</span>
             </div>
             <div class="tender-item__menu-item">
                 <a href="#" class="tender-item__menu-link">Разъяснения</a>

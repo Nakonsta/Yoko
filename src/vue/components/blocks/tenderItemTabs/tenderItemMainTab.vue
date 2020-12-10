@@ -352,6 +352,9 @@ export default {
             &-svg {
                 margin-right: rem(7px);
             }
+            &-rating {
+                margin-top: rem(5px);
+            }
         }
     }
 </style>

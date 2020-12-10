@@ -255,7 +255,7 @@ export default {
             );
         },
         fetchCompanyById(id) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies/${id}`);
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/full/data/companies/${id}`);
         }
     }
 }
