@@ -18,6 +18,9 @@ const store = new Vuex.Store({
         }
     },
     getters: {
+        userRole(state) {
+            return state.auth.loggedIn ? state.auth.role : 'guest'
+        },
         // todo: эти дела пока не работают
         companyBuyer(state) {
             return state.auth.user.companies
