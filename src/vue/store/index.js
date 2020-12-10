@@ -17,6 +17,25 @@ const store = new Vuex.Store({
             LK_SUPP: process.env.LK_SUPP
         }
     },
+    getters: {
+        // todo: эти дела пока не работают
+        companyBuyer(state) {
+            return state.auth.user.companies
+                ? state.auth.user.companies.filter(
+                    (company) => {
+                        return company.buyer
+                    }
+                ) : [];
+        },
+        companyContractor(state) {
+            return state.auth.user.companies
+                ? state.auth.user.companies.filter(
+                    (company) => {
+                        return company.contractor
+                    }
+                ) : [];
+        }
+    },
     mutations: {
         selectRoleBuyer(state) {
             window.openLoader()
