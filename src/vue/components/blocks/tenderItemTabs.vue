@@ -32,6 +32,9 @@
             <div :class="[activeTab == 'client' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="main-info">
                 <TenderItemClientTab :tenderItemData="tenderItemData" :company="company" />
             </div>
+            <div :class="[activeTab == 'documents' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="main-info">
+                <TenderItemDocumentsTab :tenderItemData="tenderItemData" :company="company" />
+            </div>
         </div>
     </div>
 </template>
@@ -39,6 +42,7 @@
 <script>
 import TenderItemMainTab from './tenderItemTabs/tenderItemMainTab.vue'
 import TenderItemClientTab from './tenderItemTabs/tenderItemClientTab.vue'
+import TenderItemDocumentsTab from './tenderItemTabs/tenderItemDocumentsTab.vue'
 
 export default {
     name: 'TenderItemTabs',
@@ -61,6 +65,7 @@ export default {
     components: {
         TenderItemMainTab,
         TenderItemClientTab,
+        TenderItemDocumentsTab
     },
 
     created() {
