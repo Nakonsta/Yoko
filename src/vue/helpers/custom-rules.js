@@ -32,7 +32,7 @@ export default {
     minMaxDateCheck: {
         validate: (value, min) => {
             if (value) {
-                const formatDate = moment(value).format('YYYY-MM-DD')
+                const formatDate = moment(value.start || value).format('YYYY-MM-DD')
                 if (
                     (min && Date.parse(formatDate) >= Date.parse(min)) ||
                     (min === undefined)

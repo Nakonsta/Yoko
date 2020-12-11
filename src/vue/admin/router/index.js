@@ -1,22 +1,21 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+import Vue from "vue";
+import VueRouter from "vue-router";
+Vue.use(VueRouter);
 
-import testPageMain from '../../components/admin/test-pageMain.vue'
-import testPage1 from '../../components/admin/test-page1.vue'
-import testPage2 from '../../components/admin/test-page2.vue'
-import ProcedureNew from '../../components/admin/procedures/form/index.vue'
+import Details from '../pages/accreditations/details.vue'
+import ProcedureNew from '../pages/procedures/form/index.vue'
+import Accreditations from '../pages/accreditations/accreditations.vue'
 
 const routes = [
-    { path: '/personal', component: testPageMain },
-    { path: '/personal/page1', component: testPage1 },
-    { path: '/personal/page2', component: testPage2 },
-    { path: '/personal/procedure/new', component: ProcedureNew }
-]
+  { path: "/personal/accreditations", component:  Accreditations},
+  { path: "/personal/accreditations/:id", component:  Details},
+  { path: '/personal/procedure/new', component: ProcedureNew }
+
+];
 
 const router = new VueRouter({
-    mode: 'history',
-    routes
-})
+  mode: "history",
+  routes,
+});
 
-export default router
+export default router;

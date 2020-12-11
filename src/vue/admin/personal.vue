@@ -1,18 +1,11 @@
 <template>
   <div class="main">
     <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
-    <!-- <div>
-      <router-link to="/personal">Перейти к главной</router-link>
-    </div>
-    <div>
-      <router-link to="/personal/page1">Перейти к Странице 1</router-link>
-    </div>
-    <div>
-      <router-link to="/personal/page2">Перейти к Странице 2</router-link>
-    </div>-->
+
     <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
       <router-view @fullMode="getModeFromPage" />
     </div>
+
   </div>
 </template>
 

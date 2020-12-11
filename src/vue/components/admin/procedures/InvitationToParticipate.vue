@@ -166,8 +166,8 @@
       },
       searchInn(value) {
         clearInterval(this.searchFlag)
-        this.loadingSearch = true
-        if (value && value.length > 4) {
+        if (value && value.length > 2) {
+          this.loadingSearch = true
           this.searchFlag = setTimeout(() => {
             this.fetchInn(value)
                 .then(({data}) => {
@@ -216,6 +216,7 @@
 }
 .btn {
   max-width: 160px;
+  min-width: 160px;
 }
 h4 {
   font-size: 20px;

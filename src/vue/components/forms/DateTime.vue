@@ -31,7 +31,7 @@
         <span slot="afterDateInput" class="icon-calendar-outlilne"></span>
       </template>
     </v-date-picker>
-    <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+    <span v-if="failed" class="field__error">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 

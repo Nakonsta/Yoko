@@ -3,7 +3,7 @@
     <template v-if="!loadingQuotes">
       <div class="quotes__spot">
         <span>Спот, {{ dates.now }}:</span>
-        {{ latestQuote[currency] }} {{ !currencyChecked ? '$' : '₽' }}
+        {{ latestQuote && latestQuote[currency] }} {{ !currencyChecked ? '$' : '₽' }}
       </div>
       <div class="quotes__dates">
         <ul class="tabs-vue">
@@ -42,7 +42,7 @@
               :language="picker.locale"
               v-model="picker.start_date"
               @input="setDates"
-              :disabled-dates="{ to: picker.disabledTo, from: picker.end_date }"
+              :disabled-dates="{ from: picker.end_date }"
           >
             <span slot="afterDateInput" class="icon-calendar-outlilne"></span>
           </datepicker>
@@ -55,7 +55,7 @@
               :language="picker.locale"
               v-model="picker.end_date"
               @input="setDates"
-              :disabled-dates="{ to: picker.start_date, from: range[type].date_end }"
+              :disabled-dates="{ to: picker.start_date, from: picker.disabledFrom }"
           >
             <span slot="afterDateInput" class="icon-calendar-outlilne"></span>
           </datepicker>
@@ -160,7 +160,7 @@ export default {
             },
             ticks: {
               callback: function (value) {
-                return moment(value, "MM-DD-YYYY").format('MM.DD');
+                return moment(value, "MM-DD-YYYY").format('DD.MM');
               }
             }
           }],
@@ -216,7 +216,7 @@ export default {
               let innerHtml = '';
               titleLines.forEach(function (title) {
                 innerHtml += '<span style="color: #9B9B9A" class="chartjs-tooltip__title">'
-                    + moment(title, "MM.DD.YYYY").format('YYYY-MM-DD')
+                    + moment(title, "MM.DD.YYYY").format('DD.MM.YYYY')
                     + ' </span>';
               });
               bodyLines.forEach(function (body) {

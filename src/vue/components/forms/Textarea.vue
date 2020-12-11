@@ -20,7 +20,7 @@
       ></textarea>
       <tooltip v-if="!!content" :content="content" />
     </div>
-    <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+    <span v-if="failed" class="field__error">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 

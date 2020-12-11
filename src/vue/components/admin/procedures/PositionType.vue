@@ -123,7 +123,7 @@
               placeholder=""
               v-model="position.vat"
               label="НДС"
-              :disabled="true"
+              :disabled="procedureIdData.positionType[key].name === 'PositionLength'"
               :options="fieldsData.positionVAT"
           ></select-input>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="quotes__latest">
     <template v-if="!loadingLatestQuotes">
-      <div class="quotes__spot text-right">
+      <div v-if="latestQuote" class="quotes__spot text-right">
         <span>{{ latestQuote.date }}</span>
         {{ latestQuote[currency] }}
         <i :class="latestQuote[`${currency}_diff`]" class="difference">
@@ -81,7 +81,7 @@ export default {
       color: $colorGray;
       font-size: rem(13px);
       font-weight: 400;
-      min-width: rem(32px);
+      width: rem(55px);
       text-align: right;
 
       &.inc {

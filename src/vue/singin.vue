@@ -2,8 +2,8 @@
     <ValidationObserver ref="form" tag="div" mode="eager">
         <form class="popup__form" @submit.prevent="onSubmit">
             <div class="popup__tabs">
-                <label><input type="radio" name="type" value="customer" v-model="type" /><span>Я Заказчик</span></label>
-                <label><input type="radio" name="type" value="supplier" v-model="type" /><span>Я Поставщик</span></label>
+                <label><input type="radio" name="type" value="buyer" v-model="type" /><span>Я Заказчик</span></label>
+                <label><input type="radio" name="type" value="contractor" v-model="type" /><span>Я Поставщик</span></label>
             </div>
             <div v-show="error" v-html="error" class="form__error"></div>
             <ValidationProvider name="Логин или E-mail" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
@@ -44,7 +44,7 @@
         mixins: [api, authorizationMixins],
         data() {
             return {
-                type: 'customer',
+                type: 'buyer',
                 error: '',
                 login: 'test@test.ru',
                 password: '1234567',
@@ -58,12 +58,14 @@
                         return;
                     }
                     window.openLoader()
-                    // todo this.type = 'customer' || 'supplier'
                     this.authSignin(this.login, this.password)
                         .then((data) => {
                             const user = data.data.data.user;
                             const token = data.data.data.token;
-                            this.authorizationMethod(user, token, this.rememberMe)
+                            this.authorizationMethod(user, token, {
+                              rememberMe: this.rememberMe,
+                              role: this.type
+                            })
                         })
                         .catch((response) => {
                             if (

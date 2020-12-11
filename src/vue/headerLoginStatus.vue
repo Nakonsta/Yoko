@@ -56,7 +56,7 @@
                                 Заказчик
                             </span>
                             <label class="switch-box">
-                                <input class="switch-box" type="checkbox">
+                                <input class="switch-box" type="checkbox" :checked="role" @change="switchRole">
                                 <span class="switch-box__body">
                                 <span class="switch-box__switch"></span>
                             </span>
@@ -107,26 +107,39 @@
               minutes: null,
           }
         },
+        computed: {
+          role() {
+            return this.$store.state.auth.role !== 'buyer'
+          }
+        },
         methods: {
-            logout() {
-                this.$store.commit('logout', {
-                  reload: true,
-                  mute: false,
-                })
-            },
-            startTime() {
-                const timestamp = document.body.getAttribute('data-timestamp')
-                let time = moment()
-                if (timestamp) {
-                    time = moment.unix(timestamp)
+              switchRole(e) {
+                console.log(e.target.checked)
+                if (!e.target.checked) {
+                  this.$store.commit('selectRoleBuyer')
+                } else {
+                  this.$store.commit('selectRoleContractor')
                 }
-                setInterval(() => {
-                    time.add(2, 'seconds')
-                    this.hours = time.format('H')
-                    this.minutes = time.format('mm')
-                }, 1000)
-            }
-        }
+              },
+              logout() {
+                  this.$store.commit('logout', {
+                    reload: true,
+                    mute: false,
+                  })
+              },
+              startTime() {
+                  const timestamp = document.body.getAttribute('data-timestamp')
+                  let time = moment()
+                  if (timestamp) {
+                      time = moment.unix(timestamp)
+                  }
+                  setInterval(() => {
+                      time.add(2, 'seconds')
+                      this.hours = time.format('H')
+                      this.minutes = time.format('mm')
+                  }, 1000)
+              }
+          }
     }
 </script>
 

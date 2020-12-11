@@ -8,12 +8,14 @@
   >
     <label v-if="$attrs.label" class="field__label">{{ $attrs.label }}</label>
     <v-date-picker
-        v-model="range"
-        mode="date"
-        is-range
+        is24hr
         locale="ru"
+        mode="date"
+        v-model="innerValue"
         class="date-picker"
+        is-range
         :min-date='minDate'
+        :disabled-dates='disableDates'
         :popover="{ visibility: 'click' }"
     >
       <template v-slot="{ inputValue, inputEvents }">
@@ -29,7 +31,7 @@
         <span slot="afterDateInput" class="icon-calendar-outlilne"></span>
       </template>
     </v-date-picker>
-    <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+    <span v-if="failed" class="field__error">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 
@@ -63,10 +65,6 @@ export default {
   },
   data() {
     return {
-      range: {
-        start: null,
-        end: null,
-      },
       disableDates: [
         { weekdays: [1, 7] },
         new Date(2021, 2, 8),
@@ -76,7 +74,10 @@ export default {
           end:  new Date(2021, 0, 9)
         },
       ],
-      innerValue: '',
+      innerValue: {
+        start: null,
+        end: null,
+      },
     }
   },
   watch: {
@@ -94,7 +95,7 @@ export default {
   },
   methods: {
     validateField(validate) {
-      setTimeout(() =>validate(), 100)
+      setTimeout(() => validate(), 100)
     }
   }
 };

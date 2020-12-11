@@ -158,29 +158,29 @@
             :disabled="isCreatedProcedure"
         ></select-input>
       </div>
-      <div v-if="procedureIdData.procedureType === 'Auction'" class="col col-xs-12">
-        <radio-input
-            title="Обеспечение заявки, внесенное победителем аукциона"
-            name="securing_the_application"
-            v-model="selectedData.securing_the_application"
-            :label="fieldsData.securingTheApplication"
-        ></radio-input>
-      </div>
+    </div>
+    <div v-if="procedureIdData.procedureType === 'Auction'">
+      <radio-input
+          title="Обеспечение заявки, внесенное победителем аукциона"
+          name="securing_the_application"
+          v-model="selectedData.securing_the_application"
+          :label="fieldsData.securingTheApplication"
+      ></radio-input>
     </div>
   </div>
 </template>
 
 <script>
-import TextInput from '../../forms/Input.vue'
-import TextareaInput from '../../forms/Textarea.vue'
-import CheckboxInput from '../../forms/Checkbox.vue'
-import SelectInput from '../../forms/Select.vue'
-import Radio from "../../forms/Radio";
+import TextInput from '../../forms/Input'
+import TextareaInput from '../../forms/Textarea'
+import CheckboxInput from '../../forms/Checkbox'
+import SelectInput from '../../forms/Select'
+import RadioInput from "../../forms/Radio";
 
   export default {
     name: 'SecurityAndGuarantees',
     components: {
-      Radio,
+      RadioInput,
       TextInput,
       TextareaInput,
       CheckboxInput,

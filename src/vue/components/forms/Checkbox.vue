@@ -6,7 +6,7 @@
       :name="$attrs.label[0].item"
       v-slot="{ errors, failed }"
   >
-    <label v-for="(item, key) in $attrs.label" class="checkbox">
+    <label v-for="(item, key) in $attrs.label" class="checkbox" :class="{error: failed}">
       <input type="checkbox" :true-value="1" :false-value="0" :class="{error: failed}" :value=key+1 :disabled="disabled" @change="change" :name="name" v-model="innerValue">
       <span v-if="withIcon" class="checkbox__img">
         <svg class="sprite-customer">
@@ -59,7 +59,9 @@ export default {
     },
     rules: {
       type: [Object, String],
-      default: "required:true"
+      default: function () {
+        return { required:false }
+      }
     },
     value: {
       type: null

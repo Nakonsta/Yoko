@@ -7,7 +7,7 @@
       :name="$attrs.label && $attrs.label.toLowerCase()"
   >
     <span v-if="$attrs.label" class="field__label">{{ $attrs.label }}</span>
-    <input type="hidden" v-model="innerValue.id">
+    <input type="hidden" v-model="innerValue && innerValue.id">
     <div class="relative">
       <multiselect
         v-if="isSingle"
@@ -22,7 +22,6 @@
         :options="options"
         :multiple="false"
         :searchable="searchable"
-        :allow-empty="false"
         :loading="loading"
         :internal-search="false"
         :closeOnSelect="close"
@@ -87,7 +86,7 @@
       </multiselect>
       <tooltip v-if="!!content" :content="content" />
     </div>
-    <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+    <span v-if="failed" class="field__error">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 

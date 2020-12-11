@@ -36,10 +36,17 @@
       </div>-->
       <div class="col col-xs-12">
         <uploader
-            v-model="setFiles"
-            :preview="true"
+            v-model="selectedData.file"
             extensions=".pdf, .doc, .docx, .xls, .xlsx, .jpeg, .png"
-            :metatypes="['application/pdf','application/doc','application/docs','application/xls','application/xlsx','image/jpeg','image/png']"
+            :metatypes="[
+                'image/png',
+                'image/jpeg',
+                'application/pdf',
+                'application/msword',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sh',
+              ]"
         ></uploader>
       </div>
     </div>
@@ -84,6 +91,15 @@
       textValidation: {
         default: () => {},
         type: Function,
+      },
+    },
+    methods: {
+      attachApplication(evt) {
+        const files = evt.target.files || evt.dataTransfer.files;
+        if (!files.length)
+          return;
+        this.selectedData.file = files[0];
+        console.log(this.selectedData.file)
       },
     },
   }

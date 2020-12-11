@@ -31,8 +31,8 @@
             name="organizationType"
             v-model="dataForm.organizationType"
             :label="[
-              {label: 'Юридическое лицо', value: 'LEGAL_ENTITY'},
-              {label: 'Индивидуальный предприниматель', value: 'INDIVIDUAL'}
+              {name: 'Юридическое лицо', id: 'LEGAL_ENTITY'},
+              {name: 'Индивидуальный предприниматель', id: 'INDIVIDUAL'}
             ]"
         ></radio-input>
         <text-input

@@ -22,7 +22,8 @@
       <div class="col col-xl-8 col-sm-6 col-xs-12">
         <text-input
             v-model="selectedData.commission"
-            label="Конкурсная комиссия"
+            label="Конкурсная
+            комиссия"
             placeholder="Введите конкурсную комиссию"
         ></text-input>
       </div>

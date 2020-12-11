@@ -9,8 +9,8 @@
             placeholder="Выберите из списка"
             v-model="selectedData.companyName"
             label="Компания"
-            :options="fieldsData.alternativeApplications"
-            :disabled="isCreatedProcedure"
+            :options="fieldsData.companies"
+            :disabled="isCreatedProcedure || fieldsData.companies.length === 1"
         ></select-input>
       </div>
     </div>
@@ -65,6 +65,7 @@
             selectedData.tender_trading_type &&
             selectedData.tender_trading_type.id &&
             procedureIdData.procedureType !== 'Query' &&
+            procedureIdData.procedureType !== 'Offers' &&
             procedureIdData.procedureType !== 'Commercial'
           "
           class="col col-md-4 col-sm-6 col-xs-12"
@@ -89,6 +90,7 @@
       <div
           v-if="
             procedureIdData.procedureType === 'Query' ||
+            procedureIdData.procedureType === 'Offers' ||
             procedureIdData.procedureType === 'Commercial'
           "
           class="col col-md-4 col-sm-6 col-xs-12"
@@ -106,6 +108,7 @@
       <div
           v-if="
             procedureIdData.procedureType === 'Query' ||
+            procedureIdData.procedureType === 'Offers' ||
             procedureIdData.procedureType === 'Commercial' ||
             procedureIdData.procedureType === 'Contest'
           "
@@ -124,6 +127,7 @@
       <div
           v-if="
             procedureIdData.procedureType === 'Query' ||
+            procedureIdData.procedureType === 'Offers' ||
             procedureIdData.procedureType === 'Commercial'
           "
           class="col col-md-4 col-sm-6 col-xs-12 field__container"
@@ -186,14 +190,15 @@
             name="tender_tolerance"
             v-model="selectedData.tender_tolerance"
             :label="[
-              {label: 'Да', value: 1},
-              {label: 'Нет', value: 0}
+              {name: 'Да', id: 1},
+              {name: 'Нет', iid: 0}
             ]"
         ></radio-input>
       </div>
       <div
           v-if="
               procedureIdData.procedureType === 'Query' ||
+              procedureIdData.procedureType === 'Offers' ||
               procedureIdData.procedureType === 'Commercial' ||
               procedureIdData.procedureType === 'FromSupplier' ||
               procedureIdData.procedureType === 'Contest'
@@ -213,6 +218,7 @@
       <div
           v-if="
             procedureIdData.procedureType === 'Query' ||
+            procedureIdData.procedureType === 'Offers' ||
             procedureIdData.procedureType === 'Commercial' ||
             procedureIdData.procedureType === 'FromSupplier' ||
             procedureIdData.procedureType === 'Contest'
@@ -228,7 +234,10 @@
         ></checkbox-input>
       </div>
       <div
-          v-if="procedureIdData.procedureType === 'Auction' || procedureIdData.procedureType === 'Supplier'"
+          v-if="
+            procedureIdData.procedureType === 'Auction' ||
+            procedureIdData.procedureType === 'Supplier'
+          "
           class="col col-md-4 col-sm-6 col-xs-12"
       >
         <select-input
@@ -257,20 +266,6 @@
       </div>
       <div
           v-if="
-            procedureIdData.procedureType === 'Auction' ||
-            procedureIdData.procedureType === 'Supplier'
-          "
-          class="col col-md-4 col-sm-6 col-xs-12 field__container"
-      >
-        <checkbox-input
-            class-name="mt3"
-            name="connect_an_autobot_for_trading"
-            v-model="selectedData.connect_an_autobot_for_trading"
-            :label="[{label: 'Подключить автобота для торгов'}]"
-        ></checkbox-input>
-      </div>
-      <div
-          v-if="
             selectedData.tender_trading_type &&
             selectedData.tender_trading_type.id &&
             procedureIdData.procedureType !== 'Contest'
@@ -282,8 +277,8 @@
             name="tender_tolerance"
             v-model="selectedData.tender_tolerance"
             :label="[
-              {label: 'Да', value: 1},
-              {label: 'Нет', value: 0}
+              {name: 'Да', id: 1},
+              {name: 'Нет', id: 0}
             ]"
         ></radio-input>
       </div>
