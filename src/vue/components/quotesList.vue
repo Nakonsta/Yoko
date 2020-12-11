@@ -81,7 +81,7 @@ export default {
       color: $colorGray;
       font-size: rem(13px);
       font-weight: 400;
-      min-width: rem(32px);
+      width: rem(55px);
       text-align: right;
 
       &.inc {
