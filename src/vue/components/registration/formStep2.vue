@@ -329,7 +329,7 @@ export default {
     .multiselect {
       &--active {
         .multiselect__tags {
-          height: 60px !important
+          //height: 60px !important
         }
       }
     }

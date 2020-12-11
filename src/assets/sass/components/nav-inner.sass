@@ -1,0 +1,85 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
+.main
+    display: flex
+    position: relative
+    > *:last-child
+        width: 100%
+        padding: rem(80px) rem(40px)
+        background-color: white
+        @include mq($from: 1025px)
+            width: 65%
+            padding: rem(40px)
+
+.nav-inner
+    border-radius: rem(6px)
+    width: rem(124px)
+    position: absolute
+    left: 0
+    top: 0
+    @include mq($from: 1025px)
+        width: 30%
+        margin-right: 5%
+        min-width: rem(200px)
+        position: static
+        background-color: white
+    .hide-menu-ico
+        background-color: $colorTurquoise
+        position: absolute
+        right: 0
+        top: 0
+    .popup
+        display: flex
+        .popup__content
+            padding: rem(24px) rem(10px) 0
+            @include mq($from: tablet)
+                padding: rem(40px)
+            max-width: rem(512px)
+            width: 100%
+    &__mobile
+        color: white
+        width: 100%
+        font-size: rem(20px)
+        border-radius: rem(6px) 0
+        padding: rem(8px) rem(14px)
+        background-color: $colorTurquoise
+        display: flex
+        justify-content: space-between
+        align-items: center
+        svg
+            width: 24px
+    &__content
+        display: block
+        margin: auto
+    .nav-icons
+        display: flex
+        > *
+            margin-left: rem(16px)
+        svg
+            width: rem(20px)
+            height: rem(20px)
+    &__head
+        display: flex
+        align-items: center
+        justify-content: space-between
+        border-bottom: 1px solid $colorGray3
+        font-size: rem(20px)
+        padding: rem(10px) rem(30px)
+        height: rem(72px)
+        label
+            width: 100%
+        span
+            font-weight: 700
+    &__item
+        font-weight: 500
+        padding: rem(12px) rem(30px)
+    &__name
+        max-width: calc(100% - 40px)
+    &__link
+        width: 100%
+        color: $colorText
+        display: flex
+        align-items: center
+        justify-content: space-between

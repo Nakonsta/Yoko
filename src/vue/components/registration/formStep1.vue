@@ -4,6 +4,7 @@
       <h3>Шаг 1: Заполните Личные данные</h3>
       <text-input v-model="dataForm.lastName" label="Фамилия"></text-input>
       <text-input v-model="dataForm.firstName" label="Имя"></text-input>
+      <text-input v-model="dataForm.secondName" label="Отчество"></text-input>
       <text-input v-model="dataForm.position" label="Должность"></text-input>
       <text-input v-model="dataForm.email" label="E-mail" rules="required|email" type="email"></text-input>
       <text-input
@@ -15,7 +16,7 @@
       <text-input
           v-model="dataForm.passwordRepeat"
           label="Повторите пароль"
-          rules="required|confirmed:password"
+          :rules="{required: true, repeatPass: dataForm.password}"
           type="password"
           vid="password"
       ></text-input>

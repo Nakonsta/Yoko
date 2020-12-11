@@ -9,8 +9,9 @@ block content
         .container
             .welcome__title Корпоративные закупки и продажи онлайн
             .welcome__wrap
-                form.welcome__search.js-search
-                    input(type="text" placeholder="Введите номер процедуры или ключевое слово")
+                form.welcome__search.js-search(method="get" action="./marketplace-procedures.html")
+                    input(type="text" name="q" data-minlength="3" placeholder="Введите номер процедуры или ключевое слово")
+                    a(href="javascript"): svg.sprite-cancel: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#cancel")
                     button(type="submit"): svg.sprite-search: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#search")
                 .welcome__counters
                     p #[span > 10 тыс.] новых закупок каждый день
@@ -59,7 +60,7 @@ block content
                     },
                     {
                         href: '#',
-                        sprite: 'insurance',
+                        sprite: 'umbrella',
                         title: 'Страхование',
                         desc: 'Позволяет подтвердить авторство электронного документа, например, аккаунт в криптовалютной системе',
                     },
@@ -85,6 +86,30 @@ block content
                         href: '#',
                         sprite: 'bank',
                         title: 'Аккредитив',
+                        desc: 'Управление материальными, информационными и людскими потоками с целью их оптимизации.',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'noun_bank',
+                        title: 'Откртытие спецсчета',
+                        desc: 'Позволяет подтвердить авторство электронного документа, например, аккаунт в криптовалютной системе',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'noun_ruble',
+                        title: 'Расчет НМЦК',
+                        desc: 'Калькулятор выдаст информацию о том, сколько весит выбранная марка кабеля с учетом длины.',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'noun_education',
+                        title: 'Обучение',
+                        desc: 'Узнать какой транспорт подойдет для перевозки вашей продукции можно прямо сейчас.',
+                    },
+                    {
+                        href: '#',
+                        sprite: 'noun_shield',
+                        title: 'Банковская гарантия',
                         desc: 'Управление материальными, информационными и людскими потоками с целью их оптимизации.',
                     },
                 ];

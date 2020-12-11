@@ -4,6 +4,7 @@ export default {
             CancelTokens: {
                 catalogCancelToken: axios.CancelToken.source(),
                 companyCancelToken: axios.CancelToken.source(),
+                proceduresCancelToken: axios.CancelToken.source(),
             },
         }
     },
@@ -23,8 +24,30 @@ export default {
             )
             this.CancelTokens.companyCancelToken = axios.CancelToken.source()
         },
+        cancelMarketplaceProceduresRequest() {
+            this.CancelTokens.proceduresCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.proceduresCancelToken = axios.CancelToken.source()
+        },
         fetchFilter() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/filter/`);
+        },
+        sendSettingsData(string, data) {
+            if (!this.CancelTokens.catalogProceduresCancelToken) {
+                this.CancelTokens.catalogProceduresCancelToken = axios.CancelToken.source()
+            } else {
+                this.CancelTokens.catalogProceduresCancelToken.cancel(
+                    'Предыдущий запрос отменен запрос',
+                )
+                this.CancelTokens.catalogProceduresCancelToken = axios.CancelToken.source()
+            }
+
+            return axios.post(
+                `${process.env.API_URL_AUTH_SERVICE}/user/settings/${string}`,
+                data,
+                { cancelToken: this.CancelTokens.catalogProceduresCancelToken.token },
+            )
         },
         fetchCatalog(filter, page = 1) {
             let body = {}
@@ -38,6 +61,11 @@ export default {
                 body,
                 {cancelToken: this.CancelTokens.catalogCancelToken.token},
             );
+        },
+        getSettingsData(string) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/user/settings/${string}`,
+            )
         },
         fetchTotalCatalog(group, filter) {
             let body = {}
@@ -72,13 +100,13 @@ export default {
             });
         },
         authSignin(l, p) {
-            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/auth/signin`, {
+            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/signin`, {
                 login: l,
                 password: p,
             });
         },
         fetchUser() {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/auth/me`);
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/user/me`);
         },
         forgotPass(email) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/restore_password_request`, {
@@ -89,7 +117,7 @@ export default {
         },
         forgotPassChange(data) {
             return axios.post(
-                `${process.env.API_URL_AUTH_SERVICE}/restore_password`,
+                `${process.env.API_URL_AUTH_SERVICE}/user/restore_password`,
                 data,
             );
         },
@@ -117,11 +145,14 @@ export default {
         fetchCountries() {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries`);
         },
+        fetchRegions() {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/regions`);
+        },
         fetchRegisteredCompanyFull(id) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/full/data/companies/${id}`)
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/${id}/full`)
         },
         sendRegistrationData(data) {
-            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/auth/register`, data)
+            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/register`, data)
         },
         fetchCatalogAdd(data) {
             return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, data);
@@ -146,22 +177,82 @@ export default {
                 params: { mode }
             });
         },
-        // fetchCountries() {
-        //     return this.$axios.$get(
-        //       `${process.env.API_URL_CONTENT_SERVICE}/api/digests/countries/`,
-        //     )
-        // },
         fetchCompany(data) {
             return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company`,
                 data,
                 {cancelToken: this.CancelTokens.companyCancelToken.token},
             );
         },
+        fetchCompanysByIds(ids) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`,{
+                params: {
+                    ids: ids.join(','),
+                },
+            });
+        },
+        fetchCompaniesByName(name) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`, {
+                params: {
+                    name: name
+                },
+            });
+        },
         fetchCompanyReportForm(data) {
             return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/`, data); // todo поставить url "проверка компании"
         },
+        fetchMarketplaceProceduresFilter() {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/filter`)
+        },
+        fetchMarketplaceProcedures(filter = null, page = 1) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/list`,
+                {
+                    ...filter,
+                    page,
+                },
+                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+            );
+        },
+        addMarketplaceProcedureMark(id, mark) {
+            const fData = new FormData();
+            fData.append('mark_code', mark);
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/mark`, fData);
+        },
+        removeMarketplaceProcedureMark(id, mark) {
+            return axios.delete(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/mark/${mark}`)
+        },
         fetchTenderItem(id) {
             return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
+        },
+        fetchAccreditationsList(props) {
+            const defaultProps = {
+              orderBy: "id",
+              orderDir: "DESC",
+              page: 1,
+              search: "",
+            };
+
+            const requestProps = Object.assign(defaultProps, props ?? {});
+
+            const fData = new FormData();
+
+            fData.append("page", requestProps.page);
+            fData.append("order[by]", requestProps.orderBy);
+            fData.append("order[direction]", requestProps.orderDir);
+
+            if (requestProps.search !== "") {
+              fData.append("q", requestProps.search);
+            }
+
+            return axios.post(
+              `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/list`,
+              fData
+            );
+        },
+        fetchAccreditationDetails(id) {
+            return axios.get(
+              `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`
+            );
         },
     }
 }

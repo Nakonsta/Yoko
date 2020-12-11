@@ -2,7 +2,7 @@
   <ValidationProvider
       :tag="tag"
       :rules="rules"
-      class="field__container"
+      :class="parentClass"
       v-slot="{ errors, failed }"
       :name="$attrs.label && $attrs.label.toLowerCase()"
       :vid="vid"
@@ -14,6 +14,8 @@
         :type="type"
         v-model="innerValue"
         :disabled="disabled"
+        @input="input"
+        :placeholder="placeholder"
     >
     <span v-show="failed" class="field__error">{{ errors[0] }}</span>
   </ValidationProvider>
@@ -27,6 +29,10 @@ export default {
       type: String,
       default: 'label'
     },
+    parentClass: {
+      type: String,
+      default: 'field__container'
+    },
     mask: {
       type: String,
       default: undefined
@@ -35,6 +41,10 @@ export default {
       type: Boolean,
       default: false
     },
+    placeholder: {
+      type: String,
+      default: ''
+    },
     vid: {
       type: String,
       default: ''
@@ -42,6 +52,10 @@ export default {
     type: {
       type: String,
       default: 'text'
+    },
+    input: {
+      type: Function,
+      default: () => {}
     },
     rules: {
       type: [Object, String],

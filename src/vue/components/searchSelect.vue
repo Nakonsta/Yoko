@@ -9,7 +9,7 @@
             <multiselect
                 v-model="value"
                 :options="options"
-                placeholder="Найти кабель"
+                :placeholder="placeholder"
                 selectedLabel=""
                 selectLabel=""
                 deselectLabel=""
@@ -19,8 +19,7 @@
                 :loading="isLoading"
                 :internal-search="false"
                 :preserveSearch="true"
-                @select="selectValue"
-                @search-change="getListSearchCatalog"
+                @search-change="getItems"
             >
                 <template v-slot:caret>
                     <span></span>
@@ -45,8 +44,14 @@
 <script>
     import api from '../helpers/api'
     export default {
-        name: 'Search',
+        name: 'search',
         mixins: [api],
+        props: {
+            placeholder: {
+                default: '',
+                type: String
+            },
+        },
         data() {
             return {
                 value: '',
@@ -56,58 +61,27 @@
             }
         },
         methods: {
-            selectValue(value) {
-                // window.location.href = value.url
-            },
-            getListSearchCatalog(string) {
-                console.log(string)
-                clearInterval(this.searchCounter)
+            getItems(string) {
+                clearInterval(this.searchCounter);
                 if (string) {
                     this.searchCounter = setTimeout(() => {
-                        this.isLoading = true
-                        this.cleanSearch()
+                        this.isLoading = true;
+                        this.options = [];
                         this.fetchListSearchCatalog(string)
                             .then((data) => {
-                                // this.startValueSearch()
-                                // this.groupingSearchList(data.data.data)
-                                this.options = data.data.data
-                                this.isLoading = false
+                                this.options = data.data.data;
+                                this.isLoading = false;
                             })
                             .catch((e) => {
-                                console.log(e)
-                                this.isLoading = false
+                                console.log(e);
+                                this.isLoading = false;
                             })
-                    }, 1000)
+                    }, 1000);
                 } else {
-                    this.cleanSearch()
-                    this.isLoading = false
+                    this.options = [];
+                    this.isLoading = false;
                 }
             },
-            startValueSearch() {
-                this.options = [
-                    {
-                        groupTitle: 'Марка',
-                        items: []
-                    },
-                    {
-                        groupTitle: 'Размер',
-                        items: []
-                    }
-                ]
-            },
-            cleanSearch() {
-                this.options = []
-            },
-            groupingSearchList(arr) {
-                arr.forEach((item) => {
-                    if (item.is_mark) {
-                        this.options[0].items.push(item)
-                    }
-                    if (item.is_mark_size) {
-                        this.options[1].items.push(item)
-                    }
-                })
-            }
         }
     }
 </script>
@@ -121,7 +95,7 @@
         position: relative;
         display: flex;
         box-shadow: 5px 10px 15px rgba(55, 55, 53, 0.1);
-        border-radius: 0 rem(6px) rem(6px) 0;
+        border-radius: rem(6px);
         &__input {
             width: 100%;
             .multiselect__option--highlight {
@@ -140,7 +114,7 @@
                 font-weight: 500;
                 font-size: rem(14px);
                 line-height: 160%;
-                border-radius: rem(6px) 0 0 rem(6px);
+                border-radius: rem(6px);
                 border: none;
                 input {
                     margin-top: rem(2px);

@@ -17,10 +17,10 @@
         <div v-if="$store.state.auth.loggedIn" class="user-info">
             <div class="user-info__info">
                 <div class="user-info__name">
-                    {{ $store.state.auth.user.company.name }}
+                    {{ $store.state.auth.user.name }} {{ $store.state.auth.user.secondName }}
                 </div>
                 <div class="user-info__id">
-                    № {{ $store.state.auth.user.company.id }}
+<!--                    № {{ $store.state.auth.user.company.id }}-->
                 </div>
                 <div class="user-info__time">
                     {{ hours }}<span class="user-info__time-dots">:</span>{{ minutes }} MSK
@@ -56,7 +56,7 @@
                                 Заказчик
                             </span>
                             <label class="switch-box">
-                                <input class="switch-box" type="checkbox">
+                                <input class="switch-box" type="checkbox" :checked="role" @change="switchRole">
                                 <span class="switch-box__body">
                                 <span class="switch-box__switch"></span>
                             </span>
@@ -107,26 +107,39 @@
               minutes: null,
           }
         },
+        computed: {
+          role() {
+            return this.$store.state.auth.role !== 'buyer'
+          }
+        },
         methods: {
-            logout() {
-                this.$store.commit('logout', {
-                  reload: true,
-                  mute: false,
-                })
-            },
-            startTime() {
-                const timestamp = document.body.getAttribute('data-timestamp')
-                let time = moment()
-                if (timestamp) {
-                    time = moment.unix(timestamp)
+              switchRole(e) {
+                console.log(e.target.checked)
+                if (!e.target.checked) {
+                  this.$store.commit('selectRoleBuyer')
+                } else {
+                  this.$store.commit('selectRoleContractor')
                 }
-                setInterval(() => {
-                    time.add(2, 'seconds')
-                    this.hours = time.format('H')
-                    this.minutes = time.format('mm')
-                }, 1000)
-            }
-        }
+              },
+              logout() {
+                  this.$store.commit('logout', {
+                    reload: true,
+                    mute: false,
+                  })
+              },
+              startTime() {
+                  const timestamp = document.body.getAttribute('data-timestamp')
+                  let time = moment()
+                  if (timestamp) {
+                      time = moment.unix(timestamp)
+                  }
+                  setInterval(() => {
+                      time.add(2, 'seconds')
+                      this.hours = time.format('H')
+                      this.minutes = time.format('mm')
+                  }, 1000)
+              }
+          }
     }
 </script>
 
@@ -222,6 +235,7 @@
         &__menu-item {
             position: relative;
             margin-left: rem(24px);
+            z-index: 2;
             &--logout {
               display: none;
             }
@@ -241,6 +255,7 @@
         }
         &__menu-item--sub {
             &:hover {
+                z-index: 1;
                 .user-info__submenu {
                     transform: translateY(0);
                     pointer-events: all;
@@ -255,11 +270,12 @@
             right: 0;
             min-width: rem(285px);
             background-color: #fff;
-            z-index: 2;
+            z-index: 3;
             box-shadow: 5px 10px 15px rgba(55, 55, 53, 0.1);
             transform: translateY(#{rem(-15px)});
             pointer-events: none;
             opacity: 0;
+            z-index: 1;
             &:after {
                 content: " ";
                 position: absolute;

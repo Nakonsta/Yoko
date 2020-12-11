@@ -14,12 +14,20 @@ sudo vi /etc/hosts, далее I, далее вставить строчку и 
 Домены должны одинаковые  
 После этого работать с авторизацией на ec.extyl.pro
 
+## Роли пользователей хранятся вo vuex 
+Получить текущую роль пользователя можно тут this.$store.getters.userRole  
+
+Роли:  
+**buyer** - Заказчик  
+**contractor** - Поставщик  
+**guest** - Гость
+
 ## Запуск и остановка глобального прелоадера
-**openLoader** - Запуск
+**openLoader** - Запуск  
 **closeLoader** - Остановка
 
 ## Нотификации
-**notificationSuccess(text)** - Нотификация успеха
+**notificationSuccess(text)** - Нотификация успеха  
 **notificationError(text)** - Нотификация ошибки
 
 ## Кастомная валидация для ValidationProvider
