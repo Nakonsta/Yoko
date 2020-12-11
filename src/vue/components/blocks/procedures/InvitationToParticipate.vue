@@ -167,17 +167,19 @@
       searchInn(value) {
         clearInterval(this.searchFlag)
         this.loadingSearch = true
-        this.searchFlag = setTimeout(() => {
-          this.fetchInn(value)
-              .then(({data}) => {
-                this.searchResultInn = data.data
-                this.loadingSearch = false
-              })
-              .catch(() => {
-                this.loadingSearch = false
-                window.notificationError('Ошибка сервера. Поиск по ИНН не доступен')
-              })
-        }, 1000)
+        if (value && value.length > 4) {
+          this.searchFlag = setTimeout(() => {
+            this.fetchInn(value)
+                .then(({data}) => {
+                  this.searchResultInn = data.data
+                  this.loadingSearch = false
+                })
+                .catch(() => {
+                  this.loadingSearch = false
+                  window.notificationError('Ошибка сервера. Поиск по ИНН не доступен')
+                })
+          }, 1000)
+        }
       },
     }
   }

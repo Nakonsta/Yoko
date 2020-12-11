@@ -15,8 +15,8 @@
             v-model="selectedData.application_submit_date_time"
             label="Дата и время окончания подачи заявки на конкурс"
             placeholder="Выберите крайнюю дату"
-            :min-date="new Date(procedureIdData.setMinWeekDates.publication_date)"
-            :rules="{required: true, minMaxDateCheck: procedureIdData.setMinWeekDates.publication_date}"
+            :min-date="new Date(procedureIdData.setMin2WeeksDates.publication_date)"
+            :rules="{required: true, minMaxDateCheck: procedureIdData.setMin2WeeksDates.publication_date}"
         ></date-time>
       </div>
       <div class="col col-xl-8 col-sm-6 col-xs-12">

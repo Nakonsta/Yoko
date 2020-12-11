@@ -338,6 +338,7 @@ export default {
       const biddingType = []
       const setMinDates = {}
       const setMinWeekDates = {}
+      const setMin2WeeksDates = {}
       const lotsCounter = []
       const positionType = []
       let procedureType = ''
@@ -483,8 +484,11 @@ export default {
             setMinDates[item] = moment(this.selectedData[item])
                 .add(1, 'day')
                 .format('YYYY-MM-DD')
-            setMinWeekDates[item] = moment(this.selectedData[item])
+            setMin2WeeksDates[item] = moment(this.selectedData[item])
                 .add(16, 'days')
+                .format('YYYY-MM-DD')
+            setMinWeekDates[item] = moment(this.selectedData[item])
+                .add(6, 'days')
                 .format('YYYY-MM-DD')
           }
         }
@@ -499,6 +503,7 @@ export default {
         procedureType,
         setMinDates,
         setMinWeekDates,
+        setMin2WeeksDates,
         productionStartDate,
       }
     },
