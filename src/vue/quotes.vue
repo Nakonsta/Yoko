@@ -163,7 +163,11 @@
         if (this.windowWidth > 767 || this.showSelect === true) {
           this.type = menuItem
           this.showSelect = false
-          this.getQuotesData(menuItem, this.dates[this.activeItem], this.dates.now)
+          this.getQuotesData(
+              menuItem,
+              moment(this.picker.start_date).format('YYYY-MM-DD'),
+              moment(this.picker.end_date).format('YYYY-MM-DD'),
+          )
           this.getLatestQuotesData(menuItem)
         } else {
           this.showSelect = true

@@ -44,7 +44,7 @@ export default {
             }
 
             return axios.post(
-                `${process.env.API_URL_AUTH_SERVICE}/auth/settings/${string}`,
+                `${process.env.API_URL_AUTH_SERVICE}/user/settings/${string}`,
                 data,
                 { cancelToken: this.CancelTokens.catalogProceduresCancelToken.token },
             )
@@ -64,7 +64,7 @@ export default {
         },
         getSettingsData(string) {
             return axios.get(
-                `${process.env.API_URL_AUTH_SERVICE}/auth/settings/${string}`,
+                `${process.env.API_URL_AUTH_SERVICE}/user/settings/${string}`,
             )
         },
         fetchTotalCatalog(group, filter) {
@@ -100,13 +100,13 @@ export default {
             });
         },
         authSignin(l, p) {
-            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/auth/signin`, {
+            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/signin`, {
                 login: l,
                 password: p,
             });
         },
         fetchUser() {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/auth/me`);
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/user/me`);
         },
         forgotPass(email) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/restore_password_request`, {
@@ -117,7 +117,7 @@ export default {
         },
         forgotPassChange(data) {
             return axios.post(
-                `${process.env.API_URL_AUTH_SERVICE}/restore_password`,
+                `${process.env.API_URL_AUTH_SERVICE}/user/restore_password`,
                 data,
             );
         },
@@ -149,10 +149,10 @@ export default {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/regions`);
         },
         fetchRegisteredCompanyFull(id) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/full/data/companies/${id}`)
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/${id}/full`)
         },
         sendRegistrationData(data) {
-            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/auth/register`, data)
+            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/register`, data)
         },
         fetchCatalogAdd(data) {
             return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, data);
@@ -184,14 +184,14 @@ export default {
             );
         },
         fetchCompanysByIds(ids) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies`,{
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`,{
                 params: {
                     ids: ids.join(','),
                 },
             });
         },
         fetchCompaniesByName(name) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies`, {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`, {
                 params: {
                     name: name
                 },
