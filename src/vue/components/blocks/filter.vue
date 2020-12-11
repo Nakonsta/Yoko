@@ -129,11 +129,11 @@
 
 <script>
     import moment from 'moment';
-    import spoiler from "./blocks/spoiler.vue";
+    import spoiler from "./spoiler.vue";
     import {ru} from "vuejs-datepicker/src/locale";
 
     export default {
-        name: 'FilterBlock',
+        name: 'filterList',
         components: {
             spoiler
         },
@@ -259,10 +259,10 @@
 </script>
 
 <style lang="scss">
-    @import "../../assets/sass/variables/variables";
-    @import "../../assets/sass/variables/fluid-variables";
-    @import "../../assets/sass/mixins/fluid-mixin";
-    @import "../../assets/sass/mixins/mq";
+    @import "../../../assets/sass/variables/variables";
+    @import "../../../assets/sass/variables/fluid-variables";
+    @import "../../../assets/sass/mixins/fluid-mixin";
+    @import "../../../assets/sass/mixins/mq";
 
     .filter {
         width: calc(100% - #{rem(68px)});

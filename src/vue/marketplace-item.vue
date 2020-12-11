@@ -31,7 +31,7 @@ import TenderItemCard from './components/blocks/tenderItemCard.vue'
 import TenderItemMenu from './components/blocks/tenderItemMenu.vue'
 
 export default {
-    name: 'TenderItem',
+    name: 'MarketplaceItem',
 
     components: {
         TenderItemCard,
@@ -120,7 +120,7 @@ export default {
 
     methods: {
         getTenderItemId() {
-            this.tenderItemId = document.querySelector('#tender-item').getAttribute('data-id')
+            this.tenderItemId = document.querySelector('#marketplace-item').getAttribute('data-id')
             return false
         },
         fillTenderItemData(data) {

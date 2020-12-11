@@ -203,24 +203,24 @@ if (CompanyReportsBlock) {
 }
 
 // Торговая площадка - Процедуры
-import marketplaceProcedures from './marketplace-procedures.vue';
-const marketplaceProceduresBlock = document.querySelector('#marketplace-procedures');
-if (marketplaceProceduresBlock) {
+import Marketplace from './marketplace.vue';
+const marketplaceBlock = document.querySelector('#marketplace-procedures');
+if (marketplaceBlock) {
     let marketplaceProceduresApp = new Vue({
-        el: marketplaceProceduresBlock,
+        el: marketplaceBlock,
         store: store,
-        render: function(h) { return h(marketplaceProcedures)}
+        render: function(h) { return h(Marketplace)}
     })
 }
 
 // Форма обратной связи
-import TenderItem from './tenderItem.vue'
-const tenderItem = document.querySelector('#tender-item');
+import MarketplaceItem from './marketplace-item.vue'
+const tenderItem = document.querySelector('#marketplace-item');
 if (tenderItem) {
     let tenderItemBlock = new Vue({
         el: tenderItem,
         store: store,
-        render: function(h) { return h(TenderItem); }
+        render: function(h) { return h(MarketplaceItem); }
     })
 }
 

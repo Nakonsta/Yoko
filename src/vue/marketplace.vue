@@ -13,7 +13,7 @@
                 </div>
                 <div class="marketplace__flex">
                     <div class="marketplace__filter" ref="filterContainer">
-                        <filterBlock
+                        <filterList
                             :key="filterKey"
                             :mobileWidth=1023
                             :loading="loadingFilter"
@@ -26,7 +26,7 @@
                         />
                     </div>
                     <div class="marketplace__body">
-                        <proceduresBlock
+                        <marketplaceList
                             :itemsTypes="itemsTypes"
                             :itemsFormats="itemsFormats"
                             :itemsStatuses="itemsStatuses"
@@ -60,16 +60,16 @@
 <script>
     import api from './helpers/api';
     import search from "./components/searchText.vue";
-    import filterBlock from "./components/filter.vue";
-    import proceduresBlock from "./components/marketplace/procedures.vue";
+    import filterList from "./components/blocks/filter.vue";
+    import marketplaceList from "./components/marketplace/list.vue";
     import formatDate from './helpers/formatDate';
 
     export default {
-        name: 'MarketplaceProcedures',
+        name: 'Marketplace',
         components: {
             search,
-            filterBlock,
-            proceduresBlock,
+            filterList,
+            marketplaceList,
         },
         mixins: [api, formatDate],
         data: function() {
@@ -253,17 +253,17 @@
                     .then((data) => {
                         this.isFirstLoad = true;
                         const items = data.data.data.items;
-                        const companiesIds = [];
+                        const companiesINN = [];
                         this.totalItems = data.data.data.total;
                         /* TODO: переделать запрос детальной информации о компании через новый роут (Отправка массива id компаний)
                             Сделать чтобы названия компаний добавлялись реактивно к уже выведенному списку компаний
                          */
                         items.forEach((item, index) => {
                             items[index].company = null;
-                            companiesIds.push(items[index].company_id);
+                            companiesINN.push(items[index].inn);
                         });
-                        if (companiesIds.length) {
-                            this.fetchCompanysByIds(companiesIds)
+                        if (companiesINN.length) {
+                            this.fetchCompaniesByINN(companiesINN)
                                 .then((data) => {
                                     const companies = data.data.data;
                                     companies.forEach((company) => {
