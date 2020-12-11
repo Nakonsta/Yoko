@@ -41,6 +41,7 @@
             :is-single="true"
             :close="true"
             placeholder="Введите  адрес"
+            content="Вы допускаете торги по конкурсу"
             v-model="selectedData.place_of_receipt"
             :options="suggestions.place_of_receipt"
             label="Место получения конкурсной документации"

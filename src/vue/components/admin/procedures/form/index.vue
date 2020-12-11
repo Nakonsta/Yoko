@@ -36,6 +36,12 @@
             :procedure-id-data="procedureIdData"
             :is-created-procedure="isCreatedProcedure"
         ></app-security-and-guarantees>
+        <app-invitation-to-participate
+            :selected-data="selectedData"
+            :fields-data="fieldsData"
+            :procedure-id-data="procedureIdData"
+            :is-created-procedure="isCreatedProcedure"
+        ></app-invitation-to-participate>
         <app-payment-and-delivery
             :selected-data="selectedData"
             :fields-data="fieldsData"
@@ -61,14 +67,14 @@
             :procedure-id-data="procedureIdData"
             :is-created-procedure="isCreatedProcedure"
             :create-new-fieldset="createNewFieldset"
-            :change-type-of-value="changeTypeOfValue"
             :remove-field="removeField"
             :save-field="saveField"
+            :validation="validation"
         ></app-additional-fields>
       </form>
     </ValidationObserver>
     <transition name="fade-loader">
-      <local-preloader v-if="isLoading" />
+      <local-preloader v-if="isLoading"/>
     </transition>
   </div>
 </template>
@@ -89,6 +95,7 @@ import PaymentAndDelivery from '../../../blocks/procedures/PaymentAndDelivery'
 import AdditionalInformation from '../../../blocks/procedures/AdditionalInformation'
 import Documentation from '../../../blocks/procedures/Documentation'
 import ContactInformation from '../../../blocks/procedures/ContactInformation'
+import InvitationToParticipate from '../../../blocks/procedures/InvitationToParticipate'
 import AdditionalFields from '../../../blocks/procedures/AdditionalFields'
 
 export default {
@@ -104,6 +111,7 @@ export default {
     appAdditionalInformation: AdditionalInformation,
     appDocumentation: Documentation,
     appContactInformation: ContactInformation,
+    appInvitationToParticipate: InvitationToParticipate,
     appAdditionalFields: AdditionalFields,
   },
   mixins: [api, functions],
@@ -113,63 +121,63 @@ export default {
         tenderTradingFormat: [],
         tenderTradingType: [],
         tenderAvailable: [
-          { id: 1, name: 'Открытый' },
-          { id: 0, name: 'Закрытый' },
+          {id: 1, name: 'Открытый'},
+          {id: 0, name: 'Закрытый'},
         ],
         tenderAvailableAuc: [
-          { id: 1, name: 'Открытый аукцион' },
-          { id: 0, name: 'Закрытый аукцион' },
+          {id: 1, name: 'Открытый аукцион'},
+          {id: 0, name: 'Закрытый аукцион'},
         ],
         tenderAvailablePur: [
-          { id: 1, name: 'Открытая закупка' },
-          { id: 0, name: 'Закрытая закупка' },
+          {id: 1, name: 'Открытая закупка'},
+          {id: 0, name: 'Закрытая закупка'},
         ],
         stagesProcedure: [
-          { id: 1, name: 'Одноэтапная процедура' },
-          { id: 0, name: 'Многоэтапная процедура' },
+          {id: 1, name: 'Одноэтапная процедура'},
+          {id: 0, name: 'Многоэтапная процедура'},
         ],
         alternativeApplications: [
-          { id: 1, name: 'Возможны альтернативные заявки' },
-          { id: 0, name: 'Невозможны альтернативные заявки' },
+          {id: 1, name: 'Возможны альтернативные заявки'},
+          {id: 0, name: 'Невозможны альтернативные заявки'},
         ],
         goodsAnalogs: [
-          { id: 1, name: 'допускаются' },
-          { id: 0, name: 'не допускаются' },
+          {id: 1, name: 'допускаются'},
+          {id: 0, name: 'не допускаются'},
         ],
         positionType: [
-          { id: 1, name: 'Товар' },
+          {id: 1, name: 'Товар'},
           // { id: 0, name: 'Услуга' },
         ],
         positionLongUnits: [
-          { id: 'm', name: 'Метры' },
-          { id: 'km', name: 'Километры' },
+          {id: 'm', name: 'Метры'},
+          {id: 'km', name: 'Километры'},
         ],
         positionUnits: [
-          { id: 'item', name: 'Штуки' },
-          { id: 'unit', name: 'Единицы' },
+          {id: 'item', name: 'Штуки'},
+          {id: 'unit', name: 'Единицы'},
         ],
         positionVAT: [
-          { id: 0, name: '0%' },
-          { id: 10, name: '10%' },
-          { id: 20, name: '20%' },
+          {id: 0, name: '0%'},
+          {id: 10, name: '10%'},
+          {id: 20, name: '20%'},
         ],
         OKPD: [
-          { id: 'products', name: 'Кабельно-проводниковая продукция' },
-          { id: 'none', name: 'Не кабельно-проводниковая продукция' },
+          {id: 'products', name: 'Кабельно-проводниковая продукция'},
+          {id: 'none', name: 'Не кабельно-проводниковая продукция'},
         ],
         fieldType: [
-          { id: 'text', name: 'Текст' },
-          { id: 'number', name: 'Число' },
-          { id: 'date', name: 'Дата' },
+          {id: 'text', name: 'Текст'},
+          {id: 'number', name: 'Число'},
+          {id: 'date', name: 'Дата'},
         ],
         reviewForm: [
-          { id: 'electronic', name: 'электронная' },
-          { id: 'analog', name: 'аналоговая' },
+          {id: 'electronic', name: 'электронная'},
+          {id: 'analog', name: 'аналоговая'},
         ],
         purchase_currency: [
-          { id: 'rub', name: 'руб.' },
-          { id: 'usd', name: 'usd' },
-          { id: 'eur', name: 'eur' },
+          {id: 'rub', name: 'руб.'},
+          {id: 'usd', name: 'usd'},
+          {id: 'eur', name: 'eur'},
         ],
         validationLength: null,
         blockingPeriodDays: [],
@@ -187,8 +195,8 @@ export default {
         reviewForm: null,
         companyName: null,
         absolutTrade: 'Абсолют трейд',
-        tender_trading_format: {},
-        tender_trading_type: {},
+        tender_trading_format: null,
+        tender_trading_type: null,
         tender_framework_contract: 0,
         confidential_price: 0,
         hide_member_names: 0,
@@ -201,7 +209,23 @@ export default {
         overbidding_is_possible: 0,
         item_description: null,
         category_okpd2_id: [],
+        invitedCompanies: [],
+        invitedEmails: [],
         tender_tolerance: null,
+        security: {
+          calculate_the_amount_of_collateral: null,
+          percentage_of_the_starting_price: null,
+          collateral_amount_percents: null,
+          collateral_amount: null,
+          blocking_period_days: null,
+        },
+        request: {
+          calculate_the_amount_of_collateral: null,
+          percentage_of_the_starting_price: null,
+          collateral_amount_percents: null,
+          collateral_amount: null,
+          blocking_period_days: null,
+        },
         calculate_the_amount_of_collateral: null,
         collateral_amount: null,
         collateral_amount_percents: null,
@@ -213,7 +237,7 @@ export default {
         application_letter_of_credit: 0,
         application_comment: null,
         application_delivery_conditions: null,
-        application_security_of_the_contract: null,
+        application_security_of_the_contract: 0,
         applications_delivery_address: null,
         application_payment_info: null,
         application_bank_guarantee: 0,
@@ -222,7 +246,7 @@ export default {
         place_of_receipt: null,
         place_of_consideration: null,
         place_of_consideration_total: null,
-        currency: { id: 'rub', name: 'руб.' },
+        currency: {id: 'rub', name: 'руб.'},
         application_submit_date_time_menu: null,
         application_submit_date_time: null,
         application_submit_date: null,
@@ -247,7 +271,7 @@ export default {
         contact_full_name: null,
         contact_phone: '',
         contact_email: null,
-        count_lots: { id: 0, name: '0' },
+        count_lots: {id: 0, name: '0'},
         analog_products: null,
         purchase_positional: null,
         publication_date_menu: null,
@@ -270,7 +294,7 @@ export default {
             pos_length_default: '1',
             measure: null,
             price_for_one: null,
-            vat: null,
+            vat: { "id": 20, "name": "20%" },
             total_price: null,
             loader: false,
             loaderName: false,
@@ -286,21 +310,21 @@ export default {
       searchOKPD2: '',
       searchOKPD2Counter: null,
       trueFalseSelect: [
-        { id: 1, name: 'Да' },
-        { id: 0, name: 'Нет' },
+        {id: 1, name: 'Да'},
+        {id: 0, name: 'Нет'},
       ],
       counterToTenSelect: [
-        { id: 0, name: '0' },
-        { id: 1, name: '1' },
-        { id: 2, name: '2' },
-        { id: 3, name: '3' },
-        { id: 4, name: '4' },
-        { id: 5, name: '5' },
-        { id: 6, name: '6' },
-        { id: 7, name: '7' },
-        { id: 8, name: '8' },
-        { id: 9, name: '9' },
-        { id: 10, name: '10' },
+        {id: 0, name: '0'},
+        {id: 1, name: '1'},
+        {id: 2, name: '2'},
+        {id: 3, name: '3'},
+        {id: 4, name: '4'},
+        {id: 5, name: '5'},
+        {id: 6, name: '6'},
+        {id: 7, name: '7'},
+        {id: 8, name: '8'},
+        {id: 9, name: '9'},
+        {id: 10, name: '10'},
       ],
       numValidation: [
         (v) => /^\d+$/.test(v) || 'Вводите только цифровые значения',
@@ -317,7 +341,10 @@ export default {
       const lotsCounter = []
       const positionType = []
       let procedureType = ''
-      if (this.selectedData.tender_trading_format.id === 'trading_223') {
+      if (
+          this.selectedData.tender_trading_format &&
+          this.selectedData.tender_trading_format.id === 'trading_223'
+      ) {
         this.fieldsData.tenderTradingType.forEach((item) => {
           switch (item.id) {
             case 'contest':
@@ -340,6 +367,7 @@ export default {
           }
         })
       } else if (
+          this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_format.id === 'commercial_trading'
       ) {
         this.fieldsData.tenderTradingType.forEach((item) => {
@@ -356,32 +384,44 @@ export default {
         })
       }
       if (
+          this.selectedData.tender_trading_format &&
+          this.selectedData.tender_trading_type &&
           this.selectedData.tender_trading_format.id === 'trading_223' &&
           this.selectedData.tender_trading_type.id === 'contest'
       ) {
         procedureType = 'Contest'
       } else if (
+          this.selectedData.tender_trading_format &&
+          this.selectedData.tender_trading_type &&
           this.selectedData.tender_trading_format.id === 'trading_223' &&
           (this.selectedData.tender_trading_type.id === 'request_prices' ||
               this.selectedData.tender_trading_type.id === 'request_offers')
       ) {
         procedureType = 'Query'
       } else if (
+          this.selectedData.tender_trading_format &&
+          this.selectedData.tender_trading_type &&
           this.selectedData.tender_trading_format.id === 'trading_223' &&
           this.selectedData.tender_trading_type.id === 'auction'
       ) {
         procedureType = 'Auction'
       } else if (
+          this.selectedData.tender_trading_format &&
+          this.selectedData.tender_trading_type &&
           this.selectedData.tender_trading_format.id === 'trading_223' &&
           this.selectedData.tender_trading_type.id === 'supplier_purchase'
       ) {
         procedureType = 'Supplier'
       } else if (
+          this.selectedData.tender_trading_format &&
+          this.selectedData.tender_trading_type &&
           this.selectedData.tender_trading_format.id === 'trading_223' &&
           this.selectedData.tender_trading_type.id === 'purchase_from_supplier'
       ) {
         procedureType = 'FromSupplier'
       } else if (
+          this.selectedData.tender_trading_format &&
+          this.selectedData.tender_trading_type &&
           this.selectedData.tender_trading_format.id === 'commercial_trading' &&
           this.selectedData.tender_trading_type.id
       ) {
@@ -396,14 +436,14 @@ export default {
         if (
             productID === 1 && item.code !== null && item.code.startsWith('27.32')
         ) {
-          positionType[index] = { name: 'PositionLength' }
+          positionType[index] = {name: 'PositionLength'}
         } else if (
             productID === 1 &&
             item.code !== null && !item.code.startsWith('27.32')
         ) {
-          positionType[index] = { name: 'PositionCount' }
-        } else if (productID=== 0) {
-          positionType[index] = { name: 'PositionService' }
+          positionType[index] = {name: 'PositionCount'}
+        } else if (productID === 0) {
+          positionType[index] = {name: 'PositionService'}
         }
 
 
@@ -421,7 +461,7 @@ export default {
       baseCount = !isNaN(baseCount) ? baseCount.toFixed(2) : baseCount
 
       for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
-        lotsCounter.push({ id: i, name: i })
+        lotsCounter.push({id: i, name: i})
       }
 
       const datesArray = [
@@ -444,7 +484,7 @@ export default {
                 .add(1, 'day')
                 .format('YYYY-MM-DD')
             setMinWeekDates[item] = moment(this.selectedData[item])
-                .add(8, 'days')
+                .add(16, 'days')
                 .format('YYYY-MM-DD')
           }
         }
@@ -577,7 +617,7 @@ export default {
           })
     },
     clearTenderTradingType() {
-      this.selectedData.tender_trading_type = {}
+      this.selectedData.tender_trading_type = null
     },
     createNewPositionFieldset() {
       const newPosition = {
@@ -591,7 +631,7 @@ export default {
         measure: null,
         marksize_id: null,
         price_for_one: null,
-        vat: null,
+        vat: { "id": 20, "name": "20%" },
         total_price: null,
         loader: false,
         loaderName: false,
@@ -608,10 +648,8 @@ export default {
         type: null,
         name: null,
         value: null,
-        value_date: null,
         isSave: false,
         description: null,
-        field_content_menu: null,
       }
       if (
           this.selectedData.fields.length <
@@ -623,32 +661,11 @@ export default {
     removeField(id) {
       this.selectedData.fields.splice(id, 1)
     },
-    changeTypeOfValue(id) {
-      this.selectedData.fields[id].value = null
-    },
     removePosition(id) {
       this.selectedData.positions.splice(id, 1)
     },
-    saveField(id, ref) {
-      const fieldForValidation = [
-        ref.type[id],
-        ref.name[id],
-        ref.description[id],
-      ]
-      const isValid = []
-      if (this.selectedData.fields[id].type === 'date') {
-        fieldForValidation.push(ref.value[id])
-      } else if (this.selectedData.fields[id].type) {
-        fieldForValidation.push(ref.value[id])
-      }
-      fieldForValidation.map((item) => {
-        isValid.push(item.validate())
-        if (!item.validate()) {
-          item.focus()
-          item.blur()
-        }
-      })
-      if (isValid.every((x) => x)) this.selectedData.fields[id].isSave = true
+    saveField(id) {
+      this.selectedData.fields[id].isSave = true
     },
     filesValidate() {
       if (!this.selectedData.file.length) {
@@ -660,7 +677,7 @@ export default {
     validation(toPublish) {
       this.filesValidate()
       this.$refs.form.validate().then((res) => {
-        if(res && this.filesValidate()) {
+        if (res && this.filesValidate()) {
           this.sendNewProcedureData(toPublish)
         } else {
           // Todo: заменить чем-то оболее умным этот скролл к ошибкам

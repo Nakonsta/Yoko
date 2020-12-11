@@ -11,12 +11,12 @@
         ></text-input>
       </div>
     </div>
-    <div class="row middle-xs">
+    <div class="row">
       <div class="col col-md-4 col-sm-6 col-xs-12">
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            placeholder="Выберите из списка"
             :rules="{ required: true, selectsValidation: true }"
             v-model="selectedData.tender_trading_format"
             label="Формат торгов"
@@ -29,7 +29,7 @@
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            placeholder="Выберите из списка"
             :rules="{ required: true, selectsValidation: true }"
             v-model="selectedData.tender_trading_type"
             label="Тип торговой процедуры"
@@ -37,8 +37,29 @@
             :disabled="isCreatedProcedure"
         ></select-input>
       </div>
+      <div v-if="
+          !selectedData.tender_trading_type
+        "
+        class="col col-md-4 col-sm-6 col-xs-12"
+      >
+        <div class="field-group">
+          <text-input
+              v-model="selectedData.tender_eis_id"
+              label="Выгрузить из ЕИС"
+              placeholder="Выберите номер"
+              :rules="{ required: true, numeric: true }"
+          ></text-input>
+          <button
+              class="btn"
+              :disabled="!selectedData.tender_eis_id"
+          >
+            Выгрузить
+          </button>
+        </div>
+      </div>
       <div
           v-if="
+            selectedData.tender_trading_type &&
             selectedData.tender_trading_type.id &&
             procedureIdData.procedureType !== 'Query' &&
             procedureIdData.procedureType !== 'Commercial'
@@ -48,7 +69,8 @@
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            content="Вы допускаете торги по конкурсу"
+            placeholder="Выберите из списка"
             v-model="selectedData.tender_available"
             label="Доступность"
             :options="
@@ -71,7 +93,7 @@
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            placeholder="Выберите из списка"
             v-model="selectedData.stages_of_the_procurement_procedure"
             label="Этапы процедуры закупки"
             :options="fieldsData.stagesProcedure"
@@ -89,7 +111,7 @@
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            placeholder="Выберите из списка"
             v-model="selectedData.alternative_applications"
             label="Альтернативные заявки"
             :options="fieldsData.alternativeApplications"
@@ -104,13 +126,19 @@
           class="col col-md-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
-            class-name=""
+            class-name="mt3"
+            content="Вы допускаете торги по конкурсу"
             name="overbidding_is_possible"
             v-model="selectedData.overbidding_is_possible"
             :label="[{label: 'Возможна переторжка'}]"
         ></checkbox-input>
       </div>
-      <div v-if="selectedData.tender_trading_type.id" class="col col-md-4 col-sm-6 col-xs-12">
+      <div v-if="
+          selectedData.tender_trading_type &&
+          selectedData.tender_trading_type.id
+        "
+        class="col col-md-4 col-sm-6 col-xs-12"
+      >
         <date-time
             v-model="selectedData.publication_date"
             label="Дата публикации"
@@ -125,7 +153,7 @@
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            placeholder="Выберите из списка"
             v-model="selectedData.alternative_applications"
             label="Альтернативные заявки"
             :options="fieldsData.alternativeApplications"
@@ -140,7 +168,7 @@
           class="col col-md-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
-            class-name=""
+            class-name="mt3"
             name="tender_framework_contract"
             v-model="selectedData.tender_framework_contract"
             :label="[{label: 'Конкурс на заключение рамочного договора'}]"
@@ -172,7 +200,7 @@
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            placeholder="Выберите из списка"
             v-model="selectedData.currency"
             label="Валюта закупки"
             :options="fieldsData.purchase_currency"
@@ -189,7 +217,8 @@
           class="col col-md-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
-            class-name=""
+            class-name="mt3"
+            content="Вы допускаете торги по конкурсу"
             name="confidential_price"
             v-model="selectedData.confidential_price"
             :label="[{label: 'Цены конфиденциальны'}]"
@@ -202,7 +231,7 @@
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            placeholder="Выберите из списка"
             v-model="selectedData.alternative_applications"
             label="Альтернативные заявки"
             :options="fieldsData.alternativeApplications"
@@ -217,7 +246,7 @@
           class="col col-md-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
-            class-name=""
+            class-name="mt3"
             name="hide_member_names"
             v-model="selectedData.hide_member_names"
             :label="[{label: 'Скрыть названия участников'}]"
@@ -231,32 +260,35 @@
           class="col col-md-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
-            class-name=""
+            class-name="mt3"
             name="connect_an_autobot_for_trading"
             v-model="selectedData.connect_an_autobot_for_trading"
             :label="[{label: 'Подключить автобота для торгов'}]"
         ></checkbox-input>
       </div>
       <div
-          v-if="selectedData.tender_trading_type.id && procedureIdData.procedureType !== 'Contest'"
+          v-if="
+            selectedData.tender_trading_type &&
+            selectedData.tender_trading_type.id &&
+            procedureIdData.procedureType !== 'Contest'
+          "
           class="col col-md-4 col-sm-6 col-xs-12"
       >
-        <select-input
-            :is-single="true"
-            :close="true"
-            placeholder=""
+        <radio-input
+            title="Допускается ли толеранс?"
+            name="tender_tolerance"
             v-model="selectedData.tender_tolerance"
-            label="Допускается ли толеранс"
-            :options="trueFalseSelect"
-            :disabled="isCreatedProcedure"
-        ></select-input>
+            :label="[
+              {label: 'Да', value: 1},
+              {label: 'Нет', value: 0}
+            ]"
+        ></radio-input>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment'
 import TextInput from '../../forms/Input.vue'
 import SelectInput from '../../forms/Select.vue'
 import CheckboxInput from '../../forms/Checkbox.vue'
@@ -293,34 +325,9 @@ export default {
       default: false,
       type: Boolean,
     },
-    selectsValidation: {
-      default: () => {
-      },
-      type: Function,
-    },
-    textValidation: {
-      default: () => {
-      },
-      type: Function,
-    },
     clearTenderTradingType: {
-      default: () => {
-      },
+      default: () => {},
       type: Function,
-    },
-    minDateValidation: {
-      default: () => {
-      },
-      type: Function,
-    },
-    numValidation: {
-      default: null,
-      type: Array,
-    },
-  },
-  methods: {
-    isAfterToday(val) {
-      return moment(val).isSameOrAfter(new Date(), 'day')
     },
   },
 }

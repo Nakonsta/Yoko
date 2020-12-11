@@ -4,7 +4,7 @@
       :rules="rules"
       class="field__container"
       :name="$attrs.label && $attrs.label.toLowerCase()"
-      v-slot="{ errors, failed }"
+      v-slot="{ errors, failed, validate }"
   >
     <label v-if="$attrs.label" class="field__label">{{ $attrs.label }}</label>
     <input type="hidden" v-model="innerValue">
@@ -16,6 +16,7 @@
         class="date-picker"
         :disabled-dates='disableDates'
         :min-date='minDate'
+        :popover="{ visibility: 'click' }"
     >
       <template v-slot="{ inputValue, inputEvents }">
         <input
@@ -25,6 +26,7 @@
             :value="inputValue"
             v-on="inputEvents"
             :disabled="disabled"
+            @blur="() => validateField(validate)"
         />
         <span slot="afterDateInput" class="icon-calendar-outlilne"></span>
       </template>
@@ -88,6 +90,11 @@ export default {
       this.innerValue = this.value;
     }
   },
+  methods: {
+    validateField(validate) {
+      setTimeout(() =>validate(), 100)
+    }
+  }
 };
 </script>
 

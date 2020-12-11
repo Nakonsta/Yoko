@@ -79,7 +79,6 @@
     "vee-validate": "^3.4.3",
     "vue": "^2.6.12",
     "vue-chartjs": "^3.5.1",
-    "vue-functional-calendar": "^2.8.1",
     "vue-infinite-loading": "^2.4.5",
     "vue-loader": "^15.9.3",
     "vue-multiselect": "^2.1.6",

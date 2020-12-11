@@ -10,7 +10,7 @@
           <select-input
               :is-single="true"
               :close="true"
-              placeholder=""
+              placeholder="Выберите из списка"
               v-model="position.is_product"
               label="Тип позиции"
               :options="fieldsData.positionType"
@@ -22,7 +22,6 @@
           <select-input
               :is-single="true"
               :close="true"
-              placeholder=""
               v-model="position.category_okpd2"
               :options="fieldsData.OKPD2"
               label="Раздел ОКПД2"
@@ -51,7 +50,7 @@
               position.is_product.id === 0
             )
           "
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-xl-3 col-md-4 col-sm-6 col-xs-12"
         >
           <select-input
               :is-single="true"
@@ -67,7 +66,7 @@
               no-result="Позиции не найдены"
           ></select-input>
         </div>
-        <div v-if="procedureIdData.positionType[key]" class="col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="procedureIdData.positionType[key]" class=" col-xl-1 col-lg-2 col col-md-4 col-sm-6 col-xs-12">
           <text-input
               v-model="position.quantity"
               :rules="{ required: true, numeric: true }"
@@ -84,7 +83,7 @@
             procedureIdData.positionType[key] &&
             procedureIdData.positionType[key].name !== 'PositionService'
           "
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-xl-2 col-md-4 col-sm-6 col-xs-12"
         >
           <select-input
               :is-single="true"
@@ -101,35 +100,37 @@
               :disabled="isCreatedProcedure"
           ></select-input>
         </div>
-        <div v-if="procedureIdData.positionType[key]" class="col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="procedureIdData.positionType[key]" class="col col-xl-1 col-lg-2 col-md-4 col-sm-6 col-xs-12">
           <text-input
               :disabled="true"
               v-model="selectedData.currency.name"
               label="Валюта"
           ></text-input>
         </div>
-        <div v-if="procedureIdData.positionType[key]" class="col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="procedureIdData.positionType[key]" class="col col-lg-3 col-md-4 col-sm-6 col-xs-12">
           <text-input
               v-model="position.price_for_one"
+              content="Вы допускаете торги по конкурсу"
               :rules="{ required: true, numeric: true, max: 12 }"
               label="Стоимость за единицу"
               :input="countTotalPrice"
           ></text-input>
         </div>
-        <div v-if="procedureIdData.positionType[key]" class="col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="procedureIdData.positionType[key]" class="col col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
           <select-input
               :is-single="true"
               :close="true"
               placeholder=""
               v-model="position.vat"
               label="НДС"
+              :disabled="true"
               :options="fieldsData.positionVAT"
-              :disabled="isCreatedProcedure"
           ></select-input>
         </div>
-        <div v-if="procedureIdData.positionType[key]" class="col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="procedureIdData.positionType[key]" class="col col-lg-3 col-md-4 col-sm-6 col-xs-12">
           <text-input
               :disabled="true"
+              content="Вы допускаете торги по конкурсу"
               v-model="position.total_price"
               label="Сумма за позицию"
           ></text-input>

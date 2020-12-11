@@ -1,10 +1,10 @@
 <template>
-  <div v-if="selectedData.tender_trading_type.id" class="container-item">
+  <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
     <h3 class="procedure__main-title">Условия оплаты и поставки</h3>
     <div class="row">
       <div class="col col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
         <checkbox-input
-            class-name=""
+            class-name="mt1"
             name="application_prepayment"
             v-model="selectedData.application_prepayment"
             :label="[{label: 'Предоплата'}]"
@@ -12,13 +12,14 @@
       </div>
       <div class="col col-xl-10 col-lg-9 col-md-4 col-sm-6 col-xs-12">
         <text-input
+            content="Вы допускаете торги по конкурсу"
             v-model="selectedData.application_payment_info"
-            label="Информация об оплате"
             placeholder="Введите  информацию об оплате"
         ></text-input>
       </div>
       <div class="col col-xs-12">
         <checkbox-input
+            content="Вы допускаете торги по конкурсу"
             name="application_letter_of_credit"
             v-model="selectedData.application_letter_of_credit"
             :label="[{label: 'Возможен аккредитив'}]"

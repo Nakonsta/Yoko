@@ -35,6 +35,7 @@ input[type=number]
     transition: .3s background-color, .3s border-color
     width: rem(24px)
     height: rem(24px)
+    margin-top: rem(3px)
     border-radius: rem(4px)
     border: 2px solid #9B9B9A
     flex: none
@@ -79,7 +80,7 @@ input[type=number]
 
     .icon-calendar-outlilne
       position: absolute
-      top: rem(9px)
+      top: rem(13px)
       right: rem(15px)
       color: $colorTurquoise
 
@@ -88,6 +89,8 @@ input[type=number]
     margin: 0 0 rem(10px)
     font-size: rem(16px)
     line-height: (22/16)
+    &--radio
+      margin-bottom: rem(16px)
 
   &__error
     display: block
@@ -147,6 +150,25 @@ input[type=number]
 
   &[disabled]
     opacity: 0.6
+  &-group
+    display: flex
+    align-items: flex-start
+    > :first-child
+      flex-grow: 2
+      .field
+        border-top-right-radius: 0
+        border-bottom-right-radius: 0
+    > :last-child
+      flex-grow: 1
+      height: rem(48px)
+      min-height: inherit
+      margin-top: 32px
+      margin-left: -5px
+      position: relative
+      min-width: inherit
+    &--null
+      > :last-child
+          margin-top: 0
 
 
 input[type="text"].field,
@@ -159,10 +181,11 @@ textarea.field
   display: block
   margin: 0
   border: 1px solid #cdcdcd
+  background-color: white
   border-radius: rem(4px)
   padding: rem(7px) rem(11px)
   width: 100%
-  height: rem(40px)
+  height: rem(48px)
   font: normal 14px/#{(24/14)} $fontFamily
   color: $colorText
   transition: border-color $animation
@@ -272,6 +295,7 @@ div.field__range
   align-items: center
   cursor: pointer
   margin-right: 2rem
+  min-height: 2rem
   input
     display: none
     &:checked

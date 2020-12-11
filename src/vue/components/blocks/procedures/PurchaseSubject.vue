@@ -1,9 +1,23 @@
 <template>
-  <div v-if="selectedData.tender_trading_type.id" class="container-item">
+  <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
+    <div class="hide-block" @click=""><tooltip content="Скрыть блок"></tooltip></div>
     <h3 class="procedure__main-title">Предмет закупки</h3>
-    <div class="row middle-xs">
+    <div class="row field__container">
+      <div class="col">
+        <button class="btn btn--bdr">
+          Скачать шаблон
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn">
+          Загрузить шаблон
+        </button>
+      </div>
+    </div>
+    <div class="row">
       <div class="col col-xs-12">
         <textarea-input
+            content="Вы допускаете торги по конкурсу"
             v-model="selectedData.item_description"
             label="Описание предмета закупки"
             placeholder="Введите информацию о предмете закупки"
@@ -20,9 +34,9 @@
             :disabled="isCreatedProcedure"
         ></select-input>
       </div>
-      <div v-if="selectedData.count_lots === 0" class="col col-md-4 col-sm-6 col-xs-12">
+      <div v-if="selectedData.count_lots.id === 0" class="col col-md-4 col-sm-6 col-xs-12">
         <checkbox-input
-            class-name=""
+            class-name="mt3"
             name="purchase_positional"
             v-model="selectedData.purchase_positional"
             :label="[{label: 'Попозиционная закупка'}]"
@@ -32,7 +46,7 @@
         <select-input
             :is-single="true"
             :close="true"
-            placeholder=""
+            placeholder="Выберите из списка"
             v-model="selectedData.analog_products"
             label="Товары-аналоги"
             :options="fieldsData.goodsAnalogs"
@@ -56,6 +70,7 @@
       <div v-for="index in selectedData.count_lots.id" :key="index" class="col col-md-4 col-sm-6 col-xs-12">
         <text-input
             :disabled="true"
+            content="Вы допускаете торги по конкурсу"
             v-model="procedureIdData.totalCount[index - 1]"
             :label="'Сумма лота ' + index"
         ></text-input>
@@ -79,10 +94,12 @@
   import CheckboxInput from '../../forms/Checkbox.vue'
   import TextareaInput from '../../forms/Textarea.vue'
   import PositionType from './PositionType.vue'
+  import Tooltip from "../../tooltip";
 
   export default {
     name: 'PurchaseSubject',
     components: {
+      Tooltip,
       TextInput,
       SelectInput,
       CheckboxInput,

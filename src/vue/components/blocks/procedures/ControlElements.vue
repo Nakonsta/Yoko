@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedData.tender_trading_type.id" class="row">
+  <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="row">
     <div class="col">
       <button class="btn" @click="validation(true)">
         Опубликовать процедуру

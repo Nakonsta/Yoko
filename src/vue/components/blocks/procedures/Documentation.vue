@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedData.tender_trading_type.id" class="container-item">
+  <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
     <h3 class="procedure__main-title">Документация</h3>
     <div class="row">
         <!--      TODO: доделать бэк для раздела документации-->

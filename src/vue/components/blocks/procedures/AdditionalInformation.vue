@@ -1,7 +1,8 @@
 <template>
-  <div v-if="selectedData.tender_trading_type.id" class="container-item">
+  <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
     <h3 class="procedure__main-title">Дополнительная информация</h3>
     <textarea-input
+        content="Вы допускаете торги по конкурсу"
         v-model="selectedData.addition_information"
         label="Дополнительная информация"
         placeholder="Введите текст"
