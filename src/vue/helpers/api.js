@@ -254,8 +254,8 @@ export default {
               `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`
             );
         },
-        fetchCompanyById(id) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/full/data/companies/${id}`);
+        fetchCompanyById(inn) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
         }
     }
 }

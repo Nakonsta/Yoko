@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="tender-item__common">
-                    <div v-if="tenderItemData.company_id" class="tender-item__row">
+                    <div v-if="company.name" class="tender-item__row">
                         <div class="tender-item__row-name">
                             Компания
                         </div>
@@ -19,20 +19,20 @@
                             {{ company.name }}
                         </div>
                     </div>
-                    <div v-if="tenderItemData.contact_id" class="tender-item__row">
+                    <div v-if="company.directorFio" class="tender-item__row">
                         <div class="tender-item__row-name">
                             Контактное лицо
                         </div>
                         <div class="tender-item__row-value">
-                            {{ tenderItemData.contact_id }}
+                            {{ company.directorFio }}
                         </div>
                     </div>
-                    <div v-if="tenderItemData.delivery_terms" class="tender-item__row">
+                    <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.delivery_to" class="tender-item__row">
                         <div class="tender-item__row-name">
                             Доставка
                         </div>
                         <div class="tender-item__row-value">
-                            {{ tenderItemData.delivery_terms ? 'Требуется' : 'Не требуется' }}
+                            {{ tenderItemData.purchase_term.delivery_to ? 'Требуется' : 'Не требуется' }}
                         </div>
                     </div>
                     <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.description" class="tender-item__row">

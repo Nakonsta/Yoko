@@ -118,11 +118,41 @@ export default {
                 user_id: null,
             },
             company: {
+                activityIndex: null,
+                address: null,
+                businessSize: null,
+                buyer: null,
+                childes: [],
+                contractor: null,
+                country: null,
+                createdAt: null,
+                declaration: null,
+                directorFio: null,
+                email: null,
                 id: null,
                 inn: null,
+                innerRating: null,
                 kpp: null,
+                legalAddress: null,
+                legalCountry: null,
+                legalPostcode: null,
+                legalType: null,
+                mailingAddress: null,
+                mailingCountry: null,
+                mailingPostcode: null,
                 name: null,
+                ogrn: null,
+                okpd2: null,
+                okved: null,
+                owner: null,
+                phone: null,
+                postcode: null,
+                rating: null,
+                regCountry: null,
+                rnp: null,
                 shortName: null,
+                updatedAt: null,
+                website: null,
             }
         }
     },
@@ -130,6 +160,7 @@ export default {
     created() {
         this.getTenderItemId()
         this.getTenderItemMainData(this.tenderItemId)
+        this.checkUrlHash()
     },
 
     methods: {
@@ -152,8 +183,7 @@ export default {
                 })
         },
         getCompanyData() {
-            // this.fetchCompanyById(this.tenderItemData.company_id)
-            this.fetchCompanyById(1)
+            this.fetchCompanyById(this.tenderItemData.inn)
                 .then((response) => {
                     this.company = response.data.data;
                 })
@@ -163,6 +193,20 @@ export default {
         },
         changeTab(tab) {
             this.activeTab = tab;
+        },
+        checkUrlHash() {
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                if (
+                    hash === 'main-info' ||
+                    hash === 'client' ||
+                    hash === 'lots' ||
+                    hash === 'documents'
+                ) {
+                    this.activeTab = hash
+                }
+            }
+            return false
         }
     }
 }
