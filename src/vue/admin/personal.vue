@@ -1,8 +1,8 @@
 <template>
   <div class="main">
     <app-menu :window-width="windowWidth"></app-menu>
-    
-    <router-view />
+
+    <div><router-view /></div>
   </div>
 </template>
 

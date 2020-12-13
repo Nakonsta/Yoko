@@ -55,23 +55,41 @@
                 :key="i"
                 v-if="enabled ? true : item.isActive"
                 v-for="(item, i) in filteredMenuItems"
-                class="nav-inner__item"
             >
-              <router-link
-                  :to="!enabled ? item.to : ''"
-                  class="nav-inner__link"
-                  :class="{ disabled: !item.isActive }"
-                  router
-                  exact
+              <div
+                  class="nav-inner__item"
+                  :class="{ parent: item.subItems.length }"
               >
-                <div class="nav-inner__name">
+                <router-link
+                    router
+                    exact
+                    :to="!enabled ? item.to : ''"
+                    class="nav-inner__link"
+                    :class="{disabled: !item.isActive}"
+                >
                   <span v-text="item.title"/>
+                </router-link>
+                <div v-if="item.subItems.length" class="open-menu" @click="showSubMenu(i)">
+                  <svg class="sprite-arrow" :class="{active: activeIndex === i}">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#arrow-right"/>
+                  </svg>
                 </div>
-                <label class="switch" v-if="enabled" @click="enabledSwitch(i)">
-                  <input type="checkbox" v-model="item.isActive">
-                  <span class="slider"></span>
-                </label>
-              </router-link>
+                <div class="switch" v-if="enabled" @click="enabledSwitch(i)">
+                  <span class="slider" :class="{active: item.isActive}"></span>
+                </div>
+              </div>
+              <div v-if="activeIndex === i" class="submenu">
+                <router-link
+                    router
+                    exact
+                    :key="i"
+                    class="nav-inner__item-sub"
+                    v-for="(el, i) in item.subItems"
+                    :to="el.to"
+                >
+                  <span v-text="el.title"/>
+                </router-link>
+              </div>
             </div>
           </draggable>
           <were-problems
@@ -110,25 +128,165 @@ export default {
         isVisible: false,
         test: null,
       },
+      activeIndex: undefined,
       enabled: false,
       filteredMenuItems: [],
-      menuItems: [],
+      menuItems: [
+        {
+          icon: 'mdi-home',
+          title: 'Главная',
+          to: '/',
+          order: 0,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-buffer',
+          title: 'Каталог',
+          to: '/catalog',
+          order: 1,
+          isActive: true,
+          subItems: [
+            {
+              title: 'Управление закупками',
+              to: '/'
+            },
+            {
+              title: 'Открытые переговоры',
+              to: '/'
+            },
+            {
+              title: 'Мои заявки в закупках',
+              to: '/'
+            },
+            {
+              title: 'Избранное',
+              to: '/'
+            }
+          ]
+        },
+        {
+          icon: 'mdi-compare-horizontal',
+          title: 'Торговые процедуры',
+          to: '/procedures',
+          order: 2,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-information-outline',
+          title: 'О компании',
+          to: '/info',
+          order: 3,
+          isActive: true,
+          subItems: [
+            {
+              title: 'Управление закупками',
+              to: '/'
+            },
+            {
+              title: 'Открытые переговоры',
+              to: '/'
+            },
+            {
+              title: 'Мои заявки в закупках',
+              to: '/'
+            },
+            {
+              title: 'Избранное',
+              to: '/'
+            }
+          ]
+        },
+        {
+          icon: 'mdi-card-account-phone-outline',
+          title: 'Контакты',
+          to: '/contact',
+          order: 4,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-account-multiple-check',
+          title: 'Аккредитация',
+          to: '/accreditations',
+          order: 5,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-account-heart',
+          title: 'Мои данные',
+          to: '/user',
+          order: 6,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-home',
+          title: 'Справочник',
+          to: '/info',
+          order: 7,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-home',
+          title: 'Логистические сервисы',
+          to: '/accreditations',
+          order: 8,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-home',
+          title: 'Торги',
+          to: '/catalog',
+          order: 9,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-home',
+          title: 'Электронные документооборот',
+          to: '/procedures',
+          order: 10,
+          isActive: true,
+          subItems: [],
+        },
+        {
+          icon: 'mdi-home',
+          title: 'Инструкции',
+          to: '/user',
+          order: 11,
+          isActive: true,
+          subItems: [],
+        },
+      ],
     }
   },
   mounted() {
-    this.getSettingsData('menu')
-        .then((response) => {
-          const data = decodeURIComponent(response.data.data.value)
-              .replace(/\+/g, ' ')
-              .replace(/=/g, '')
-          this.menuItems = JSON.parse(data)
+    // this.getSettingsData('menu')
+    //     .then((response) => {
+    //       const data = decodeURIComponent(response.data.data.value)
+    //           .replace(/\+/g, ' ')
+    //           .replace(/=/g, '')
+    //       this.menuItems = JSON.parse(data)
           this.filteredMenuItems = this.menuItems
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+    //       console.log(this.filteredMenuItems)
+    //     })
+    //     .catch((e) => {
+    //       console.log(e)
+    //     })
   },
   methods: {
+    showSubMenu(index) {
+      if (this.activeIndex === index) {
+        this.activeIndex = undefined
+      } else {
+        this.activeIndex = index
+      }
+    },
     resetList() {
       this.filteredMenuItems = this.filteredMenuItems
           .sort((one, two) => {
@@ -171,6 +329,7 @@ export default {
           this.saveList()
         }, 100)
       }
+      return false;
     },
   },
 }
