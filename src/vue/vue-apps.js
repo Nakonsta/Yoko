@@ -44,6 +44,17 @@ configure({
     }
 });
 
+// Детальная страница марки
+import markDetails from './mark-details.vue'
+const descriptionMarkBlock = document.querySelector('#mark-details');
+if (descriptionMarkBlock) {
+    let appMark = new Vue({
+        el: descriptionMarkBlock,
+        store: store,
+        render: function(h) { return h(markDetails); }
+    })
+}
+
 // Регистрация
 import Registration from './registration.vue'
 const registrationBlock = document.querySelector('#registration');

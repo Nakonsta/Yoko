@@ -52,6 +52,7 @@
       ></text-input>
       <div class="registration-form__title">Юридический адрес</div>
       <select-input
+          :is-single="true"
           v-model="dataForm.legalAddress.country"
           label="Страна"
           :options="lists.countries"
@@ -77,6 +78,7 @@
           :disabled="oldCompany === '1'"
       ></checkbox-input>
       <select-input
+          :is-single="true"
           v-if="!dataForm.mailAddress.coincidesLegalAddress"
           v-model="dataForm.actualAddress.country"
           label="Страна"
@@ -85,6 +87,7 @@
       ></select-input>
       <select-input
           v-else
+          :is-single="true"
           v-model="dataForm.legalAddress.country"
           label="Страна"
           :options="lists.countries"
@@ -124,6 +127,7 @@
           :disabled="oldCompany === '1'"
       ></checkbox-input>
       <select-input
+          :is-single="true"
           v-if="!dataForm.mailAddress.coincidesLegalAddress"
           v-model="dataForm.mailAddress.country"
           label="Страна"
@@ -132,6 +136,7 @@
       ></select-input>
       <select-input
           v-else
+          :is-single="true"
           v-model="dataForm.legalAddress.country"
           label="Страна"
           :options="lists.countries"

@@ -71,6 +71,20 @@
       @include mq($until: mobileLandscape)
         left: rem(24px)
 
+  &--white
+    border-color: white
+    color: $colorText !important
+    background-color: white
+    svg
+      fill: $colorTurquoise
+
+    &:hover
+      border-color: $colorTurquoise
+      color: white !important
+      background-color: $colorTurquoise
+      svg
+        fill: white
+
   &-group
     display: flex
     flex-wrap: wrap
