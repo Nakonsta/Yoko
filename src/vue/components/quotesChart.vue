@@ -2,7 +2,7 @@
   <div class="quotes__body">
     <template v-if="!loadingQuotes">
       <div class="quotes__spot">
-        <span>Спот, {{ dates.now }}:</span>
+        <span>{{ currencyChecked ? 'Спот' : 'Котировка' }}, {{ dates.now }}:</span>
         {{ latestQuote && latestQuote[currency] }} {{ !currencyChecked ? '$' : '₽' }}
       </div>
       <div class="quotes__dates">
