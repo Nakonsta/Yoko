@@ -45,7 +45,7 @@
                 </svg>
             </div>
         </div>
-        <input style="display: none;" type="file" ref="input" accept="image/.jpg,.png,.jpeg,.pdf" @change="uploadFile" />
+        <input style="display: none" type="file" ref="input" accept="image/.jpg,.png,.jpeg,.pdf" @change="uploadFile" />
     </div>
 </template>
 <script>
@@ -104,12 +104,19 @@ export default {
             }
         },
         uploadFile() {
+            const types = ['image/png', 'image/jpg', 'image/jpeg', 'image/pdf']
             const file = this.$refs.input.files[0]
 
-            if (file) {
-                this.localFile.name = file.name
-                this.localFile.url = URL.createObjectURL(file)
-                this.$emit('uploaded', file)
+            if (types.includes(file.type)) {
+                if (file) {
+                    this.localFile.name = file.name
+                    this.localFile.url = URL.createObjectURL(file)
+                    this.$emit('uploaded', file)
+                }
+            } else {
+                window.notificationError(
+                    'Вы пытаетесь загрузить файлы неверного формата. Разрешенные форматы .pdf, .jpeg, .png'
+                )
             }
         },
         removeFile() {
