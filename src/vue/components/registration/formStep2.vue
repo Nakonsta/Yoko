@@ -52,7 +52,6 @@
             "
         ></text-input>
         <select-input
-            :is-multiple="true"
             v-if="dataForm.clientType.find((item) => item === 1)"
             v-model="dataForm.offeredProductsAndServices"
             class="field__container field__container--tags"
@@ -67,7 +66,6 @@
             :search="getSearchListOKVED"
         ></select-input>
         <select-input
-            :is-multiple="true"
             v-if="dataForm.clientType.find((item) => item === 2)"
             v-model="dataForm.consumedProductsAndServices"
             class="field__container field__container--tags"
