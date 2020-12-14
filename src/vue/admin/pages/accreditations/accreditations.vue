@@ -1,5 +1,8 @@
 <template>
     <div class="accreditations">
+        <router-link class="accreditations__create" to="accreditations/new">
+            создать заявку
+        </router-link>
         <accreditations-title title="Список заявок"></accreditations-title>
 
         <div class="accreditations__filters">
@@ -117,6 +120,30 @@ export default {
 
     @include mq($until: desktop) {
         padding-top: rem(87px);
+    }
+
+    &__create {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        max-width: 290px;
+        padding: rem(13px) rem(33px);
+        background-color: $colorTurquoise;
+        border: none;
+        border-radius: 6px;
+        transition: 0.3s;
+
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: rem(14px);
+        color: #ffffff;
+        text-transform: uppercase;
+
+        &:active,
+        &:hover {
+            background-color: lighten($color: $colorTurquoise, $amount: 5%);
+        }
     }
 
     &__preloader {

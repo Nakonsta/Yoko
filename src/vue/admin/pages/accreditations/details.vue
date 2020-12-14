@@ -5,7 +5,7 @@
                 <div class="preloader__loader"></div>
             </div>
         </div>
-        <div v-else class="accreditation-details__wrapper">
+        <div v-if="!viewType.isEmpty && !loading" class="accreditation-details__wrapper">
             <div class="accreditation-details__header">
                 <accreditations-steps
                     v-if="!viewType.isCreate && accreditation.status"
@@ -147,6 +147,7 @@
                 {{ viewType.isCreate ? 'Отправить заявку на аккредитацию' : 'Повторно отправить документы' }}
             </button>
         </div>
+        <accreditation-details-empty v-if="!loading && viewType.isEmpty"></accreditation-details-empty>
     </div>
 </template>
 <script>
@@ -159,6 +160,7 @@ import AccreditationDetailsCard from '../../../components/admin/accreditations/d
 import AccreditationDetailsSelect from '../../../components/admin/accreditations/details/AccreditationDetailsSelect.vue'
 import AccreditationDetailsCheckbox from '../../../components/admin/accreditations/details/AccreditationDetailsCheckbox.vue'
 import AccreditationDetailsFileUploader from '../../../components/admin/accreditations/details/AccreditationDetailsFileUploader.vue'
+import AccreditationDetailsEmpty from '../../../components/admin/accreditations/details/AccreditationDetailsEmpty.vue'
 
 export default {
     name: 'accreditation-details',
@@ -168,6 +170,7 @@ export default {
         AccreditationDetailsSelect,
         AccreditationDetailsCard,
         AccreditationDetailsFileUploader,
+        AccreditationDetailsEmpty,
         AccreditationDetailsCheckbox
     },
     mixins: [api, functions],
@@ -200,7 +203,8 @@ export default {
                 isEdit: this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false,
                 isView:
                     this.id !== 'new' &&
-                    !(this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false)
+                    !(this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false),
+                isEmpty: false
             }
         }
     },
@@ -213,6 +217,9 @@ export default {
                         ...this.accreditation,
                         ...(data?.data?.data ?? {})
                     }
+                })
+                .catch(() => {
+                    this.viewType.isEmpty = true
                 })
                 .finally(() => (this.loading = false))
         },
@@ -358,6 +365,7 @@ export default {
 .accreditation-details {
     padding: rem(80px) 0 rem(40px) !important;
     border-radius: 6px;
+    background-color: #fff;
 
     &__header {
         padding: 0 rem(40px);
