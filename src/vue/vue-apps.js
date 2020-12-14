@@ -15,6 +15,9 @@ Vue.component('paginate', Paginate)
 import VueTheMask from 'vue-the-mask'
 Vue.use(VueTheMask)
 
+import VCalendar from 'v-calendar'
+Vue.use(VCalendar)
+
 // validate
 import {configure, setInteractionMode, ValidationObserver, ValidationProvider, extend, localize} from 'vee-validate'
 import customRules from './helpers/custom-rules'

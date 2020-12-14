@@ -7,11 +7,10 @@
     position: relative
     > *:last-child
         width: 100%
-        padding: rem(80px) rem(40px)
-        background-color: white
+        &.fullMode
+            width: 100%
         @include mq($from: 1025px)
             width: 65%
-            padding: rem(40px)
 
 .nav-inner
     border-radius: rem(6px)
@@ -19,6 +18,11 @@
     position: absolute
     left: 0
     top: 0
+    &.fullMode
+        position: absolute
+        width: rem(124px)
+        min-width: inherit
+        z-index: 9
     @include mq($from: 1025px)
         width: 30%
         margin-right: 5%

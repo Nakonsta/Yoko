@@ -1,8 +1,11 @@
 <template>
   <div class="main">
-    <app-menu :window-width="windowWidth"></app-menu>
-    
-    <router-view />
+    <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
+
+    <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
+      <router-view @fullMode="getModeFromPage" />
+    </div>
+
   </div>
 </template>
 
@@ -22,6 +25,7 @@
     data() {
       return {
         windowWidth: window.innerWidth,
+        fullMode: false,
       }
     },
     mounted() {
@@ -33,6 +37,9 @@
       window.removeEventListener('resize', this.onResize);
     },
     methods: {
+      getModeFromPage() {
+        this.fullMode = true
+      },
       onResize() {
         this.windowWidth = window.innerWidth
       },
