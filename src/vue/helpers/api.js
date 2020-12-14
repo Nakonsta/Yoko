@@ -269,33 +269,43 @@ export default {
         },
         fetchAccreditationsList(props) {
             const defaultProps = {
-              orderBy: "id",
-              orderDir: "DESC",
-              page: 1,
-              search: "",
-            };
-
-            const requestProps = Object.assign(defaultProps, props ?? {});
-
-            const fData = new FormData();
-
-            fData.append("page", requestProps.page);
-            fData.append("order[by]", requestProps.orderBy);
-            fData.append("order[direction]", requestProps.orderDir);
-
-            if (requestProps.search !== "") {
-              fData.append("q", requestProps.search);
+                orderBy: 'id',
+                orderDir: 'DESC',
+                page: 1,
+                search: '',
             }
 
-            return axios.post(
-              `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/list`,
-              fData
-            );
+            const requestProps = Object.assign(defaultProps, props ?? {})
+
+            const fData = new FormData()
+
+            fData.append('page', requestProps.page)
+            fData.append('order[by]', requestProps.orderBy)
+            fData.append('order[direction]', requestProps.orderDir)
+
+            if (requestProps.search !== '') {
+                fData.append('q', requestProps.search)
+            }
+
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/list`, fData)
         },
         fetchAccreditationDetails(id) {
-            return axios.get(
-              `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`
-            );
+            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`)
+        },
+        updateAccreditation(id, data) {
+            const fData = new FormData()
+
+            for (const key in data) {
+                fData.append(`documents[${key}]`, data[key])
+            }
+
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`, fData)
+        },
+        sendAccreditationCompany(data) {
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation`, data)
+        },
+        fetchAccreditationSampleRequiredFiles() {
+            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/files`)
         },
     }
 }
