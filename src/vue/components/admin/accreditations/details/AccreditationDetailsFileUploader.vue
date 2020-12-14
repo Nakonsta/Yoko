@@ -45,7 +45,7 @@
                 </svg>
             </div>
         </div>
-        <input style="display: none;" type="file" ref="input" @change="uploadFile" />
+        <input style="display: none;" type="file" ref="input" accept="image/.jpg,.png,.jpeg,.pdf" @change="uploadFile" />
     </div>
 </template>
 <script>
