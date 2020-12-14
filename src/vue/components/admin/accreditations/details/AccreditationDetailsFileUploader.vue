@@ -107,16 +107,16 @@ export default {
             const types = ['image/png', 'image/jpg', 'image/jpeg', 'image/pdf']
             const file = this.$refs.input.files[0]
 
-            if (types.includes(file.type)) {
-                if (file) {
+            if (file) {
+                if (types.includes(file.type)) {
                     this.localFile.name = file.name
                     this.localFile.url = URL.createObjectURL(file)
                     this.$emit('uploaded', file)
+                } else {
+                    window.notificationError(
+                        'Вы пытаетесь загрузить файлы неверного формата. Разрешенные форматы .pdf, .jpeg, .png'
+                    )
                 }
-            } else {
-                window.notificationError(
-                    'Вы пытаетесь загрузить файлы неверного формата. Разрешенные форматы .pdf, .jpeg, .png'
-                )
             }
         },
         removeFile() {
