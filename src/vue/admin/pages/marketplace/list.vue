@@ -103,6 +103,7 @@
             },
         },
         created() {
+            this.$emit('fullMode');
             let params = new URLSearchParams(window.location.search.substring(1));
             this.searchQuery = params.get('q') || '';
             if( this.searchQuery.length ) {
@@ -191,7 +192,8 @@
                 this.page = page;
                 this.getItems();
             },
-            changeCompany(company) {
+            changeCompany(evt, company) {
+                evt.preventDefault();
                 this.page = 1;
                 this.currentFilter = {};
                 this.currentCompany = company.inn;
@@ -246,8 +248,8 @@
                     // чистим фильтр
                     this.page = 1;
                     this.currentFilter = {};
-                    this.currentFilter.inn = [this.currentCompany];
                     this.currentFilter = {
+                        inn: [this.currentCompany],
                         q: search,
                     };
                     // перерисовываем фильтр
@@ -353,6 +355,9 @@
             width: 348px;
             @include mq($until: desktop) {
                 display: none;
+            }
+            .test-container.fullMode & {
+                padding-top: rem(86px);
             }
         }
         &__body {

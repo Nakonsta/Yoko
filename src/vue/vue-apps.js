@@ -15,6 +15,9 @@ Vue.component('paginate', Paginate)
 import VueTheMask from 'vue-the-mask'
 Vue.use(VueTheMask)
 
+import VCalendar from 'v-calendar'
+Vue.use(VCalendar)
+
 // validate
 import {configure, setInteractionMode, ValidationObserver, ValidationProvider, extend, localize} from 'vee-validate'
 import customRules from './helpers/custom-rules'
@@ -40,6 +43,17 @@ configure({
         events: 'input',
     }
 });
+
+// Детальная страница марки
+import markDetails from './mark-details.vue'
+const descriptionMarkBlock = document.querySelector('#mark-details');
+if (descriptionMarkBlock) {
+    let appMark = new Vue({
+        el: descriptionMarkBlock,
+        store: store,
+        render: function(h) { return h(markDetails); }
+    })
+}
 
 // Регистрация
 import Registration from './registration.vue'

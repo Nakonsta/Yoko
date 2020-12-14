@@ -12,6 +12,9 @@
     margin: 1.5rem 0
   .radio
     display: flex
+    margin-right: 0
+    + .radio
+      margin-top: rem(18px)
   .phone-container__item .multiselect__tags
     border-top-right-radius: 0
     border-bottom-right-radius: 0
@@ -31,15 +34,11 @@
         border-color: $colorRed !important
         .multiselect__placeholder
           color: $colorRed
-  .multiselect__tags
-    height: auto !important
   .multiselect__tag
     background: #31acb8
   .multiselect__tag-icon
     &:hover
       background: #1cc8d8
-  .form-select--multiple
-    height: auto !important
   .field
     background-color: #fff
   .checkbox + .checkbox
@@ -63,9 +62,6 @@
       align-items: flex-start
       &__body
         transform: translateY(0)
-    &--disabled .multiselect__current,
-    &--disabled .multiselect__select
-      background-color: transparent
     &__spinner
       height: rem(48px)
     &--active
