@@ -570,6 +570,7 @@ export default {
           })
           .catch((e) => {
             console.log(e)
+            this.isLoading = false
           })
       this.fetchProceduresPropertyList('tender_trading_format')
           .then((response) => {
@@ -578,6 +579,7 @@ export default {
           })
           .catch((e) => {
             console.log(e)
+            this.isLoading = false
           })
       this.fetchProceduresPropertyList('tender_trading_type')
           .then((response) => {

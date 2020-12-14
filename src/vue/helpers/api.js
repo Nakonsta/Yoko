@@ -16,7 +16,7 @@ export default {
             this.CancelTokens.catalogCancelToken = axios.CancelToken.source()
         },
         fetchInn(inn) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies`, { params: { inn } })
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/users`)
         },
         cancelCompanyRequest() {
             this.CancelTokens.companyCancelToken.cancel(
