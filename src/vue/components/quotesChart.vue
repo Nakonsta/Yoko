@@ -367,7 +367,6 @@ ul {
 
 
 .vdp-datepicker {
-  position: relative;
 
   input {
     background: transparent;
@@ -376,10 +375,7 @@ ul {
   }
 
   span {
-    position: absolute;
     top: rem(15px);
-    right: rem(15px);
-    color: $colorTurquoise;
   }
 
   &-dash {

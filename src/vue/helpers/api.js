@@ -224,6 +224,49 @@ export default {
         fetchTenderItem(id) {
             return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
         },
+        fetchSettingsProcedures() {
+            return axios.get(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/settings/`,
+            )
+        },
+        fetchProceduresPropertyList(field) {
+            return axios.get(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/property/${field}`,
+            )
+        },
+        fetchUsersFromCompany(id) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/secured/data/companies/${id}/users`,
+            )
+        },
+        fetchCatalogMarksize(string, okpd) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/marksize_with_okpd/`,
+                {
+                    params: {
+                        q: string,
+                        okpd_2_id: okpd,
+                    },
+                },
+            )
+        },
+        sendProcedure(data) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure`,
+                data,
+            )
+        },
+        fetchDaData(query) {
+            return axios.post(
+                process.env.DA_URL,
+                {query},
+                {
+                    headers: {
+                        Authorization: 'Token ' + process.env.DA_API_KEY,
+                    },
+                },
+            )
+        },
         fetchAccreditationsList(props) {
             const defaultProps = {
               orderBy: "id",

@@ -5,20 +5,19 @@
       class="input__container"
       :class="parentClass"
       v-slot="{ errors, failed }"
-      :name="$attrs.label && $attrs.label.toLowerCase() || validationName"
+      :name="$attrs.label && $attrs.label.toLowerCase()"
       :vid="vid"
   >
     <span v-if="$attrs.label" class="field__label">{{ $attrs.label }}</span>
     <div class="relative">
-      <input
+      <textarea
           :class="{field: true, error: failed}"
-          v-mask="mask || noMask"
-          :type="type"
           v-model="innerValue"
+          :rows="rows"
           :disabled="disabled"
           @input="input"
           :placeholder="placeholder"
-      >
+      ></textarea>
       <tooltip v-if="!!content" :content="content" />
     </div>
     <span v-if="failed" class="field__error">{{ errors[0] }}</span>
@@ -29,7 +28,7 @@
 import Tooltip from "../tooltip";
 
 export default {
-  name: 'Input',
+  name: 'Textarea',
   components: {
     Tooltip
   },
@@ -42,13 +41,13 @@ export default {
       type: String,
       default: 'label'
     },
+    rows: {
+      type: Number,
+      default: 3
+    },
     parentClass: {
       type: String,
       default: 'field__container'
-    },
-    mask: {
-      type: String,
-      default: undefined
     },
     disabled: {
       type: Boolean,
@@ -59,14 +58,6 @@ export default {
       default: ''
     },
     vid: {
-      type: String,
-      default: ''
-    },
-    type: {
-      type: String,
-      default: 'text'
-    },
-    validationName: {
       type: String,
       default: ''
     },
@@ -106,13 +97,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.input__container {
-  .tooltip {
-    position: absolute;
-    right: 15px;
-    top: 13px;
-  }
-}
-</style>

@@ -22,6 +22,10 @@ sudo vi /etc/hosts, далее I, далее вставить строчку и 
 **contractor** - Поставщик  
 **guest** - Гость
 
+Геттеры компании Заказчика/Поставщика:  
+**this.$store.getters.companyBuyer** - компании Заказчика  
+**this.$store.getters.companyContractor** - компании Поставщика
+
 ## Запуск и остановка глобального прелоадера
 **openLoader** - Запуск  
 **closeLoader** - Остановка

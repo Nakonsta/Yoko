@@ -1,3 +1,7 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
 .wrapper
   display: flex
   flex-direction: column
@@ -6,3 +10,11 @@
 
 .page
   flex: 1 1 auto
+
+.container-item
+  padding: rem(40px)
+  position: relative
+  background-color: white
+  border-radius: 6px
+  &:not(:first-child)
+    margin-top: rem(24px)

@@ -1,0 +1,31 @@
+@import "../variables/variables"
+@import "../mixins/mq"
+@import "../mixins/fluid-mixin"
+
+.procedure
+  &-new
+    &.container-item
+      padding-top: rem(80px)
+      //@include mq($until: 1025px)
+        padding-top: rem(80px)
+  &__main
+    h3
+      font-size: rem(24px)
+      font-weight: 500
+    .form-select .multiselect__single
+      white-space: nowrap
+      text-overflow: ellipsis
+      overflow: hidden
+
+.hide-block
+  position: absolute
+  top: 20px
+  right: 20px
+.relative
+  position: relative
+.mt1
+  margin-top: 1rem
+.mt2
+  margin-top: 2rem
+.mt3
+  margin-top: 3rem

@@ -2,32 +2,31 @@
   <ValidationProvider
       :tag="tag"
       :rules="rules"
-      class="field__container"
-      v-slot="{ errors, failed }"
+      class="field__container select__container"
+      v-slot="{ errors, failed, validate }"
       :name="$attrs.label && $attrs.label.toLowerCase()"
   >
     <span v-if="$attrs.label" class="field__label">{{ $attrs.label }}</span>
-    <input type="hidden" v-model="innerValue">
-    <multiselect
+    <input type="hidden" v-model="innerValue && innerValue.id">
+    <div class="relative">
+      <multiselect
         v-if="isSingle"
         v-model="innerValue"
+        value="id"
         class="form-select"
         :placeholder="placeholder"
         :class="{field: true, error: failed}"
-        deselect-label=""
         track-by="id"
         label="name"
-        selectedLabel=""
-        selectLabel=""
-        deselectLabel=""
+        :show-labels="false"
         :options="options"
-        :multiple="multiple"
+        :multiple="false"
         :searchable="searchable"
-        :allow-empty="false"
         :loading="loading"
         :internal-search="false"
         :closeOnSelect="close"
         :disabled="disabled"
+        @close="() => closeEvent(validate)"
         @select=select
         @remove=remove
         @search-change="search"
@@ -38,56 +37,67 @@
       >
         {{ option.name }}
       </template>
-    </multiselect>
-    <multiselect
-        v-if="isMultiple"
-        v-model="innerValue"
-        class="form-select"
-        :placeholder="placeholder"
-        :class="{field: true, error: failed, 'form-select--multiple': multiple}"
-        deselect-label=""
-        track-by="id"
-        label="name"
-        selectedLabel=""
-        selectLabel=""
-        deselectLabel=""
-        :options="options"
-        :multiple="multiple"
-        :searchable="searchable"
-        :allow-empty="false"
-        :loading="loading"
-        :internal-search="false"
-        :closeOnSelect="close"
-        :disabled="disabled"
-        @select=select
-        @remove=remove
-        @search-change="search"
-    >
-<!--      <template slot="tag" slot-scope="{ option }">-->
-<!--        <span class="custom__tag">-->
-<!--          <span>{{ option.name }}</span>-->
-<!--        </span>-->
-<!--      </template>-->
-      <template slot="option" slot-scope="{ option }">
-        <span
-          class="checkbox"
-          :class="{subunit: option.subunit, subsubunit: option.subSubunit}"
-        >
-          <input type="checkbox" v-model="option.checked" @focus.prevent>
-          <span class="checkbox__body"></span>
-          <span class="checkbox__text">
-              {{ option.name }}
+      <span slot="noOptions">Список пуст</span>
+      <span slot="noResult">{{ noResult }}</span>
+      </multiselect>
+      <multiselect
+          v-if="isMultiple"
+          v-model="innerValue"
+          class="form-select"
+          :placeholder="placeholder"
+          :class="{field: true, error: failed, 'form-select--multiple': multiple}"
+          deselect-label=""
+          track-by="id"
+          label="name"
+          selectedLabel=""
+          selectLabel=""
+          deselectLabel=""
+          :options="options"
+          :multiple="multiple"
+          :searchable="searchable"
+          :allow-empty="false"
+          :loading="loading"
+          :internal-search="false"
+          :closeOnSelect="close"
+          :disabled="disabled"
+          @select=select
+          @remove=remove
+          @search-change="search"
+      >
+  <!--      <template slot="tag" slot-scope="{ option }">-->
+  <!--        <span class="custom__tag">-->
+  <!--          <span>{{ option.name }}</span>-->
+  <!--        </span>-->
+  <!--      </template>-->
+        <template slot="option" slot-scope="{ option }">
+          <span
+            class="checkbox"
+            :class="{subunit: option.subunit, subsubunit: option.subSubunit}"
+          >
+            <input type="checkbox" v-model="option.checked" @focus.prevent>
+            <span class="checkbox__body"></span>
+            <span class="checkbox__text">
+                {{ option.name }}
+            </span>
           </span>
-        </span>
-      </template>
-      <span slot="noResult">{{ $attrs.label }} не найдены</span>
-    </multiselect>
+        </template>
+        <span slot="noResult">{{ $attrs.label }} не найдены</span>
+        <span slot="noOptions">Список пуст</span>
+      </multiselect>
+      <tooltip v-if="!!content" :content="content" />
+    </div>
+    <span v-if="failed" class="field__error">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 
 <script>
+import Tooltip from '../tooltip'
+
 export default {
   name: 'Select',
+  components: {
+    Tooltip
+  },
   props: {
     select: {
       type: Function,
@@ -133,6 +143,14 @@ export default {
       type: String,
       default: 'Введите название или выберите из списка'
     },
+    noResult: {
+      type: String,
+      default: ''
+    },
+    content: {
+      type: String,
+      default: ''
+    },
     tag: {
       type: String,
       default: 'label'
@@ -168,24 +186,21 @@ export default {
     if (this.value) {
       this.innerValue = this.value;
     }
+  },
+  methods: {
+    closeEvent(validate) {
+      setTimeout(() =>validate(), 100)
+    }
   }
 };
 </script>
 
 <style lang="scss">
-  @import "../../../assets/sass/variables/variables";
-
-  .company {
-    &-search {
-      &__name {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-      }
-      &__inn {
-        color: $colorGray;
-        font-weight: 400;
-      }
+  .select__container {
+    .tooltip {
+      position: absolute;
+      right: 50px;
+      top: 13px;
     }
   }
 </style>

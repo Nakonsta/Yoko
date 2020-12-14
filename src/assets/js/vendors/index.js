@@ -46,13 +46,14 @@ const  lightbox  =  GLightbox ( {
 
 //owl-carousel, через import не работает. см. - https://github.com/OwlCarousel2/OwlCarousel2/issues/2206
 // window.fn = require('./modules/owl.carousel.min');
-import './modules/magnific-popup';
-import './modules/jquery.formstyler.min';
-import './modules/jquery.inputmask.min';
-import './modules/jquery.validate.min';
-import './modules/jquery.validate.additional-methods.min';
-import './modules/tooltipster.bundle.min.js';
-import './modules/jquery.scrollbar.min.js';
+// todo: выключил эти зависимости
+// import './modules/magnific-popup';
+// import './modules/jquery.formstyler.min';
+// import './modules/jquery.inputmask.min';
+// import './modules/jquery.validate.min';
+// import './modules/jquery.validate.additional-methods.min';
+// import './modules/tooltipster.bundle.min.js';
+// import './modules/jquery.scrollbar.min.js';
 
 import GLightbox from 'glightbox';
 global.GLightbox = GLightbox;

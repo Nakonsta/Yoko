@@ -47,7 +47,7 @@
                             </ValidationProvider>
                             <div class="field__remove" v-if="index > 2">
                                 <a href="javascript:{}" @click="layerRemove($event, item, index)">
-                                    <svg class="sprite-cancel"><use xmlns\:xlink="http://www.w3.org/1999/xlink" xlink\:href="./img/sprite.svg#cancel"></use></svg>
+                                    c
                                 </a>
                             </div>
                         </div>

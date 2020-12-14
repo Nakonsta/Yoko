@@ -32,8 +32,8 @@
             name="organizationType"
             v-model="dataForm.organizationType"
             :label="[
-              {label: 'Юридическое лицо', value: 'LEGAL_ENTITY'},
-              {label: 'Индивидуальный предприниматель', value: 'INDIVIDUAL'}
+              {name: 'Юридическое лицо', id: 'LEGAL_ENTITY'},
+              {name: 'Индивидуальный предприниматель', id: 'INDIVIDUAL'}
             ]"
         ></radio-input>
         <text-input
@@ -58,6 +58,7 @@
             class="field__container field__container--tags"
             :options="lists.productsAndServicesOKVED"
             label="ОКВЭД"
+            :is-multiple="true"
             :multiple="true"
             :searchable="true"
             :loading="loadingOKVEDSearch"
@@ -72,6 +73,7 @@
             class="field__container field__container--tags"
             :options="lists.productsAndServicesOKPD2"
             label="ОКПД-2"
+            :is-multiple="true"
             :multiple="true"
             :searchable="true"
             :loading="loadingOKPD2Search"
