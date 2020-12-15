@@ -48,6 +48,7 @@ function popupOpen(currentPopup) {
 		}
 		currentPopup.classList.add('open');
 		currentPopup.addEventListener("click", function (e) {
+			if (currentPopup.classList.contains("certificate-view")) return;
 			if (!e.target.closest('.popup__content')) {
 				popupClose(e.target.closest('.popup'));
 			}

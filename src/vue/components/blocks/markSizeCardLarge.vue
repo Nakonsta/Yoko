@@ -29,14 +29,31 @@
                 </span>
             </span>
         </div>
-        <div v-if="item.documents && item.documents.certificates" class="table-cell__certificates cable-info__certificates" :data-name="item.documents && item.documents.certificates ? 'Сертификаты' : ''">
-            <span v-for="(document, key) in item.documents.certificates" :key="key" class="cable-info__certificate">
-                <a class="cable-info__certificate-link">
-                    <img :src="`/img/sprite.svg#${chooseCertificatePic(document.properties.date_end)}-usage`" class="cable-info__certificate-pic" alt="Сертификат продукции">
-                    <span class="cable-info__certificate-tooltip">{{chooseCertificateToolTip(document.properties.date_end)}}</span>
-                </a>
-                {{ document.properties.number }}
-            </span>
+        <div v-if="item.documents && item.documents.certificates" class="table-cell__price cable-info__certificates" :data-name="item.documents && item.documents.certificates ? 'Сертификаты' : ''">
+            <div>
+                <span v-for="(document, key) in getCertificates(item.documents.certificates)" :key="key" @click="viewCertificate(key, item.title)" class="cable-info__certificate">
+                    <a class="cable-info__certificate-link">
+                        <img :src="`/img/sprite.svg#${chooseCertificatePic(document.properties.date_end)}-usage`" class="cable-info__certificate-pic" alt="Сертификат продукции">
+                        <span class="cable-info__certificate-tooltip">{{chooseCertificateToolTip(document.properties.date_end)}}</span>
+                    </a>
+                    {{ document.properties.number }}
+                </span>
+            </div>
+            <div @click="showMenu = !showMenu" class="table-menu">
+                <div class="table-menu__content">
+
+                </div>
+                <span v-show="showMenu" class="table-menu__close">
+                    <img src="/src/assets/img/svg-templates/close.svg" alt="закрыть меню">
+                </span>
+                    <span v-show="!showMenu" class="table-menu__control">
+                   <img src="/src/assets/img/svg-templates/expand-menu.svg" alt="открыть меню">
+               </span>
+                <ul v-show="showMenu" class="table-menu__list">
+                    <li v-show="!expandedCerts" @click="showCertificates(certificates.length)" class="table-menu__item">Показать все сертификаты</li>
+                    <li v-show="expandedCerts" @click="showCertificates(6)" class="table-menu__item">Скрыть все сертификаты</li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
@@ -55,6 +72,133 @@ export default {
     data() {
         return {
             today: new Date(),
+            showMenu: false,
+            maxOfCertificates: 6,
+            certificates: [
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/276/sample.pdf",
+                    "name": "sample.pdf",
+                    "properties": {
+                        "number": "0001",
+                        "date_end": "2020-11-03",
+                        "date_start": "2020-11-02"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/277/sample.jpg",
+                    "name": "sample.jpg",
+                    "properties": {
+                        "number": "0002",
+                        "date_end": "2020-11-04",
+                        "date_start": "2020-11-03"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                },
+                {
+                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
+                    "name": "sample.png",
+                    "properties": {
+                        "number": "0003",
+                        "date_end": "2020-11-06",
+                        "date_start": "2020-11-05"
+                    }
+                }
+            ]
+        }
+    },
+
+    computed: {
+        expandedCerts() {
+            return this.maxOfCertificates > 6;
         }
     },
 
@@ -94,6 +238,21 @@ export default {
             if (yy < 10) yy = '0' + yy;
 
             return dd + '.' + mm + '.' + yy;
+        },
+        showCertificates(max) {
+            this.maxOfCertificates = max;
+        },
+        getCertificates(list) {
+            if (list.length) {
+                return list.slice(0, this.maxOfCertificates);
+            }
+        },
+        viewCertificate(id, title) {
+            const certificates = {
+                current: { ...this.item.documents.certificates[id], title },
+                items: this.item.documents.certificates
+            };
+            this.$emit("view-certificate", certificates);
         }
     }
 }
@@ -149,6 +308,10 @@ export default {
         &__certificate {
             display: inline-block;
             margin-right: rem(12px);
+            &:hover {
+                cursor: pointer;
+                color: lighten($colorGray, 10%);
+            }
             &-link {
                 display: inline-block;
                 position: relative;
@@ -178,8 +341,11 @@ export default {
                 height: 12px;
             }
         }
+        &__certificates {
+            display: flex;
+        }
     }
-        
+
     .table-cell {
         &__title {
             width: 25%;
@@ -192,6 +358,52 @@ export default {
         }
         &__certificates {
             width: 35%;
+        }
+        &__controls {
+            width: 20%;
+        }
+    }
+
+    .table-menu {
+        position: relative;
+        display: block;
+        font-size: rem(12px);
+        font-weight: 400;
+        max-height: 20px;
+        margin-top: rem(6px);
+        color: white;
+        img {
+            width: 18px;
+            height: 18px;
+        }
+        &:hover {
+            cursor: pointer;
+        }
+        &__list {
+            position: absolute;
+            background-color: #373735;
+            list-style: none;
+            left: -5px;
+            bottom: -45px;
+            margin: 0;
+            padding: rem(10px) rem(20px);
+            min-width: 200px;
+
+            li {
+                margin: 0;
+                padding: 0;
+                transition: color .2s ease;
+                &:hover {
+                    color:$colorTurquoise;
+                }
+            }
+        }
+        &__close {
+            opacity: 1;
+            transition: opacity .2s linear;
+            &:hover {
+                opacity: 0.6;
+            }
         }
     }
 
@@ -209,7 +421,7 @@ export default {
             &__certificates {
                 width: 25%;
             }
-        } 
+        }
     }
 
     @include mq($until: tablet) {
@@ -248,6 +460,25 @@ export default {
             }
             &__certificates {
                 width: 100%;
+            }
+        }
+        .table-menu {
+            margin-top: 0;
+            &__list {
+                left: -200px;
+                bottom: -45px;
+                margin: 0;
+                padding: rem(10px) rem(20px);
+                min-width: 200px;
+
+                li {
+                    margin: 0;
+                    padding: 0;
+                    transition: color .2s ease;
+                    &:hover {
+                        color:$colorTurquoise;
+                    }
+                }
             }
         }
     }
