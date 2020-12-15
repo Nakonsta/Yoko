@@ -39,7 +39,7 @@
                     {{ document.properties.number }}
                 </span>
             </div>
-            <div @click="showMenu = !showMenu" class="table-menu">
+            <div v-show="item.documents.certificates.length > 6" @click="showMenu = !showMenu" class="table-menu">
                 <div class="table-menu__content">
 
                 </div>
@@ -50,7 +50,7 @@
                    <img src="/src/assets/img/svg-templates/expand-menu.svg" alt="открыть меню">
                </span>
                 <ul v-show="showMenu" class="table-menu__list">
-                    <li v-show="!expandedCerts" @click="showCertificates(certificates.length)" class="table-menu__item">Показать все сертификаты</li>
+                    <li v-show="!expandedCerts" @click="showCertificates(item.documents.certificates.length)" class="table-menu__item">Показать все сертификаты</li>
                     <li v-show="expandedCerts" @click="showCertificates(6)" class="table-menu__item">Скрыть все сертификаты</li>
                 </ul>
             </div>
@@ -73,126 +73,7 @@ export default {
         return {
             today: new Date(),
             showMenu: false,
-            maxOfCertificates: 6,
-            certificates: [
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/276/sample.pdf",
-                    "name": "sample.pdf",
-                    "properties": {
-                        "number": "0001",
-                        "date_end": "2020-11-03",
-                        "date_start": "2020-11-02"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/277/sample.jpg",
-                    "name": "sample.jpg",
-                    "properties": {
-                        "number": "0002",
-                        "date_end": "2020-11-04",
-                        "date_start": "2020-11-03"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                },
-                {
-                    "url": "https://stage-operator.ec.extyl.pro/storage/products/278/sample.png",
-                    "name": "sample.png",
-                    "properties": {
-                        "number": "0003",
-                        "date_end": "2020-11-06",
-                        "date_start": "2020-11-05"
-                    }
-                }
-            ]
+            maxOfCertificates: 6
         }
     },
 
