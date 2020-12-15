@@ -18,8 +18,8 @@
             <div class="tender-item__tab-item">
                 <span class="tender-item__tab-link">Разъяснения</span>
             </div>
-            <div class="tender-item__tab-item">
-                <span class="tender-item__tab-link">Протоколы</span>
+            <div :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
+                <span @click="changeActiveTab('protocols')" class="tender-item__tab-link">Протоколы</span>
             </div>
             <div class="tender-item__tab-item">
                 <span class="tender-item__tab-link">Журнал событий</span>
@@ -38,6 +38,9 @@
             <div :class="[activeTab == 'documents' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="documents">
                 <TenderItemDocumentsTab :tenderItemData="tenderItemData" :company="company" />
             </div>
+            <div :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
+                <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
+            </div>
         </div>
     </div>
 </template>
@@ -47,6 +50,7 @@ import TenderItemMainTab from './tenderItemTabs/tenderItemMainTab.vue'
 import TenderItemClientTab from './tenderItemTabs/tenderItemClientTab.vue'
 import TenderItemLotsTab from './tenderItemTabs/tenderItemLotsTab.vue'
 import TenderItemDocumentsTab from './tenderItemTabs/tenderItemDocumentsTab.vue'
+import TenderItemProtocolsTab from './tenderItemTabs/tenderItemProtocolsTab.vue'
 
 export default {
     name: 'TenderItemTabs',
@@ -70,7 +74,8 @@ export default {
         TenderItemMainTab,
         TenderItemClientTab,
         TenderItemLotsTab,
-        TenderItemDocumentsTab
+        TenderItemDocumentsTab,
+        TenderItemProtocolsTab
     },
 
     created() {
@@ -228,6 +233,40 @@ export default {
                 line-height: 160%;
                 border-bottom: 1px solid $borderColor;
             }
+        }
+    }
+
+    .tender-item__protocol {
+        &-title {
+            font-weight: 700;
+            font-size: rem(20px);
+            padding-bottom: 1rem;
+        }
+        &-header {
+            width: 33%;
+            &-row {
+                display: flex;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+                color: $colorGray;
+                border-bottom: 1px solid $borderColor;
+                padding-bottom: rem(12px);
+            }
+        }
+        &-item {
+            width: 33%;
+            &-row {
+                display: flex;
+                padding: rem(24px) 0;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+            }
+        }
+        &-link {
+            color: $colorTurquoise;
+            text-decoration: underline;
         }
     }
 </style>
