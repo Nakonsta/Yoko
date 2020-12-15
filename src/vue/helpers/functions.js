@@ -92,6 +92,27 @@ export default {
                     .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
             const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
             return result === undefined || result === obj ? defaultValue : result;
-        }
+        },
+        convertFileSize({bytes, convertTo = 'bytes', round = 4, withPreffix = false}) {
+            if (bytes === 0) {
+                return 0;
+            }
+
+            convertTo = convertTo.toLowerCase()
+
+            if (convertTo === 'bytes') {
+                return bytes;
+            }
+
+            round = round <= 0 ? 0 : round;
+            const convertTypes = {'kb': 1,'mb': 2,'gb': 3,'tb': 4,'pb': 5,'eb': 6,'zb': 7,'yb': 8};
+            const result = parseFloat((bytes / Math.pow(1024,convertTypes[convertTo])).toFixed(round))
+
+            if (withPreffix) {
+                return `${result} ${convertTo.toUpperCase()}`;
+            } else {
+                return result;   
+            }
+        },
     }
 }
