@@ -49,6 +49,7 @@
     </div>
 </template>
 <script>
+import functions from '../../../../helpers/functions'
 export default {
     name: 'accreditation-details-file-uploader',
     props: {
@@ -76,6 +77,7 @@ export default {
             type: Boolean
         }
     },
+    mixins: [functions],
     data() {
         return {
             localFile: {
@@ -108,13 +110,20 @@ export default {
             const file = this.$refs.input.files[0]
 
             if (file) {
+                if (this.convertFileSize({bytes: file.size, convertTo: 'MB'}) >= 20) {
+                    window.notificationError(
+                        'Вы пытаетесь загрузить файл превыщаюший максимальный вес. Максимальный допустимый вес файла 20MB'
+                    )
+                    return
+                }
+
                 if (types.includes(file.type)) {
                     this.localFile.name = file.name
                     this.localFile.url = URL.createObjectURL(file)
                     this.$emit('uploaded', file)
                 } else {
                     window.notificationError(
-                        'Вы пытаетесь загрузить файлы неверного формата. Разрешенные форматы .pdf, .jpeg, .png'
+                        'Вы пытаетесь загрузить файл неверного формата. Разрешенные форматы .pdf, .jpeg, .png'
                     )
                 }
             }
