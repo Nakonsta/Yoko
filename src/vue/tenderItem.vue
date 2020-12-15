@@ -1,41 +1,47 @@
 <template>
     <div class="tender-item">
         <div class="tender-item__top">
-            <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" />
-            <TenderItemMenu />
-            <transition name="fade-loader">
-                <div
-                    v-if="isLoading"
-                    class="card__loader card__loader--absolute"
-                >
-                    <div class="preloader">
-                        <div class="preloader__preloader">
-                            <div class="preloader__loader"></div>
-                        </div>
-                    </div>
-                </div>
-            </transition>
-            <div class="tender-item__menu">
-
-            </div>
+            <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" :company="company" />
+            <TenderItemMenu v-if="!isLoading" :activeTab="activeTab" @changeTab = "changeTab" />            
         </div>
         <div class="tender-item__tabs">
-
+            <TenderItemTabs 
+                v-if="!isLoading"
+                :tenderItemData="tenderItemData"
+                :company="company"
+                :activeTab="activeTab"
+                @changeTab = "changeTab"
+            />
         </div>
+        <transition name="fade-loader">
+            <div
+                v-if="isLoading"
+                class="card__loader card__loader--absolute"
+            >
+                <div class="preloader">
+                    <div class="preloader__preloader">
+                        <div class="preloader__loader"></div>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script>
 import api from './helpers/api'
+import functions from './helpers/functions'
 import TenderItemCard from './components/blocks/tenderItemCard.vue'
 import TenderItemMenu from './components/blocks/tenderItemMenu.vue'
+import TenderItemTabs from './components/blocks/tenderItemTabs.vue'
 
 export default {
     name: 'TenderItem',
 
     components: {
         TenderItemCard,
-        TenderItemMenu
+        TenderItemMenu,
+        TenderItemTabs
     },
 
     mixins: [api],
@@ -44,6 +50,7 @@ export default {
         return {
             tenderItemId: '',
             isLoading: true,
+            activeTab: 'main-info',
             tenderItemData: {
                 addition_information: null,
                 additional_fields: [],
@@ -109,6 +116,43 @@ export default {
                 timing_comment: null,
                 updated_at: null,
                 user_id: null,
+            },
+            company: {
+                activityIndex: null,
+                address: null,
+                businessSize: null,
+                buyer: null,
+                childes: [],
+                contractor: null,
+                country: null,
+                createdAt: null,
+                declaration: null,
+                directorFio: null,
+                email: null,
+                id: null,
+                inn: null,
+                innerRating: null,
+                kpp: null,
+                legalAddress: null,
+                legalCountry: null,
+                legalPostcode: null,
+                legalType: null,
+                mailingAddress: null,
+                mailingCountry: null,
+                mailingPostcode: null,
+                name: null,
+                ogrn: null,
+                okpd2: null,
+                okved: null,
+                owner: null,
+                phone: null,
+                postcode: null,
+                rating: null,
+                regCountry: null,
+                rnp: null,
+                shortName: null,
+                updatedAt: null,
+                website: null,
             }
         }
     },
@@ -116,6 +160,7 @@ export default {
     created() {
         this.getTenderItemId()
         this.getTenderItemMainData(this.tenderItemId)
+        this.checkUrlHash()
     },
 
     methods: {
@@ -131,10 +176,37 @@ export default {
                 .then((response) => {
                     this.fillTenderItemData(response.data.data)
                     this.isLoading = false
+                    this.getCompanyData()
                 })
                 .catch((e) => {
                     console.log(e)
                 })
+        },
+        getCompanyData() {
+            this.fetchCompanyById(this.tenderItemData.inn)
+                .then((response) => {
+                    this.company = response.data.data;
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
+        changeTab(tab) {
+            this.activeTab = tab;
+        },
+        checkUrlHash() {
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                if (
+                    hash === 'main-info' ||
+                    hash === 'client' ||
+                    hash === 'lots' ||
+                    hash === 'documents'
+                ) {
+                    this.activeTab = hash
+                }
+            }
+            return false
         }
     }
 }
@@ -142,8 +214,12 @@ export default {
 
 <style lang="scss" scoped>
     .tender-item {
+        position: relative;
         &__top {
             position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
     }
 </style>
