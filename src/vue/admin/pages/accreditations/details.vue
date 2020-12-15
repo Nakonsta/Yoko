@@ -308,7 +308,7 @@ export default {
         checkAllowFileSize(size) {
             if (this.convertFileSize({bytes: size, convertTo: 'MB'}) >= 100) {
                 window.notificationError(
-                    'Вы пытаетесь загрузить файлы превыщаюший максимальный вес. Максимальный допустимый вес всех файлов 100MB'
+                    'Вы пытаетесь загрузить файлы превыщающие максимальный вес. Максимальный допустимый вес всех файлов 100MB'
                 )
 
                 return false

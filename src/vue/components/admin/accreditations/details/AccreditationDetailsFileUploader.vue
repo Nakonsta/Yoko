@@ -112,7 +112,7 @@ export default {
             if (file) {
                 if (this.convertFileSize({bytes: file.size, convertTo: 'MB'}) >= 20) {
                     window.notificationError(
-                        'Вы пытаетесь загрузить файл превыщаюший максимальный вес. Максимальный допустимый вес файла 20MB'
+                        'Вы пытаетесь загрузить файл превыщающий максимальный вес. Максимальный допустимый вес файла 20MB'
                     )
                     return
                 }
