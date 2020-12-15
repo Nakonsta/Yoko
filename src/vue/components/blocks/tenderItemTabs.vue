@@ -36,7 +36,7 @@
                 <TenderItemLotsTab :tenderItemData="tenderItemData" />
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="documents">
-                <TenderItemDocumentsTab :tenderItemData="tenderItemData" :company="company" />
+                <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
             </div>
             <div :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
                 <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
@@ -88,9 +88,6 @@ export default {
             this.$emit('changeTab', tab);
             return false;
         },
-        checkUrlHash() {
-
-        }
     }
 }
 </script>
@@ -259,6 +256,37 @@ export default {
             &-row {
                 display: flex;
                 padding: rem(24px) 0;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+            }
+        }
+        &-link {
+            color: $colorTurquoise;
+            text-decoration: underline;
+        }
+    }
+
+    .tender-item__file {
+        padding-bottom: rem(24px);
+        color: $lightcolorText;
+        &-header {
+            width: 33%;
+            &-row {
+                display: flex;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+                color: $colorGray;
+                padding-bottom: rem(12px);
+                border-bottom: 1px solid $borderColor;
+            }
+        }
+        &-item {
+            width: 33%;
+            &-row {
+                display: flex;
+                padding: rem(16px) 0;
                 font-weight: 500;
                 font-size: rem(14px);
                 line-height: 160%;
