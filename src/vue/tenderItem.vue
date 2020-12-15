@@ -201,7 +201,8 @@ export default {
                     hash === 'main-info' ||
                     hash === 'client' ||
                     hash === 'lots' ||
-                    hash === 'documents'
+                    hash === 'documents' ||
+                    hash === 'protocols'
                 ) {
                     this.activeTab = hash
                 }
