@@ -2,7 +2,7 @@ global.sliderPrevBtn = '<div class="swiper-button-prev"><svg width="12" height="
 global.sliderNextBtn = '<div class="swiper-button-next"><svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.25 2.5L9.75 10L2.25 17.5" stroke="#31ACB8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
 
 global.sliderAdd = function(items) {
-    // добавляем класс для юsection__head чтобы было куда выводить навигацию слайдеров на планшетах
+    // добавляем класс для .section__head чтобы было куда выводить навигацию слайдеров на планшетах
     let head = items.closest('.section').querySelector('.section__head');
     if( head ) head.classList.add('with-slider');
     // wrap slider & add classes

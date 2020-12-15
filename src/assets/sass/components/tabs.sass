@@ -92,7 +92,7 @@
     text-align: center
     color: $colorGray
     transition: border $animation, color $animation, background $animation
-    
+
     @include mq($until: tablet)
       border: 0 !important
       padding: rem(13px) rem(24px)
@@ -261,6 +261,7 @@
 
 .tabs
   &__content
+    display: none
     .section--green &
       border-radius: 6px
       padding: rem(40px) rem(64px)

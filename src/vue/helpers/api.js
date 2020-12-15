@@ -224,35 +224,88 @@ export default {
         fetchTenderItem(id) {
             return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}`);
         },
+        fetchSettingsProcedures() {
+            return axios.get(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/settings/`,
+            )
+        },
+        fetchProceduresPropertyList(field) {
+            return axios.get(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/property/${field}`,
+            )
+        },
+        fetchUsersFromCompany(id) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/secured/data/companies/${id}/users`,
+            )
+        },
+        fetchCatalogMarksize(string, okpd) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/marksize_with_okpd/`,
+                {
+                    params: {
+                        q: string,
+                        okpd_2_id: okpd,
+                    },
+                },
+            )
+        },
+        sendProcedure(data) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure`,
+                data,
+            )
+        },
+        fetchDaData(query) {
+            return axios.post(
+                process.env.DA_URL,
+                {query},
+                {
+                    headers: {
+                        Authorization: 'Token ' + process.env.DA_API_KEY,
+                    },
+                },
+            )
+        },
         fetchAccreditationsList(props) {
             const defaultProps = {
-              orderBy: "id",
-              orderDir: "DESC",
-              page: 1,
-              search: "",
-            };
-
-            const requestProps = Object.assign(defaultProps, props ?? {});
-
-            const fData = new FormData();
-
-            fData.append("page", requestProps.page);
-            fData.append("order[by]", requestProps.orderBy);
-            fData.append("order[direction]", requestProps.orderDir);
-
-            if (requestProps.search !== "") {
-              fData.append("q", requestProps.search);
+                orderBy: 'id',
+                orderDir: 'DESC',
+                page: 1,
+                search: '',
             }
 
-            return axios.post(
-              `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/list`,
-              fData
-            );
+            const requestProps = Object.assign(defaultProps, props ?? {})
+
+            const fData = new FormData()
+
+            fData.append('page', requestProps.page)
+            fData.append('order[by]', requestProps.orderBy)
+            fData.append('order[direction]', requestProps.orderDir)
+
+            if (requestProps.search !== '') {
+                fData.append('q', requestProps.search)
+            }
+
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/list`, fData)
         },
         fetchAccreditationDetails(id) {
-            return axios.get(
-              `${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`
-            );
+            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`)
+        },
+        updateAccreditation(id, data) {
+            const fData = new FormData()
+
+            for (const key in data) {
+                fData.append(`documents[${key}]`, data[key])
+            }
+
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`, fData)
+        },
+        sendAccreditationCompany(data) {
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation`, data)
+        },
+        fetchAccreditationSampleRequiredFiles() {
+            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/files`)
         },
         fetchCompanyById(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);

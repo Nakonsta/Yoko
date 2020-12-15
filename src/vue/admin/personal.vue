@@ -1,43 +1,50 @@
 <template>
-  <div class="main">
-    <app-menu :window-width="windowWidth"></app-menu>
-    
-    <router-view />
-  </div>
+    <div class="main">
+    <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
+
+    <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
+      <router-view @fullMode="getModeFromPage" />
+    </div>
+
+    </div>
 </template>
 
 <script>
-  import draggable from 'vuedraggable'
-  import api from '../helpers/api'
-  import functions from '../helpers/functions'
-  import AppMenu from '../components/blocks/Menu.vue'
+import draggable from 'vuedraggable'
+import api from '../helpers/api'
+import functions from '../helpers/functions'
+import AppMenu from '../components/blocks/Menu.vue'
 
-  export default {
+export default {
     name: 'Personal',
     components: {
-      AppMenu,
-      draggable,
+        AppMenu,
+        draggable,
     },
     mixins: [api, functions],
     data() {
-      return {
+        return {
         windowWidth: window.innerWidth,
-      }
+        fullMode: false,
+        }
     },
     mounted() {
-      this.$nextTick(() => {
-        window.addEventListener('resize', this.onResize);
-      })
+        this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+        })
     },
     beforeDestroy() {
-      window.removeEventListener('resize', this.onResize);
+        window.removeEventListener('resize', this.onResize);
     },
     methods: {
-      onResize() {
-        this.windowWidth = window.innerWidth
-      },
+        getModeFromPage() {
+            this.fullMode = true
+        },
+        onResize() {
+            this.windowWidth = window.innerWidth
+        },
     }
-  }
+}
 </script>
 
 <style lang="scss">

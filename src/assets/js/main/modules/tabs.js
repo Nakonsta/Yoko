@@ -8,7 +8,7 @@ document.addEventListener('click', (e) => {
     el.closest('.js-tabs').querySelectorAll('a').forEach((link) => {
         let tab = document.getElementById(link.getAttribute('href').substr(1));
         if( el === link ) {
-            if( tab ) tab.style.display = '';
+            if( tab ) tab.style.display = 'block';
             link.closest('li').classList.add('active');
         } else {
             if( tab ) tab.style.display = 'none';
@@ -31,6 +31,7 @@ document.addEventListener('click', (e) => {
 
 // инициализация при загрузке
 document.querySelectorAll('.js-tabs').forEach((tabs) => {
+    console.log(tabs);
     let link = tabs.querySelector('li a[href="#'+hash+'"]') || tabs.querySelector('li.active a') || tabs.querySelector('li:nth-child(1) a');
     if (link) {
         link.click();
