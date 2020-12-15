@@ -2,7 +2,7 @@
   <div class="quotes__body">
     <template v-if="!loadingQuotes">
       <div class="quotes__spot">
-        <span>Спот, {{ dates.now }}:</span>
+        <span>{{ currencyChecked ? 'Спот' : 'Котировка' }}, {{ dates.now }}:</span>
         {{ latestQuote && latestQuote[currency] }} {{ !currencyChecked ? '$' : '₽' }}
       </div>
       <div class="quotes__dates">
@@ -367,7 +367,6 @@ ul {
 
 
 .vdp-datepicker {
-  position: relative;
 
   input {
     background: transparent;
@@ -376,10 +375,7 @@ ul {
   }
 
   span {
-    position: absolute;
     top: rem(15px);
-    right: rem(15px);
-    color: $colorTurquoise;
   }
 
   &-dash {

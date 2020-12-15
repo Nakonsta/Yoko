@@ -10,7 +10,7 @@ mixin info-slider(items)
                         svg(class='sprite-info-slider-'+item.sprite): use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#info-slider-"+item.sprite)
                 .typography.typography--accent !{item.title}
                 if( Array.isArray(item.desc) )
-                    ul
+                    ul.list--bullet
                         each desc in item.desc
                             li #{desc}
                 else

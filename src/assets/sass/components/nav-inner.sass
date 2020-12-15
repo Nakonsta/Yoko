@@ -7,11 +7,10 @@
     position: relative
     > *:last-child
         width: 100%
-        padding: rem(80px) rem(40px)
-        background-color: white
+        &.fullMode
+            width: 100%
         @include mq($from: 1025px)
             width: 65%
-            padding: rem(40px)
 
 .nav-inner
     border-radius: rem(6px)
@@ -19,12 +18,25 @@
     position: absolute
     left: 0
     top: 0
+    &.fullMode
+        position: absolute
+        width: rem(124px)
+        min-width: inherit
+        z-index: 9
     @include mq($from: 1025px)
         width: 30%
         margin-right: 5%
         min-width: rem(200px)
         position: static
         background-color: white
+    .open-menu
+        cursor: pointer
+        svg
+            width: 8px
+            height: 15px
+            transition: transform .5s ease
+            &.active
+                transform: rotate(90deg)
     .hide-menu-ico
         background-color: $colorTurquoise
         position: absolute
@@ -75,11 +87,22 @@
     &__item
         font-weight: 500
         padding: rem(12px) rem(30px)
+        display: flex
+        align-items: center
+        justify-content: space-between
     &__name
+        color: $colorText
         max-width: calc(100% - 40px)
     &__link
         width: 100%
         color: $colorText
-        display: flex
-        align-items: center
-        justify-content: space-between
+
+    .submenu
+        .nav-inner__item-sub
+            display: block
+            color: $colorText
+            padding: 12px 10px 12px 60px
+            background-color: white
+            transition: background-color .5s ease
+            &:hover
+                background-color: #F4F4F4
