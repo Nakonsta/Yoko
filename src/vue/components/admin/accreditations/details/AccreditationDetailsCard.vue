@@ -178,7 +178,7 @@ export default {
         height: 100%;
         max-height: 785px;
         margin-bottom: rem(60px);
-        transition: 0.4s ease-in-out;
+        transition: 0.4s;
         overflow: hidden;
 
         @include mq($until: desktop) {

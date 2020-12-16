@@ -265,19 +265,33 @@ export default {
             }
 
             if (this.viewType.isCreate) {
+                let filesSize = 0
                 Object.entries(this.accreditation.documents).forEach(([key, document]) => {
                     if (!(document instanceof File)) {
                         this.errors.files[key] = true
                         hasErrors = true
+                    } else {
+                        filesSize += document.size
                     }
                 })
+                
+                if (!this.checkAllowFileSize(filesSize)) {
+                    hasErrors = true
+                }
             } else {
+                let filesSize = 0
                 Object.entries(this.newFiles).forEach(([key, file]) => {
                     if (!(file instanceof File) && !this.accreditation.documents[key].file.accepted) {
                         this.errors.files[key] = true
                         hasErrors = true
+                    } else {
+                        filesSize += file.size
                     }
                 })
+                
+                if (!this.checkAllowFileSize(filesSize)) {
+                    hasErrors = true
+                }
             }
 
             if (!hasErrors) {
@@ -289,6 +303,17 @@ export default {
                         this.send()
                         break
                 }
+            }
+        },
+        checkAllowFileSize(size) {
+            if (this.convertFileSize({bytes: size, convertTo: 'MB'}) >= 100) {
+                window.notificationError(
+                    'Вы пытаетесь загрузить файлы превыщающие максимальный вес. Максимальный допустимый вес всех файлов 100MB'
+                )
+
+                return false
+            } else {
+                return true
             }
         },
         update() {
