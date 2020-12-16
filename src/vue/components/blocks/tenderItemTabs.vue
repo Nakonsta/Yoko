@@ -21,8 +21,8 @@
             <div :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
                 <span @click="changeActiveTab('protocols')" class="tender-item__tab-link">Протоколы</span>
             </div>
-            <div class="tender-item__tab-item">
-                <span class="tender-item__tab-link">Журнал событий</span>
+            <div :class="[activeTab == 'logs' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="logs">
+                <span @click="changeActiveTab('logs')" class="tender-item__tab-link">Журнал событий</span>
             </div>
         </div>
         <div class="tender-item__tabs-content">
@@ -41,6 +41,9 @@
             <div :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
                 <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
             </div>
+            <div :class="[activeTab == 'logs' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="logs">
+                <TenderItemLogsTab :tenderItemData="tenderItemData" />
+            </div>
         </div>
     </div>
 </template>
@@ -51,6 +54,7 @@ import TenderItemClientTab from './tenderItemTabs/tenderItemClientTab.vue'
 import TenderItemLotsTab from './tenderItemTabs/tenderItemLotsTab.vue'
 import TenderItemDocumentsTab from './tenderItemTabs/tenderItemDocumentsTab.vue'
 import TenderItemProtocolsTab from './tenderItemTabs/tenderItemProtocolsTab.vue'
+import TenderItemLogsTab from './tenderItemTabs/tenderItemLogsTab.vue'
 
 export default {
     name: 'TenderItemTabs',
@@ -75,7 +79,8 @@ export default {
         TenderItemClientTab,
         TenderItemLotsTab,
         TenderItemDocumentsTab,
-        TenderItemProtocolsTab
+        TenderItemProtocolsTab,
+        TenderItemLogsTab
     },
 
     created() {

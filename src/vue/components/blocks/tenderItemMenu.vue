@@ -19,8 +19,8 @@
             <div :class="[activeTab == 'protocols' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
                 <span @click="changeChange('protocols')" class="tender-item__menu-link">Протоколы</span>
             </div>
-            <div class="tender-item__menu-item">
-                <a href="#" class="tender-item__menu-link">Журнал событий</a>
+            <div :class="[activeTab == 'logs' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeChange('logs')" class="tender-item__menu-link">Журнал событий</span>
             </div>
         </div>
     </div>
