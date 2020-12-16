@@ -101,11 +101,11 @@
                         <div class="procedures__item-btns">
                             <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                             <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
-                            <a href="javascript:{}" title="Написать продавцу" v-if="$store.state.auth.loggedIn"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden')" v-if="$store.state.auth.loggedIn" :class="{active: itemMarkExist(item, 'hidden')}">
+                            <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contactor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden')" v-if="$store.getters.userRole === 'contactor'" :class="{active: itemMarkExist(item, 'hidden')}">
                                 <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
                             </a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite')" v-if="$store.state.auth.loggedIn" :class="{active: itemMarkExist(item, 'favorite')}">
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite')" v-if="$store.getters.userRole === 'contactor'" :class="{active: itemMarkExist(item, 'favorite')}">
                                 <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                             </a>
                         </div>
@@ -197,7 +197,7 @@
     import formatDate from '../../helpers/formatDate'
 
     export default {
-        name: 'proceduresBlock',
+        name: 'marketplaceItems',
         mixins: [api, formatDate],
         props: {
             filter: {
