@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card__head">
             <div class="card__counter">
-                <template v-if="totalProducts !== -1">
+                <template v-if="!loadingItems">
                     Найдено <span>{{ totalProducts }}</span>
                 </template>
                 <template v-else>
@@ -22,11 +22,11 @@
             <marksCard
                 v-if="isFirstLoad"
                 :item="catalogItem"
-                :loadingCatalog="loadingCatalog"
+                :loadingItems="loadingItems"
             />
             <transition name="fade-loader">
                 <div
-                    v-if="loadingCatalog"
+                    v-if="loadingItems"
                     class="card__loader"
                     :class="{
                     'card__loader--absolute': isFirstLoad
@@ -44,10 +44,10 @@
 </template>
 
 <script>
-    import marksCard from "./blocks/marksCard.vue";
+    import marksCard from "../blocks/marksCard.vue";
 
     export default {
-        name: 'CatalogBlock',
+        name: 'catalogList',
         components: {
             marksCard
         },
@@ -64,7 +64,7 @@
                 default: false,
                 type: Boolean
             },
-            loadingCatalog: {
+            loadingItems: {
                 default: false,
                 type: Boolean
             }
@@ -78,10 +78,10 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/sass/variables/variables";
-    @import "../../assets/sass/variables/fluid-variables";
-    @import "../../assets/sass/mixins/fluid-mixin";
-    @import "../../assets/sass/mixins/mq";
+    @import "../../../assets/sass/variables/variables";
+    @import "../../../assets/sass/variables/fluid-variables";
+    @import "../../../assets/sass/mixins/fluid-mixin";
+    @import "../../../assets/sass/mixins/mq";
 
     .card {
         &__items {
