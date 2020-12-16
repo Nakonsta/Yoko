@@ -89,7 +89,7 @@
                 itemsStatuses: [],
                 filter: [],
                 filterKey: 0,
-                perPage: 100,
+                perPage: 10,
                 items: [],
                 totalItems: 0,
                 page: 1,
@@ -99,7 +99,7 @@
         },
         computed: {
             totalPages() {
-                return Math.ceil(this.totalProducts / this.perPage)
+                return Math.ceil(this.totalItems / this.perPage)
             },
         },
         created() {

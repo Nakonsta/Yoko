@@ -62,13 +62,14 @@
                 items: [],
                 totalItems: 0,
                 weightFilter: [],
+                perPage: 100,
                 page: 1,
                 tMark: 4,
             }
         },
         computed: {
             totalPages() {
-                return Math.ceil(this.totalProducts / 100)
+                return Math.ceil(this.totalItems / this.perPage)
             },
         },
         created() {
