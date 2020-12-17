@@ -3,6 +3,7 @@ export default {
         return {
             CancelTokens: {
                 catalogCancelToken: axios.CancelToken.source(),
+                searchCancelToken: axios.CancelToken.source(),
                 companyCancelToken: axios.CancelToken.source(),
                 proceduresCancelToken: axios.CancelToken.source(),
             },
@@ -154,11 +155,11 @@ export default {
         sendRegistrationData(data) {
             return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/register`, data)
         },
-        fetchCatalogAdd(data) {
-            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, data);
+        sendCatalogMark(data) {
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/mark/`, data);
         },
-        fetchCatalogImport(data, config) {
-            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}`, data, config); // todo url
+        sendCatalogMarksize(data) {
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/marksize/`, data);
         },
         fetchQuotes(quote, date_start, date_end, mode) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/quotes`, {
@@ -246,7 +247,35 @@ export default {
                 `${process.env.API_URL_AUTH_SERVICE}/secured/data/companies/${id}/users`,
             )
         },
-        fetchCatalogMarksize(string, okpd) {
+        cancelCatalogSearch() {
+            this.CancelTokens.searchCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchCancelToken = axios.CancelToken.source()
+        },
+        fetchCatalogMark(string) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/mark/`,
+                {
+                    params: {
+                        q: string,
+                    },
+                    cancelToken: this.CancelTokens.searchCancelToken.token,
+                },
+            )
+        },
+        fetchCatalogMarksize(string) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/marksize/`,
+                {
+                    params: {
+                        q: string,
+                    },
+                    cancelToken: this.CancelTokens.searchCancelToken.token,
+                },
+            )
+        },
+        fetchCatalogMarksizeOKPD(string, okpd) {
             return axios.get(
                 `${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/marksize_with_okpd/`,
                 {

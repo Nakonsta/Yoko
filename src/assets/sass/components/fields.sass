@@ -84,6 +84,13 @@ input[type=number]
       right: rem(15px)
       color: $colorTurquoise
 
+  &__counter
+    white-space: nowrap
+    font-size: rem(12px)
+    color: $colorGray
+    background: rgba($colorWhite, .5)
+    pointer-events: none
+
   &__label
     display: block
     margin: 0 0 rem(10px)
@@ -126,6 +133,7 @@ input[type=number]
         margin-top: -12px
 
 
+  &__clone,
   &__remove
     margin: rem(32px) 0 0 // .field__label line-height + .field__label margin-bottom
 
@@ -265,9 +273,13 @@ textarea.field
 div.field__range
   display: flex
   justify-content: space-between
+  margin: 0 0 rem(30px)
 
   > span
     align-self: center
+
+  .field__container
+    margin-bottom: 0
 
   .field__range-from,
   .field__range-to

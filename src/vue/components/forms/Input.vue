@@ -4,7 +4,7 @@
       :rules="rules"
       class="input__container"
       :class="parentClass"
-      v-slot="{ errors, failed }"
+      v-slot="{ errors, failed, failedRules }"
       :name="$attrs.label && $attrs.label.toLowerCase() || validationName"
       :vid="vid"
   >
@@ -13,15 +13,21 @@
       <input
           :class="{field: true, error: failed}"
           v-mask="mask || noMask"
+          v-inputmask="inputmask"
           :type="type"
           v-model="innerValue"
           :disabled="disabled"
           @input="input"
           :placeholder="placeholder"
+          :maxlength="maxlength || false"
+          :max="type === 'number' && max ? max : false"
+          :min="type === 'number' && min ? min : false"
       >
+      <div class="multiselect__spinner" v-show="loading"></div>
       <tooltip v-if="!!content" :content="content" />
     </div>
-    <span v-if="failed" class="field__error">{{ errors[0] }}</span>
+    <span v-if="failed && !failedRules.excluded" class="field__error">{{ errors[0] }}</span>
+    <span v-if="failed && failedRules.excluded" class="field__error">Нужно ввести уникальное значение.</span>
   </ValidationProvider>
 </template>
 
@@ -50,6 +56,9 @@ export default {
       type: String,
       default: undefined
     },
+    inputmask: {
+      default: null,
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -74,13 +83,29 @@ export default {
       type: Function,
       default: () => {}
     },
+    loading: {
+      type: Boolean,
+      default: false
+    },
     rules: {
       type: [Object, String],
       default: 'required'
     },
     value: {
       type: null
-    }
+    },
+    maxlength: {
+      default: 0,
+      type: Number
+    },
+    max: {
+      default: 0,
+      type: Number
+    },
+    min: {
+      default: 0,
+      type: Number
+    },
   },
   data: () => ({
     innerValue: '',
@@ -113,6 +138,9 @@ export default {
     position: absolute;
     right: 15px;
     top: 13px;
+  }
+  .multiselect__spinner {
+    background-color: transparent !important;
   }
 }
 </style>

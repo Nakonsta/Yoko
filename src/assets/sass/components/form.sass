@@ -2,6 +2,25 @@
 @import "../mixins/fluid-mixin"
 
 .form
+
+  &--white
+    .test-container.fullMode &
+      padding-top: rem(86px)
+
+    .section--green &
+      border-radius: 6px
+      padding: rem(40px) rem(64px)
+      background: $colorWhite
+
+      @include mq($until: widescreen)
+        padding: rem(40px)
+
+      @include mq($until: tablet)
+        padding: rem(32px) rem(20px)
+
+      html:not(.js) & + &
+        margin-top: rem(40px)
+
   &__title
     margin: 0 0 rem(32px)
     font-weight: 500
@@ -52,10 +71,13 @@
             width: calc(50% - #{rem(40px)})
           
         &--short
-          width: 50px
+          width: 100px
+
+          span.field__error
+            display: none !important
 
         &--long
-          width: calc(100% - #{rem(130px)})
+          width: calc(100% - #{rem(180px)})
 
   &__line
     display: flex
@@ -67,7 +89,10 @@
 
       &--short
         flex-shrink: 0
-        width: 50px
+        width: 100px
+
+        span.field__error
+          display: none !important
 
       &--long
         flex-grow: 1

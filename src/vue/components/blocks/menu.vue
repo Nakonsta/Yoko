@@ -148,7 +148,7 @@ export default {
           {
             icon: 'mdi-buffer',
             title: 'Список процедур',
-            to: '/personal/tender',
+            to: '/personal/procedures',
             order: 1,
             isActive: true,
             subItems: [
@@ -174,6 +174,27 @@ export default {
                 to: '/personal/accreditations/new'
               },
             ]
+          },
+          {
+            icon: 'mdi-buffer',
+            title: 'Каталог',
+            to: '/catalog',
+            order: 1,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Добавление продукции',
+                to: '/personal/catalog/new'
+              },
+            ]
+          },
+          {
+            icon: 'mdi-buffer',
+            title: 'Торговая площадка',
+            to: '/marketplace',
+            order: 1,
+            isActive: true,
+            subItems: [],
           },
         ],
         contractor: [

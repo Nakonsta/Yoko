@@ -66,7 +66,7 @@
     import formatDate from '../../../helpers/formatDate';
 
     export default {
-        name: 'Marketplace',
+        name: 'Procedures',
         components: {
             search,
             filterList,
