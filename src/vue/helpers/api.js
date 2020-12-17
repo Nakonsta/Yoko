@@ -15,7 +15,10 @@ export default {
             )
             this.CancelTokens.catalogCancelToken = axios.CancelToken.source()
         },
-        fetchInn(inn) {
+        fetchInn(filterRequest) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, {params: filterRequest})
+        },
+        fetchCompaniesByInn(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/users`)
         },
         cancelCompanyRequest() {
@@ -114,6 +117,12 @@ export default {
                     email
                 }
             });
+        },
+        getDate(data) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/settings/tender/`,
+                data,
+            );
         },
         forgotPassChange(data) {
             return axios.post(
@@ -229,14 +238,14 @@ export default {
                 `${process.env.API_URL_TENDER_SERVICE}/api/procedure/settings/`,
             )
         },
-        fetchProceduresPropertyList(field) {
+        fetchProceduresPropertyList(entity, property) {
             return axios.get(
-                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/property/${field}`,
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/property/${entity}/${property}`,
             )
         },
         fetchUsersFromCompany(id) {
             return axios.get(
-                `${process.env.API_URL_AUTH_SERVICE}/secured/data/companies/${id}/users`,
+                `${process.env.API_URL_AUTH_SERVICE}/companies/${id}/users`,
             )
         },
         fetchCatalogMarksize(string, okpd) {
@@ -250,9 +259,10 @@ export default {
                 },
             )
         },
-        sendProcedure(data) {
+        sendProcedure(data, id) {
+            const setId = id ? `/${id}` : ''
             return axios.post(
-                `${process.env.API_URL_TENDER_SERVICE}/api/procedure`,
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure${setId}`,
                 data,
             )
         },

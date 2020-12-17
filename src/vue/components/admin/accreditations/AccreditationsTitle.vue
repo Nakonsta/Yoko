@@ -36,8 +36,11 @@ export default {
 .accreditations-title {
     font-family: $fontGilroy, Arial, 'Helvetica Neue', Helvetica, sans-serif;
     font-weight: bold;
-    font-size: rem(38px);
+    font-size: rem(30px);
     letter-spacing: 0.02em;
     color: #2c2c2c;
+    @include mq($from: tablet) {
+      font-size: rem(38px);
+    }
 }
 </style>

@@ -6,7 +6,7 @@
       <text-input v-model="dataForm.firstName" label="Имя"></text-input>
       <text-input v-model="dataForm.secondName" label="Отчество"></text-input>
       <text-input v-model="dataForm.position" label="Должность"></text-input>
-      <text-input v-model="dataForm.email" label="E-mail" rules="required|email" type="email"></text-input>
+      <text-input v-model="dataForm.email" label="E-mail" rules="required|email"></text-input>
       <text-input
           v-model="dataForm.password"
           label="Пароль"
@@ -31,6 +31,7 @@
         <div class="support-form__item support-form__phone">
           <text-input
               type="tel"
+              validation-name="телефон"
               v-model="dataForm.phone"
               :rules="{ required: true, customPhone: true }"
               :mask="`+${codePhone.phone_code} (###) ###-####`"

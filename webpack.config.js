@@ -17,7 +17,7 @@ const PATHS = {
 };
 const pages_dir = `${PATHS.src}/pug/pages/`;
 const pages = fs.readdirSync(pages_dir).filter(fileName => fileName.endsWith('.pug'));
-
+console.log(path.resolve('src/vue'))
 module.exports = {
     externals: {
         paths: PATHS
@@ -31,6 +31,7 @@ module.exports = {
     resolve: {
         alias: {
             'vue': 'vue/dist/vue.esm',
+            '@': path.resolve('src/vue'),
         },
         extensions: ['.js', '.vue']
     },

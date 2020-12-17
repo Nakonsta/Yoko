@@ -7,7 +7,7 @@
   >
     <span v-if="title" class="field__label field__label--radio">{{ title }}</span>
     <label v-for="item in $attrs.label" class="radio" :class="{error: failed}">
-      <input type="radio" :true-value="1" :false-value="0" :name="name" :disabled="disabled" :value="item.id" v-model="innerValue"/>
+      <input type="radio" :true-value="1" :false-value="0" :name="item.name" :disabled="disabled" :value="item.id" v-model="innerValue"/>
       <span class="radio__body" :class="{error: failed}"></span>
       <span class="radio__text">{{ item.name }}</span>
     </label>

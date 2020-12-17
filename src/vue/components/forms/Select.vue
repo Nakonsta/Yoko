@@ -7,7 +7,7 @@
       :name="$attrs.label && $attrs.label.toLowerCase()"
   >
     <span v-if="$attrs.label" class="field__label">{{ $attrs.label }}</span>
-    <input type="hidden" v-model="innerValue && innerValue.id">
+    <input type="hidden" v-model="innerValue">
     <div class="relative">
       <multiselect
         v-if="isSingle"
@@ -201,6 +201,7 @@ export default {
       position: absolute;
       right: 50px;
       top: 13px;
+      z-index: 10;
     }
   }
 </style>
