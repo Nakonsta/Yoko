@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div
-                v-if="accepted !== null"
+                v-if="showStatus && accepted !== null"
                 :class="['file-uploader__status', { 'file-uploader__status--rejected': !accepted }]"
             >
                 <svg v-if="accepted">
@@ -67,6 +67,9 @@ export default {
         accepted: {
             type: Boolean
         },
+        showStatus: {
+            type: Boolean
+        },
         hasError: {
             type: Boolean
         }
@@ -76,7 +79,8 @@ export default {
         return {
             localFile: {
                 name: '',
-                url: ''
+                url: '',
+                file: null
             }
         }
     },
@@ -100,7 +104,7 @@ export default {
             }
         },
         uploadFile() {
-            const types = ['image/png', 'image/jpg', 'image/jpeg', 'image/pdf']
+            const types = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf']
             const file = this.$refs.input.files[0]
 
             if (file) {
@@ -114,6 +118,7 @@ export default {
                 if (types.includes(file.type)) {
                     this.localFile.name = file.name
                     this.localFile.url = URL.createObjectURL(file)
+                    this.localFile.file = file
                     this.$emit('uploaded', file)
                 } else {
                     window.notificationError(
@@ -121,10 +126,15 @@ export default {
                     )
                 }
             }
+
+            this.$refs.input.files = null
+            this.$refs.input.value = ''
         },
         removeFile() {
+            this.$emit('remove', this.localFile.file)
+
+            this.localFile = { name: '', url: '', file: null }
             this.$refs.input.files = null
-            this.localFile = { name: '', url: '' }
             this.$refs.input.value = ''
         }
     }
