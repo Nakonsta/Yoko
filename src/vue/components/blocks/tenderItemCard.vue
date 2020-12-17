@@ -11,28 +11,36 @@
                     </div>
                 </div>
                 <div class="tender-item__common">
-                    <div v-if="tenderItemData.company_id" class="tender-item__row">
+                    <div v-if="company.name" class="tender-item__row">
                         <div class="tender-item__row-name">
                             Компания
                         </div>
                         <div class="tender-item__row-value">
-                            {{ tenderItemData.company_id }}
+                            {{ company.name }}
                         </div>
                     </div>
-                    <div v-if="tenderItemData.contact_id" class="tender-item__row">
+                    <div v-if="company.directorFio" class="tender-item__row">
                         <div class="tender-item__row-name">
                             Контактное лицо
                         </div>
                         <div class="tender-item__row-value">
-                            {{ tenderItemData.contact_id }}
+                            {{ company.directorFio }}
                         </div>
                     </div>
-                    <div v-if="tenderItemData.delivery_terms" class="tender-item__row">
+                    <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.delivery_to" class="tender-item__row">
                         <div class="tender-item__row-name">
                             Доставка
                         </div>
                         <div class="tender-item__row-value">
-                            {{ tenderItemData.delivery_terms ? 'Требуется' : 'Не требуется' }}
+                            {{ tenderItemData.purchase_term.delivery_to ? 'Требуется' : 'Не требуется' }}
+                        </div>
+                    </div>
+                    <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.description" class="tender-item__row">
+                        <div class="tender-item__row-name">
+                            Объект закупки
+                        </div>
+                        <div class="tender-item__row-value">
+                            {{ tenderItemData.purchase_subject.description }}
                         </div>
                     </div>
                 </div>
@@ -44,12 +52,12 @@
                     </div>
                     <Actions />
                 </div>
-                <div v-if="tenderItemData.start_price" class="tender-item__start-price">
+                <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.start_price" class="tender-item__start-price">
                     <div class="tender-item__start-price-text">
                         Начальная цена:
                     </div>
                     <div class="tender-item__start-price-num">
-                        {{ tenderItemData.start_price }} &#8381;
+                        {{ tenderItemData.purchase_subject.start_price }} &#8381;
                     </div>
                 </div>
                 <div class="tender-item__dates">
@@ -61,12 +69,12 @@
                             {{ formatDateNoTime(tenderItemData.publication_date) }}
                         </div>
                     </div>
-                    <div v-if="tenderItemData.terms_tender_to" class="tender-item__date">
+                    <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.application_end_date" class="tender-item__date">
                         <div class="tender-item__date-text">
                             Дата окончания:
                         </div>
                         <div class="tender-item__date-day">
-                            {{ formatDateNoTime(tenderItemData.terms_tender_to) }}
+                            {{ formatDateNoTime(tenderItemData.purchase_term.application_end_date) }}
                         </div>
                     </div>
                 </div>
@@ -77,8 +85,30 @@
                 <a href="#" class="tender-item__products-show">{{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}</a>
                 <a href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
             </div>
-            <div v-for="(item, key) in tenderItemData.products" :key="key">
-                <TenderItemProductCard :item="item" />
+            <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.products" class="tender-item__products-table">
+                <div v-if="tenderItemData.purchase_subject.products.length" class="tender-item__products-thead company-products__thead">
+                    <div class="table-cell__title">
+                        Наименование позиции
+                    </div>
+                    <div class="table-cell__quantity">
+                        Длина
+                    </div>
+                    <div class="table-cell__measure">
+                        Единица
+                    </div>
+                    <div class="table-cell__sum">
+                        Сумма за позицию
+                    </div>
+                    <div class="table-cell__vat">
+                        НДС
+                    </div>
+                    <div class="table-cell__analogues">
+                        Аналог
+                    </div>
+                </div>
+                <div v-for="(item, key) in tenderItemData.purchase_subject.products" :key="key">
+                    <TenderItemProductCard :item="item" />
+                </div>
             </div>
         </div>
     </div>
@@ -93,6 +123,10 @@ export default {
 
     props: {
         tenderItemData: {
+            type: Object,
+            required: true,
+        },
+        company: {
             type: Object,
             required: true,
         }
@@ -157,6 +191,8 @@ export default {
             background-color: #fff;
             border-radius: 6px;
             padding: rem(24px) rem(32px);
+            width: calc(100% - 315px);
+            margin-right: 32px;
         }
         &__requsites {
             display: flex;
@@ -234,6 +270,59 @@ export default {
                 align-items: center;
                 padding-top: rem(29px);
             }
+            &-show {
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+                color: $colorTurquoise;
+                position: relative;
+                padding-right: rem(18px);
+                &::after {
+                    content: '';
+                    position: absolute;
+                    display: inline-block;
+                    background: url('../src/assets/img/content/down.png') no-repeat;
+                    background-size: contain;
+                    width: 8px;
+                    height: 5px;
+                    top: 50%;
+                    right: 0;
+                    transform: translateY(-50%);
+                }
+            }
+            &-table {
+                padding: rem(77px) 0 rem(31px);
+            }
+            &-thead {
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+                color: $colorGray;
+
+            }
+        }
+    }
+    .company-products__thead {
+        display: flex;
+    }
+    .table-cell {
+        &__title {
+            width: 20%;
+        }
+        &__quantity {
+            width: 20%;
+        }
+        &__measure {
+            width: 20%;
+        }
+        &__sum {
+            width: 20%;
+        }
+        &__vat {
+            width: 20%;
+        }
+        &__analogues {
+            width: 20%;
         }
     }
 </style>

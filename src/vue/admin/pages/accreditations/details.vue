@@ -5,7 +5,7 @@
                 <div class="preloader__loader"></div>
             </div>
         </div>
-        <div v-else class="accreditation-details__wrapper">
+        <div v-if="!viewType.isEmpty && !loading" class="accreditation-details__wrapper">
             <div class="accreditation-details__header">
                 <accreditations-steps
                     v-if="!viewType.isCreate && accreditation.status"
@@ -56,7 +56,7 @@
                 заключения договора присоединения (ст. 428 ГК РФ), направления
                 оферты и акцепта (ст. 435–444 ГК РФ)."
                     :isAccepted="false"
-                    :disabled="viewType.isView"
+                    :disabled="!viewType.isCreate"
                 ></accreditation-details-card>
                 <accreditation-details-card
                     title="Подтверждение отсутствия в РНП"
@@ -92,13 +92,13 @@
                 заключения договора присоединения (ст. 428 ГК РФ), направления
                 оферты и акцепта (ст. 435–444 ГК РФ)."
                     :isAccepted="false"
-                    :disabled="viewType.isView"
+                    :disabled="!viewType.isCreate"
                 ></accreditation-details-card>
 
                 <accreditation-details-select
                     :defaultCompanyId="accreditation.entity_id"
                     @on-select="onSelect"
-                    :disabled="viewType.isView"
+                    :disabled="!viewType.isCreate"
                     :hasError="errors.noCompany"
                 ></accreditation-details-select>
 
@@ -108,14 +108,14 @@
                         label="Поставщик"
                         :value="accreditation.provider_accreditation"
                         @click="accreditation.provider_accreditation = $event"
-                        :disabled="viewType.isView"
+                        :disabled="!viewType.isCreate"
                         :hasError="errors.noAccreditationType"
                     ></accreditation-details-checkbox>
                     <accreditation-details-checkbox
                         label="Заказчик"
                         :value="accreditation.customer_accreditation"
                         @click="accreditation.customer_accreditation = $event"
-                        :disabled="viewType.isView"
+                        :disabled="!viewType.isCreate"
                         :hasError="errors.noAccreditationType"
                     ></accreditation-details-checkbox>
                 </div>
@@ -129,9 +129,11 @@
                         :fileName="accreditation.documents.length ? accreditation.documents[key].file.name : ''"
                         :fileUrl="accreditation.documents.length ? accreditation.documents[key].file.url : ''"
                         :accepted="accreditation.documents.length ? accreditation.documents[key].file.accepted : null"
-                        :disabled="viewType.isView"
+                        :showStatus="viewType.isEdit"
+                        :disabled="viewType.isView || (viewType.isEdit && accreditation.documents[key].file.accepted)"
                         :hasError="errors.files[label.id]"
                         @uploaded="onFileUpload($event, label.id)"
+                        @remove="onFileRemove"
                     ></accreditation-details-file-uploader>
                 </div>
             </div>
@@ -147,6 +149,7 @@
                 {{ viewType.isCreate ? 'Отправить заявку на аккредитацию' : 'Повторно отправить документы' }}
             </button>
         </div>
+        <accreditation-details-empty v-if="!loading && viewType.isEmpty"></accreditation-details-empty>
     </div>
 </template>
 <script>
@@ -159,6 +162,7 @@ import AccreditationDetailsCard from '../../../components/admin/accreditations/d
 import AccreditationDetailsSelect from '../../../components/admin/accreditations/details/AccreditationDetailsSelect.vue'
 import AccreditationDetailsCheckbox from '../../../components/admin/accreditations/details/AccreditationDetailsCheckbox.vue'
 import AccreditationDetailsFileUploader from '../../../components/admin/accreditations/details/AccreditationDetailsFileUploader.vue'
+import AccreditationDetailsEmpty from '../../../components/admin/accreditations/details/AccreditationDetailsEmpty.vue'
 
 export default {
     name: 'accreditation-details',
@@ -168,6 +172,7 @@ export default {
         AccreditationDetailsSelect,
         AccreditationDetailsCard,
         AccreditationDetailsFileUploader,
+        AccreditationDetailsEmpty,
         AccreditationDetailsCheckbox
     },
     mixins: [api, functions],
@@ -200,7 +205,8 @@ export default {
                 isEdit: this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false,
                 isView:
                     this.id !== 'new' &&
-                    !(this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false)
+                    !(this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false),
+                isEmpty: false
             }
         }
     },
@@ -213,6 +219,9 @@ export default {
                         ...this.accreditation,
                         ...(data?.data?.data ?? {})
                     }
+                })
+                .catch(() => {
+                    this.viewType.isEmpty = true
                 })
                 .finally(() => (this.loading = false))
         },
@@ -238,6 +247,13 @@ export default {
                 this.newFiles[key] = file
             }
         },
+        onFileRemove(file) {
+            Object.entries(this.newFiles).map(([key, value]) => {
+                if (value === file) {
+                    this.newFiles[key] = null
+                }
+            })
+        },
         validation(typeSend) {
             this.errors = {
                 noCompany: false,
@@ -258,19 +274,35 @@ export default {
             }
 
             if (this.viewType.isCreate) {
+                let filesSize = 0
                 Object.entries(this.accreditation.documents).forEach(([key, document]) => {
                     if (!(document instanceof File)) {
                         this.errors.files[key] = true
                         hasErrors = true
+                    } else {
+                        filesSize += document.size
                     }
                 })
+
+                if (!this.checkAllowFileSize(filesSize)) {
+                    hasErrors = true
+                }
             } else {
-                Object.entries(this.newFiles).forEach(([key, file]) => {
-                    if (!(file instanceof File) && !this.accreditation.documents[key].file.accepted) {
+                let filesSize = 0
+                Object.entries(this.newFiles).forEach(([key, file], i) => {
+                    if (!(file instanceof File) && !this.accreditation.documents[i].file.accepted) {
                         this.errors.files[key] = true
                         hasErrors = true
+                    } else {
+                        if (file) {
+                            filesSize += file.size
+                        }
                     }
                 })
+
+                if (!this.checkAllowFileSize(filesSize)) {
+                    hasErrors = true
+                }
             }
 
             if (!hasErrors) {
@@ -284,24 +316,31 @@ export default {
                 }
             }
         },
-        update() {
-            if (this.checkUnacceptedFiles()) {
-                const updateFiles = this.getNewUploadFiles()
-                this.updateAccreditation(this.id, updateFiles)
-                    .then(() => {
-                        window.notificationSuccess('Документы отправлены на аккредитацию')
-                        this.$router.replace('/accreditations')
-                    })
-                    .catch(e => {
-                        window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
-                    })
+        checkAllowFileSize(size) {
+            if (this.convertFileSize({ bytes: size, convertTo: 'MB' }) >= 100) {
+                window.notificationError(
+                    'Вы пытаетесь загрузить файлы превыщающие максимальный вес. Максимальный допустимый вес всех файлов 100MB'
+                )
+
+                return false
             } else {
-                window.notificationError('Зарузите повторно все отклоненные документы')
+                return true
             }
+        },
+        update() {
+            const updateFiles = this.getNewUploadFiles()
+            this.updateAccreditation(this.id, updateFiles)
+                .then(() => {
+                    window.notificationSuccess('Документы отправлены на аккредитацию')
+                    this.$router.replace('/personal/accreditations')
+                })
+                .catch(e => {
+                    window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
+                })
         },
         getNewUploadFiles() {
             const objFiles = {}
-            this.newFiles.forEach((file, key) => {
+            Object.entries(this.newFiles).forEach(([key, file]) => {
                 if (file instanceof File) {
                     objFiles[key] = file
                 }
@@ -309,20 +348,11 @@ export default {
 
             return objFiles
         },
-        checkUnacceptedFiles() {
-            for (const key in this.accreditation.documents) {
-                if (this.accreditation.documents[key].accepted === false) {
-                    return false
-                }
-            }
-
-            return true
-        },
         send() {
             this.sendAccreditationCompany(this.objectToFormData(this.accreditation))
                 .then(() => {
                     window.notificationSuccess('Заявка на аккредитацию отправлена')
-                    this.$router.replace('/presonal/accreditations')
+                    this.$router.replace('/personal/accreditations')
                 })
                 .catch(e => {
                     if (e.response) {
@@ -358,6 +388,7 @@ export default {
 .accreditation-details {
     padding: rem(80px) 0 rem(40px) !important;
     border-radius: 6px;
+    background-color: #fff;
 
     &__header {
         padding: 0 rem(40px);
