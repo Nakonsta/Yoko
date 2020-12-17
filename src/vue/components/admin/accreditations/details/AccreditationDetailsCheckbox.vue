@@ -1,7 +1,9 @@
 <template>
     <div :class="classes" @click="handleClick">
         <div :class="['check', { 'check--checked': this.value }]">
-            <img src="/src/assets/img/svg-templates/ok.svg" alt="checked" />
+            <svg>
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#ok"></use>
+            </svg>
         </div>
         <span>{{ label }}</span>
     </div>
@@ -99,7 +101,7 @@ export default {
     border-radius: 2px;
     transition: 0.3s;
 
-    img {
+    svg {
         display: none;
     }
 
@@ -107,8 +109,10 @@ export default {
         background-color: $colorTurquoise;
         border: 1px solid $colorTurquoise;
 
-        img {
+        svg {
             display: block;
+            max-width: 100%;
+            max-height: 100%;
         }
     }
 }
