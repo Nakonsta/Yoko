@@ -129,7 +129,7 @@
                         :fileName="accreditation.documents.length ? accreditation.documents[key].file.name : ''"
                         :fileUrl="accreditation.documents.length ? accreditation.documents[key].file.url : ''"
                         :accepted="accreditation.documents.length ? accreditation.documents[key].file.accepted : null"
-                        :disabled="viewType.isView"
+                        :disabled="viewType.isView || (viewType.isEdit && accreditation.documents[key].file.accepted)"
                         :hasError="errors.files[label.id]"
                         @uploaded="onFileUpload($event, label.id)"
                     ></accreditation-details-file-uploader>

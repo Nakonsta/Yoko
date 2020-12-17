@@ -157,15 +157,16 @@ export default {
         color: $colorRed;
     }
 
-    &--disabled {
-        filter: grayscale(100%);
-    }
-
     &--disabled &__description {
         cursor: default;
 
         &:hover {
             background-color: transparent;
+        }
+
+        * {
+            color: $colorGray;
+            fill: $colorGray;
         }
     }
 
