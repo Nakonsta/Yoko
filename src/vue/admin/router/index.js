@@ -16,7 +16,6 @@ const routes = [
   { path: '/personal/procedures/:id', component: Procedure},
   { path: '/personal/procedures/new', component: ProcedureNew},
   { path: "/personal/catalog/new", component:  CatalogNew},
-  { path: "/personal/marketplace", component:  Marketplace},
 ];
 
 const router = new VueRouter({
