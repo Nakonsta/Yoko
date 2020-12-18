@@ -65,6 +65,7 @@
     "dotenv-webpack": "^4.0.0",
     "dragula": "^3.7.2",
     "glightbox": "^3.0.5",
+    "inputmask": "^5.0.5",
     "js-cookie": "^2.2.1",
     "moment": "^2.29.1",
     "nouislider": "^14.2.0",

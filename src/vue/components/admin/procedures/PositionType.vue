@@ -256,7 +256,7 @@
         this.selectedData.positions[key].loaderName = true
         if (string && string.length > 2) {
           this.searchCatalog = setTimeout(() => {
-            this.fetchCatalogMarksize(
+            this.fetchCatalogMarksizeOKPD(
               string,
               this.selectedData.positions[key].category_okpd.id,
             )

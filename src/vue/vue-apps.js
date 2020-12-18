@@ -15,6 +15,19 @@ Vue.component('paginate', Paginate)
 import VueTheMask from 'vue-the-mask'
 Vue.use(VueTheMask)
 
+// труЪ маска, а не вот это вот всё...
+import Inputmask from 'inputmask'
+Inputmask.extendDefinitions({
+    'x': {
+        "validator": "[1-9]"
+    },
+});
+Vue.directive('inputmask', {
+    bind: function(el, binding) {
+        Inputmask(binding.value).mask(el);
+    }
+});
+
 import VCalendar from 'v-calendar'
 Vue.use(VCalendar)
 
@@ -85,28 +98,6 @@ if (catalogBlock) {
         el: catalogBlock,
         store: store,
         render: function(h) { return h(Catalog); }
-    })
-}
-
-// Каталог - добавление - заполнить форму
-import CatalogAdd from './catalog-add.vue'
-const catalogAddBlock = document.querySelector('#catalog-add');
-if (catalogAddBlock) {
-    let appCatalogAdd = new Vue({
-        el: catalogAddBlock,
-        store: store,
-        render: function(h) { return h(CatalogAdd); }
-    })
-}
-
-// Каталог - добавление - импортировать файл
-import CatalogImport from './catalog-import.vue'
-const catalogImportBlock = document.querySelector('#catalog-import');
-if (catalogImportBlock) {
-    let appCatalogAdd = new Vue({
-        el: catalogImportBlock,
-        store: store,
-        render: function(h) { return h(CatalogImport); }
     })
 }
 

@@ -3,8 +3,9 @@
       :tag="tag"
       :rules="rules"
       class="field__container select__container"
+      :class="parentClass"
       v-slot="{ errors, failed, validate }"
-      :name="$attrs.label && $attrs.label.toLowerCase()"
+      :name="$attrs.label && $attrs.label.toLowerCase() || validationName"
   >
     <span v-if="$attrs.label" class="field__label">{{ $attrs.label }}</span>
     <input type="hidden" v-model="innerValue">
@@ -12,12 +13,12 @@
       <multiselect
         v-if="isSingle"
         v-model="innerValue"
-        value="id"
+        :value="!isArray ? 'id' : null"
         class="form-select"
         :placeholder="placeholder"
         :class="{field: true, error: failed}"
-        track-by="id"
-        label="name"
+        :track-by="!isArray ? 'id' : ''"
+        :label="!isArray ? 'name' : ''"
         :show-labels="false"
         :options="options"
         :multiple="false"
@@ -26,6 +27,7 @@
         :internal-search="false"
         :closeOnSelect="close"
         :disabled="disabled"
+        :allow-empty="false"
         @close="() => closeEvent(validate)"
         @select=select
         @remove=remove
@@ -34,6 +36,7 @@
       <template
           slot="singleLabel"
           slot-scope="{ option }"
+          v-if="!isArray"
       >
         {{ option.name }}
       </template>
@@ -99,6 +102,10 @@ export default {
     Tooltip
   },
   props: {
+    parentClass: {
+      type: String,
+      default: 'field__container'
+    },
     select: {
       type: Function,
       default: () => {}
@@ -112,6 +119,10 @@ export default {
       default: false
     },
     isMultiple: {
+      type: Boolean,
+      default: false
+    },
+    isArray: {
       type: Boolean,
       default: false
     },
@@ -160,6 +171,10 @@ export default {
       default: null
     },
     text: {
+      type: String,
+      default: ''
+    },
+    validationName: {
       type: String,
       default: ''
     },
