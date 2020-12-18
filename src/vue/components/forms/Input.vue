@@ -138,6 +138,7 @@ export default {
     position: absolute;
     right: 15px;
     top: 13px;
+    z-index: 10;
   }
   .multiselect__spinner {
     background-color: transparent !important;

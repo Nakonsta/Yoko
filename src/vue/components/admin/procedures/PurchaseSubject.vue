@@ -3,13 +3,13 @@
     <div class="hide-block" @click=""><tooltip content="Скрыть блок"></tooltip></div>
     <h3 class="procedure__main-title">Предмет закупки</h3>
     <div class="row field__container">
-      <div class="col">
-        <button class="btn btn--bdr">
+      <div class="col mb1">
+        <button class="btn btn--bdr" :disabled="isCreatedProcedure">
           Скачать шаблон
         </button>
       </div>
-      <div class="col">
-        <button class="btn">
+      <div class="col mb1">
+        <button class="btn" :disabled="isCreatedProcedure">
           Загрузить шаблон
         </button>
       </div>
@@ -17,9 +17,9 @@
     <div class="row">
       <div class="col col-xs-12">
         <textarea-input
-            content="Вы допускаете торги по конкурсу"
             v-model="selectedData.item_description"
             label="Описание предмета закупки"
+            :disabled="isCreatedProcedure"
             placeholder="Введите информацию о предмете закупки"
         ></textarea-input>
       </div>
@@ -32,12 +32,14 @@
             label="Количество лотов"
             :options="counterToTenSelect"
             :disabled="isCreatedProcedure"
+            :select="changeLotsCount"
         ></select-input>
       </div>
       <div v-if="selectedData.count_lots.id === 0" class="col col-md-4 col-sm-6 col-xs-12">
         <checkbox-input
             class-name="mt3"
             name="purchase_positional"
+            :disabled="isCreatedProcedure"
             v-model="selectedData.purchase_positional"
             :label="[{label: 'Попозиционная закупка'}]"
         ></checkbox-input>
@@ -70,7 +72,6 @@
       <div v-for="index in selectedData.count_lots.id" :key="index" class="col col-md-4 col-sm-6 col-xs-12">
         <text-input
             :disabled="true"
-            content="Вы допускаете торги по конкурсу"
             v-model="procedureIdData.totalCount[index - 1]"
             :label="'Сумма лота ' + index"
         ></text-input>
@@ -78,6 +79,7 @@
     </div>
     <div class="row">
       <div class="col col-md-4 col-sm-6 col-xs-12">
+        {{ procedureIdData.baseCount }}
         <text-input
             :disabled="true"
             v-model="procedureIdData.baseCount"
@@ -89,12 +91,12 @@
 </template>
 
 <script>
-  import TextInput from '../../forms/Input.vue'
-  import SelectInput from '../../forms/Select.vue'
-  import CheckboxInput from '../../forms/Checkbox.vue'
-  import TextareaInput from '../../forms/Textarea.vue'
+  import TextInput from '@/components/forms/Input.vue'
+  import SelectInput from '@/components/forms/Select.vue'
+  import CheckboxInput from '@/components/forms/Checkbox.vue'
+  import TextareaInput from '@/components/forms/Textarea.vue'
   import PositionType from './PositionType.vue'
-  import Tooltip from "../../tooltip";
+  import Tooltip from "@/components/tooltip";
 
   export default {
     name: 'PurchaseSubject',
@@ -132,6 +134,10 @@
         type: Boolean,
       },
       countTotalPrice: {
+        default: () => {},
+        type: Function,
+      },
+      changeLotsCount: {
         default: () => {},
         type: Function,
       },

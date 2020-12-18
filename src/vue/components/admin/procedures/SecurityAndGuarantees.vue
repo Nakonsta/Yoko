@@ -30,7 +30,8 @@
             v-model="selectedData.security.percentage_of_the_starting_price"
             label="Процент от начальной цены"
             placeholder="Введите число"
-            :rules="{ required: true, numeric: true, max: 3 }"
+            :disabled="isCreatedProcedure"
+            :rules="{ required: true, numeric: true, max: 3, max_value: 100 }"
             :input="() => countCollateralAmount('security')"
         ></text-input>
       </div>
@@ -57,6 +58,7 @@
         <text-input
             v-model="selectedData.security.collateral_amount"
             label="Сумма обеспечения"
+            :disabled="isCreatedProcedure"
             placeholder="Введите число"
             :rules="{ required: true, regex: /^\d{1,9}(\.\d{1,2})?$/ }"
         ></text-input>
@@ -83,6 +85,7 @@
     <checkbox-input
         name="application_security_required"
         v-model="selectedData.application_security_required"
+        :disabled="isCreatedProcedure"
         :label="[{label: 'Требуется обеспечение заявки'}]"
         :change="securityChecked"
     ></checkbox-input>
@@ -109,7 +112,8 @@
             v-model="selectedData.request.percentage_of_the_starting_price"
             label="Процент от начальной цены"
             placeholder="Введите число"
-            :rules="{ required: true, numeric: true, max: 3 }"
+            :disabled="isCreatedProcedure"
+            :rules="{ required: true, numeric: true, max: 3, max_value: 100 }"
             :input="() => countCollateralAmount('request')"
         ></text-input>
       </div>
@@ -136,6 +140,7 @@
         <text-input
             v-model="selectedData.request.collateral_amount"
             label="Сумма обеспечения"
+            :disabled="isCreatedProcedure"
             placeholder="Введите число"
             :rules="{ required: true, regex: /^\d{1,9}(\.\d{1,2})?$/ }"
         ></text-input>
@@ -161,6 +166,8 @@
     </div>
     <div v-if="procedureIdData.procedureType === 'Auction'">
       <radio-input
+          :rules="{required: true}"
+          :disabled="isCreatedProcedure"
           title="Обеспечение заявки, внесенное победителем аукциона"
           name="securing_the_application"
           v-model="selectedData.securing_the_application"
@@ -171,11 +178,11 @@
 </template>
 
 <script>
-import TextInput from '../../forms/Input'
-import TextareaInput from '../../forms/Textarea'
-import CheckboxInput from '../../forms/Checkbox'
-import SelectInput from '../../forms/Select'
-import RadioInput from "../../forms/Radio";
+import TextInput from '@/components/forms/Input'
+import TextareaInput from '@/components/forms/Textarea'
+import CheckboxInput from '@/components/forms/Checkbox'
+import SelectInput from '@/components/forms/Select'
+import RadioInput from "@/components/forms/Radio";
 
   export default {
     name: 'SecurityAndGuarantees',

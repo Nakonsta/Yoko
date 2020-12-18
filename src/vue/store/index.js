@@ -83,7 +83,6 @@ const store = new Vuex.Store({
                 }
                 api.methods.fetchUser()
                     .then((response) => {
-                        console.log(state)
                         state.token = token
                         state.auth.user = response.data.data
                         state.auth.loggedIn = true

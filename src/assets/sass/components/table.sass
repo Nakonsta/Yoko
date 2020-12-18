@@ -1,5 +1,6 @@
 @import "../variables/variables"
 @import "../mixins/fluid-mixin"
+@import "../mixins/mq"
 
 .table
   thead
@@ -12,3 +13,22 @@
       border-bottom: 1px solid $colorGray3
       > *
         margin: 0
+  &--thin
+    tbody
+      td
+        padding: 0
+  &--adaptive
+    @include mq($until: tablet)
+      thead
+        display: none
+      tr
+        display: block
+      & td
+        display: flex
+        padding: rem(10px) 0 !important
+        font-weight: 400 !important
+        &::before
+          content: attr(data-label)
+          font-weight: 500
+          width: 52%
+          margin-right: 3%

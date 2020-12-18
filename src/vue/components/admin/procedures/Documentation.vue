@@ -36,8 +36,11 @@
       </div>-->
       <div class="col col-xs-12">
         <uploader
+            :multiple="true"
             v-model="selectedData.file"
             extensions=".pdf, .doc, .docx, .xls, .xlsx, .jpeg, .png"
+            :is-not-files="isNotFiles"
+            :disabled="isCreatedProcedure"
             :metatypes="[
                 'image/png',
                 'image/jpeg',
@@ -54,8 +57,8 @@
 </template>
 
 <script>
-  import SelectInput from "../../forms/Select";
-  import Uploader from "../../uploder";
+  import SelectInput from "@/components/forms/Select";
+  import Uploader from "@/components/uploder";
 
   export default {
     name: 'Documentation',
@@ -99,7 +102,6 @@
         if (!files.length)
           return;
         this.selectedData.file = files[0];
-        console.log(this.selectedData.file)
       },
     },
   }
