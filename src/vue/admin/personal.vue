@@ -28,6 +28,12 @@ export default {
         fullMode: false,
         }
     },
+    watch: {
+      $route(to, from) {
+        this.fullMode = false
+        closePopupById('#menu')
+      }
+    },
     mounted() {
         this.$nextTick(() => {
             window.addEventListener('resize', this.onResize);
