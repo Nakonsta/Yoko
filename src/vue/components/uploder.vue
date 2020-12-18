@@ -1,6 +1,6 @@
 <template>
   <div class="uploader" :class="{'error': isNotFiles}">
-    <div v-show="!files.length && $attrs.value && !$attrs.value.length">
+    <div v-show="!files.length">
       <slot></slot>
       <div
           class="uploader__file"
