@@ -36,7 +36,7 @@
       </div>-->
       <div class="col col-xs-12">
         <uploader
-            :multiple="true"
+            :max="true"
             v-model="selectedData.file"
             extensions=".pdf, .doc, .docx, .xls, .xlsx, .jpeg, .png"
             :is-not-files="isNotFiles"

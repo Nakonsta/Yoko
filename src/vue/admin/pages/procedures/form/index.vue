@@ -645,7 +645,6 @@ export default {
           data.guarantee && this.fieldsData.amountOfCollateral.find(x => x.id === data.guarantee.application_collateral.calc_amount)
       const blocking_period_daysA =
           data.guarantee && this.fieldsData.blockingPeriodDays.find(x => x.id === parseInt(data.guarantee.application_collateral.blocking_period))
-
       this.selectedData = {
         ...this.selectedData,
         currency,
@@ -655,9 +654,9 @@ export default {
         tender_trading_type,
         alternative_applications,
         stages_of_the_procurement_procedure,
-        securing_the_application: data.guarantee.application_ensuring,
         tender_available,
         id: data.id,
+        securing_the_application: this.get(data, 'guarantee.application_ensuring'),
         item_description: this.get(data, 'purchase_subject.description'),
         addition_information: data.addition_information,
         purchase_positional: this.parseBoolToNumber(this.get(data, 'purchase_subject.positional_purchase')),
@@ -699,6 +698,7 @@ export default {
           percentage_of_the_starting_price: this.get(data, 'guarantee.application_collateral.percent_of_init_price'),
         },
       }
+
       this.selectedData.positions = []
       if (data.purchase_subject.products.length) {
         data.purchase_subject.products.map((item, index) => {
@@ -993,7 +993,7 @@ export default {
       this.selectedData.fields[id].isSave = true
     },
     filesValidate() {
-      if (!this.selectedData.file.length) {
+      if (Array.isArray(this.selectedData.file) ? !this.selectedData.file.length : !this.selectedData.file) {
         this.isNotFiles = true
         return false
       }
@@ -1046,7 +1046,8 @@ export default {
         publication_date: this.parseDate(this.selectedData.publication_date),
         purchase_currency: this.get(this.selectedData, 'currency.id'),
         publication_allowed: Number(toPublish),
-        documents: this.selectedData.file,
+        documents: [],
+        old_documents: [],
         purchase_subject: {
           description: this.selectedData.item_description,
           lots_number: this.get(this.selectedData, 'count_lots.id'),
@@ -1067,6 +1068,15 @@ export default {
           delivery_address: this.get(this.selectedData, 'applications_delivery_address.id'),
         },
         additional_fields: [],
+      }
+
+      if (this.selectedData.file && this.selectedData.file[0].size) {
+        formData.documents = this.selectedData.file
+      }
+      if (this.selectedData.file && this.selectedData.file.length) {
+        this.selectedData.file.map((item) => {
+          formData.old_documents.push(item.id)
+        })
       }
       if (
           this.procedureIdData.procedureType !== 'Query' &&

@@ -230,11 +230,17 @@
           <div class="preview-block__item">
             <div class="preview-block__key">Загруженные документы</div>
             <div class="preview-block__value">
-              <div v-for="item in data.file" class="link">
+              <div v-for="item in data.file" v-if="data.file.length" class="link">
                 <svg class="sprite-paperclip">
                   <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use>
                 </svg>
                 <a :href="item.url" target="_blank">{{ item.name }}</a>
+              </div>
+              <div v-if="!data.file.length" class="link">
+                <svg class="sprite-paperclip">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use>
+                </svg>
+                <span>{{ data.file.name }}</span>
               </div>
             </div>
           </div>
