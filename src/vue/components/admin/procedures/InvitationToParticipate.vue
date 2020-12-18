@@ -1,5 +1,13 @@
 <template>
-  <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
+  <div v-if="
+    selectedData.tender_available &&
+    selectedData.tender_available.id === 0 &&
+    (procedureIdData.procedureType == 'Auction' ||
+      procedureIdData.procedureType == 'FromSupplier' ||
+      procedureIdData.procedureType === 'Contest')
+    "
+    class="container-item"
+  >
     <h3 class="procedure__main-title">Приглашение к участию</h3>
     <div class="row">
       <div class="col col-md-6 col-xs-12">
@@ -24,6 +32,7 @@
                 :loading="loadingSearch"
                 :internal-search="false"
                 :closeOnSelect="true"
+                :disabled="isCreatedProcedure"
                 @search-change="searchInn"
             >
               <template
@@ -44,11 +53,11 @@
               <span slot="noOptions">Список пуст</span>
             </multiselect>
           </ValidationProvider>
-          <button :disabled="!companyId" class="btn" @click="() => addCompany(companyId)">
+          <button :disabled="!companyId || isCreatedProcedure" class="btn" @click="() => addCompany(companyId)">
             Добавить
           </button>
         </div>
-        <table v-if="selectedData.invitedCompanies.length" class="table invitation-list">
+        <table v-if="selectedData.invitedCompanies.length" class="table table--thin invitation-list">
           <thead>
           <tr>
             <th>№</th>
@@ -75,15 +84,16 @@
         <div class="field-group field-group--null">
           <text-input
               v-model="emailId"
+              :disabled="isCreatedProcedure"
               validationName="email"
               placeholder="Введите Email"
               :rules="{ required: false, email: true }"
           ></text-input>
-          <button :disabled="!emailId" class="btn" @click="() => addEmail(emailId)">
+          <button :disabled="!emailId || isCreatedProcedure" class="btn" @click="() => addEmail(emailId)">
             Добавить
           </button>
         </div>
-        <table v-if="selectedData.invitedEmails.length" class="table invitation-list">
+        <table v-if="selectedData.invitedEmails.length" class="table table--thin invitation-list">
           <thead>
             <tr>
               <th>№</th>
@@ -110,9 +120,9 @@
 </template>
 
 <script>
-  import SelectInput from '../../forms/Select.vue'
-  import TextInput from '../../forms/Input.vue'
-  import api from "../../../helpers/api";
+  import SelectInput from '@/components/forms/Select.vue'
+  import TextInput from '@/components/forms/Input.vue'
+  import api from "@/helpers/api";
 
   export default {
     name: 'InvitationToParticipate',
@@ -155,7 +165,7 @@
       },
       addCompany(event) {
         this.companyId = null
-        this.selectedData.invitedCompanies.push(event.name)
+        this.selectedData.invitedCompanies.push(event.inn)
       },
       addEmail(event) {
         const pattern = /^[0-9a-zA-z]([.-]?\w+)*@[0-9a-z]([.-]?[0-9a-zA-z])*(\.[0-9a-zA-z]{2,4})+$/
@@ -171,7 +181,7 @@
           this.searchFlag = setTimeout(() => {
             this.fetchInn(value)
                 .then(({data}) => {
-                  this.searchResultInn = data.data
+                  this.searchResultInn = data.data.elements
                   this.loadingSearch = false
                 })
                 .catch(() => {

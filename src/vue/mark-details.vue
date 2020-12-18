@@ -23,8 +23,7 @@
     <div class="tabs__content company__content" id="description" style="display: block;">
       <mark-description :root="rootData"></mark-description>
     </div>
-    <div class="tabs__content company__content" id="markosize"> package.json
-
+    <div class="tabs__content company__content" id="markosize">
       <mark-mark-size :root="rootData" :lists="lists" :data-form="dataForm"></mark-mark-size>
     </div>
     <div class="tabs__content company__content" id="characters">
