@@ -7,6 +7,7 @@ import CatalogNew from '../pages/catalog/new.vue'
 import Procedures from '../pages/procedures/procedures.vue'
 import Procedure from '../pages/procedures/form/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
+import page404 from '../pages/page404.vue'
 
 const routes = [
   { path: "/personal/accreditations", component:  Accreditations},
@@ -15,6 +16,7 @@ const routes = [
   { path: '/personal/procedures/:id', component: Procedure},
   { path: '/personal/procedures/new', component: Procedure},
   { path: "/personal/catalog/new", component:  CatalogNew},
+  { path: "*", component:  page404},
 ];
 
 const router = new VueRouter({
