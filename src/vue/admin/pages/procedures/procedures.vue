@@ -16,6 +16,7 @@
                 />
             </div>
             <div class="marketplace__body">
+                <router-link to="/personal/procedures/new" class="btn">Создать новую процедуру</router-link>
                 <div class="tabs tabs--line" v-if="companies.length">
                     <ul>
                         <li v-for="company in companies" :key="company.id" :class="{active: company.inn === currentCompany}"><a href="javascript:{}" @click="changeCompany($event, company)">{{ company.name }}</a></li>
