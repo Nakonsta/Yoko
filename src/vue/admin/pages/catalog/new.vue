@@ -2015,8 +2015,6 @@
                     const item = data[1]; // get item row
                     data.splice(0, 2); // delete head & item rows
                     data.splice(9); // delete all trash rows
-                    console.log(item);
-                    console.log(data);
                     let fields = [];
                     if( this.type.id === 'mark' ) {
                         fields = ['mark', 'description', 'appointment', 'description_additional', 'layers|layer', 'layers|description', 'property_armor_options', 'property_screen_view', 'property_gost', 'property_voltage_allowable', 'property_filling', 'property_protective_cover', 'property_isolation', 'property_execution', 'property_caliber', 'property_material', 'property_material_fibers', 'property_material_shell', 'property_armor_availability', 'property_rated_operating_voltage', 'property_normative_document', 'property_use', 'property_insulation_resistance', 'property_fiber_type', 'property_veins_type', 'property_cable_type', 'property_laying_conditions', 'property_color_protective_hose_outer_sheath', 'property_central_element'];
@@ -2040,6 +2038,7 @@
                                             if (data.length) {
                                                 // перебираем все дополнительные поля
                                                 for (let r = 0; r < data.length; r++) {
+                                                    if( field !== 'layers' && r > 4 ) continue;
                                                     if (data[r][i] && data[r][i].length) {
                                                         if (typeof this.markForSend[field][r+1] === 'object') {
                                                             // если элемент для дополнительного поля существует - ставим значение
@@ -2061,6 +2060,7 @@
                                             if (data.length) {
                                                 // перебираем все дополнительные поля
                                                 for (let r = 0; r < data.length; r++) {
+                                                    if( field !== 'layers' && r > 4 ) continue;
                                                     if (data[r][i] && data[r][i].length) {
                                                         // т.к. элемент для дополнительного поля гарантированно НЕ существует - создаем и добавляем
                                                         obj = {};
@@ -2109,6 +2109,12 @@
                                 console.log('?field: '+field+' = '+item[i]);
                             }
                         }
+                    }
+                    while (this.markForSend.layers.length < 3 ) {
+                        this.markForSend.layers.push({
+                            layer: '',
+                            description: '',
+                        });
                     }
                     window.closeLoader();
                     this.view = 'form';
