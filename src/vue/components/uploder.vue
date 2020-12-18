@@ -1,6 +1,6 @@
 <template>
   <div class="uploader" :class="{'error': isNotFiles}">
-    <div v-show="!files.length && !$attrs.value.length">
+    <div v-show="!files.length && (!$attrs.value || !$attrs.value.length)">
       <slot></slot>
       <div
           class="uploader__file"
@@ -107,7 +107,7 @@
         </a>
       </div>
     </div>
-    <div class="uploader__process" v-if="!files.length && $attrs.value.length">
+    <div class="uploader__process" v-if="!files.length && $attrs.value && $attrs.value.length">
       <div class="uploader__process-file" v-for="(item, index) in $attrs.value">
         <div class="uploader__process-progress">
           <svg class="uploader__process-icon" width="24" height="24" viewBox="0 0 24 24"
