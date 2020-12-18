@@ -151,7 +151,8 @@
             label="Дата публикации"
             placeholder="Выберите дату"
             :disabled="isCreatedProcedure"
-            :min-date="new Date()"
+            :min-date="new Date(today)"
+            :rules="{required: true, minMaxDateCheck: today}"
         ></date-time>
       </div>
       <div
@@ -294,11 +295,13 @@
 </template>
 
 <script>
+import moment from 'moment'
 import TextInput from '@/components/forms/Input.vue'
 import SelectInput from '@/components/forms/Select.vue'
 import CheckboxInput from '@/components/forms/Checkbox.vue'
 import RadioInput from '@/components/forms/Radio.vue'
 import DateTime from '@/components/forms/DateTime.vue'
+
 
 export default {
   name: 'BasicInformation',
@@ -335,6 +338,11 @@ export default {
       type: Function,
     },
   },
+  data() {
+    return {
+      today: moment().format('YYYY-MM-DD')
+    }
+  }
 }
 </script>
 

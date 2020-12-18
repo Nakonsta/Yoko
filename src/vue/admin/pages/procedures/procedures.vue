@@ -1,6 +1,6 @@
 <template>
     <div class="marketplace">
-        <a class="btn marketplace__add" href="#">Создать процедуру</a>
+        <router-link class="btn marketplace__add" href="/personal/procedures/new">Создать процедуру</router-link>
         <div class="marketplace__flex">
             <div class="marketplace__filter" ref="filterContainer">
                 <filterList
