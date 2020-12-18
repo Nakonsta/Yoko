@@ -2,7 +2,7 @@
   <div class="tooltip">
     <div class="tooltip-body" @mouseover="isHide = false" @mouseleave="isHide = true" >
       <svg class="sprite-question">
-        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#question"></use>
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="icon"></use>
       </svg>
     </div>
     <transition name="fade-loader">
@@ -17,6 +17,10 @@
 export default {
   name: 'Tooltip',
   props: {
+    icon: {
+      default: '\\./img/sprite.svg#question',
+      type: String,
+    },
     content: {
       default: '',
       type: String,
