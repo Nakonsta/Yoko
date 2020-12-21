@@ -128,7 +128,7 @@
                                                     parentClass="field__container"
                                                     placeholder="Выберите из списка"
                                                     validationName="варианты брони"
-                                                    rules="required"
+                                                    rules=""
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -149,7 +149,7 @@
                                                     parentClass="field__container"
                                                     validationName="вид экрана"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_screen_view[field.index]"
                                             />
@@ -167,7 +167,7 @@
                                                     parentClass="field__container"
                                                     validationName="ГОСТ"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_gost[field.index]"
                                             />
@@ -185,7 +185,7 @@
                                                     parentClass="field__container"
                                                     validationName="допустимое напряжение"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="markForSend.property_voltage_allowable[field.index]"
                                             />
@@ -203,7 +203,7 @@
                                                     parentClass="field__container"
                                                     placeholder="Выберите из списка"
                                                     validationName="заполнение"
-                                                    rules="required"
+                                                    rules=""
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -224,7 +224,7 @@
                                                     parentClass="field__container"
                                                     validationName="защитный покров"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_protective_cover[field.index]"
                                             />
@@ -242,7 +242,7 @@
                                                     parentClass="field__container"
                                                     validationName="изоляция"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_isolation[field.index]"
                                             />
@@ -260,7 +260,7 @@
                                                     parentClass="field__container"
                                                     validationName="исполнение"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_execution[field.index]"
                                             />
@@ -295,7 +295,7 @@
                                                     parentClass="field__container"
                                                     validationName="материал"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_material[field.index]"
                                             />
@@ -313,7 +313,7 @@
                                                     parentClass="field__container"
                                                     validationName="материал волокон"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_material_fibers[field.index]"
                                             />
@@ -331,7 +331,7 @@
                                                     parentClass="field__container"
                                                     validationName="материал оболочки"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_material_shell[field.index]"
                                             />
@@ -349,7 +349,7 @@
                                                     parentClass="field__container"
                                                     validationName="наличие брони"
                                                     placeholder="Выберите из списка"
-                                                    rules="required"
+                                                    rules=""
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -370,7 +370,7 @@
                                                     parentClass="field__container"
                                                     validationName="номинальное рабочее напряжение"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="markForSend.property_rated_operating_voltage[field.index]"
                                             />
@@ -388,7 +388,7 @@
                                                     parentClass="field__container"
                                                     validationName="нормативный документ"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_normative_document[field.index]"
                                             />
@@ -406,7 +406,7 @@
                                                     parentClass="field__container"
                                                     validationName="применение"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_use[field.index]"
                                             />
@@ -424,7 +424,7 @@
                                                     parentClass="field__container"
                                                     validationName="сопротивление изоляции"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="markForSend.property_insulation_resistance[field.index]"
                                             />
@@ -442,7 +442,7 @@
                                                     parentClass="field__container"
                                                     validationName="тип волокна"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_fiber_type[field.index]"
                                             />
@@ -460,7 +460,7 @@
                                                     parentClass="field__container"
                                                     validationName="тип жил"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_veins_type[field.index]"
                                             />
@@ -478,7 +478,7 @@
                                                     parentClass="field__container"
                                                     validationName="тип кабеля"
                                                     placeholder="Выберите из списка"
-                                                    rules="required"
+                                                    rules=""
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -499,7 +499,7 @@
                                                     parentClass="field__container"
                                                     validationName="условия прокладки"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_laying_conditions[field.index]"
                                             />
@@ -517,7 +517,7 @@
                                                     parentClass="field__container"
                                                     validationName="цвет защитного шланга/наружной оболочки"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_color_protective_hose_outer_sheath[field.index]"
                                             />
@@ -535,7 +535,7 @@
                                                     parentClass="field__container"
                                                     validationName="центральный элемент"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="markForSend.property_central_element[field.index]"
                                             />
@@ -755,7 +755,7 @@
                                                     parentClass="field__container"
                                                     validationName="активное сопротивление жил (нулевой)"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_active_resistance_zero[field.index]"
                                             />
@@ -773,7 +773,7 @@
                                                     parentClass="field__container"
                                                     validationName="активное сопротивление жил (основных)"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_active_resistance_main[field.index]"
                                             />
@@ -791,7 +791,7 @@
                                                     parentClass="field__container"
                                                     validationName="активное сопротивление"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_active_resistance[field.index]"
                                             />
@@ -809,7 +809,7 @@
                                                     parentClass="field__container"
                                                     validationName="активное сопротивление при прокладке в плоскости"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_active_resistance_plane[field.index]"
                                             />
@@ -827,7 +827,7 @@
                                                     parentClass="field__container"
                                                     validationName="активное сопротивление при прокладке треугольником"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_active_resistance_triangle[field.index]"
                                             />
@@ -845,7 +845,7 @@
                                                     parentClass="field__container"
                                                     validationName="варианты исполнения вольтажа"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_voltage_versions[field.index]"
                                             />
@@ -863,7 +863,7 @@
                                                     parentClass="field__container"
                                                     validationName="внешний диаметр"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_outer_diameter[field.index]"
                                             />
@@ -881,7 +881,7 @@
                                                     parentClass="field__container"
                                                     validationName="волновое сопротивление"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_resistance_wave[field.index]"
                                             />
@@ -899,7 +899,7 @@
                                                     parentClass="field__container"
                                                     validationName="диаметр кабеля"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_diameter_cabel[field.index]"
                                             />
@@ -917,7 +917,7 @@
                                                     parentClass="field__container"
                                                     validationName="диаметр"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_diameter[field.index]"
                                             />
@@ -935,7 +935,7 @@
                                                     parentClass="field__container"
                                                     validationName="допустимое напряжение"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_voltage_allowable[field.index]"
                                             />
@@ -953,7 +953,7 @@
                                                     parentClass="field__container"
                                                     validationName="емкостная проводимость"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_capacitive_conductivity[field.index]"
                                             />
@@ -971,7 +971,7 @@
                                                     parentClass="field__container"
                                                     validationName="емкость"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_capacity[field.index]"
                                             />
@@ -989,7 +989,7 @@
                                                     parentClass="field__container"
                                                     validationName="индуктивное сопротивление жил (нулевой)"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_inductive_resistance_cores_zero[field.index]"
                                             />
@@ -1007,7 +1007,7 @@
                                                     parentClass="field__container"
                                                     validationName="индуктивное сопротивление жил (основных)"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_inductive_resistance_cores_main[field.index]"
                                             />
@@ -1025,7 +1025,7 @@
                                                     parentClass="field__container"
                                                     validationName="индуктивное сопротивление нулевой последовательности"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_inductive_resistance_zero_sequence[field.index]"
                                             />
@@ -1043,7 +1043,7 @@
                                                     parentClass="field__container"
                                                     validationName="индуктивное сопротивление"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_inductive_resistance[field.index]"
                                             />
@@ -1061,7 +1061,7 @@
                                                     parentClass="field__container"
                                                     validationName="индуктивное сопротивление при прокладке в плоскости"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_inductive_resistance_plane[field.index]"
                                             />
@@ -1079,7 +1079,7 @@
                                                     parentClass="field__container"
                                                     validationName="индуктивное сопротивление при прокладке треугольником"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_inductive_resistance_triangle[field.index]"
                                             />
@@ -1097,7 +1097,7 @@
                                                     parentClass="field__container"
                                                     validationName="индуктивное сопротивление прямой последовательности"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_inductive_resistance_direct_sequence[field.index]"
                                             />
@@ -1115,7 +1115,7 @@
                                                     parentClass="field__container"
                                                     validationName="класс гибкости жилы"
                                                     placeholder="Выберите из списка"
-                                                    rules="required"
+                                                    rules=""
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -1137,7 +1137,7 @@
                                                     parentClass="field__container"
                                                     validationName="количеств волокон"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     :max="99999"
                                                     :min="1"
                                                     v-model="marksizeForSend.property_fiber_count[field.index]"
@@ -1157,7 +1157,7 @@
                                                     parentClass="field__container"
                                                     validationName="количеств жил"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     :max="99999"
                                                     :min="1"
                                                     v-model="marksizeForSend.property_veins_count[field.index]"
@@ -1177,7 +1177,7 @@
                                                     parentClass="field__container"
                                                     validationName="количеств пар"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     :max="99999"
                                                     :min="0"
                                                     v-model="marksizeForSend.property_number_pairs[field.index]"
@@ -1197,7 +1197,7 @@
                                                     parentClass="field__container"
                                                     validationName="количеств троек"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     :max="99999"
                                                     :min="0"
                                                     v-model="marksizeForSend.property_number_triples[field.index]"
@@ -1217,7 +1217,7 @@
                                                     parentClass="field__container"
                                                     validationName="количеств четверок"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     :max="99999"
                                                     :min="0"
                                                     v-model="marksizeForSend.property_number_fours[field.index]"
@@ -1237,7 +1237,7 @@
                                                     parentClass="field__container"
                                                     validationName="количеств элементов"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     :max="99999"
                                                     :min="0"
                                                     v-model="marksizeForSend.property_number_elements[field.index]"
@@ -1256,7 +1256,7 @@
                                                     parentClass="field__container"
                                                     validationName="материал жилы"
                                                     placeholder="Выберите из списка"
-                                                    rules="required"
+                                                    rules=""
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -1277,7 +1277,7 @@
                                                     parentClass="field__container"
                                                     validationName="минимальный радиус изгиба"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_minimum_bending_radius[field.index]"
                                             />
@@ -1295,7 +1295,7 @@
                                                     parentClass="field__container"
                                                     validationName="напряжение"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_voltage[field.index]"
                                             />
@@ -1313,7 +1313,7 @@
                                                     parentClass="field__container"
                                                     validationName="оптические модули"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_optical_module[field.index]"
                                             />
@@ -1331,7 +1331,7 @@
                                                     parentClass="field__container"
                                                     validationName="раздавливающее усилие"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_crushing_force[field.index]"
                                             />
@@ -1349,7 +1349,7 @@
                                                     parentClass="field__container"
                                                     validationName="размер волокна"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_fiber_size[field.index]"
                                             />
@@ -1367,7 +1367,7 @@
                                                     parentClass="field__container"
                                                     validationName="размер волокон"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_fibers_size[field.index]"
                                             />
@@ -1385,7 +1385,7 @@
                                                     parentClass="field__container"
                                                     validationName="растягивающее усилие"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_tensile_force[field.index]"
                                             />
@@ -1403,7 +1403,7 @@
                                                     parentClass="field__container"
                                                     validationName="сечение"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_section[field.index]"
                                             />
@@ -1421,7 +1421,7 @@
                                                     parentClass="field__container"
                                                     validationName="сечение кабеля"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_cable_cross_section[field.index]"
                                             />
@@ -1439,7 +1439,7 @@
                                                     parentClass="field__container"
                                                     validationName="срок службы"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_lifetime[field.index]"
                                             />
@@ -1457,7 +1457,7 @@
                                                     parentClass="field__container"
                                                     validationName="строительная длина"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_construction_length[field.index]"
                                             />
@@ -1475,7 +1475,7 @@
                                                     parentClass="field__container"
                                                     validationName="тип применения"
                                                     placeholder="Введите текст"
-                                                    rules="required"
+                                                    rules=""
                                                     :maxlength="50"
                                                     v-model="marksizeForSend.property_application_type[field.index]"
                                             />
@@ -1493,7 +1493,7 @@
                                                     parentClass="field__container"
                                                     validationName="электрическое сопротивление"
                                                     placeholder="Введите значение"
-                                                    rules="required"
+                                                    rules=""
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
                                                     v-model="marksizeForSend.property_electrical_resistance[field.index]"
                                             />

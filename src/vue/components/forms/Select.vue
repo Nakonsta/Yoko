@@ -1,6 +1,6 @@
 <template>
   <ValidationProvider
-      :tag="tag"
+      :tag="(tag === 'label' && isSingle && searchable) ? 'span' : tag"
       :rules="rules"
       class="field__container select__container"
       :class="parentClass"
