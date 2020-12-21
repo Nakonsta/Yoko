@@ -239,6 +239,7 @@ export default {
     }
 
     .tender-item__protocol {
+        padding-bottom: rem(32px);
         &-title {
             font-weight: 700;
             font-size: rem(20px);
@@ -300,6 +301,37 @@ export default {
         &-link {
             color: $colorTurquoise;
             text-decoration: underline;
+        }
+    }
+
+    .tender-item__log {
+        padding-bottom: rem(24px);
+        color: $lightcolorText;
+        &-header {
+            &-row {
+                display: flex;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+                color: $colorGray;
+                padding-bottom: rem(12px);
+                border-bottom: 1px solid $borderColor;
+            }
+        }
+        &-item {
+            &-row {
+                display: flex;
+                padding: rem(16px) 0;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+            }
+        }
+        &-date {
+            width: 33%;
+        }
+        &-name {
+            width: 67%;
         }
     }
 </style>

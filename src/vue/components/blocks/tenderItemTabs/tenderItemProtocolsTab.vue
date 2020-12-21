@@ -3,7 +3,7 @@
         <div class="tender-item__protocols-block">
             <div class="tender-item__protocols-rows">
                 <div v-for="(group, index) in protocolGroups" :key="index" class="tender-item__protocol">
-                    <div v-if="filterProtocols(tenderItemData.protocols, group.value).length" class="tender-item__protocol-title">
+                    <div class="tender-item__protocol-title">
                         {{ group.name }}
                     </div>
                     <div v-if="filterProtocols(tenderItemData.protocols, group.value).length" class="tender-item__protocol-table">
@@ -31,6 +31,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div v-else class="tender-item__empty">
+                        Протоколов процедуры пока нет.
                     </div>                    
                 </div>
             </div>
