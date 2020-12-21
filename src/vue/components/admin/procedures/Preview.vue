@@ -124,8 +124,10 @@
         <div v-if="calculatedData.procedureType === 'Auction'" class="preview-block">
           <previews label="Комментарий" :value="data.application_comment"/>
         </div>
-        <h3>Условия оплаты и поставки товара</h3>
-        <div class="preview-block">
+        <h3 v-if="procedureIdData.procedureType === 'Commercial' && !fieldsData.hideBlock.payment_info">
+          Условия оплаты и поставки товара
+        </h3>
+        <div v-if="procedureIdData.procedureType === 'Commercial' && !fieldsData.hideBlock.payment_info" class="preview-block">
           <previews label="Предоплата" :value="convertedData.application_prepayment"/>
           <previews label="Аккредитив" :value="convertedData.application_letter_of_credit"/>
           <previews label="Информация об оплате" :value="data.application_payment_info"/>
@@ -207,26 +209,40 @@
           />
         </div>
         <h3 v-if="data.application_security_of_the_contract || data.application_security_required">Обеспечение и гарантии</h3>
-        <div class="preview-block" v-if="data.application_security_of_the_contract">
+        <div
+            class="preview-block"
+            v-if="procedureIdData.procedureType === 'Commercial'
+              ? !fieldsData.hideBlock.application_security
+              : data.application_security_of_the_contract
+            "
+        >
           <previews label="Считать размер обеспечения в" :value="data.security.calculate_the_amount_of_collateral && data.security.calculate_the_amount_of_collateral.name"/>
           <previews label="Процент от начальной цены" :value="data.security.percentage_of_the_starting_price"/>
           <previews label="Сумма обеспечения" :value="data.security.collateral_amount_percents"/>
           <previews label="Сумма обеспечения" :value="data.security.collateral_amount"/>
           <previews label="Срок блокировки, дней" :value="data.security.blocking_period_days && data.security.blocking_period_days.name"/>
         </div>
-        <div class="preview-block" v-if="data.application_security_required">
+        <div
+            class="preview-block"
+            v-if="procedureIdData.procedureType === 'Commercial'
+              ? !fieldsData.hideBlock.application_security
+              : data.application_security_required
+            "
+        >
           <previews label="Считать размер обеспечения в" :value="data.request.calculate_the_amount_of_collateral && data.request.calculate_the_amount_of_collateral.name"/>
           <previews label="Процент от начальной цены" :value="data.request.percentage_of_the_starting_price"/>
           <previews label="Сумма обеспечения" :value="data.request.collateral_amount_percents"/>
           <previews label="Сумма обеспечения" :value="data.request.collateral_amount"/>
           <previews label="Срок блокировки, дней" :value="data.request.blocking_period_days && data.request.blocking_period_days.name"/>
         </div>
-        <h3>Дополнительная информация о конкурсе</h3>
-        <div class="preview-block">
+        <h3 v-if="procedureIdData.procedureType === 'Commercial' && !fieldsData.hideBlock.additional_info">
+          Дополнительная информация о конкурсе
+        </h3>
+        <div v-if="procedureIdData.procedureType === 'Commercial' && !fieldsData.hideBlock.additional_info" class="preview-block">
           <previews label="Дополнительная информация" :value="data.addition_information"/>
         </div>
-        <h3>Конкурсная документация</h3>
-        <div class="preview-block">
+        <h3 v-if="procedureIdData.procedureType === 'Commercial' && !fieldsData.hideBlock.documentation">Конкурсная документация</h3>
+        <div v-if="procedureIdData.procedureType === 'Commercial' && !fieldsData.hideBlock.documentation" class="preview-block">
           <div class="preview-block__item">
             <div class="preview-block__key">Загруженные документы</div>
             <div class="preview-block__value">
@@ -339,6 +355,14 @@ export default {
     publish: {
       type: Function,
       default: () => {},
+    },
+    fieldsData: {
+      default: null,
+      type: Object,
+    },
+    procedureIdData: {
+      default: null,
+      type: Object,
     },
     uncheckPreview: {
       type: Function,

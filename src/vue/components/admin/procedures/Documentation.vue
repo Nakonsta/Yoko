@@ -1,5 +1,17 @@
 <template>
-  <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
+  <div
+      class="container-item"
+      :class="{hideIt: procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.documentation}"
+      v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id"
+  >
+    <div
+        class="function-btn"
+        :class="{active: fieldsData.hideBlock.documentation}"
+        v-if="procedureIdData.procedureType === 'Commercial'"
+        @click="removeBlock('documentation')"
+    >
+      <tooltip content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
+    </div>
     <h3 class="procedure__main-title">Документация</h3>
     <div class="row">
         <!--      TODO: доделать бэк для раздела документации-->
@@ -57,12 +69,14 @@
 </template>
 
 <script>
-  import SelectInput from "@/components/forms/Select";
-  import Uploader from "@/components/uploder";
+  import Tooltip from "@/components/tooltip"
+  import SelectInput from "@/components/forms/Select"
+  import Uploader from "@/components/uploder"
 
   export default {
     name: 'Documentation',
     components: {
+      Tooltip,
       SelectInput,
       Uploader,
     },
@@ -82,6 +96,14 @@
       isCreatedProcedure: {
         default: false,
         type: Boolean,
+      },
+      procedureIdData: {
+        default: null,
+        type: Object,
+      },
+      removeBlock: {
+        default: () => {},
+        type: Function,
       },
       selectsValidation: {
         default: () => {},
