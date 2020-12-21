@@ -1,5 +1,17 @@
 <template>
-  <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
+  <div
+      class="container-item"
+      :class="{hideIt: procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.payment_info}"
+      v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id"
+  >
+    <div
+        class="function-btn"
+        :class="{active: fieldsData.hideBlock.payment_info}"
+        v-if="procedureIdData.procedureType === 'Commercial'"
+        @click="removeBlock('payment_info')"
+    >
+      <tooltip content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
+    </div>
     <h3 class="procedure__main-title">Условия оплаты и поставки</h3>
     <div class="row">
       <div class="col col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -14,6 +26,7 @@
         <text-input
             validationName="информация об оплате"
             :disabled="isCreatedProcedure"
+            :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.payment_info)}"
             v-model="selectedData.application_payment_info"
             placeholder="Введите информацию об оплате"
         ></text-input>
@@ -31,6 +44,7 @@
             v-model="selectedData.application_delivery_conditions"
             label="Условия поставки"
             :disabled="isCreatedProcedure"
+            :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.payment_info)}"
             placeholder="Введите  дополнительную информацио об исполнительном договоре"
         ></textarea-input>
       </div>
@@ -46,6 +60,7 @@
             :loading="loadingPlaceSearch"
             :search="searchPlace"
             :disabled="isCreatedProcedure"
+            :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.payment_info)}"
             no-result="Адрес не найден"
         ></select-input>
       </div>
@@ -55,14 +70,16 @@
 
 <script>
   import api from '@/helpers/api'
-  import TextInput from '@/components/forms/Input.vue'
-  import SelectInput from '@/components/forms/Select.vue'
-  import CheckboxInput from '@/components/forms/Checkbox.vue'
-  import TextareaInput from "@/components/forms/Textarea";
+  import Tooltip from "@/components/tooltip"
+  import TextInput from '@/components/forms/Input'
+  import SelectInput from '@/components/forms/Select'
+  import CheckboxInput from '@/components/forms/Checkbox'
+  import TextareaInput from "@/components/forms/Textarea"
 
   export default {
     name: 'PaymentAndDelivery',
     components: {
+      Tooltip,
       TextareaInput,
       TextInput,
       SelectInput,
@@ -81,6 +98,14 @@
       isCreatedProcedure: {
         default: false,
         type: Boolean,
+      },
+      procedureIdData: {
+        default: null,
+        type: Object,
+      },
+      removeBlock: {
+        default: () => {},
+        type: Function,
       },
     },
     data() {

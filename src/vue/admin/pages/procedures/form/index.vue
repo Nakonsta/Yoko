@@ -10,7 +10,7 @@
           <accreditations-title v-if="!isPreview" :title="title" />
           <accreditations-title v-if="isPreview" title="Предпросмотр" />
         </div>
-        <div v-if="!isPreview">
+        <div v-if="!isPreview" class="flexBlock">
           <app-basic-information
             :selected-data="selectedData"
             :fields-data="fieldsData"
@@ -46,6 +46,7 @@
               :fields-data="fieldsData"
               :procedure-id-data="procedureIdData"
               :is-created-procedure="isCreatedProcedure"
+              :remove-block="removeBlock"
           ></app-security-and-guarantees>
           <app-invitation-to-participate
               :selected-data="selectedData"
@@ -56,11 +57,16 @@
           <app-payment-and-delivery
               :selected-data="selectedData"
               :fields-data="fieldsData"
+              :procedure-id-data="procedureIdData"
               :is-created-procedure="isCreatedProcedure"
+              :remove-block="removeBlock"
           ></app-payment-and-delivery>
           <app-additional-information
               :selected-data="selectedData"
               :is-created-procedure="isCreatedProcedure"
+              :fields-data="fieldsData"
+              :procedure-id-data="procedureIdData"
+              :remove-block="removeBlock"
           ></app-additional-information>
           <app-documentation
               :selected-data="selectedData"
@@ -68,6 +74,8 @@
               :is-created-procedure="isCreatedProcedure"
               :fields-data="fieldsData"
               :set-files="setFiles"
+              :procedure-id-data="procedureIdData"
+              :remove-block="removeBlock"
           ></app-documentation>
           <app-contact-information
               :selected-data="selectedData"
@@ -89,6 +97,8 @@
             v-if="isPreview"
             :data="selectedData"
             :calculated-data="procedureIdData"
+            :fields-data="fieldsData"
+            :procedure-id-data="procedureIdData"
             :validation="validation"
             :publish="publish"
             :uncheck-preview="uncheckPreview"
@@ -143,6 +153,12 @@ export default {
   data() {
     return {
       fieldsData: {
+        hideBlock: {
+          payment_info: false,
+          documentation: false,
+          additional_info: false,
+          application_security: false,
+        },
         markSize: [],
         tenderTradingFormat: [],
         tenderTradingType: [],
@@ -567,6 +583,9 @@ export default {
     }
   },
   methods: {
+    removeBlock(key) {
+      this.fieldsData.hideBlock[key] = !this.fieldsData.hideBlock[key]
+    },
     changeLotsCount(event) {
       if(event.id === 0) {
         this.selectedData.positions.map((item) => {
@@ -993,7 +1012,13 @@ export default {
       this.selectedData.fields[id].isSave = true
     },
     filesValidate() {
-      if (Array.isArray(this.selectedData.file) ? !this.selectedData.file.length : !this.selectedData.file) {
+      if (
+          this.procedureIdData.procedureType === 'Commercial'
+            ? !this.fieldsData.hideBlock.documentation
+            : Array.isArray(this.selectedData.file)
+              ? !this.selectedData.file.length
+              : !this.selectedData.file
+      ) {
         this.isNotFiles = true
         return false
       }
@@ -1070,7 +1095,7 @@ export default {
         additional_fields: [],
       }
 
-      if (this.selectedData.file && this.selectedData.file[0].size) {
+      if (this.selectedData.file && this.selectedData.file[0] && this.selectedData.file[0].size) {
         formData.documents = this.selectedData.file
       }
       if (this.selectedData.file && this.selectedData.file.length) {
@@ -1253,6 +1278,19 @@ export default {
         })
       }
 
+      if (this.fieldsData.hideBlock.payment_info) {
+        formData.payment_and_delivery = {}
+      }
+      if (this.fieldsData.hideBlock.documentation) {
+        formData.file = {}
+      }
+      if (this.fieldsData.hideBlock.additional_info) {
+        formData.addition_information = {}
+      }
+      if (this.fieldsData.hideBlock.application_security) {
+        formData.guarantee = {}
+      }
+
       const formDataObj = this.objectToFormData(formData)
       window.openLoader()
       this.sendProcedure(formDataObj, this.selectedData.id)
@@ -1286,6 +1324,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.flexBlock {
+  display: flex;
+  flex-direction: column;
+  .hideIt {
+    order: 10;
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      background: rgba(white, 0.5);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9;
+    }
+  }
+}
 .procedure-new {
   margin-bottom: 20px;
 }
