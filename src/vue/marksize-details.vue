@@ -3,14 +3,15 @@
         <mark-info :root="rootData"></mark-info>
         <div class="tabs tabs--line js-tabs company__nav js-more">
             <ul class="js-more__items">
-                <li class="js-more__item"><a href="#description">Описание</a></li>
-                <li class="js-more__item active"><a href="#markosize">Маркоразмеры</a></li>
-                <li class="js-more__item"><a href="#characters">Характеристики</a></li>
-                <li class="js-more__item"><a href="#appointment">Назначение</a></li>
-                <li class="js-more__item"><a href="#documents">Документация</a></li>
-                <li class="js-more__item"><a href="#analogs">Аналоги</a></li>
-                <li class="js-more__item"><a href="#manufacturer">Производители</a></li>
-                <li class="js-more__item"><a href="#additional">Дополнительная информация</a></li>
+                <li
+                    v-for="item in tabLinks"
+                    :key="item.url"
+                    @click="handleTabLinkClick(item.url)"
+                    class="js-more__item"
+                    :class="item.url === '#' + currentTab ? 'active' : ''"
+                >
+                    <a :href="item.url">{{ item.name }}</a>
+                </li>
                 <li class="js-more__btn hidden">
                     <button type="button" aria-haspopup="true" aria-expanded="false">
                         <svg class="sprite-dropdown">
@@ -20,10 +21,10 @@
                 </li>
             </ul>
         </div>
-        <div class="tabs__content company__content" id="description">
+        <div class="tabs__content company__content" id="description" style="display: block;">
             <mark-description :root="rootData"></mark-description>
         </div>
-        <div class="tabs__content company__content" id="markosize" style="display: block;">
+        <div class="tabs__content company__content" id="markosize">
             <mark-mark-size :root="rootData" :lists="lists" :data-form="dataForm"></mark-mark-size>
         </div>
         <div class="tabs__content company__content" id="characters">
@@ -120,14 +121,39 @@ export default {
                 voltage: null,
                 company: null,
             },
-            tabs: [
+            currentTab: "description",
+            tabLinks: [
                 {
                     name: "Описание",
-                    href: "#description"
+                    url: "#description"
                 },
                 {
                     name: "Маркоразмеры",
-                    href: "#markosize"
+                    url: "#markosize"
+                },
+                {
+                    name: "Характеристики",
+                    url: "#characters"
+                },
+                {
+                    name: "Назначение",
+                    url: "#appointment"
+                },
+                {
+                    name: "Документация",
+                    url: "#documents"
+                },
+                {
+                    name: "Аналоги",
+                    url: "#analogs"
+                },
+                {
+                    name: "Производители",
+                    url: "#manufacturer"
+                },
+                {
+                    name: "Дополнительная информация",
+                    url: "#additional"
                 }
             ]
         }
@@ -400,8 +426,18 @@ export default {
                 ]
             }
         },
-        handleNavigationClick() {
-
+        handleTabLinkClick(link) {
+            if (link) {
+                this.currentTab = link.replace("#", "").trim();
+                let elLink = document.getElementById(this.currentTab);
+                /**
+                 * На табы вешается какой-то js обработчик извне, который не дает показывать контент таба по клику.
+                 * пришлось пока сдлеать через setTimout с нулевой задержкой.
+                 */
+                setTimeout(function () {
+                    elLink.style.display = "block";
+                }, 0);
+            }
         }
     }
 }
