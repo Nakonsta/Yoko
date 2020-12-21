@@ -11,22 +11,23 @@
               :is-single="true"
               :close="true"
               placeholder="Выберите из списка"
-              v-model="position.is_product"
+              v-model="position.type"
               label="Тип позиции"
               :options="fieldsData.positionType"
               :disabled="isCreatedProcedure"
-              :select="countTotalPrice"
+              :select="countTotalPrice(key)"
           ></select-input>
         </div>
-        <div v-if="position.is_product && position.is_product.id === 1" class="col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="position.type && position.type.id === 1" class="col col-md-4 col-sm-6 col-xs-12">
           <select-input
               :is-single="true"
               :close="true"
-              v-model="position.category_okpd2"
+              v-model="position.category_okpd"
               :options="fieldsData.OKPD2"
               label="Раздел ОКПД2"
               :searchable="true"
               :loading="position.loader"
+              :disabled="isCreatedProcedure"
               :search="(event) => searchOKPD2(event, key)"
               :select="(event) => updateCode(event, key)"
               no-result="ОКПД-2 не найдены"
@@ -37,7 +38,8 @@
               :is-single="true"
               :close="true"
               placeholder=""
-              v-model="position.lot"
+              v-model="position.addLot"
+              :disabled="isCreatedProcedure"
               :options="procedureIdData.lotsCounter"
               label="Добавить в лот"
           ></select-input>
@@ -45,9 +47,9 @@
       </div>
       <div class="row">
         <div v-if="
-            position.is_product && (
-              (position.is_product.id === 1 && position.category_okpd2) ||
-              position.is_product.id === 0
+            position.type && (
+              (position.type.id === 1 && position.category_okpd) ||
+              position.type.id === 0
             )
           "
           class="col col-xl-3 col-md-4 col-sm-6 col-xs-12"
@@ -56,10 +58,11 @@
               :is-single="true"
               :close="true"
               placeholder="Поиск"
-              v-model="position.name"
+              v-model="position.names"
               :options="markSize"
               label="Наименование позиции"
               :searchable="true"
+              :disabled="isCreatedProcedure"
               :loading="position.loaderName"
               :search="(event) => fetchCatalogMark(event, key)"
               :select="(event) => updateRegion(event, key)"
@@ -76,7 +79,8 @@
                   ? 'Длина'
                   : 'Количество'
               "
-              :input="countTotalPrice"
+              :disabled="isCreatedProcedure"
+              :input="countTotalPrice(key)"
           ></text-input>
         </div>
         <div v-if="
@@ -89,7 +93,7 @@
               :is-single="true"
               :close="true"
               placeholder=""
-              v-model="position.measure"
+              v-model="position.measures"
               label="Единица"
               :options="
                 procedureIdData.positionType[key] &&
@@ -110,10 +114,10 @@
         <div v-if="procedureIdData.positionType[key]" class="col col-lg-3 col-md-4 col-sm-6 col-xs-12">
           <text-input
               v-model="position.price_for_one"
-              content="Вы допускаете торги по конкурсу"
+              :disabled="isCreatedProcedure"
               :rules="{ required: true, numeric: true, max: 12 }"
               label="Стоимость за единицу"
-              :input="countTotalPrice"
+              :input="countTotalPrice(key)"
           ></text-input>
         </div>
         <div v-if="procedureIdData.positionType[key]" class="col col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -121,21 +125,20 @@
               :is-single="true"
               :close="true"
               placeholder=""
-              v-model="position.vat"
+              v-model="position.vats"
               label="НДС"
-              :disabled="procedureIdData.positionType[key].name === 'PositionLength'"
+              :disabled="procedureIdData.positionType[key].name === 'PositionLength' || isCreatedProcedure"
               :options="fieldsData.positionVAT"
           ></select-input>
         </div>
         <div v-if="procedureIdData.positionType[key]" class="col col-lg-3 col-md-4 col-sm-6 col-xs-12">
           <text-input
               :disabled="true"
-              content="Вы допускаете торги по конкурсу"
               v-model="position.total_price"
               label="Сумма за позицию"
           ></text-input>
         </div>
-        <div v-if="key !== 0" class="col col-xs-12">
+        <div v-if="key !== 0 && !isCreatedProcedure" class="col col-xs-12">
           <div class="remove-btn" @click="removePosition(key)">
             <svg class="sprite-cancel"><use xmlns\:xlink="http://www.w3.org/1999/xlink" xlink\:href="\./img/sprite.svg#cancel"></use></svg>
           </div>
@@ -146,10 +149,11 @@
 </template>
 
 <script>
-  import api from '../../../helpers/api'
-  import TextInput from '../../forms/Input.vue'
-  import SelectInput from '../../forms/Select.vue'
-  import CheckboxInput from '../../forms/Checkbox.vue'
+  import api from '@/helpers/api'
+  import parsers from '@/helpers/parsers'
+  import TextInput from '@/components/forms/Input.vue'
+  import SelectInput from '@/components/forms/Select.vue'
+  import CheckboxInput from '@/components/forms/Checkbox.vue'
 
   export default {
     name: 'PositionType',
@@ -158,7 +162,7 @@
       SelectInput,
       CheckboxInput,
     },
-    mixins: [api],
+    mixins: [api, parsers],
     props: {
       selectedData: {
         default: null,
@@ -195,7 +199,11 @@
     },
     data() {
       return {
-        markSize: [],
+        markSize: [{
+          id: 1,
+          name: 'ВВГ',
+          code: '123'
+        }],
         numValidation: [
           (v) =>
             /^\d{1,12}$/.test(v) || 'Вводите максимум 12 цифровых значений',
@@ -215,11 +223,8 @@
         this.fetchCatalog(value, key)
       },
       updateRegion(event, key) {
-        console.log(event, key)
         if (this.selectedData.positions) {
-          this.selectedData.positions[
-            key
-          ].marksize_id = this.selectedData.positions[key].name
+          this.selectedData.positions[key].marksize_id = event.id
         }
       },
       updateCode(event, key) {
@@ -227,27 +232,10 @@
           this.selectedData.positions[key].code = event.code
         }
       },
-      parseOKPD2(arr) {
-        return arr.map((item) => {
-          return {
-            code: item.code,
-            id: item.id,
-            name: `${item.code} ${item.name}`,
-          }
-        })
-      },
-      parseMarksize(arr) {
-        return arr.map((item) => {
-          return {
-            id: item.id,
-            name: item.title,
-          }
-        })
-      },
       getSearchListOKPD2(string, key) {
         clearInterval(this.searchOKPD2Counter)
-        this.selectedData.positions[key].loader = true
         if (string && string.length > 2) {
+          this.selectedData.positions[key].loader = true
           this.searchOKPD2Counter = setTimeout(() => {
             this.searchProceduresOKPD2(string)
               .then(({data}) => {
@@ -268,12 +256,12 @@
         this.selectedData.positions[key].loaderName = true
         if (string && string.length > 2) {
           this.searchCatalog = setTimeout(() => {
-            this.fetchCatalogMarksize(
+            this.fetchCatalogMarksizeOKPD(
               string,
-              this.selectedData.positions[key].category_okpd2.id,
+              this.selectedData.positions[key].category_okpd.id,
             )
               .then(({data}) => {
-                this.markSize = this.parseMarksize(data.data)
+                this.markSize = this.parseMarkSize(data.data)
                 this.selectedData.positions[key].loaderName = false
               })
               .catch((e) => {
@@ -290,12 +278,17 @@
 </script>
 
 <style scoped lang="scss">
+  @import '../../../../assets/sass/variables/variables';
+  @import '../../../../assets/sass/mixins/mq';
   .new-positions-fields {
     position: relative;
     background: #F4F4F4;
     border-radius: 6px;
-    padding: 24px 24px 0;
+    padding: 16px 16px 0;
     margin-bottom: 20px;
+    @include mq($from: tablet) {
+      padding: 24px 24px 0;
+    }
   }
 
   .remove-btn {

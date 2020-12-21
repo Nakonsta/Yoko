@@ -1,6 +1,6 @@
 <template>
     <div class="marketplace">
-        <a class="btn marketplace__add" href="#">Создать процедуру</a>
+        <router-link class="btn marketplace__add" to="/personal/procedures/new">Создать процедуру</router-link>
         <div class="marketplace__flex">
             <div class="marketplace__filter" ref="filterContainer">
                 <filterList
@@ -16,6 +16,7 @@
                 />
             </div>
             <div class="marketplace__body">
+                <router-link to="/personal/procedures/new" class="btn">Создать новую процедуру</router-link>
                 <div class="tabs tabs--line" v-if="companies.length">
                     <ul>
                         <li v-for="company in companies" :key="company.id" :class="{active: company.inn === currentCompany}"><a href="javascript:{}" @click="changeCompany($event, company)">{{ company.name }}</a></li>
@@ -66,7 +67,7 @@
     import formatDate from '../../../helpers/formatDate';
 
     export default {
-        name: 'Marketplace',
+        name: 'Procedures',
         components: {
             search,
             filterList,
@@ -279,15 +280,15 @@
                          */
                         items.forEach((item, index) => {
                             items[index].company = null;
-                            companiesINN.push(items[index].inn);
+                            if (companiesINN.indexOf(items[index].inn) === -1) companiesINN.push(items[index].inn);
                         });
                         if (companiesINN.length) {
                             this.fetchCompaniesByINN(companiesINN)
-                                .then((data) => {
-                                    const companies = data.data.data;
+                                .then((response) => {
+                                    const companies = response.data.data.elements;
                                     companies.forEach((company) => {
                                         items.forEach((item) => {
-                                            if (company.id === item.company_id) {
+                                            if (parseInt(company.inn) === parseInt(item.inn)) {
                                                 item.company = company;
                                             }
                                         });

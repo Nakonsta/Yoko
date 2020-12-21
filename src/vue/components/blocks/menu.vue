@@ -140,21 +140,25 @@ export default {
           {
             icon: 'mdi-home',
             title: 'Главная',
-            to: '/',
+            to: '/personal',
             order: 0,
             isActive: true,
             subItems: [],
           },
           {
             icon: 'mdi-buffer',
-            title: 'Список процедур',
-            to: '/personal/tender',
+            title: 'Торговые процедуры',
+            to: '/personal/procedures',
             order: 1,
             isActive: true,
             subItems: [
               {
+                title: 'Список процедур',
+                to: '/personal/procedures'
+              },
+              {
                 title: 'Создание процедуры',
-                to: '/personal/procedure/new'
+                to: '/personal/procedures/new'
               },
               {
                 title: 'Черновики процедур',
@@ -174,37 +178,16 @@ export default {
                 to: '/personal/accreditations/new'
               },
             ]
-          },
+          }
         ],
         contractor: [
           {
             icon: 'mdi-home',
             title: 'Главная',
-            to: '/',
+            to: '/personal',
             order: 0,
             isActive: true,
             subItems: [],
-          },
-          {
-            icon: 'mdi-buffer',
-            title: 'Список продукции',
-            to: '/personal',
-            order: 1,
-            isActive: true,
-            subItems: [
-              {
-                title: 'Добавление продукции',
-                to: '/personal'
-              },
-            ]
-          },
-          {
-            icon: 'mdi-buffer',
-            title: 'Торговые процедуры',
-            to: '/personal/tender',
-            order: 1,
-            isActive: true,
-            subItems: []
           },
           {
             icon: 'mdi-buffer',
@@ -216,6 +199,19 @@ export default {
               {
                 title: 'Создание заявки',
                 to: '/personal/accreditations/new'
+              },
+            ]
+          },
+          {
+            icon: 'mdi-buffer',
+            title: 'Каталог',
+            to: '/catalog',
+            order: 1,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Добавление продукции',
+                to: '/personal/catalog/new'
               },
             ]
           },

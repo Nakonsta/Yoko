@@ -287,7 +287,7 @@ export default {
               const inn = this.dataForm.inn.replace(/\s/g, '')
               this.fetchInn(inn)
                   .then(({data}) => {
-                    const arrInn = data.data
+                    const arrInn = data.data.elements
                     const isOldCompany = arrInn.find((item) => item.inn === inn)
                     if (isOldCompany) {
                       this.dataForm.oldCompany = '1'
@@ -311,7 +311,7 @@ export default {
       this.searchFlag = setTimeout(() => {
         this.fetchInn(value)
             .then(({data}) => {
-              this.searchResultInn = data.data
+              this.searchResultInn = data.data.elements
               this.loadingSearch = false
             })
             .catch(() => {

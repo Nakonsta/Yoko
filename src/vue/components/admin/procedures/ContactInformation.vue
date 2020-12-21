@@ -8,6 +8,7 @@
             :is-single="true"
             :close="true"
             placeholder="Выберите из списка"
+            :disabled="isCreatedProcedure"
             v-model="selectedData.contact_full_name"
             :options="fieldsData.contacts_list"
         ></select-input>
@@ -32,9 +33,9 @@
   </div>
 </template>
 
-  <script>
-  import TextInput from '../../forms/Input.vue'
-  import SelectInput from '../../forms/Select.vue'
+<script>
+  import TextInput from '@/components/forms/Input.vue'
+  import SelectInput from '@/components/forms/Select.vue'
 
   export default {
     name: 'ContactInformation',

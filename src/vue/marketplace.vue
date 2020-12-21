@@ -260,15 +260,15 @@
                          */
                         items.forEach((item, index) => {
                             items[index].company = null;
-                            companiesINN.push(items[index].inn);
+                            if (companiesINN.indexOf(items[index].inn) === -1) companiesINN.push(items[index].inn);
                         });
                         if (companiesINN.length) {
                             this.fetchCompaniesByINN(companiesINN)
-                                .then((data) => {
-                                    const companies = data.data.data;
+                                .then((response) => {
+                                    const companies = response.data.data.elements;
                                     companies.forEach((company) => {
                                         items.forEach((item) => {
-                                            if (company.id === item.company_id) {
+                                            if (parseInt(company.inn) === parseInt(item.inn)) {
                                                 item.company = company;
                                             }
                                         });
