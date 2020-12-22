@@ -84,6 +84,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
+    openPopupById('#singin')
     if (to.path === '/personal') {
       next()
     } else {

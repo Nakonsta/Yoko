@@ -7,9 +7,7 @@
           <router-view @fullMode="getModeFromPage" />
         </div>
       </template>
-      <div v-else class="no-auth-block">
-        <preloader />
-      </div>
+      <noAuthBlock v-else />
     </div>
 </template>
 
@@ -18,14 +16,14 @@ import draggable from 'vuedraggable'
 import api from '../helpers/api'
 import functions from '../helpers/functions'
 import AppMenu from '../components/blocks/Menu.vue'
-import preloader from "@/components/preloader";
+import noAuthBlock from '../components/blocks/noAuthBlock'
 
 export default {
     name: 'Personal',
     components: {
         AppMenu,
         draggable,
-        preloader,
+        noAuthBlock,
     },
     mixins: [api, functions],
     data() {
@@ -60,7 +58,4 @@ export default {
 </script>
 
 <style lang="scss">
-  .no-auth-block {
-    height: 20rem;
-  }
 </style>
