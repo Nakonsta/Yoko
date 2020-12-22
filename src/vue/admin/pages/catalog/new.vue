@@ -186,7 +186,7 @@
                                                     validationName="допустимое напряжение"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="markForSend.property_voltage_allowable[field.index]"
                                             />
                                         </template>
@@ -279,7 +279,7 @@
                                                     validationName="калибр"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="markForSend.property_caliber[field.index]"
                                             />
                                         </template>
@@ -371,7 +371,7 @@
                                                     validationName="номинальное рабочее напряжение"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="markForSend.property_rated_operating_voltage[field.index]"
                                             />
                                         </template>
@@ -425,7 +425,7 @@
                                                     validationName="сопротивление изоляции"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="markForSend.property_insulation_resistance[field.index]"
                                             />
                                         </template>
@@ -568,6 +568,7 @@
                                         rules="required"
                                         :maxlength="50"
                                         v-model="item.properties.number"
+                                        :disabled="item.file === null"
                                 />
                             </div>
                         </fieldset>
@@ -584,12 +585,13 @@
                                 </a>
                             </div>
                             <div class="legend">Загрузить сертификат</div>
-                            <ValidationProvider name="сертификат" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
+                            <ValidationProvider name="сертификат" v-slot="{ errors, failed }" :rules="{ required: markForSend.documents.guarantee_letters[0].file === null }" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
+                                        :disabled="markForSend.documents.guarantee_letters[0].file !== null"
                                 />
                                 <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                             </ValidationProvider>
@@ -598,9 +600,10 @@
                                         parentClass="field__container field__container--w50"
                                         label="Номер сертификата"
                                         placeholder="Введите номер"
-                                        rules="required"
+                                        :rules="{ required: item.file !== null }"
                                         :maxlength="50"
                                         v-model="item.properties.number"
+                                        :disabled="item.file === null"
                                 />
                                 <div class="field__container field__container--w50">
                                     <span class="field__label">Выберите дату начала и окончания сертификата</span>
@@ -611,6 +614,9 @@
                                                     v-model="item.properties.date_start"
                                                     :disabledFrom="item.properties.date_end"
                                                     :disabledTo="picker.disabledTo"
+                                                    :format="picker.format"
+                                                    :rules="{ required: item.file !== null }"
+                                                    :disabled="item.file === null"
                                             />
                                         </div>
                                         <span>&mdash;</span>
@@ -620,13 +626,16 @@
                                                     v-model="item.properties.date_end"
                                                     :disabledFrom="picker.disabledFrom"
                                                     :disabledTo="item.properties.date_start"
+                                                    :format="picker.format"
+                                                    :rules="{ required: item.file !== null }"
+                                                    :disabled="item.file === null"
                                             />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </fieldset>
-                        <div class="field__add">
+                        <div class="field__add" :class="{disabled: markForSend.documents.guarantee_letters[0].file !== null}">
                             <a href="javascript:{}" @click="fileAdd(markForSend.documents.certificates)">
                                 <svg class="sprite-field-add"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#field-add"></use></svg>
                                 Добавить Сертификат
@@ -634,19 +643,20 @@
                         </div>
                         <fieldset class="files" v-for="(item, index) in markForSend.documents.guarantee_letters">
                             <div class="legend">Загрузить гарантийное письмо</div>
-                            <ValidationProvider name="гарантийное письмо" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
+                            <ValidationProvider name="гарантийное письмо" v-slot="{ errors, failed }" :rules="{ required: markForSend.documents.certificates[0].file === null }" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
+                                        :disabled="markForSend.documents.certificates[0].file !== null"
                                 />
                                 <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                             </ValidationProvider>
                         </fieldset>
                         <fieldset class="files">
                             <div class="legend">Загрузить изображения</div>
-                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
+                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="markForSend.images"
                                         :preview="true"
@@ -756,7 +766,7 @@
                                                     validationName="активное сопротивление жил (нулевой)"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_active_resistance_zero[field.index]"
                                             />
                                         </template>
@@ -774,7 +784,7 @@
                                                     validationName="активное сопротивление жил (основных)"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_active_resistance_main[field.index]"
                                             />
                                         </template>
@@ -792,7 +802,7 @@
                                                     validationName="активное сопротивление"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_active_resistance[field.index]"
                                             />
                                         </template>
@@ -810,7 +820,7 @@
                                                     validationName="активное сопротивление при прокладке в плоскости"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_active_resistance_plane[field.index]"
                                             />
                                         </template>
@@ -828,7 +838,7 @@
                                                     validationName="активное сопротивление при прокладке треугольником"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_active_resistance_triangle[field.index]"
                                             />
                                         </template>
@@ -846,7 +856,7 @@
                                                     validationName="варианты исполнения вольтажа"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_voltage_versions[field.index]"
                                             />
                                         </template>
@@ -864,7 +874,7 @@
                                                     validationName="внешний диаметр"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_outer_diameter[field.index]"
                                             />
                                         </template>
@@ -882,7 +892,7 @@
                                                     validationName="волновое сопротивление"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_resistance_wave[field.index]"
                                             />
                                         </template>
@@ -900,7 +910,7 @@
                                                     validationName="диаметр кабеля"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_diameter_cabel[field.index]"
                                             />
                                         </template>
@@ -918,7 +928,7 @@
                                                     validationName="диаметр"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_diameter[field.index]"
                                             />
                                         </template>
@@ -936,7 +946,7 @@
                                                     validationName="допустимое напряжение"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_voltage_allowable[field.index]"
                                             />
                                         </template>
@@ -954,7 +964,7 @@
                                                     validationName="емкостная проводимость"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_capacitive_conductivity[field.index]"
                                             />
                                         </template>
@@ -972,7 +982,7 @@
                                                     validationName="емкость"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_capacity[field.index]"
                                             />
                                         </template>
@@ -990,7 +1000,7 @@
                                                     validationName="индуктивное сопротивление жил (нулевой)"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_inductive_resistance_cores_zero[field.index]"
                                             />
                                         </template>
@@ -1008,7 +1018,7 @@
                                                     validationName="индуктивное сопротивление жил (основных)"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_inductive_resistance_cores_main[field.index]"
                                             />
                                         </template>
@@ -1026,7 +1036,7 @@
                                                     validationName="индуктивное сопротивление нулевой последовательности"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_inductive_resistance_zero_sequence[field.index]"
                                             />
                                         </template>
@@ -1044,7 +1054,7 @@
                                                     validationName="индуктивное сопротивление"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_inductive_resistance[field.index]"
                                             />
                                         </template>
@@ -1062,7 +1072,7 @@
                                                     validationName="индуктивное сопротивление при прокладке в плоскости"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_inductive_resistance_plane[field.index]"
                                             />
                                         </template>
@@ -1080,7 +1090,7 @@
                                                     validationName="индуктивное сопротивление при прокладке треугольником"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_inductive_resistance_triangle[field.index]"
                                             />
                                         </template>
@@ -1098,7 +1108,7 @@
                                                     validationName="индуктивное сопротивление прямой последовательности"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_inductive_resistance_direct_sequence[field.index]"
                                             />
                                         </template>
@@ -1278,7 +1288,7 @@
                                                     validationName="минимальный радиус изгиба"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_minimum_bending_radius[field.index]"
                                             />
                                         </template>
@@ -1296,7 +1306,7 @@
                                                     validationName="напряжение"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_voltage[field.index]"
                                             />
                                         </template>
@@ -1314,7 +1324,7 @@
                                                     validationName="оптические модули"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_optical_module[field.index]"
                                             />
                                         </template>
@@ -1332,7 +1342,7 @@
                                                     validationName="раздавливающее усилие"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_crushing_force[field.index]"
                                             />
                                         </template>
@@ -1350,7 +1360,7 @@
                                                     validationName="размер волокна"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_fiber_size[field.index]"
                                             />
                                         </template>
@@ -1368,7 +1378,7 @@
                                                     validationName="размер волокон"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_fibers_size[field.index]"
                                             />
                                         </template>
@@ -1386,7 +1396,7 @@
                                                     validationName="растягивающее усилие"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_tensile_force[field.index]"
                                             />
                                         </template>
@@ -1404,7 +1414,7 @@
                                                     validationName="сечение"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_section[field.index]"
                                             />
                                         </template>
@@ -1422,7 +1432,7 @@
                                                     validationName="сечение кабеля"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_cable_cross_section[field.index]"
                                             />
                                         </template>
@@ -1440,7 +1450,7 @@
                                                     validationName="срок службы"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_lifetime[field.index]"
                                             />
                                         </template>
@@ -1458,7 +1468,7 @@
                                                     validationName="строительная длина"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_construction_length[field.index]"
                                             />
                                         </template>
@@ -1494,7 +1504,7 @@
                                                     validationName="электрическое сопротивление"
                                                     placeholder="Введите значение"
                                                     rules=""
-                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+                                                    inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="marksizeForSend.property_electrical_resistance[field.index]"
                                             />
                                         </template>
@@ -1526,6 +1536,7 @@
                                         rules="required"
                                         :maxlength="50"
                                         v-model="item.properties.number"
+                                        :disabled="item.file === null"
                                 />
                             </div>
                         </fieldset>
@@ -1542,12 +1553,13 @@
                                 </a>
                             </div>
                             <div class="legend">Загрузить сертификат</div>
-                            <ValidationProvider name="сертификат" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
+                            <ValidationProvider name="сертификат" v-slot="{ errors, failed }" :rules="{ required: marksizeForSend.documents.guarantee_letters[0].file === null }" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
+                                        :disabled="marksizeForSend.documents.guarantee_letters[0].file !== null"
                                 />
                                 <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                             </ValidationProvider>
@@ -1556,9 +1568,10 @@
                                         parentClass="field__container field__container--w50"
                                         label="Номер сертификата"
                                         placeholder="Введите номер"
-                                        rules="required"
+                                        :rules="{ required: item.file !== null }"
                                         :maxlength="50"
                                         v-model="item.properties.number"
+                                        :disabled="item.file === null"
                                 />
                                 <div class="field__container field__container--w50">
                                     <span class="field__label">Выберите дату начала и окончания сертификата</span>
@@ -1569,6 +1582,9 @@
                                                     v-model="item.properties.date_start"
                                                     :disabledFrom="item.properties.date_end"
                                                     :disabledTo="picker.disabledTo"
+                                                    :format="picker.format"
+                                                    :rules="{ required: item.file !== null }"
+                                                    :disabled="item.file === null"
                                             />
                                         </div>
                                         <span>&mdash;</span>
@@ -1578,13 +1594,16 @@
                                                     v-model="item.properties.date_end"
                                                     :disabledFrom="picker.disabledFrom"
                                                     :disabledTo="item.properties.date_start"
+                                                    :format="picker.format"
+                                                    :rules="{ required: item.file !== null }"
+                                                    :disabled="item.file === null"
                                             />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </fieldset>
-                        <div class="field__add">
+                        <div class="field__add" :class="{disabled: marksizeForSend.documents.guarantee_letters[0].file !== null}">
                             <a href="javascript:{}" @click="fileAdd(marksizeForSend.documents.certificates)">
                                 <svg class="sprite-field-add"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#field-add"></use></svg>
                                 Добавить Сертификат
@@ -1592,19 +1611,20 @@
                         </div>
                         <fieldset class="files" v-for="(item, index) in marksizeForSend.documents.guarantee_letters">
                             <div class="legend">Загрузить гарантийное письмо</div>
-                            <ValidationProvider name="гарантийное письмо" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
+                            <ValidationProvider name="гарантийное письмо" v-slot="{ errors, failed }" :rules="{ required: marksizeForSend.documents.certificates[0].file === null }" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
+                                        :disabled="marksizeForSend.documents.certificates[0].file !== null"
                                 />
                                 <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                             </ValidationProvider>
                         </fieldset>
                         <fieldset class="files">
                             <div class="legend">Загрузить изображения</div>
-                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
+                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="marksizeForSend.images"
                                         :preview="true"
@@ -1639,7 +1659,7 @@
     import DateInput from "../../../components/forms/Date";
     import XLSX from 'xlsx/xlsx';
 
-    // inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0,9[x])"
+    // inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
     // :inputmask='{regex: `([1-9]\\d{0,4})|(([1-9]\\d{0,2},\\d?[1-9])|([1-9]\\d{3},[1-9])|(0,\\d?[1-9]))`}'
 
     export default {
@@ -1685,7 +1705,7 @@
                 picker: {
                     start_date: '',
                     end_date: '',
-                    format: "yyyy-MM-dd",
+                    format: "dd.MM.yyyy",
                     locale: ru,
                     disabledFrom: null,
                     disabledTo: null,
@@ -1944,7 +1964,7 @@
                     if (data instanceof File) {
                         formDataObj.append(root, data);
                     } else if (data instanceof Date) {
-                        formDataObj.append(root, moment(data).format('YYYY-MM-DD'));
+                        formDataObj.append(root, moment(data).format('DD.MM.YYYY'));
                     } else if (Array.isArray(data)) {
                         for (let i = 0; i < data.length; i++) {
                             appendFormData(data[i], root + '[' + i + ']', formDataObj);
@@ -1969,10 +1989,20 @@
             },
             sendForm(evt) {
                 evt.preventDefault();
-                const fData = this.type.id === 'mark' ? this.markForSend : this.marksizeForSend;
-                // fData.company_id = 7; // todo TEST data
-                const formDataObj = this.objectToFormData(fData);
                 window.openLoader();
+                let fData = this.type.id === 'mark' ? this.markForSend : this.marksizeForSend;
+                for (let i=0; i< fData.documents.technical_conditions.length; i++) {
+                    if (fData.documents.technical_conditions[i].file === null) {
+                        fData.documents.technical_conditions.splice(i, 1);
+                    }
+                    if (fData.documents.certificates[i].file === null) {
+                        fData.documents.certificates.splice(i, 1);
+                    }
+                    if (fData.documents.guarantee_letters[i].file === null) {
+                        fData.documents.guarantee_letters.splice(i, 1);
+                    }
+                }
+                const formDataObj = this.objectToFormData(fData);
                 if( this.type.id === 'mark' ) {
                     this.sendCatalogMark(formDataObj)
                         .then(() => {
