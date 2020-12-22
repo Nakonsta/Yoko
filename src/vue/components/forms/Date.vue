@@ -16,6 +16,7 @@
         :language="locale"
         v-model="innerValue"
         @input="setDates"
+        :disabled="disabled"
         :disabled-dates="{ from: disabledFrom, to: disabledTo }"
     >
       <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#calendar"></use></svg>
@@ -38,6 +39,10 @@ export default {
     format: {
       type: String,
       default: "yyyy-MM-dd"
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     disabledFrom: {
       type: Date,
