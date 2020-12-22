@@ -8,7 +8,6 @@
         </div>
       </template>
       <div v-else class="no-auth-block">
-        Вы не авторизованы
         <preloader />
       </div>
     </div>
