@@ -1,11 +1,13 @@
 <template>
     <div class="main">
-    <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
+      <template v-if="$store.getters.userRole !== 'guest'">
+        <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
 
-    <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
-      <router-view @fullMode="getModeFromPage" />
-    </div>
-
+        <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
+          <router-view @fullMode="getModeFromPage" />
+        </div>
+      </template>
+      <noAuthBlock v-else />
     </div>
 </template>
 
@@ -14,12 +16,14 @@ import draggable from 'vuedraggable'
 import api from '../helpers/api'
 import functions from '../helpers/functions'
 import AppMenu from '../components/blocks/Menu.vue'
+import noAuthBlock from '../components/blocks/noAuthBlock'
 
 export default {
     name: 'Personal',
     components: {
         AppMenu,
         draggable,
+        noAuthBlock,
     },
     mixins: [api, functions],
     data() {
