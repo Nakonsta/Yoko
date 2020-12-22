@@ -669,7 +669,7 @@
                         </fieldset>
                         <div class="btns">
                             <button type="submit" class="btn" :disabled="!valid">Добавить</button>
-                            <a href="#" class="btn btn--bdr">Отменить</a>
+                            <a href="/personal/" class="btn btn--bdr">Отменить</a>
                         </div>
                         <div class="form__note">Обратите внимание, добавленная вами марка отправится на модерацию</div>
                     </template>
@@ -678,7 +678,7 @@
                     <div class="tabs tabs--line">
                         <ul>
                             <li :class="{active: view === 'form'}"><a href="javascript:{}" @click="viewSelect('form')">Заполнить форму</a></li>
-                            <li :class="{active: view === 'import'}" v-if="false"><a href="javascript:{}" @click="viewSelect('import')">Импортировать Файл</a></li>
+                            <li :class="{active: view === 'import'}"><a href="javascript:{}" @click="viewSelect('import')">Импортировать Файл</a></li>
                         </ul>
                     </div>
                     <template v-if="view === 'import'">
@@ -687,11 +687,11 @@
                                 extensions=".csv, .xlsx"
                                 :metatypes="['text/csv','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']"
                         >
-                            <p>1. Скачайте <a href="./content/test.xlsx">шаблон</a> добавления маркоразмера в каталог
+                            <p>1. Скачайте <a href="/content/template-marksize.xlsx">шаблон</a> добавления маркоразмера в каталог
                                 <br>
                                 2. Заполните необходимые поля.
                                 <br>
-                                3. Загрузите заполненный <a href="./content/test.xlsx">шаблон</a> в формате .csv или .xlsx
+                                3. Загрузите заполненный <a href="/content/template-marksize.xlsx">шаблон</a> в формате .csv или .xlsx
                             </p>
                         </Uploader>
                     </template>
@@ -1637,7 +1637,7 @@
                         </fieldset>
                         <div class="btns">
                             <button type="submit" class="btn" :disabled="!valid">Добавить</button>
-                            <a href="#" class="btn btn--bdr">Отменить</a>
+                            <a href="/personal/" class="btn btn--bdr">Отменить</a>
                         </div>
                         <div class="form__note">Обратите внимание, добавленный вами маркоразмер отправится на модерацию</div>
                     </template>
@@ -1785,6 +1785,7 @@
                 marksizeForSend: {
                     company_id: null,
                     mark: null,
+                    size: null,
                     type: '',
                     description: null,
                     appointment: null,
@@ -1894,7 +1895,7 @@
             markSearch: function(q) {
                 clearInterval(this.loadingMarksCounter);
                 if( q.length ) {
-                    this.cancelCatalogSearch();
+                    this.cancelCatalogMarkSearch();
                     this.loadingMarksCounter = setTimeout(() => {
                         this.loadingMarks = true;
                         this.fetchCatalogMark(q)
@@ -1914,7 +1915,7 @@
             marksizeChange: function() {
                 clearInterval(this.loadingMarksizesCounter);
                 if( this.marksizeForSend.size.length ) {
-                    this.cancelCatalogSearch();
+                    this.cancelCatalogMarksizeSearch();
                     this.loadingMarksizesCounter = setTimeout(() => {
                         this.loadingMarksizes = true;
                         this.fetchCatalogMarksize(this.marksizeForSend.size)
@@ -2045,109 +2046,223 @@
                     const item = data[1]; // get item row
                     data.splice(0, 2); // delete head & item rows
                     data.splice(9); // delete all trash rows
-                    let fields = [];
+                    let fields = [],
+                        importedFields = {};
                     if( this.type.id === 'mark' ) {
                         fields = ['mark', 'description', 'appointment', 'description_additional', 'layers|layer', 'layers|description', 'property_armor_options', 'property_screen_view', 'property_gost', 'property_voltage_allowable', 'property_filling', 'property_protective_cover', 'property_isolation', 'property_execution', 'property_caliber', 'property_material', 'property_material_fibers', 'property_material_shell', 'property_armor_availability', 'property_rated_operating_voltage', 'property_normative_document', 'property_use', 'property_insulation_resistance', 'property_fiber_type', 'property_veins_type', 'property_cable_type', 'property_laying_conditions', 'property_color_protective_hose_outer_sheath', 'property_central_element'];
+                        importedFields = this.markForSend;
                         // чистим все масивы с объектами
-                        this.markForSend.layers = [{}];
+                        importedFields.layers = [{}];
                     } else {
-
+                        fields = ['size', 'markname', 'description', 'appointment', 'description_additional', 'property_active_resistance_zero', 'property_active_resistance_main', 'property_active_resistance', 'property_active_resistance_plane', 'property_active_resistance_triangle', 'property_voltage_versions', 'property_outer_diameter', 'property_resistance_wave', 'property_diameter_cabel', 'property_diameter', 'property_voltage_allowable', 'property_capacitive_conductivity', 'property_capacity', 'property_inductive_resistance_cores_zero', 'property_inductive_resistance_cores_main', 'property_inductive_resistance_zero_sequence', 'property_inductive_resistance', 'property_inductive_resistance_plane', 'property_inductive_resistance_triangle', 'property_inductive_resistance_direct_sequence', 'property_class_flexibility_vein', 'property_fiber_count', 'property_veins_count', 'property_number_pairs', 'property_number_triples', 'property_number_fours', 'property_number_elements', 'property_material_vein', 'property_minimum_bending_radius', 'property_voltage', 'property_optical_module', 'property_crushing_force', 'property_fiber_size', 'property_fibers_size', 'property_tensile_force', 'property_section', 'property_cable_cross_section', 'property_lifetime', 'property_construction_length', 'property_application_type', 'property_electrical_resistance'];
+                        importedFields = this.marksizeForSend;
+                    }
+                    function getImportValue(field, value) {
+                        if( !value || !value.length ) return value;
+                        let v = '';
+                        switch( field ) {
+                            case 'property_voltage_allowable':
+                            case 'property_caliber':
+                            case 'property_rated_operating_voltage':
+                            case 'property_insulation_resistance':
+                            case 'property_active_resistance_zero':
+                            case 'property_active_resistance_main':
+                            case 'property_active_resistance':
+                            case 'property_active_resistance_plane':
+                            case 'property_active_resistance_triangle':
+                            case 'property_voltage_versions':
+                            case 'property_outer_diameter':
+                            case 'property_resistance_wave':
+                            case 'property_diameter_cabel':
+                            case 'property_diameter':
+                            case 'property_capacitive_conductivity':
+                            case 'property_capacity':
+                            case 'property_inductive_resistance_cores_zero':
+                            case 'property_inductive_resistance_cores_main':
+                            case 'property_inductive_resistance_zero_sequence':
+                            case 'property_inductive_resistance':
+                            case 'property_inductive_resistance_plane':
+                            case 'property_inductive_resistance_triangle':
+                            case 'property_inductive_resistance_direct_sequence':
+                            case 'property_minimum_bending_radius':
+                            case 'property_voltage':
+                            case 'property_optical_module':
+                            case 'property_crushing_force':
+                            case 'property_fiber_size':
+                            case 'property_fibers_size':
+                            case 'property_tensile_force':
+                            case 'property_section':
+                            case 'property_cable_cross_section':
+                            case 'property_lifetime':
+                            case 'property_construction_length':
+                            case 'property_electrical_resistance':
+                                // цифровое значение с маской
+                                v = Inputmask.format(value, {mask: '(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])'});
+                                v = value.replace(/[^,0-9]/g,'');
+                                break;
+                            case 'property_fiber_count':
+                            case 'property_veins_count':
+                            case 'property_number_pairs':
+                            case 'property_number_triples':
+                            case 'property_number_fours':
+                            case 'property_number_elements':
+                                // integer
+                                v = value.replace(/[^0-9]/g,'');
+                                break;
+                            default:
+                                // обычная строка
+                                v = value;
+                                break;
+                        }
+                        // console.log("getImportValue('"+field+"', '"+value+"') = '"+v+"';");
+                        return v;
                     }
                     for (let i=0; i<fields.length; i++) {
                         let field = fields[i].indexOf('|') === -1 ? fields[i] : fields[i].substr(0, fields[i].indexOf('|'));
-                        if (this.type.id === 'mark') {
-                            if (this.markForSend.hasOwnProperty(field)) {
-                                if (Array.isArray(this.markForSend[field])) {
-                                    if (typeof this.markForSend[field][0] === 'object') {
-                                        // проставляем значения для объектов
-                                        let subfield = fields[i].substr(fields[i].indexOf('|')+1);
-                                        // console.log('Import field: '+field+', subfield: '+subfield+' = '+item[i]);
-                                        if (this.markForSend[field][0]) {
-                                            // если элемент уже существует - ставим значение
-                                            this.markForSend[field][0][subfield] = item[i];
-                                            if (data.length) {
-                                                // перебираем все дополнительные поля
-                                                for (let r = 0; r < data.length; r++) {
-                                                    if( field !== 'layers' && r > 4 ) continue;
-                                                    if (data[r][i] && data[r][i].length) {
-                                                        if (typeof this.markForSend[field][r+1] === 'object') {
-                                                            // если элемент для дополнительного поля существует - ставим значение
-                                                            this.markForSend[field][r+1][subfield] = data[r][i];
-                                                        } else {
-                                                            // если элемент для дополнительного поля НЕ существует - создаем и добавляем
-                                                            let obj = {};
-                                                            obj[subfield] = data[r][i];
-                                                            this.markForSend[field].push(obj);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            // если элемент НЕ существует - создаём и добавляем
-                                            let obj = {};
-                                            obj[subfield] = item[i];
-                                            this.markForSend[field].push(obj);
-                                            if (data.length) {
-                                                // перебираем все дополнительные поля
-                                                for (let r = 0; r < data.length; r++) {
-                                                    if( field !== 'layers' && r > 4 ) continue;
-                                                    if (data[r][i] && data[r][i].length) {
-                                                        // т.к. элемент для дополнительного поля гарантированно НЕ существует - создаем и добавляем
-                                                        obj = {};
+                        if (importedFields.hasOwnProperty(field)) {
+                            if (Array.isArray(importedFields[field])) {
+                                if (typeof importedFields[field][0] === 'object') {
+                                    // проставляем значения для объектов
+                                    let subfield = fields[i].substr(fields[i].indexOf('|')+1);
+                                    // console.log('Import field: '+field+', subfield: '+subfield+' = '+item[i]);
+                                    if (importedFields[field][0]) {
+                                        // если элемент уже существует - ставим значение
+                                        importedFields[field][0][subfield] = item[i];
+                                        if (data.length) {
+                                            // перебираем все дополнительные поля
+                                            for (let r = 0; r < data.length; r++) {
+                                                if( field !== 'layers' && r > 4 ) continue;
+                                                if (data[r][i] && data[r][i].length) {
+                                                    if (typeof importedFields[field][r+1] === 'object') {
+                                                        // если элемент для дополнительного поля существует - ставим значение
+                                                        importedFields[field][r+1][subfield] = data[r][i];
+                                                    } else {
+                                                        // если элемент для дополнительного поля НЕ существует - создаем и добавляем
+                                                        let obj = {};
                                                         obj[subfield] = data[r][i];
-                                                        this.markForSend[field].push(obj);
+                                                        importedFields[field].push(obj);
                                                     }
                                                 }
                                             }
                                         }
                                     } else {
-                                        // проставляем текстовые значения
-                                        this.markForSend[field] = [];
-                                        if (Array.isArray(this[field])) {
-                                            // console.log(field+' is array: '+this[field].indexOf(item[i]));
-                                            // если поле выпадающий список то проверяем значение
-                                            if (this[field].indexOf(item[i]) !== -1) {
-                                                this.markForSend[field].push(item[i]);
-                                            } else {
-                                                this.markForSend[field].push('');
-                                            }
-                                            if (data.length) {
-                                                for (let r = 0; r < data.length; r++) {
-                                                    if (data[r][i] && data[r][i].length) {
-                                                        if (this[field].indexOf(data[r][i]) !== -1) {
-                                                            this.markForSend[field].push(data[r][i]);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            // console.log('Import field: '+field+' = '+item[i]);
-                                            this.markForSend[field].push(item[i]);
-                                            if (data.length) {
-                                                for (let r = 0; r < data.length; r++) {
-                                                    if (data[r][i] && data[r][i].length) {
-                                                        this.markForSend[field].push(data[r][i]);
-                                                    }
+                                        // если элемент НЕ существует - создаём и добавляем
+                                        let obj = {};
+                                        obj[subfield] = item[i];
+                                        importedFields[field].push(obj);
+                                        if (data.length) {
+                                            // перебираем все дополнительные поля
+                                            for (let r = 0; r < data.length; r++) {
+                                                if( field !== 'layers' && r > 4 ) continue;
+                                                if (data[r][i] && data[r][i].length) {
+                                                    // т.к. элемент для дополнительного поля гарантированно НЕ существует - создаем и добавляем
+                                                    obj = {};
+                                                    obj[subfield] = data[r][i];
+                                                    importedFields[field].push(obj);
                                                 }
                                             }
                                         }
                                     }
                                 } else {
-                                    this.markForSend[field] = item[i];
+                                    // проставляем текстовые значения
+                                    importedFields[field] = [];
+                                    if (Array.isArray(this[field])) {
+                                        // console.log(field+' is array: '+this[field].indexOf(item[i]));
+                                        // если поле выпадающий список то проверяем значение
+                                        if (this[field].indexOf(item[i]) !== -1) {
+                                            importedFields[field].push(getImportValue(field, item[i]));
+                                        } else {
+                                            importedFields[field].push('');
+                                        }
+                                        if (data.length) {
+                                            for (let r = 0; r < data.length; r++) {
+                                                if (data[r][i] && data[r][i].length) {
+                                                    if (this[field].indexOf(data[r][i]) !== -1) {
+                                                        let v = getImportValue(field, data[r][i]);
+                                                        if (v || v.length) importedFields[field].push(v);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // console.log('Import field: '+field+' = '+item[i]);
+                                        importedFields[field].push(getImportValue(field, item[i]));
+                                        if (data.length) {
+                                            for (let r = 0; r < data.length; r++) {
+                                                if (data[r][i] && data[r][i].length) {
+                                                    let v = getImportValue(field, data[r][i]);
+                                                    if (v || v.length) importedFields[field].push(v);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             } else {
-                                console.log('?field: '+field+' = '+item[i]);
+                                importedFields[field] = getImportValue(field, item[i]);
+                            }
+                        } else {
+                            // console.log('?field: '+field+' = '+item[i]);
+                        }
+                    }
+                    if( this.type.id === 'mark' ) {
+                        this.markForSend = importedFields;
+                        while (this.markForSend.layers.length < 3) {
+                            this.markForSend.layers.push({
+                                layer: '',
+                                description: '',
+                            });
+                        }
+                        window.closeLoader();
+                        this.view = 'form';
+                    } else {
+                        let newMark = item[1];
+                        if (this.marksizeForSend.mark !== newMark) {
+                            // импортировали НОВОЕ markname
+                            if (!newMark.length) {
+                                // markname пустое
+                                // this.marksizeForSend = importedFields;
+                                this.marksizeForSend.mark === '';
+                                this.marksizeForSend.type = '';
+                                this.marks = [];
+                                window.closeLoader();
+                                this.view = 'form';
+                            } else {
+                                // markname НЕ пустое - проверяем
+                                this.cancelCatalogMarkSearch();
+                                this.marks = [];
+                                this.loadingMarks = true;
+                                this.fetchCatalogMark(newMark)
+                                    .then((response) => {
+                                        this.marks = response.data.data;
+                                        this.loadingMarks = false;
+                                        let importedMark = this.marks.filter((item)=>{return item.name === newMark})[0] || null;
+                                        // this.marksizeForSend = importedFields;
+                                        if (importedMark) {
+                                            this.mark = importedMark;
+                                            this.markSelect(importedMark);
+                                        } else {
+                                            this.mark = null;
+                                            this.marksizeForSend.mark = '';
+                                            this.marksizeForSend.type = '';
+                                        }
+                                        window.closeLoader();
+                                        this.view = 'form';
+                                    })
+                                    .catch((response) => {
+                                        console.log(response.message);
+                                        window.notificationError('Ошибка сервера');
+                                        this.marks = [];
+                                        this.mark = null;
+                                        this.marksizeForSend.mark = '';
+                                        this.marksizeForSend.type = '';
+                                        this.loadingMarks = false;
+                                        // this.marksizeForSend = importedFields;
+                                        window.closeLoader();
+                                        this.view = 'form';
+                                    });
                             }
                         }
                     }
-                    while (this.markForSend.layers.length < 3 ) {
-                        this.markForSend.layers.push({
-                            layer: '',
-                            description: '',
-                        });
-                    }
-                    window.closeLoader();
-                    this.view = 'form';
                 };
                 reader.readAsBinaryString(file);
             },
