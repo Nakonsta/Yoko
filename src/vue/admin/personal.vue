@@ -1,11 +1,16 @@
 <template>
     <div class="main">
-    <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
+      <template v-if="$store.getters.userRole !== 'guest'">
+        <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
 
-    <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
-      <router-view @fullMode="getModeFromPage" />
-    </div>
-
+        <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
+          <router-view @fullMode="getModeFromPage" />
+        </div>
+      </template>
+      <div v-else class="no-auth-block">
+        Вы не авторизованы
+        <preloader />
+      </div>
     </div>
 </template>
 
@@ -14,12 +19,14 @@ import draggable from 'vuedraggable'
 import api from '../helpers/api'
 import functions from '../helpers/functions'
 import AppMenu from '../components/blocks/Menu.vue'
+import preloader from "@/components/preloader";
 
 export default {
     name: 'Personal',
     components: {
         AppMenu,
         draggable,
+        preloader,
     },
     mixins: [api, functions],
     data() {
@@ -54,4 +61,7 @@ export default {
 </script>
 
 <style lang="scss">
+  .no-auth-block {
+    height: 20rem;
+  }
 </style>

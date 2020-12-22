@@ -34,12 +34,9 @@ const routes = [
     meta: { role: 'buyer' },
   },
   {
-    path: '/personal/procedures/new',
-    component: Procedure
-  },
-  {
     path: "/personal/catalog/new",
-    component:  CatalogNew
+    component:  CatalogNew,
+    meta: { role: 'contractor' },
   },
   {
     path: "*",
@@ -57,6 +54,8 @@ router.beforeEach((to, from, next) => {
   const { role } = to.meta
   const companyBuyer = store.getters.companyBuyer
   const companyContractor = store.getters.companyContractor
+
+  console.log(to)
 
   if (userRole !== 'guest') {
     if (role) {
@@ -85,7 +84,11 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    next('/personal')
+    if (to.path === '/personal') {
+      next()
+    } else {
+      next('/personal')
+    }
   }
 })
 

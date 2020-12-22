@@ -14,7 +14,7 @@ const store = new Vuex.Store({
         },
         token: null,
         env: {
-            LK_SUPP: process.env.LK_SUPP
+            LK_SUPP: process.env.LK_SUPP,
         }
     },
     getters: {
