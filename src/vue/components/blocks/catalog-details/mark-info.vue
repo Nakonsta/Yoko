@@ -12,12 +12,9 @@
               :swipeToSlide="true"
               :focusOnSelect="true"
           >
-            <div><img draggable="false" src="/content/catalog/slider-add-1.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-2.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-3.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-4.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-4.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-4.jpg" /></div>
+            <div v-for="(item, idx) in sliderImagesThumbs" :key="idx">
+              <img draggable="false" :src="item" />
+            </div>
           </VueSlickCarousel>
           <VueSlickCarousel
               ref="c1"
@@ -28,12 +25,9 @@
               :dots="window.width <= 600 ? true : false"
               dotsClass="dots"
           >
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
+            <div v-for="(item, idx) in sliderImagesTop" :key="idx">
+              <img draggable="false" :src="item" />
+            </div>
           </VueSlickCarousel>
         </div>
       </div>
@@ -65,6 +59,22 @@ export default {
         "vertical": true,
         "verticalSwiping": true,
       },
+      sliderImagesThumbs: [
+        "/content/catalog/slider-add-1.jpg",
+        "/content/catalog/slider-add-2.jpg",
+        "/content/catalog/slider-add-3.jpg",
+        "/content/catalog/slider-add-4.jpg",
+        "/content/catalog/slider-add-4.jpg",
+        "/content/catalog/slider-add-4.jpg"
+      ],
+      sliderImagesTop: [
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg"
+      ]
     }
   },
   props: {
@@ -73,8 +83,15 @@ export default {
       type: Object
     }
   },
+  watch: {
+    root() {
+      console.log("handle change root data");
+      this.initSliderImages();
+    }
+  },
   mounted() {
     this.show = 4
+    this.initSliderImages();
   },
   created() {
     window.addEventListener('resize', this.handleResize);
@@ -86,6 +103,17 @@ export default {
   methods: {
     handleResize() {
       this.window.width = window.innerWidth;
+    },
+    initSliderImages() {
+      let { images = null } = this.root;
+      console.log("this root", this.root, "images", images);
+      images = images.map(item => {
+        return "https://stage-content.ec.extyl.pro/" + item;
+      })
+      if (images) {
+        this.sliderImagesTop = images;
+        this.sliderImagesThumbs = images;
+      }
     }
   }
 }

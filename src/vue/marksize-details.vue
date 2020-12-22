@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="this.rootData">
         <mark-info :root="rootData"></mark-info>
         <div class="tabs tabs--line js-tabs company__nav js-more">
             <ul class="js-more__items">
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import api from './helpers/api';
 import MarkInfo from './components/blocks/catalog-details/mark-info.vue'
 import MarkDescription from './components/blocks/catalog-details/mark-description.vue'
 import MarkMarkSize from './components/blocks/catalog-details/mark-marksize.vue'
@@ -73,6 +74,13 @@ export default {
         MarkManufacturer,
         MarkAdditional,
     },
+    props: {
+        marksizeId: {
+            type: Number,
+            default: 6
+        }
+    },
+    mixins: [api],
     data() {
         return {
             companyId: null,
@@ -159,8 +167,8 @@ export default {
         }
     },
     created() {
-        this.fillUserData()
-        this.getMarkData()
+        this.fillUserData();
+        this.getMarksizeDetailData(this.marksizeId);
     },
     mounted() {
         initTabs()
@@ -170,7 +178,7 @@ export default {
             this.companyId = document.querySelector('.section--mark').getAttribute('data-id');
             return false;
         },
-        getMarkData() {
+        prepareMarksizeDetailData() {
             this.rootData = {
                 items: [
                     {
@@ -438,6 +446,14 @@ export default {
                     elLink.style.display = "block";
                 }, 0);
             }
+        },
+        getMarksizeDetailData(id) {
+            this.fetchMarksizeDetail(id).then((response) => {
+                const marksizeDetailData = response.data.data;
+                console.log("Response marksize detail", marksizeDetailData);
+                this.prepareMarksizeDetailData();
+                this.rootData.images = marksizeDetailData.images;
+            })
         }
     }
 }

@@ -355,6 +355,9 @@ export default {
         },
         fetchCompanyById(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
+        },
+        fetchMarksizeDetail(id) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/`)
         }
     }
 }
