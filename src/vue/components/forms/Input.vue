@@ -22,6 +22,7 @@
           :maxlength="maxlength || false"
           :max="type === 'number' && max ? max : false"
           :min="type === 'number' && min ? min : false"
+          @paste="paste"
       >
       <div class="multiselect__spinner" v-show="loading"></div>
       <tooltip v-if="!!content" :content="content" />
@@ -57,7 +58,7 @@ export default {
       default: undefined
     },
     inputmask: {
-      default: null,
+      default: false,
     },
     disabled: {
       type: Boolean,
@@ -127,6 +128,16 @@ export default {
   created () {
     if (this.value) {
       this.innerValue = this.value;
+    }
+  },
+  methods: {
+    paste: function(evt) {
+      // fix Inputmask & vue past issuse
+      if( this.inputmask === false ) return;
+      let clipboardData = evt.clipboardData || window.clipboardData,
+        pastedData = clipboardData.getData('Text');
+      let newValue = Inputmask.format(pastedData, {mark: this.inputmask});
+      this.innerValue = newValue;
     }
   }
 };
