@@ -4,6 +4,8 @@ export default {
             CancelTokens: {
                 catalogCancelToken: axios.CancelToken.source(),
                 searchCancelToken: axios.CancelToken.source(),
+                searchMarkCancelToken: axios.CancelToken.source(),
+                searchMarksizeCancelToken: axios.CancelToken.source(),
                 companyCancelToken: axios.CancelToken.source(),
                 proceduresCancelToken: axios.CancelToken.source(),
             },
@@ -269,9 +271,15 @@ export default {
                     params: {
                         q: string,
                     },
-                    cancelToken: this.CancelTokens.searchCancelToken.token,
+                    cancelToken: this.CancelTokens.searchMarkCancelToken.token,
                 },
             )
+        },
+        cancelCatalogMarkSearch(){
+            this.CancelTokens.searchMarkCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchMarkCancelToken = axios.CancelToken.source()
         },
         fetchCatalogMarksize(string) {
             return axios.get(
@@ -280,9 +288,15 @@ export default {
                     params: {
                         q: string,
                     },
-                    cancelToken: this.CancelTokens.searchCancelToken.token,
+                    cancelToken: this.CancelTokens.searchMarksizeCancelToken.token,
                 },
             )
+        },
+        cancelCatalogMarksizeSearch(){
+            this.CancelTokens.searchMarkCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchMarkCancelToken = axios.CancelToken.source()
         },
         fetchCatalogMarksizeOKPD(string, okpd) {
             return axios.get(

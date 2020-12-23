@@ -14,7 +14,7 @@ const store = new Vuex.Store({
         },
         token: null,
         env: {
-            LK_SUPP: process.env.LK_SUPP
+            LK_SUPP: process.env.LK_SUPP,
         }
     },
     getters: {
@@ -101,7 +101,7 @@ const store = new Vuex.Store({
                         }
                     })
                     .catch((e) => {
-                        if (e.response.status === 403) {
+                        if (e.response.status === 401) {
                             store.commit('logout', {
                                 reload: true,
                                 mute: true,
