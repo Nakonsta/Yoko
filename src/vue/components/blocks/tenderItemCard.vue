@@ -48,9 +48,12 @@
             <div class="tender-item__right">
                 <div class="tender-item__actions">
                     <div class="tender-item__status">
-                        {{ tenderItemData.status }}
+                        {{ getTenderStatusName(tenderItemData) }}
                     </div>
-                    <Actions />
+                    <div class="tender-item__actions-block">
+                        <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
+                        <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
+                    </div>
                 </div>
                 <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.start_price" class="tender-item__start-price">
                     <div class="tender-item__start-price-text">
@@ -82,7 +85,7 @@
         </div>
         <div class="tender-item__products">
             <div class="tender-item__products-actions">
-                <a href="#" class="tender-item__products-show">{{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}</a>
+                <span @click="isProductsShown = !isProductsShown" class="tender-item__products-show">{{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}</span>
                 <a href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
             </div>
             <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.products" class="tender-item__products-table">
@@ -106,8 +109,15 @@
                         Аналог
                     </div>
                 </div>
-                <div v-for="(item, key) in tenderItemData.purchase_subject.products" :key="key">
-                    <TenderItemProductCard :item="item" />
+                <div v-if="isProductsShown">
+                    <div v-for="(item, key) in tenderItemData.purchase_subject.products" :key="key">
+                        <TenderItemProductCard :item="item" />
+                    </div>
+                </div>
+                <div v-else>
+                    <div v-for="(item, key) in tenderItemData.purchase_subject.products.slice(0,3)" :key="key">
+                        <TenderItemProductCard :item="item" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -129,7 +139,11 @@ export default {
         company: {
             type: Object,
             required: true,
-        }
+        },
+        itemsStatuses: {
+            default: [],
+            type: Array
+        },
     },
 
     components: {
@@ -152,9 +166,6 @@ export default {
         }
     },
 
-    created() {
-    },
-
     methods: {
         formatDateNoTime(string) {
             var d = new Date(string),
@@ -169,6 +180,15 @@ export default {
 
             return [day, month, year].join('.');
         },
+        getTenderStatusName(item) {
+            const status = this.itemsStatuses.find(
+                (status) => status.id === item.status,
+            );
+            if (status) {
+                return status.name;
+            }
+            return item.status;
+        }
     }
 }
 </script>
@@ -262,6 +282,19 @@ export default {
         }
         &__actions {
             padding-bottom: rem(38px);
+            display: flex;
+            align-items: center;
+            &-block {
+                display: flex;
+                align-items: center;
+                margin-left: 1rem;
+                svg {
+                    display: block;
+                    width: 20px;
+                    height: 20px;
+                    margin-left: 1rem;
+                }
+            }
         }
         &__products {
             &-actions {
@@ -277,6 +310,7 @@ export default {
                 color: $colorTurquoise;
                 position: relative;
                 padding-right: rem(18px);
+                cursor: pointer;
                 &::after {
                     content: '';
                     position: absolute;

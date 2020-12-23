@@ -1,7 +1,7 @@
 <template>
     <div class="tender-item">
         <div class="tender-item__top">
-            <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" :company="company" />
+            <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" :company="company" :itemsStatuses="itemsStatuses" />
             <TenderItemMenu v-if="!isLoading" :activeTab="activeTab" @changeTab = "changeTab" />            
         </div>
         <div class="tender-item__tabs">
@@ -153,7 +153,8 @@ export default {
                 shortName: null,
                 updatedAt: null,
                 website: null,
-            }
+            },
+            itemsStatuses: [],
         }
     },
 
@@ -161,6 +162,7 @@ export default {
         this.getTenderItemId()
         this.getTenderItemMainData(this.tenderItemId)
         this.checkUrlHash()
+        this.getMarketplaceProceduresFilter()
     },
 
     methods: {
@@ -209,6 +211,27 @@ export default {
                 }
             }
             return false
+        },
+        parseObjToArr(obj) {
+            const arr = [];
+            for (const key in obj) {
+                arr.push({
+                    id: key,
+                    name: obj[key],
+                });
+            }
+            return arr;
+        },
+        getMarketplaceProceduresFilter() {
+            this.fetchMarketplaceProceduresFilter()
+                .then((response) => {
+                    let filterData = response.data.data.procedures;
+                    console.log(filterData);
+                    this.itemsStatuses = this.parseObjToArr(filterData.values.status);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         }
     }
 }
