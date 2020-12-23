@@ -16,30 +16,7 @@
             </div>
         </div>
         <div class="card__content">
-            <p class="card__content-text">{{ splitedText[page - 1] }}</p>
-            <div class="card__pagination">
-                <div
-                    :class="[
-                        'card__pagination-action',
-                        'card__pagination-action--prev',
-                        { 'card__pagination-action--disabled': page === 1 }
-                    ]"
-                    @click="changePage('prev')"
-                >
-                    <svg width="11" height="18" viewBox="0 0 11 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 17L9 9L1 1" stroke="#31ACB8" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </div>
-                <span>{{ page }} из {{ totalPages }}</span>
-                <div
-                    :class="['card__pagination-action', { 'card__pagination-action--disabled': page === totalPages }]"
-                    @click="changePage('next')"
-                >
-                    <svg width="11" height="18" viewBox="0 0 11 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 17L9 9L1 1" stroke="#31ACB8" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </div>
-            </div>
+            <iframe :src="pdf" frameborder="0"></iframe>
         </div>
         <div class="card__footer">
             <div class="card__footer-section">
@@ -59,8 +36,7 @@
     </div>
 </template>
 <script>
-import pdfMake from 'pdfmake/build/pdfmake.js'
-import pdfFonts from 'pdfmake/build/vfs_fonts.js'
+import axios from 'axios'
 export default {
     name: 'accreditation-details-card',
     props: {
@@ -72,7 +48,7 @@ export default {
             type: String,
             required: true
         },
-        content: {
+        pdf: {
             type: String,
             required: true
         },
@@ -97,69 +73,26 @@ export default {
                 { 'card--collapsed': !this.isOpened },
                 { 'card--error': this.hasError }
             ]
-        },
-        splitedText() {
-            const arr = this.content
-                .replace(/\s+/g, ' ')
-                .trim()
-                .split(' ')
-            const textArr = []
-
-            while (arr.length) {
-                textArr.push(arr.splice(0, 300).join(' '))
-            }
-
-            return textArr
-        },
-        totalPages() {
-            return this.splitedText.length
         }
     },
     methods: {
-        initPDF() {
-            if (pdfMake.vfs == undefined) {
-                pdfMake.vfs = pdfFonts.pdfMake.vfs
-            }
-
-            const pdf = {
-                content: [
-                    {
-                        alignment: 'center',
-                        text: this.title,
-                        style: 'header',
-                        fontSize: 22,
-                        bold: true,
-                        margin: [10, 10]
-                    },
-                    {
-                        text: this.content,
-                        fontSize: 16
-                    }
-                ]
-            }
-
-            return pdf
-        },
         download() {
-            pdfMake.createPdf(this.initPDF()).download(`${this.title}.pdf`)
+            const link = document.createElement('a')
+            link.href = this.pdf
+            link.target = '_blank'
+            link.download = `${this.title}.pdf`
+            link.click()
+            document.body.removeChild(link)
         },
         print() {
-            pdfMake.createPdf(this.initPDF()).print()
+            const doc = this.$el.children[1].children[0]
+
+            doc.focus()
+            doc.contentWindow.print()
         },
         agree() {
             this.isOpened = false
             this.$emit('on-agree', true)
-        },
-        changePage(action) {
-            if (action === 'prev') {
-                if (this.page > 1) {
-                    this.page--
-                }
-            } else if (action === 'next') {
-                if (this.page < this.totalPages) {
-                    this.page++
-                }
-            }
         }
     }
 }
@@ -207,7 +140,7 @@ export default {
     }
 
     &--collapsed &__content {
-        max-height: 0;
+        height: 0;
         margin-bottom: 0;
     }
 
@@ -277,73 +210,15 @@ export default {
         justify-content: flex-start;
         align-items: flex-start;
 
-        height: 100%;
-        max-height: 800px;
+        width: 100%;
+        height: 600px;
         margin-bottom: rem(60px);
         transition: 0.4s;
         overflow: hidden;
 
-        @include mq($until: desktop) {
-            max-height: 2200px;
-        }
-    }
-
-    &__content-text {
-        margin: 0;
-        min-height: 500px;
-        max-width: 785px;
-
-        font-family: Roboto;
-        font-size: rem(14px);
-        color: $lightcolorText;
-    }
-
-    &__pagination {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-
-        width: 100%;
-        margin-top: rem(18px);
-
-        span {
-            margin: 0 rem(13px);
-
-            font-family: Roboto;
-            font-size: rem(14px);
-            color: $lightcolorText;
-        }
-    }
-
-    &__pagination-action {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: 14px;
-        height: 14px;
-        cursor: pointer;
-
-        &--prev {
-            transform: rotate(180deg);
-        }
-
-        &--disabled {
-            cursor: default;
-
-            path {
-                stroke: $colorGray;
-            }
-        }
-
-        svg {
-            width: 14px;
-            height: 14px;
-
-            path {
-                transition: 0.3s;
-            }
+        embed {
+            width: 100%;
+            height: 100%;
         }
     }
 
