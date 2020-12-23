@@ -15,6 +15,7 @@
             v-model="selectedData.application_submit_date_time"
             label="Дата и время окончания подачи заявки на конкурс"
             placeholder="Выберите крайнюю дату"
+            :disabled="isCreatedProcedure"
             :min-date="new Date(procedureIdData.setMin2WeeksDates.publication_date)"
             :rules="{required: true, minMaxDateCheck: procedureIdData.setMin2WeeksDates.publication_date}"
         ></date-time>
@@ -22,8 +23,8 @@
       <div class="col col-xl-8 col-sm-6 col-xs-12">
         <text-input
             v-model="selectedData.commission"
-            label="Конкурсная
-            комиссия"
+            label="Конкурсная комиссия"
+            :disabled="isCreatedProcedure"
             placeholder="Введите конкурсную комиссию"
         ></text-input>
       </div>
@@ -33,6 +34,7 @@
             v-model="selectedData.application_opening_date_time"
             label="Дата и время получения конкурсной документации"
             placeholder="Выберите крайнюю дату"
+            :disabled="isCreatedProcedure"
             :min-date="new Date(procedureIdData.setMinDates.application_submit_date_time)"
             :rules="{required: true, minMaxDateCheck: procedureIdData.setMinDates.application_submit_date_time}"
         ></date-time>
@@ -42,11 +44,11 @@
             :is-single="true"
             :close="true"
             placeholder="Введите  адрес"
-            content="Вы допускаете торги по конкурсу"
             v-model="selectedData.place_of_receipt"
             :options="suggestions.place_of_receipt"
             label="Место получения конкурсной документации"
             :searchable="true"
+            :disabled="isCreatedProcedure"
             :loading="loadingPlaceSearch.place_of_receipt"
             :search="value => searchPlace(value, 'place_of_receipt')"
             no-result="Адрес не найден"
@@ -58,6 +60,7 @@
             v-model="selectedData.application_date_time"
             label="Дата и время рассмотрения заявок"
             placeholder="Выберите крайнюю дату"
+            :disabled="isCreatedProcedure"
             :min-date="new Date(procedureIdData.setMinDates.application_opening_date_time)"
             :rules="{required: true, minMaxDateCheck: procedureIdData.setMinDates.application_opening_date_time}"
         ></date-time>
@@ -84,6 +87,7 @@
             :options="suggestions.place_of_consideration"
             label="Место рассмотрения заявок"
             :searchable="true"
+            :disabled="isCreatedProcedure"
             :loading="loadingPlaceSearch.place_of_consideration"
             :search="value => searchPlace(value, 'place_of_consideration')"
             no-result="Адрес не найден"
@@ -105,6 +109,7 @@
             v-model="selectedData.application_date_time_summing_up"
             label="Дата и время подведения итогов"
             placeholder="Выберите крайнюю дату"
+            :disabled="isCreatedProcedure"
             :min-date="new Date(procedureIdData.setMinDates.application_date_time)"
             :rules="{required: true, minMaxDateCheck: procedureIdData.setMinDates.application_date_time}"
         ></date-time>
@@ -118,6 +123,7 @@
             :options="suggestions.place_of_consideration_total"
             label="Место подведения итогов"
             :searchable="true"
+            :disabled="isCreatedProcedure"
             :loading="loadingPlaceSearch.place_of_consideration_total"
             :search="value => searchPlace(value, 'place_of_consideration_total')"
             no-result="Адрес не найден"
@@ -128,10 +134,10 @@
 </template>
 
 <script>
-  import api from '../../../helpers/api'
-  import TextInput from '../../forms/Input.vue'
-  import SelectInput from '../../forms/Select.vue'
-  import DateTime from '../../forms/DateTime.vue'
+  import api from '@/components/../helpers/api'
+  import TextInput from '@/components/forms/Input.vue'
+  import SelectInput from '@/components/forms/Select.vue'
+  import DateTime from '@/components/forms/DateTime.vue'
 
   export default {
     name: 'Consideration',

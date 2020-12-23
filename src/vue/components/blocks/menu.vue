@@ -140,142 +140,67 @@ export default {
           {
             icon: 'mdi-home',
             title: 'Главная',
-            to: '/',
+            to: '/personal',
             order: 0,
             isActive: true,
             subItems: [],
           },
           {
             icon: 'mdi-buffer',
-            title: 'Каталог',
-            to: '/catalog',
+            title: 'Торговые процедуры',
+            to: '/personal/procedures',
             order: 1,
             isActive: true,
             subItems: [
               {
-                title: 'Управление закупками',
-                to: '/'
+                title: 'Список процедур',
+                to: '/personal/procedures'
               },
               {
-                title: 'Открытые переговоры',
-                to: '/'
+                title: 'Создание процедуры',
+                to: '/personal/procedures/new'
               },
               {
-                title: 'Мои заявки в закупках',
-                to: '/'
+                title: 'Черновики процедур',
+                to: '/personal'
               },
-              {
-                title: 'Избранное',
-                to: '/'
-              }
             ]
           },
           {
-            icon: 'mdi-compare-horizontal',
-            title: 'Торговые процедуры',
-            to: '/procedures',
-            order: 2,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-information-outline',
-            title: 'О компании Заказчик',
-            to: '/info',
-            order: 3,
+            icon: 'mdi-buffer',
+            title: 'Аккредитация',
+            to: '/personal/accreditations',
+            order: 1,
             isActive: true,
             subItems: [
               {
-                title: 'Управление закупками',
-                to: '/'
+                title: 'Создание заявки',
+                to: '/personal/accreditations/new'
               },
-              {
-                title: 'Открытые переговоры',
-                to: '/'
-              },
-              {
-                title: 'Мои заявки в закупках',
-                to: '/'
-              },
-              {
-                title: 'Избранное',
-                to: '/'
-              }
             ]
-          },
-          {
-            icon: 'mdi-card-account-phone-outline',
-            title: 'Контакты',
-            to: '/contact',
-            order: 4,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-account-multiple-check',
-            title: 'Аккредитация',
-            to: '/accreditations',
-            order: 5,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-account-heart',
-            title: 'Мои данные',
-            to: '/user',
-            order: 6,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Справочник',
-            to: '/info',
-            order: 7,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Логистические сервисы',
-            to: '/accreditations',
-            order: 8,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Торги',
-            to: '/catalog',
-            order: 9,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Электронные документооборот',
-            to: '/procedures',
-            order: 10,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Инструкции',
-            to: '/user',
-            order: 11,
-            isActive: true,
-            subItems: [],
-          },
+          }
         ],
         contractor: [
           {
             icon: 'mdi-home',
             title: 'Главная',
-            to: '/',
+            to: '/personal',
             order: 0,
             isActive: true,
             subItems: [],
+          },
+          {
+            icon: 'mdi-buffer',
+            title: 'Аккредитация',
+            to: '/personal/accreditations',
+            order: 1,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Создание заявки',
+                to: '/personal/accreditations/new'
+              },
+            ]
           },
           {
             icon: 'mdi-buffer',
@@ -285,119 +210,10 @@ export default {
             isActive: true,
             subItems: [
               {
-                title: 'Управление закупками',
-                to: '/'
+                title: 'Добавление продукции',
+                to: '/personal/catalog/new'
               },
-              {
-                title: 'Открытые переговоры',
-                to: '/'
-              },
-              {
-                title: 'Мои заявки в закупках',
-                to: '/'
-              },
-              {
-                title: 'Избранное',
-                to: '/'
-              }
             ]
-          },
-          {
-            icon: 'mdi-compare-horizontal',
-            title: 'Торговые процедуры',
-            to: '/procedures',
-            order: 2,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-information-outline',
-            title: 'О компании Поставщик',
-            to: '/info',
-            order: 3,
-            isActive: true,
-            subItems: [
-              {
-                title: 'Управление закупками',
-                to: '/'
-              },
-              {
-                title: 'Открытые переговоры',
-                to: '/'
-              },
-              {
-                title: 'Мои заявки в закупках',
-                to: '/'
-              },
-              {
-                title: 'Избранное',
-                to: '/'
-              }
-            ]
-          },
-          {
-            icon: 'mdi-card-account-phone-outline',
-            title: 'Контакты',
-            to: '/contact',
-            order: 4,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-account-multiple-check',
-            title: 'Аккредитация',
-            to: '/accreditations',
-            order: 5,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-account-heart',
-            title: 'Мои данные',
-            to: '/user',
-            order: 6,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Справочник',
-            to: '/info',
-            order: 7,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Логистические сервисы',
-            to: '/accreditations',
-            order: 8,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Торги',
-            to: '/catalog',
-            order: 9,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Электронные документооборот',
-            to: '/procedures',
-            order: 10,
-            isActive: true,
-            subItems: [],
-          },
-          {
-            icon: 'mdi-home',
-            title: 'Инструкции',
-            to: '/user',
-            order: 11,
-            isActive: true,
-            subItems: [],
           },
         ],
         guest: [],
@@ -406,17 +222,19 @@ export default {
     }
   },
   mounted() {
-    this.getSettingsData('menu')
-        .then((response) => {
-          const data = decodeURIComponent(response.data.data.value)
-              .replace(/\+/g, ' ')
-              .replace(/=/g, '')
-          this.menuItems = JSON.parse(data)
-          this.filteredMenuItems = this.menuItems
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+    // todo: пока отключим сохранение позиций меню на время разработки
+    // this.getSettingsData('menu')
+    //     .then((response) => {
+    //       const data = decodeURIComponent(response.data.data.value)
+    //           .replace(/\+/g, ' ')
+    //           .replace(/=/g, '')
+    //       this.menuItems = JSON.parse(data)
+    //       this.filteredMenuItems = this.menuItems
+    //     })
+    //     .catch((e) => {
+    //       console.log(e)
+    //     })
+    this.filteredMenuItems = this.menuItems
   },
   methods: {
     showSubMenu(index) {

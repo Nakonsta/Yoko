@@ -1,8 +1,12 @@
 <template>
     <ul class="accreditation__steps">
         <li :class="classes(key)" v-for="(step, key) in steps" :key="key">
-            <img class="done" src="/src/assets/img/svg-templates/ok.svg" alt="done" />
-            <img class="rejected" src="/src/assets/img/svg-templates/close.svg" alt="rejected" />
+            <svg class="done">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#ok"></use>
+            </svg>
+            <svg class="rejected">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#close"></use>
+            </svg>
             <div :class="['accreditation__tooltip', { 'accreditation__tooltip--left': key == 2 }]">
                 {{ step.anotherId == status.id ? step.anotherTitle : step.title }}
             </div>
@@ -119,7 +123,6 @@ export default {
 
             .rejected {
                 display: block;
-                filter: invert(100%);
                 width: 14px;
                 height: 14px;
             }
@@ -172,5 +175,6 @@ export default {
 
     width: 100%;
     height: 100%;
+    fill: #fff;
 }
 </style>

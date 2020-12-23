@@ -1,7 +1,7 @@
 <template>
   <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
     <h3 class="procedure__main-title">Дополнительные поля</h3>
-    <button class="btn btn--bdr field__container" @click="createNewFieldset">
+    <button class="btn btn--bdr field__container" :disabled="isCreatedProcedure" @click="createNewFieldset">
       Добавить поле
     </button>
     <div
@@ -16,7 +16,7 @@
               :is-single="true"
               :close="true"
               placeholder="Введите адрес"
-              v-model="field.type"
+              v-model="field.types"
               :options="fieldsData.fieldType"
               label="Выберите тип поля"
               :disabled="isCreatedProcedure || field.isSave"
@@ -34,8 +34,7 @@
           ></text-input>
         </div>
         <div v-if="
-            field.type && field.type.id === 'text' ||
-            field.type && field.type.id === 'number'
+            field.types && (field.types.id === 'text' || field.types.id === 'number')
           "
           class="col col-md-8 col-sm-6 col-xs-12"
         >
@@ -43,8 +42,8 @@
             <text-input
                 v-model="field.value"
                 label="Содержание поля"
-                :rules="{required: true, numeric: field.type.id === 'text' ? false : true}"
-                :placeholder="field.type.id === 'text' ? 'Введите текст' : 'Введите число'"
+                :rules="{required: true, numeric: field.types.id === 'text' ? false : true}"
+                :placeholder="field.types.id === 'text' ? 'Введите текст' : 'Введите число'"
                 :disabled="field.isSave"
             ></text-input>
             <button
@@ -56,11 +55,11 @@
             </button>
           </div>
         </div>
-        <div v-if="field.type && field.type.id === 'date'" class="col col-md-8 col-sm-6 col-xs-12">
+        <div v-if="field.types && field.types.id === 'date'" class="col col-md-8 col-sm-6 col-xs-12">
           <div class="field-group">
             <date-time
                 v-model="field.value"
-                label="Описание поля"
+                label="Содержание поля"
                 placeholder="Выберите дату"
                 :min-date="new Date(procedureIdData.setMinDates.publication_date)"
                 :disabled="field.isSave"
@@ -77,7 +76,6 @@
         <div class="col col-xs-12">
           <textarea-input
               ref="description"
-              content="Вы допускаете торги по конкурсу"
               v-model="field.description"
               label="Описание поля"
               placeholder="Введите описание поля"
@@ -86,12 +84,13 @@
         </div>
       </div>
       <div class="col col-xs-12">
-        <div class="remove-btn" @click="removeField(key)">
+        <div v-if="!isCreatedProcedure" class="remove-btn" @click="removeField(key)">
           <svg class="sprite-cancel"><use xmlns\:xlink="http://www.w3.org/1999/xlink" xlink\:href="\./img/sprite.svg#cancel"></use></svg>
         </div>
       </div>
     </div>
     <app-control-elements
+        v-if="!isCreatedProcedure"
         :selected-data="selectedData"
         :validation="validation"
     ></app-control-elements>
@@ -99,10 +98,10 @@
 </template>
 
 <script>
-  import TextareaInput from "../../forms/Textarea";
-  import TextInput from "../../forms/Input";
-  import SelectInput from "../../forms/Select";
-  import DateTime from "../../forms/DateTime";
+  import TextareaInput from "@/components/forms/Textarea";
+  import TextInput from "@/components/forms/Input";
+  import SelectInput from "@/components/forms/Select";
+  import DateTime from "@/components/forms/DateTime";
   import ControlElements from "./ControlElements";
 
   export default {

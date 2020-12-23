@@ -3,6 +3,9 @@ export default {
         return {
             CancelTokens: {
                 catalogCancelToken: axios.CancelToken.source(),
+                searchCancelToken: axios.CancelToken.source(),
+                searchMarkCancelToken: axios.CancelToken.source(),
+                searchMarksizeCancelToken: axios.CancelToken.source(),
                 companyCancelToken: axios.CancelToken.source(),
                 proceduresCancelToken: axios.CancelToken.source(),
             },
@@ -15,8 +18,11 @@ export default {
             )
             this.CancelTokens.catalogCancelToken = axios.CancelToken.source()
         },
-        fetchInn(inn) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/data/companies`, { params: { inn } })
+        fetchInn(filterRequest) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, {params: filterRequest})
+        },
+        fetchCompaniesByInn(inn) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/users`)
         },
         cancelCompanyRequest() {
             this.CancelTokens.companyCancelToken.cancel(
@@ -115,6 +121,12 @@ export default {
                 }
             });
         },
+        getDate(data) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/settings/tender/`,
+                data,
+            );
+        },
         forgotPassChange(data) {
             return axios.post(
                 `${process.env.API_URL_AUTH_SERVICE}/user/restore_password`,
@@ -154,11 +166,11 @@ export default {
         sendRegistrationData(data) {
             return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/register`, data)
         },
-        fetchCatalogAdd(data) {
-            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, data);
+        sendCatalogMark(data) {
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/mark/`, data);
         },
-        fetchCatalogImport(data, config) {
-            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}`, data, config); // todo url
+        sendCatalogMarksize(data) {
+            return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/marksize/`, data);
         },
         fetchQuotes(quote, date_start, date_end, mode) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/quotes`, {
@@ -187,6 +199,13 @@ export default {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`,{
                 params: {
                     ids: ids.join(','),
+                },
+            });
+        },
+        fetchCompaniesByINN(inn) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`,{
+                params: {
+                    inn: inn.join(','),
                 },
             });
         },
@@ -229,17 +248,57 @@ export default {
                 `${process.env.API_URL_TENDER_SERVICE}/api/procedure/settings/`,
             )
         },
-        fetchProceduresPropertyList(field) {
+        fetchProceduresPropertyList(entity, property) {
             return axios.get(
-                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/property/${field}`,
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/property/${entity}/${property}`,
             )
         },
         fetchUsersFromCompany(id) {
             return axios.get(
-                `${process.env.API_URL_AUTH_SERVICE}/secured/data/companies/${id}/users`,
+                `${process.env.API_URL_AUTH_SERVICE}/companies/${id}/users`,
             )
         },
-        fetchCatalogMarksize(string, okpd) {
+        cancelCatalogSearch() {
+            this.CancelTokens.searchCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchCancelToken = axios.CancelToken.source()
+        },
+        fetchCatalogMark(string) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/mark/`,
+                {
+                    params: {
+                        q: string,
+                    },
+                    cancelToken: this.CancelTokens.searchMarkCancelToken.token,
+                },
+            )
+        },
+        cancelCatalogMarkSearch(){
+            this.CancelTokens.searchMarkCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchMarkCancelToken = axios.CancelToken.source()
+        },
+        fetchCatalogMarksize(string) {
+            return axios.get(
+                `${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/marksize/`,
+                {
+                    params: {
+                        q: string,
+                    },
+                    cancelToken: this.CancelTokens.searchMarksizeCancelToken.token,
+                },
+            )
+        },
+        cancelCatalogMarksizeSearch(){
+            this.CancelTokens.searchMarkCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchMarkCancelToken = axios.CancelToken.source()
+        },
+        fetchCatalogMarksizeOKPD(string, okpd) {
             return axios.get(
                 `${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/marksize_with_okpd/`,
                 {
@@ -250,9 +309,10 @@ export default {
                 },
             )
         },
-        sendProcedure(data) {
+        sendProcedure(data, id) {
+            const setId = id ? `/${id}` : ''
             return axios.post(
-                `${process.env.API_URL_TENDER_SERVICE}/api/procedure`,
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure${setId}`,
                 data,
             )
         },
@@ -307,5 +367,8 @@ export default {
         fetchAccreditationSampleRequiredFiles() {
             return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/files`)
         },
+        fetchCompanyById(inn) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
+        }
     }
 }

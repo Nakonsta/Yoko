@@ -5,7 +5,7 @@
         </div>
         <div class="catalog__flex">
             <div ref="filterContainer" class="catalog__filter">
-                <filterBlock
+                <filterList
                     :loading="loadingFilter"
                     :filter="filter"
                     :currentFilter="currentFilter"
@@ -14,7 +14,7 @@
                 />
             </div>
             <div class="catalog__body">
-                <catalogBlock
+                <catalogList
                     :isFirstLoad="isFirstLoad"
                     :loadingItems="loadingItems"
                     :catalog-item="items"
@@ -40,15 +40,15 @@
 
 <script>
     import api from './helpers/api'
-    import filterBlock from "./components/filter.vue";
-    import catalogBlock from "./components/catalog.vue";
+    import filterList from "./components/blocks/filter.vue";
+    import catalogList from "./components/catalog/list.vue";
     import search from "./components/searchSelect.vue";
 
     export default {
         name: 'App',
         components: {
-            filterBlock,
-            catalogBlock,
+            filterList,
+            catalogList,
             search,
         },
         mixins: [api],
@@ -62,13 +62,14 @@
                 items: [],
                 totalItems: 0,
                 weightFilter: [],
+                perPage: 100,
                 page: 1,
                 tMark: 4,
             }
         },
         computed: {
             totalPages() {
-                return Math.ceil(this.totalProducts / 100)
+                return Math.ceil(this.totalItems / this.perPage)
             },
         },
         created() {

@@ -11,9 +11,10 @@
                     v-if="!viewType.isCreate && accreditation.status"
                     :status="accreditation.status"
                 ></accreditations-steps>
+                <accreditationsMessage v-if="viewType.isCreate" />
                 <accreditations-title
                     :title="`Заявка на аккредитацию ${viewType.isCreate ? '' : `№${id}`}`"
-                    margin="32px 0 0 0"
+                    :margin="!viewType.isCreate && accreditation.status ? '32px 0 0 0' : '0'"
                 ></accreditations-title>
 
                 <div class="divider"></div>
@@ -179,10 +180,15 @@ import AccreditationDetailsSelect from '../../../components/admin/accreditations
 import AccreditationDetailsCheckbox from '../../../components/admin/accreditations/details/AccreditationDetailsCheckbox.vue'
 import AccreditationDetailsFileUploader from '../../../components/admin/accreditations/details/AccreditationDetailsFileUploader.vue'
 import AccreditationDetailsEmpty from '../../../components/admin/accreditations/details/AccreditationDetailsEmpty.vue'
+<<<<<<< HEAD
+=======
+import accreditationsMessage from '../../../components/blocks/accreditationsMessage'
+>>>>>>> nv_merge
 
 export default {
     name: 'accreditation-details',
     components: {
+        accreditationsMessage,
         AccreditationsSteps,
         AccreditationsTitle,
         AccreditationDetailsSelect,
@@ -426,9 +432,15 @@ export default {
 @import '../../../../assets/sass/mixins/mq';
 
 .accreditation-details {
-    padding: rem(80px) 0 rem(40px) !important;
+    padding: rem(40px) 0 rem(40px) !important;
     border-radius: 6px;
     background-color: #fff;
+<<<<<<< HEAD
+=======
+    @media(max-width: 1024px) {
+      padding: rem(80px) 0 rem(40px) !important;
+    }
+>>>>>>> nv_merge
 
     &__header {
         padding: 0 rem(40px);

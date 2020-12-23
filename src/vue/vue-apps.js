@@ -15,6 +15,20 @@ Vue.component('paginate', Paginate)
 import VueTheMask from 'vue-the-mask'
 Vue.use(VueTheMask)
 
+// труЪ маска, а не вот это вот всё...
+import Inputmask from 'inputmask'
+Inputmask.extendDefinitions({
+    'x': {
+        "validator": "[1-9]"
+    },
+});
+Vue.directive('inputmask', {
+    bind: function(el, binding) {
+        if( !binding || binding.value === false ) return;
+        Inputmask(binding.value).mask(el);
+    }
+});
+
 import VCalendar from 'v-calendar'
 Vue.use(VCalendar)
 
@@ -85,28 +99,6 @@ if (catalogBlock) {
         el: catalogBlock,
         store: store,
         render: function(h) { return h(Catalog); }
-    })
-}
-
-// Каталог - добавление - заполнить форму
-import CatalogAdd from './catalog-add.vue'
-const catalogAddBlock = document.querySelector('#catalog-add');
-if (catalogAddBlock) {
-    let appCatalogAdd = new Vue({
-        el: catalogAddBlock,
-        store: store,
-        render: function(h) { return h(CatalogAdd); }
-    })
-}
-
-// Каталог - добавление - импортировать файл
-import CatalogImport from './catalog-import.vue'
-const catalogImportBlock = document.querySelector('#catalog-import');
-if (catalogImportBlock) {
-    let appCatalogAdd = new Vue({
-        el: catalogImportBlock,
-        store: store,
-        render: function(h) { return h(CatalogImport); }
     })
 }
 
@@ -217,24 +209,24 @@ if (CompanyReportsBlock) {
 }
 
 // Торговая площадка - Процедуры
-import marketplaceProcedures from './marketplace-procedures.vue';
-const marketplaceProceduresBlock = document.querySelector('#marketplace-procedures');
-if (marketplaceProceduresBlock) {
+import Marketplace from './marketplace.vue';
+const marketplaceBlock = document.querySelector('#marketplace-procedures');
+if (marketplaceBlock) {
     let marketplaceProceduresApp = new Vue({
-        el: marketplaceProceduresBlock,
+        el: marketplaceBlock,
         store: store,
-        render: function(h) { return h(marketplaceProcedures)}
+        render: function(h) { return h(Marketplace)}
     })
 }
 
 // Форма обратной связи
-import TenderItem from './tenderItem.vue'
-const tenderItem = document.querySelector('#tender-item');
+import MarketplaceItem from './marketplace-item.vue'
+const tenderItem = document.querySelector('#marketplace-item');
 if (tenderItem) {
     let tenderItemBlock = new Vue({
         el: tenderItem,
         store: store,
-        render: function(h) { return h(TenderItem); }
+        render: function(h) { return h(MarketplaceItem); }
     })
 }
 

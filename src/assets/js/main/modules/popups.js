@@ -48,6 +48,7 @@ function popupOpen(currentPopup) {
 		}
 		currentPopup.classList.add('open');
 		currentPopup.addEventListener("click", function (e) {
+			if (currentPopup.classList.contains("certificate-view")) return;
 			if (!e.target.closest('.popup__content')) {
 				popupClose(e.target.closest('.popup'));
 			}
@@ -68,7 +69,9 @@ function popupOpen(currentPopup) {
 
 function popupClose(popupActive, doUnlock = true) {
 	if (unlock) {
-		popupActive.classList.remove('open');
+		if (popupActive) {
+			popupActive.classList.remove('open');
+		}
 		if (doUnlock) {
 			bodyUnLock();
 		}

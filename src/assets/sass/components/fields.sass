@@ -84,6 +84,13 @@ input[type=number]
       right: rem(15px)
       color: $colorTurquoise
 
+  &__counter
+    white-space: nowrap
+    font-size: rem(12px)
+    color: $colorGray
+    background: rgba($colorWhite, .5)
+    pointer-events: none
+
   &__label
     display: block
     margin: 0 0 rem(10px)
@@ -101,6 +108,14 @@ input[type=number]
   &__add
     margin: 0 0 rem(32px)
     font-weight: 500
+
+    &.disabled
+      a
+        color: #cdcdcd !important
+        pointer-events: none
+
+        svg
+          fill: #cdcdcd !important
 
     a
       padding-left: 30px
@@ -126,6 +141,7 @@ input[type=number]
         margin-top: -12px
 
 
+  &__clone,
   &__remove
     margin: rem(32px) 0 0 // .field__label line-height + .field__label margin-bottom
 
@@ -265,9 +281,13 @@ textarea.field
 div.field__range
   display: flex
   justify-content: space-between
+  margin: 0 0 rem(30px)
 
   > span
     align-self: center
+
+  .field__container
+    margin-bottom: 0
 
   .field__range-from,
   .field__range-to
@@ -278,6 +298,9 @@ div.field__range
 
   .field
     padding-right: rem(58px)
+
+    &:disabled ~ .sprite-calendar
+      fill: #cdcdcd
 
   .sprite-calendar
     display: block
@@ -298,6 +321,11 @@ div.field__range
   min-height: 2rem
   input
     display: none
+    &[disabled]
+      + span
+        opacity: 0.6
+        + span
+          color: $colorGray
     &:checked
       & ~ .radio__body
         box-shadow: inset 0 0 0 7px $colorTurquoise

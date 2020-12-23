@@ -32,7 +32,8 @@
     border-color: $colorGray
     background: $colorGray
     pointer-events: none
-
+  &--full
+    width: 100%
   &--bdr
     border-color: $colorTurquoise
     color: $colorTurquoise !important
@@ -123,3 +124,18 @@
 
   > .btn
     margin: rem(24px) 0 0 rem(24px)
+
+.function-btn
+  position: absolute
+  top: 10px
+  right: 10px
+  transition: transform .5s
+  cursor: pointer
+  z-index: 11
+  svg
+    fill: #4F5057
+    height: 20px
+    width: 20px
+  &.active
+    svg
+      transform: rotate(45deg)

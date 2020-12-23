@@ -1,6 +1,8 @@
 <template>
     <div class="accreditations__sort" @click="changeSortType">
-        <img src="/src/assets/img/svg-templates/sort.svg" alt="" />
+        <svg>
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#sort"></use>
+        </svg>
     </div>
 </template>
 <script>
@@ -33,6 +35,11 @@ export default {
         margin-right: rem(25px);
         cursor: pointer;
         transition: 0.3s;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
 
         &:hover {
             filter: brightness(0.85);

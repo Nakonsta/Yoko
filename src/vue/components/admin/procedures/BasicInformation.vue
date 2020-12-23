@@ -1,8 +1,8 @@
 <template>
-  <div class="procedure-new container-item">
+  <div class="container-item">
     <h3 class="procedure__main-title">Основная информация</h3>
     <div class="row">
-      <div class="col col-md-4 col-sm-6 col-xs-12">
+      <div class="col col-lg-4 col-sm-6 col-xs-12">
         <select-input
             :is-single="true"
             :close="true"
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col col-md-4 col-sm-6 col-xs-12">
+      <div class="col col-lg-4 col-sm-6 col-xs-12">
         <select-input
             :is-single="true"
             :close="true"
@@ -28,7 +28,7 @@
             :select="clearTenderTradingType"
         ></select-input>
       </div>
-      <div class="col col-md-4 col-sm-6 col-xs-12">
+      <div class="col col-lg-4 col-sm-6 col-xs-12">
         <select-input
             :is-single="true"
             :close="true"
@@ -43,13 +43,14 @@
       <div v-if="
           !selectedData.tender_trading_type
         "
-        class="col col-md-4 col-sm-6 col-xs-12"
+        class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <div class="field-group">
           <text-input
               v-model="selectedData.tender_eis_id"
               label="Выгрузить из ЕИС"
               placeholder="Выберите номер"
+              :disabled="isCreatedProcedure"
               :rules="{ required: true, numeric: true }"
           ></text-input>
           <button
@@ -68,12 +69,11 @@
             procedureIdData.procedureType !== 'Offers' &&
             procedureIdData.procedureType !== 'Commercial'
           "
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <select-input
             :is-single="true"
             :close="true"
-            content="Вы допускаете торги по конкурсу"
             placeholder="Выберите из списка"
             v-model="selectedData.tender_available"
             label="Доступность"
@@ -93,7 +93,7 @@
             procedureIdData.procedureType === 'Offers' ||
             procedureIdData.procedureType === 'Commercial'
           "
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <select-input
             :is-single="true"
@@ -112,7 +112,7 @@
             procedureIdData.procedureType === 'Commercial' ||
             procedureIdData.procedureType === 'Contest'
           "
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <select-input
             :is-single="true"
@@ -130,12 +130,12 @@
             procedureIdData.procedureType === 'Offers' ||
             procedureIdData.procedureType === 'Commercial'
           "
-          class="col col-md-4 col-sm-6 col-xs-12 field__container"
+          class="col col-lg-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
             class-name="mt3"
-            content="Вы допускаете торги по конкурсу"
             name="overbidding_is_possible"
+            :disabled="isCreatedProcedure"
             v-model="selectedData.overbidding_is_possible"
             :label="[{label: 'Возможна переторжка'}]"
         ></checkbox-input>
@@ -144,18 +144,20 @@
           selectedData.tender_trading_type &&
           selectedData.tender_trading_type.id
         "
-        class="col col-md-4 col-sm-6 col-xs-12"
+        class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <date-time
             v-model="selectedData.publication_date"
             label="Дата публикации"
             placeholder="Выберите дату"
-            :min-date="new Date()"
+            :disabled="isCreatedProcedure"
+            :min-date="new Date(today)"
+            :rules="{required: true, minMaxDateCheck: today}"
         ></date-time>
       </div>
       <div
           v-if="procedureIdData.procedureType === 'FromSupplier'"
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <select-input
             :is-single="true"
@@ -172,26 +174,29 @@
             procedureIdData.procedureType === 'Contest' ||
             procedureIdData.procedureType === 'FromSupplier'
           "
-          class="col col-md-4 col-sm-6 col-xs-12 field__container"
+          class="col col-lg-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
             class-name="mt3"
             name="tender_framework_contract"
+            :disabled="isCreatedProcedure"
             v-model="selectedData.tender_framework_contract"
             :label="[{label: 'Конкурс на заключение рамочного договора'}]"
         ></checkbox-input>
       </div>
       <div
           v-if="procedureIdData.procedureType === 'Contest'"
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <radio-input
+            :rules="{required: true}"
             title="Допускается ли толеранс?"
             name="tender_tolerance"
+            :disabled="isCreatedProcedure"
             v-model="selectedData.tender_tolerance"
             :label="[
-              {name: 'Да', id: 1},
-              {name: 'Нет', iid: 0}
+              {name: 'Да', id: '1'},
+              {name: 'Нет', id: '0'}
             ]"
         ></radio-input>
       </div>
@@ -203,7 +208,7 @@
               procedureIdData.procedureType === 'FromSupplier' ||
               procedureIdData.procedureType === 'Contest'
           "
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <select-input
             :is-single="true"
@@ -212,7 +217,7 @@
             v-model="selectedData.currency"
             label="Валюта закупки"
             :options="fieldsData.purchase_currency"
-            :disabled="procedureIdData.procedureType !== 'Commercial'"
+            :disabled="procedureIdData.procedureType !== 'Commercial' || isCreatedProcedure"
         ></select-input>
       </div>
       <div
@@ -223,12 +228,12 @@
             procedureIdData.procedureType === 'FromSupplier' ||
             procedureIdData.procedureType === 'Contest'
           "
-          class="col col-md-4 col-sm-6 col-xs-12 field__container"
+          class="col col-lg-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
             class-name="mt3"
-            content="Вы допускаете торги по конкурсу"
             name="confidential_price"
+            :disabled="isCreatedProcedure"
             v-model="selectedData.confidential_price"
             :label="[{label: 'Цены конфиденциальны'}]"
         ></checkbox-input>
@@ -238,7 +243,7 @@
             procedureIdData.procedureType === 'Auction' ||
             procedureIdData.procedureType === 'Supplier'
           "
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <select-input
             :is-single="true"
@@ -255,11 +260,12 @@
             procedureIdData.procedureType === 'Auction' ||
             procedureIdData.procedureType === 'Supplier'
           "
-          class="col col-md-4 col-sm-6 col-xs-12 field__container"
+          class="col col-lg-4 col-sm-6 col-xs-12 field__container"
       >
         <checkbox-input
             class-name="mt3"
             name="hide_member_names"
+            :disabled="isCreatedProcedure"
             v-model="selectedData.hide_member_names"
             :label="[{label: 'Скрыть названия участников'}]"
         ></checkbox-input>
@@ -270,15 +276,17 @@
             selectedData.tender_trading_type.id &&
             procedureIdData.procedureType !== 'Contest'
           "
-          class="col col-md-4 col-sm-6 col-xs-12"
+          class="col col-lg-4 col-sm-6 col-xs-12"
       >
         <radio-input
+            :rules="{required: true}"
             title="Допускается ли толеранс?"
             name="tender_tolerance"
+            :disabled="isCreatedProcedure"
             v-model="selectedData.tender_tolerance"
             :label="[
-              {name: 'Да', id: 1},
-              {name: 'Нет', id: 0}
+              {name: 'Да', id: '1'},
+              {name: 'Нет', id: '0'}
             ]"
         ></radio-input>
       </div>
@@ -287,11 +295,13 @@
 </template>
 
 <script>
-import TextInput from '../../forms/Input.vue'
-import SelectInput from '../../forms/Select.vue'
-import CheckboxInput from '../../forms/Checkbox.vue'
-import RadioInput from '../../forms/Radio.vue'
-import DateTime from '../../forms/DateTime.vue'
+import moment from 'moment'
+import TextInput from '@/components/forms/Input.vue'
+import SelectInput from '@/components/forms/Select.vue'
+import CheckboxInput from '@/components/forms/Checkbox.vue'
+import RadioInput from '@/components/forms/Radio.vue'
+import DateTime from '@/components/forms/DateTime.vue'
+
 
 export default {
   name: 'BasicInformation',
@@ -328,6 +338,11 @@ export default {
       type: Function,
     },
   },
+  data() {
+    return {
+      today: moment().format('YYYY-MM-DD')
+    }
+  }
 }
 </script>
 

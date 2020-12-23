@@ -17,9 +17,10 @@
                 <div class="table-cell__certificates">
                     Сертификаты
                 </div>
+              <div class="table-cell__controls"></div>
             </div>
             <div v-for="(item, key) in items" :key="key">
-                <MarkSizeCard :item="item" />
+                <MarkSizeCard :item="item" @view-certificate="viewCertificate" />
             </div>
             <div v-if="!items.length && !isLoading">
                 Ничего не найдено
@@ -52,6 +53,7 @@
             >
             </paginate>
         </div>
+        <ProductCertificateView :document="currentCertificate" @change-item="changeCertificate" />
     </div>
 </template>
 
@@ -60,13 +62,15 @@ import api from '../../helpers/api'
 import functions from '../../helpers/functions'
 import MarkSizeCard from './markSizeCardLarge.vue'
 import ProductsFilters from './ProductsFilters.vue'
+import ProductCertificateView from '../../productsCertificateView';
 
 export default {
     name: 'Products',
 
     components: {
         MarkSizeCard,
-        ProductsFilters
+        ProductsFilters,
+        ProductCertificateView
     },
 
     mixins: [api, functions],
@@ -90,6 +94,8 @@ export default {
                     to: null,
                 }
             },
+            certificates: [],
+            currentCertificate: null
         }
     },
 
@@ -143,7 +149,7 @@ export default {
             if(filtersData.metresTo) {
                 this.currentFilter.quantity.to = filtersData.metresTo
             } else {
-                this.currentFilter.quantity.to = null 
+                this.currentFilter.quantity.to = null
             }
             if(filtersData.priceFrom) {
                 this.currentFilter.price.from = filtersData.priceFrom
@@ -172,6 +178,36 @@ export default {
                 }
             }
             this.getCompanyData(this.currentFilter)
+        },
+        viewCertificate(value) {
+            this.certificates = value.items;
+            this.currentCertificate = value.current;
+            openPopupById('#products-certificate-view');
+        },
+        changeCertificate(value) {
+            let idx = this.certificates.findIndex(item => item.properties.number === this.currentCertificate.properties.number);
+            if (idx >= 0) {
+                switch (value) {
+                    case "next":
+                        idx += 1;
+                        break;
+                    case "back":
+                        idx -= 1;
+                        break;
+                    default:
+                        console.log("Неизвестный тип переключения слайдера сертификата", value);
+                        return;
+                }
+
+                if (idx > this.certificates.length - 1) {
+                    idx = 0;
+                }
+
+                if (idx < 0) {
+                    idx = this.certificates.length - 1;
+                }
+                this.currentCertificate = { ...this.certificates[idx], title: this.currentCertificate.title };
+            }
         }
     }
 }
@@ -263,7 +299,7 @@ export default {
             &__certificates {
                 width: 25%;
             }
-        } 
+        }
     }
 
     @include mq($until: tablet) {
