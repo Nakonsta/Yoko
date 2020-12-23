@@ -8,12 +8,12 @@
               class="gallery-thumbs"
               v-bind="window.width > 1200 ? settings : { arrows: false }"
               :asNavFor="$refs.c1"
-              :slidesToShow="show"
+              :slidesToShow="this.show"
               :swipeToSlide="true"
               :focusOnSelect="true"
           >
-            <div v-for="(item, idx) in sliderImagesThumbs" :key="idx">
-              <img draggable="false" :src="item" />
+            <div v-for="(src, i) in sliderImagesThumbs" :key="i">
+              <img draggable="false" :src="src" />
             </div>
           </VueSlickCarousel>
           <VueSlickCarousel
@@ -26,7 +26,7 @@
               dotsClass="dots"
           >
             <div v-for="(item, idx) in sliderImagesTop" :key="idx">
-              <img draggable="false" :src="item" />
+              <img draggable="false" :src="item" style="max-height: 200px;" />
             </div>
           </VueSlickCarousel>
         </div>
@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      show: 1,
+      show: 2,
       window: {
         width: 0,
       },
@@ -60,12 +60,14 @@ export default {
         "verticalSwiping": true,
       },
       sliderImagesThumbs: [
+        "https://stage-operator.ec.extyl.pro/storage/products/404/sample.jpg",
         "/content/catalog/slider-add-1.jpg",
         "/content/catalog/slider-add-2.jpg",
         "/content/catalog/slider-add-3.jpg",
         "/content/catalog/slider-add-4.jpg",
         "/content/catalog/slider-add-4.jpg",
-        "/content/catalog/slider-add-4.jpg"
+        "/content/catalog/slider-add-4.jpg",
+        "https://stage-operator.ec.extyl.pro/storage/products/405/sample.png"
       ],
       sliderImagesTop: [
         "/content/catalog/slider.jpg",
@@ -85,7 +87,6 @@ export default {
   },
   watch: {
     root() {
-      console.log("handle change root data");
       this.initSliderImages();
     }
   },
@@ -105,14 +106,11 @@ export default {
       this.window.width = window.innerWidth;
     },
     initSliderImages() {
-      let { images = null } = this.root;
-      console.log("this root", this.root, "images", images);
-      images = images.map(item => {
-        return "https://stage-content.ec.extyl.pro/" + item;
-      })
-      if (images) {
+      let { images = [] } = this.root;
+      if (images.length) {
         this.sliderImagesTop = images;
         this.sliderImagesThumbs = images;
+        this.show = images.length;
       }
     }
   }
@@ -150,6 +148,7 @@ export default {
           padding: rem(5px);
           border-radius: rem(6px);
           border: 1px solid transparent;
+          max-height: 100px;
         }
       }
       .slick-current {
