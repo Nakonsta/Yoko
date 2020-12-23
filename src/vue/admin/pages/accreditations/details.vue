@@ -5,7 +5,7 @@
                 <div class="preloader__loader"></div>
             </div>
         </div>
-        <div v-else class="accreditation-details__wrapper">
+        <div v-if="!viewType.isEmpty && !loading" class="accreditation-details__wrapper">
             <div class="accreditation-details__header">
                 <accreditations-steps
                     v-if="!viewType.isCreate && accreditation.status"
@@ -55,8 +55,13 @@
                 кодекса Российской Федерации, регулирующие порядок и условия
                 заключения договора присоединения (ст. 428 ГК РФ), направления
                 оферты и акцепта (ст. 435–444 ГК РФ)."
-                    :isAccepted="false"
-                    :disabled="viewType.isView"
+                    :isAccepted="accreditation.agreement"
+                    :disabled="!viewType.isCreate"
+                    :hasError="errors.agreement"
+                    @on-agree="
+                        accreditation.agreement = $event
+                        errors.agreement = false
+                    "
                 ></accreditation-details-card>
                 <accreditation-details-card
                     title="Подтверждение отсутствия в РНП"
@@ -91,14 +96,19 @@
                 кодекса Российской Федерации, регулирующие порядок и условия
                 заключения договора присоединения (ст. 428 ГК РФ), направления
                 оферты и акцепта (ст. 435–444 ГК РФ)."
-                    :isAccepted="false"
-                    :disabled="viewType.isView"
+                    :isAccepted="accreditation.rnp"
+                    :disabled="!viewType.isCreate"
+                    :hasError="errors.rnp"
+                    @on-agree="
+                        accreditation.rnp = $event
+                        errors.rnp = false
+                    "
                 ></accreditation-details-card>
 
                 <accreditation-details-select
                     :defaultCompanyId="accreditation.entity_id"
                     @on-select="onSelect"
-                    :disabled="viewType.isView"
+                    :disabled="!viewType.isCreate"
                     :hasError="errors.noCompany"
                 ></accreditation-details-select>
 
@@ -107,15 +117,21 @@
                     <accreditation-details-checkbox
                         label="Поставщик"
                         :value="accreditation.provider_accreditation"
-                        @click="accreditation.provider_accreditation = $event"
-                        :disabled="viewType.isView"
+                        @click="
+                            accreditation.provider_accreditation = $event
+                            errors.noAccreditationType = false
+                        "
+                        :disabled="!viewType.isCreate"
                         :hasError="errors.noAccreditationType"
                     ></accreditation-details-checkbox>
                     <accreditation-details-checkbox
                         label="Заказчик"
                         :value="accreditation.customer_accreditation"
-                        @click="accreditation.customer_accreditation = $event"
-                        :disabled="viewType.isView"
+                        @click="
+                            accreditation.customer_accreditation = $event
+                            errors.noAccreditationType = false
+                        "
+                        :disabled="!viewType.isCreate"
                         :hasError="errors.noAccreditationType"
                     ></accreditation-details-checkbox>
                 </div>
@@ -129,9 +145,11 @@
                         :fileName="accreditation.documents.length ? accreditation.documents[key].file.name : ''"
                         :fileUrl="accreditation.documents.length ? accreditation.documents[key].file.url : ''"
                         :accepted="accreditation.documents.length ? accreditation.documents[key].file.accepted : null"
-                        :disabled="viewType.isView"
+                        :showStatus="viewType.isEdit"
+                        :disabled="viewType.isView || (viewType.isEdit && accreditation.documents[key].file.accepted)"
                         :hasError="errors.files[label.id]"
                         @uploaded="onFileUpload($event, label.id)"
+                        @remove="onFileRemove"
                     ></accreditation-details-file-uploader>
                 </div>
             </div>
@@ -147,6 +165,7 @@
                 {{ viewType.isCreate ? 'Отправить заявку на аккредитацию' : 'Повторно отправить документы' }}
             </button>
         </div>
+        <accreditation-details-empty v-if="!loading && viewType.isEmpty"></accreditation-details-empty>
     </div>
 </template>
 <script>
@@ -159,6 +178,7 @@ import AccreditationDetailsCard from '../../../components/admin/accreditations/d
 import AccreditationDetailsSelect from '../../../components/admin/accreditations/details/AccreditationDetailsSelect.vue'
 import AccreditationDetailsCheckbox from '../../../components/admin/accreditations/details/AccreditationDetailsCheckbox.vue'
 import AccreditationDetailsFileUploader from '../../../components/admin/accreditations/details/AccreditationDetailsFileUploader.vue'
+import AccreditationDetailsEmpty from '../../../components/admin/accreditations/details/AccreditationDetailsEmpty.vue'
 
 export default {
     name: 'accreditation-details',
@@ -168,6 +188,7 @@ export default {
         AccreditationDetailsSelect,
         AccreditationDetailsCard,
         AccreditationDetailsFileUploader,
+        AccreditationDetailsEmpty,
         AccreditationDetailsCheckbox
     },
     mixins: [api, functions],
@@ -179,13 +200,17 @@ export default {
                 provider_accreditation: false,
                 customer_accreditation: false,
                 documents: {},
-                status: null
+                status: null,
+                rnp: false,
+                agreement: false
             },
             fileLabels: null,
             newFiles: {},
             errors: {
                 noCompany: false,
                 noAccreditationType: false,
+                rnp: false,
+                agreement: false,
                 files: {}
             }
         }
@@ -200,7 +225,8 @@ export default {
                 isEdit: this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false,
                 isView:
                     this.id !== 'new' &&
-                    !(this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false)
+                    !(this.accreditation.status !== null ? this.accreditation.status.id === 'revision' : false),
+                isEmpty: false
             }
         }
     },
@@ -213,6 +239,9 @@ export default {
                         ...this.accreditation,
                         ...(data?.data?.data ?? {})
                     }
+                })
+                .catch(() => {
+                    this.viewType.isEmpty = true
                 })
                 .finally(() => (this.loading = false))
         },
@@ -230,12 +259,31 @@ export default {
         },
         onSelect(value) {
             this.accreditation.entity_id = value.id
+            this.errors.noCompany = false
         },
         onFileUpload(file, key) {
             if (this.viewType.isCreate) {
                 this.accreditation.documents[key] = file
             } else {
                 this.newFiles[key] = file
+            }
+
+            this.errors.files[key] = false
+            this.errors = Object.assign({}, this.errors)
+        },
+        onFileRemove(file) {
+            if (this.viewType.isCreate) {
+                Object.entries(this.accreditation.documents).map(([key, value]) => {
+                    if (value === file) {
+                        this.accreditation.documents[key] = null
+                    }
+                })
+            } else {
+                Object.entries(this.newFiles).map(([key, value]) => {
+                    if (value === file) {
+                        this.newFiles[key] = null
+                    }
+                })
             }
         },
         validation(typeSend) {
@@ -257,20 +305,46 @@ export default {
                 hasErrors = true
             }
 
+            if (!this.accreditation.agreement) {
+                this.errors.agreement = true
+                hasErrors = true
+            }
+
+            if (!this.accreditation.rnp) {
+                this.errors.rnp = true
+                hasErrors = true
+            }
+
             if (this.viewType.isCreate) {
+                let filesSize = 0
                 Object.entries(this.accreditation.documents).forEach(([key, document]) => {
                     if (!(document instanceof File)) {
                         this.errors.files[key] = true
                         hasErrors = true
+                    } else {
+                        filesSize += document.size
                     }
                 })
+
+                if (!this.checkAllowFileSize(filesSize)) {
+                    hasErrors = true
+                }
             } else {
-                Object.entries(this.newFiles).forEach(([key, file]) => {
-                    if (!(file instanceof File) && !this.accreditation.documents[key].file.accepted) {
+                let filesSize = 0
+                Object.entries(this.newFiles).forEach(([key, file], i) => {
+                    if (!(file instanceof File) && !this.accreditation.documents[i].file.accepted) {
                         this.errors.files[key] = true
                         hasErrors = true
+                    } else {
+                        if (file) {
+                            filesSize += file.size
+                        }
                     }
                 })
+
+                if (!this.checkAllowFileSize(filesSize)) {
+                    hasErrors = true
+                }
             }
 
             if (!hasErrors) {
@@ -284,24 +358,33 @@ export default {
                 }
             }
         },
-        update() {
-            if (this.checkUnacceptedFiles()) {
-                const updateFiles = this.getNewUploadFiles()
-                this.updateAccreditation(this.id, updateFiles)
-                    .then(() => {
-                        window.notificationSuccess('Документы отправлены на аккредитацию')
-                        this.$router.replace('/accreditations')
-                    })
-                    .catch(e => {
-                        window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
-                    })
+        checkAllowFileSize(size) {
+            if (this.convertFileSize({ bytes: size, convertTo: 'MB' }) >= 100) {
+                window.notificationError(
+                    'Вы пытаетесь загрузить файлы превыщающие максимальный вес. Максимальный допустимый вес всех файлов 100MB'
+                )
+
+                return false
             } else {
-                window.notificationError('Зарузите повторно все отклоненные документы')
+                return true
             }
+        },
+        update() {
+            window.openLoader()
+            const updateFiles = this.getNewUploadFiles()
+            this.updateAccreditation(this.id, updateFiles)
+                .then(() => {
+                    window.notificationSuccess('Документы отправлены на аккредитацию')
+                    this.$router.replace('/personal/accreditations')
+                })
+                .catch(e => {
+                    window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
+                })
+                .finally(() => window.closeLoader())
         },
         getNewUploadFiles() {
             const objFiles = {}
-            this.newFiles.forEach((file, key) => {
+            Object.entries(this.newFiles).forEach(([key, file]) => {
                 if (file instanceof File) {
                     objFiles[key] = file
                 }
@@ -309,36 +392,23 @@ export default {
 
             return objFiles
         },
-        checkUnacceptedFiles() {
-            for (const key in this.accreditation.documents) {
-                if (this.accreditation.documents[key].accepted === false) {
-                    return false
-                }
-            }
-
-            return true
-        },
         send() {
+            window.openLoader()
             this.sendAccreditationCompany(this.objectToFormData(this.accreditation))
                 .then(() => {
                     window.notificationSuccess('Заявка на аккредитацию отправлена')
-                    this.$router.replace('/presonal/accreditations')
+                    this.$router.replace('/personal/accreditations')
                 })
                 .catch(e => {
-                    if (e.response) {
-                        switch (e.response.data.message) {
-                            case 'Validation error':
-                                window.notificationError(
-                                    'Вы пытаетесь загрузить файлы неверного формата. Разрешенные форматы pdf, jpeg.'
-                                )
-                                break
-                            default:
-                                window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
-                        }
+                    if (e?.response?.data?.message ?? false) {
+                        window.notificationError(
+                            'Вы пытаетесь загрузить файлы неверного формата. Разрешенные форматы pdf, jpeg.'
+                        )
                     } else {
                         window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
                     }
                 })
+                .finally(() => window.closeLoader())
         }
     },
     created() {
@@ -358,9 +428,14 @@ export default {
 .accreditation-details {
     padding: rem(80px) 0 rem(40px) !important;
     border-radius: 6px;
+    background-color: #fff;
 
     &__header {
         padding: 0 rem(40px);
+
+        @include mq($until: mobileLandscape) {
+            padding: 0 rem(20px);
+        }
     }
 
     &__title {
@@ -374,6 +449,10 @@ export default {
 
     &__content {
         padding: 0 rem(40px);
+
+        @include mq($until: mobileLandscape) {
+            padding: 0 rem(20px);
+        }
     }
 
     &__checkboxes {
@@ -420,6 +499,7 @@ export default {
         margin: rem(48px) rem(40px) 0 rem(40px);
         background-color: $colorTurquoise;
         border: none;
+        outline: none;
         border-radius: 6px;
         transition: 0.3s;
 
@@ -427,6 +507,10 @@ export default {
         font-weight: 500;
         font-size: rem(14px);
         color: #ffffff;
+
+        @include mq($until: mobileLandscape) {
+            margin: rem(24px) rem(20px) 0 rem(20px);
+        }
 
         &:active,
         &:hover {

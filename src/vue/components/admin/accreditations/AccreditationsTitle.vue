@@ -39,5 +39,9 @@ export default {
     font-size: rem(38px);
     letter-spacing: 0.02em;
     color: #2c2c2c;
+
+    @include mq($until: mobileLandscape) {
+        font-size: rem(30px);
+    }
 }
 </style>

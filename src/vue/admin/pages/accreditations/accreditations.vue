@@ -1,5 +1,8 @@
 <template>
     <div class="accreditations">
+        <router-link class="accreditations__create" to="accreditations/new">
+            создать заявку
+        </router-link>
         <accreditations-title title="Список заявок"></accreditations-title>
 
         <div class="accreditations__filters">
@@ -13,12 +16,6 @@
                     <div class="preloader__loader"></div>
                 </div>
             </div>
-        </div>
-
-        <accreditations-list v-else :items="accreditations"></accreditations-list>
-
-        <div v-if="!loading && accreditations.length === 0" class="accreditations__empty-search">
-            Заявления не найдены
         </div>
 
         <accreditations-list v-else :items="accreditations"></accreditations-list>
@@ -119,6 +116,31 @@ export default {
         padding-top: rem(87px);
     }
 
+    &__create {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        max-width: 290px;
+        padding: rem(13px) rem(33px);
+        background-color: $colorTurquoise;
+        border: none;
+        outline: none;
+        border-radius: 6px;
+        transition: 0.3s;
+
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: rem(14px);
+        color: #ffffff;
+        text-transform: uppercase;
+
+        &:active,
+        &:hover {
+            background-color: lighten($color: $colorTurquoise, $amount: 5%);
+        }
+    }
+
     &__preloader {
         display: flex;
         justify-content: center;
@@ -165,6 +187,7 @@ export default {
             width: 30px;
             height: 30px;
             margin: 0 rem(5px);
+            outline: none;
 
             &.disabled {
                 a {
