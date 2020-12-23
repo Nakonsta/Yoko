@@ -36,7 +36,6 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
     name: 'accreditation-details-card',
     props: {
@@ -73,6 +72,71 @@ export default {
                 { 'card--collapsed': !this.isOpened },
                 { 'card--error': this.hasError }
             ]
+        },
+        splitedText() {
+            const arr = this.content
+                .replace(/\s+/g, ' ')
+                .trim()
+                .split(' ')
+            const textArr = []
+
+            while (arr.length) {
+                textArr.push(arr.splice(0, 300).join(' '))
+            }
+
+            return textArr
+        },
+        totalPages() {
+            return this.splitedText.length
+        }
+    },
+    methods: {
+        initPDF() {
+            if (pdfMake.vfs == undefined) {
+                pdfMake.vfs = pdfFonts.pdfMake.vfs
+            }
+
+            const pdf = {
+                content: [
+                    {
+                        alignment: 'center',
+                        text: this.title,
+                        style: 'header',
+                        fontSize: 22,
+                        bold: true,
+                        margin: [10, 10]
+                    },
+                    {
+                        text: this.content,
+                        fontSize: 16
+                    }
+                ]
+            }
+
+            return pdf
+        },
+        download() {
+            pdfMake.createPdf(this.initPDF()).download(`${this.title}.pdf`)
+        },
+        print() {
+            pdfMake.createPdf(this.initPDF()).print()
+        },
+        agree() {
+            this.isOpened = false
+            this.$emit('on-agree', true)
+        },
+        changePage(action) {
+            if (action === 'prev') {
+                if (this.page > 1) {
+                    this.page--
+                }
+            } else if (action === 'next') {
+                if (this.page < this.totalPages) {
+                    this.page++
+                }
+            }
+
+            console.log(this.page)
         }
     },
     methods: {
@@ -238,6 +302,54 @@ export default {
         iframe {
             width: 100%;
             height: 100%;
+        }
+    }
+
+    &__pagination {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+
+        span {
+            margin: 0 rem(13px);
+
+            font-family: Roboto;
+            font-size: rem(14px);
+            color: $lightcolorText;
+        }
+    }
+
+    &__pagination-action {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+
+        &--prev {
+            transform: rotate(180deg);
+        }
+
+        &--disabled {
+            cursor: default;
+
+            path {
+                stroke: $colorGray;
+            }
+        }
+
+        svg {
+            width: 14px;
+            height: 14px;
+
+            path {
+                transition: 0.3s;
+            }
         }
     }
 
