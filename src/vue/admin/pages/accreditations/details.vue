@@ -22,7 +22,7 @@
             <div class="accreditation-details__content">
                 <accreditation-details-card
                     title="Соглашение с оператором торгов"
-                    pdf="http://www.africau.edu/images/default/sample.pdf"
+                    pdf="/content/sample.pdf"
                     :isAccepted="accreditation.agreement"
                     :disabled="!viewType.isCreate"
                     :hasError="errors.agreement"
@@ -33,7 +33,7 @@
                 ></accreditation-details-card>
                 <accreditation-details-card
                     title="Подтверждение отсутствия в РНП"
-                    pdf="http://www.africau.edu/images/default/sample.pdf"
+                    pdf="/content/sample.pdf"
                     :isAccepted="accreditation.rnp"
                     :disabled="!viewType.isCreate"
                     :hasError="errors.rnp"
