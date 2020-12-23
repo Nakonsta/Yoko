@@ -90,6 +90,13 @@
         display: flex
         align-items: center
         justify-content: space-between
+        &:hover
+            background-color: #F4F4F4
+        &.active
+            background-color: #F4F4F4
+        &.router-link-exact-active
+            .nav-inner__link
+                color: #31ACB8 !important
     &__name
         color: $colorText
         max-width: calc(100% - 40px)
@@ -106,3 +113,5 @@
             transition: background-color .5s ease
             &:hover
                 background-color: #F4F4F4
+            &.router-link-exact-active
+                color: #31ACB8 !important
