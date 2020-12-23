@@ -232,6 +232,19 @@ export default {
                 { cancelToken: this.CancelTokens.proceduresCancelToken.token },
             );
         },
+        fetchProcedureApplications(id, page = 1) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/applications/list`,
+                {page},
+                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+            );
+        },
+        sendProcedureApplications(id, data) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/applications`,
+                data,
+            );
+        },
         addMarketplaceProcedureMark(id, mark) {
             const fData = new FormData();
             fData.append('mark_code', mark);
