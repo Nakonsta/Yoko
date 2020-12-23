@@ -179,10 +179,10 @@ export default {
                 title: 'Создание процедуры',
                 to: '/personal/procedures/new'
               },
-              {
-                title: 'Черновики процедур',
-                to: '/personal'
-              },
+              // {
+              //   title: 'Черновики процедур',
+              //   to: '/personal'
+              // },
             ]
           },
           {
