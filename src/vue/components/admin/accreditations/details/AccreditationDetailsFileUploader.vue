@@ -3,7 +3,7 @@
         <div class="file-uploader__description" @click="selectFile">
             <div class="file-uploader__icon">
                 <svg>
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#upload"></use>
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#upload"></use>
                 </svg>
             </div>
             <div :class="['file-uploader__label', { 'file-uploader__label--uploaded': isUploaded }]">
@@ -11,7 +11,7 @@
             </div>
             <div class="file-uploader__info-icon">
                 <svg>
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#info"></use>
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#info"></use>
                 </svg>
                 <span>{{ tooltip }}</span>
             </div>
@@ -23,19 +23,25 @@
                 }}</a>
                 <div v-if="localFile.name" class="file-uploader__remove" @click="removeFile">
                     <svg>
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#close"></use>
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"></use>
                     </svg>
                 </div>
             </div>
             <div
                 v-if="showStatus && accepted !== null"
-                :class="['file-uploader__status', { 'file-uploader__status--rejected': !accepted }]"
+                :class="[
+                    'file-uploader__status',
+                    { 'file-uploader__status--rejected': !accepted && localFile.name === '' }
+                ]"
             >
-                <svg v-if="accepted">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#ok"></use>
+                <svg class="new-upload" v-if="!accepted && localFile.name !== ''">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#arr"></use>
                 </svg>
-                <svg v-else>
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#close"></use>
+                <svg v-if="accepted && localFile.name === ''">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#ok"></use>
+                </svg>
+                <svg v-if="!accepted && localFile.name === ''">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"></use>
                 </svg>
             </div>
         </div>
@@ -260,6 +266,11 @@ export default {
             font-size: 10px;
             color: #fff;
             white-space: nowrap;
+
+            @include mq($until: tablet) {
+                left: auto;
+                right: 30px
+            }
         }
     }
 
@@ -330,6 +341,10 @@ export default {
 
         &--rejected {
             background-color: $colorCrimson;
+        }
+
+        .new-upload {
+            transform: rotate(-90deg);
         }
     }
 

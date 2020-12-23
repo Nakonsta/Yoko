@@ -70,6 +70,7 @@
     "moment": "^2.29.1",
     "nouislider": "^14.2.0",
     "object-fit-images": "3.2.4",
+    "pdfmake": "^0.1.68",
     "pug-plain-loader": "^1.0.0",
     "sass-mq": "^5.0.1",
     "simplebar-vue": "^1.6.0",
