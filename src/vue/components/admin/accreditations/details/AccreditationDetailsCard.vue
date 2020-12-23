@@ -94,6 +94,20 @@ export default {
             this.isOpened = false
             this.$emit('on-agree', true)
         }
+    },
+    created() {
+        const mm = window.matchMedia('only screen and (max-width: 767px)')
+        if (mm.matches) {
+            this.isOpened = true
+        }
+
+        mm.addListener(mql => {
+            if (mql.matches) {
+                this.isOpened = true
+            } else {
+                this.isOpened = false
+            }
+        })
     }
 }
 </script>
@@ -216,7 +230,12 @@ export default {
         transition: 0.4s;
         overflow: hidden;
 
-        embed {
+        @include mq($until: tablet) {
+            height: 0;
+            margin-bottom: 0;
+        }
+
+        iframe {
             width: 100%;
             height: 100%;
         }
@@ -280,6 +299,10 @@ export default {
         text-decoration-line: underline;
         color: $lightcolorText;
         white-space: nowrap;
+
+        @include mq($until: tablet) {
+            display: none;
+        }
     }
 
     &__agree {
