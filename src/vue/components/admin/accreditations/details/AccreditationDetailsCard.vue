@@ -160,8 +160,6 @@ export default {
                     this.page++
                 }
             }
-
-            console.log(this.page)
         }
     }
 }
