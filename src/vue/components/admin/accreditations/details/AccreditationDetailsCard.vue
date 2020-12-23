@@ -280,19 +280,20 @@ export default {
         align-items: flex-start;
 
         height: 100%;
-        max-height: 785px;
+        max-height: 800px;
         margin-bottom: rem(60px);
         transition: 0.4s;
         overflow: hidden;
 
         @include mq($until: desktop) {
-            // max-height: 2200px;
+            max-height: 2200px;
         }
     }
 
     &__content-text {
         margin: 0;
         min-height: 500px;
+        max-width: 785px;
 
         font-family: Roboto;
         font-size: rem(14px);
@@ -306,6 +307,7 @@ export default {
         align-items: center;
 
         width: 100%;
+        margin-top: rem(18px);
 
         span {
             margin: 0 rem(13px);
