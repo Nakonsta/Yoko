@@ -286,11 +286,13 @@
                 if( search && search.length ) {
                     // чистим фильтр
                     this.page = 1;
+                    let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
-                    this.currentFilter = {
-                        inn: [this.currentCompany.inn],
-                        q: search,
-                    };
+                    this.currentFilter.showing = showing;
+                    if( this.companies.length ) {
+                        this.currentFilter.inn = [this.currentCompany.inn];
+                    }
+                    this.currentFilter.q = search;
                     // перерисовываем фильтр
                     this.filterKey++;
                 }
@@ -298,8 +300,12 @@
                 if( search === false ) {
                     // чистим фильтр
                     this.page = 1;
+                    let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
-                    this.currentFilter.inn = [this.currentCompany.inn];
+                    this.currentFilter.showing = showing;
+                    if( this.companies.length ) {
+                        this.currentFilter.inn = [this.currentCompany.inn];
+                    }
                     // перерисовываем фильтр
                     this.filterKey++;
                 }
