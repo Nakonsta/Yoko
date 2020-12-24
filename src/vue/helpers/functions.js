@@ -1,3 +1,4 @@
+import moment from 'moment'
 export default {
     methods: {
         declOfNum(n, text_forms) {
