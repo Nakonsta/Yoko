@@ -1,0 +1,21 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-title
+
+block default
+    - var title = 'Кабель ВВГ 1х1,5 ок-1';
+
+block content
+
+    +breadCrumbs([
+    'Главная',
+    'Каталог',
+    'Кабели силовые',
+    'ВВГ'
+])
+
+    +pageTitle(title)
+
+    .section.section--green.section--mark(data-id="1000011")
+        .container.catalog-mark
+            #marksize-details
