@@ -9,7 +9,10 @@
           Маркоразмер
         </div>
         <div class="table-cell__quantity">
-          Остаток, м
+          Наличие, м
+        </div>
+        <div class="table-cell__quantity">
+          Компания
         </div>
         <div class="table-cell__price">
           Цена, руб
@@ -74,11 +77,15 @@ export default {
   },
 
   mixins: [api, functions],
-
+  props: {
+    companyId: {
+      type: String,
+      default: null
+    }
+  },
   data() {
     return {
       isFirstLoad: false,
-      companyId: null,
       items: [],
       page: 1,
       totalPages: null,
@@ -98,9 +105,7 @@ export default {
       currentCertificate: null
     }
   },
-
   created() {
-    this.fillUserData()
     this.getCompanyData()
   },
 
@@ -111,10 +116,6 @@ export default {
       this.cancelCompanyRequest()
       this.getCompanyData(this.currentFilter)
     },
-    fillUserData() {
-      this.companyId = document.querySelector('.section--company').getAttribute('data-id');
-      return false;
-    },
     getCompanyData(filterValues = null) {
       const companyInfo = {
         company_id: this.companyId,
@@ -122,7 +123,7 @@ export default {
         filter: filterValues
       }
       const fData = this.objectToFormData(companyInfo)
-      this.fetchCompany(fData)
+      this.fetchMarksizeQuantity(this.companyId)
         .then((response) => {
           this.items = response.data.data.items;
           this.totalPages = Math.ceil(response.data.data.total / 8);

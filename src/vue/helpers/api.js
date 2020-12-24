@@ -358,6 +358,9 @@ export default {
         },
         fetchMarksizeDetail(id) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/`)
+        },
+        fetchMarksizeQuantity(id) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/quantity/`);
         }
     }
 }
