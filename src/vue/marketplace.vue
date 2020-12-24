@@ -175,6 +175,7 @@
                 values: [],
                 currentValues: [],
                 search: 'searchCompanies',
+                loading: false,
             });
             this.getItems();
         },
@@ -291,13 +292,17 @@
             searchCompanies(index, q) {
                 clearInterval(this.searchCompanyCounter);
                 if (q) {
+                    this.cancelCompaniesRequest();
                     this.searchCompanyCounter = setTimeout(() => {
+                        this.filter[index].loading = true;
                         this.fetchCompaniesByName(q)
                             .then((response) => {
-                                this.filter[index].values = response.data.data;
+                                this.filter[index].loading = false;
+                                this.filter[index].values = response.data.data.elements;
                             })
                             .catch((e) => {
                                 console.log(e);
+                                this.filter[index].loading = false;
                                 this.filter[index].values = [];
                             });
                     }, 1000);

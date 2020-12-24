@@ -162,7 +162,7 @@ export default {
               },
               {
                 title: 'Черновики процедур',
-                to: '/personal'
+                to: '/personal/procedures/drafts'
               },
             ]
           },
@@ -199,6 +199,23 @@ export default {
               {
                 title: 'Создание заявки',
                 to: '/personal/accreditations/new'
+              },
+            ]
+          },
+          {
+            icon: 'mdi-buffer',
+            title: 'Торговые процедуры',
+            to: '/personal/procedures',
+            order: 1,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Список процедур',
+                to: '/personal/procedures'
+              },
+              {
+                title: 'Участие в процедурах',
+                to: '/personal/procedures/applications'
               },
             ]
           },

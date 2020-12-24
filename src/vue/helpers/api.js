@@ -6,6 +6,7 @@ export default {
                 searchCancelToken: axios.CancelToken.source(),
                 searchMarkCancelToken: axios.CancelToken.source(),
                 searchMarksizeCancelToken: axios.CancelToken.source(),
+                searchCompaniesCancelToken: axios.CancelToken.source(),
                 companyCancelToken: axios.CancelToken.source(),
                 proceduresCancelToken: axios.CancelToken.source(),
             },
@@ -209,11 +210,18 @@ export default {
                 },
             });
         },
+        cancelCompaniesRequest() {
+            this.CancelTokens.searchCompaniesCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchCompaniesCancelToken = axios.CancelToken.source()
+        },
         fetchCompaniesByName(name) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`, {
                 params: {
                     name: name
                 },
+                cancelToken: this.CancelTokens.searchCompaniesCancelToken.token,
             });
         },
         fetchCompanyReportForm(data) {
