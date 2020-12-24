@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="procedures__view" v-if="$store.state.auth.loggedIn">
+            <div class="procedures__view" v-if="$store.getters.userRole === 'contactor'">
                 <span>Показывать:</span>
                 <div class="dropdown">
                     <div class="dropdown__value">{{ viewList[view] }}</div>
@@ -163,7 +163,7 @@
                             </thead>
                             <tbody>
                                 <tr
-                                    v-for="product in item.products"
+                                    v-for="product in item.purchase_subject.products"
                                     :key="product.id"
                                     class="procedures__item-product"
                                 >

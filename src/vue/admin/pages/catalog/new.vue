@@ -656,7 +656,7 @@
                         </fieldset>
                         <fieldset class="files">
                             <div class="legend">Загрузить изображения</div>
-                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="" tag="div" :mode="validateFile">
+                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="markForSend.images"
                                         :preview="true"
@@ -1624,7 +1624,7 @@
                         </fieldset>
                         <fieldset class="files">
                             <div class="legend">Загрузить изображения</div>
-                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="" tag="div" :mode="validateFile">
+                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="marksizeForSend.images"
                                         :preview="true"
@@ -1677,7 +1677,6 @@
             return {
                 view: 'form',
                 company: null,
-                companies: [],
                 type: null,
                 types: [
                     {
@@ -1860,6 +1859,21 @@
                 },
             }
         },
+        computed: {
+            companies() {
+                // список компаний пользователя
+                let companies = [];
+                switch( this.$store.getters.userRole ) {
+                    case 'buyer':
+                        companies = this.$store.getters.companyBuyer;
+                        break;
+                    case 'contractor':
+                        companies = this.$store.getters.companyContractor;
+                        break;
+                }
+                return companies;
+            },
+        },
         created() {
             this.$emit('fullMode');
             this.companies = this.$store.state.auth.loggedIn ? this.$store.state.auth.user.companies : [];
@@ -2008,7 +2022,7 @@
                     this.sendCatalogMark(formDataObj)
                         .then(() => {
                             window.closeLoader();
-                            window.notificationSuccess('Ваша макра отправлен');
+                            window.notificationSuccess('Ваша марка отправлена на модерацию');
                         })
                         .catch((response) => {
                             console.log(response.message);
@@ -2019,7 +2033,7 @@
                     this.sendCatalogMarksize(formDataObj)
                         .then(() => {
                             window.closeLoader();
-                            window.notificationSuccess('Ваш макроразмер отправлен');
+                            window.notificationSuccess('Ваш макроразмер отправлен на модерацию');
                         })
                         .catch((response) => {
                             console.log(response.message);
