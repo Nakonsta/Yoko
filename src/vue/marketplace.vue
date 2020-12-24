@@ -231,10 +231,10 @@
                 if( search && search.length ) {
                     // чистим фильтр
                     this.page = 1;
+                    let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
-                    this.currentFilter = {
-                        q: search,
-                    };
+                    this.currentFilter.showing = showing;
+                    this.currentFilter.q = search;
                     // перерисовываем фильтр
                     this.filterKey++;
                 }
@@ -242,7 +242,9 @@
                 if( search === false ) {
                     // чистим фильтр
                     this.page = 1;
+                    let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
+                    this.currentFilter.showing = showing;
                     // перерисовываем фильтр
                     this.filterKey++;
                 }
