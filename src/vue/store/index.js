@@ -15,7 +15,8 @@ const store = new Vuex.Store({
         token: null,
         env: {
             LK_SUPP: process.env.LK_SUPP,
-        }
+        },
+        newUserDataSignal: 1
     },
     getters: {
         userRole(state) {
@@ -86,7 +87,11 @@ const store = new Vuex.Store({
                         state.token = token
                         state.auth.user = response.data.data
                         state.auth.loggedIn = true
+                        console.log(storageUser === JSON.stringify(response.data.data))
                         sessionStorage.setItem('user', JSON.stringify(response.data.data))
+                        if (storageUser !== JSON.stringify(response.data.data)) {
+                            state.newUserDataSignal++
+                        }
                         window.closeLoader()
                         if (!storageUser) {
                             window.notificationSuccess('Вы вошли в систему')
