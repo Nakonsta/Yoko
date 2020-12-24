@@ -574,7 +574,7 @@ export default {
   mounted() {
     const fromState = this.$store.state.auth.user
     if (fromState) {
-      this.fieldsData.companies = fromState.companies
+      this.fieldsData.companies = this.$store.getters.companyBuyer
       this.selectedData.contact_phone = fromState.phone
       this.selectedData.contact_email = fromState.email
       if(this.fieldsData.companies.length === 1) {
@@ -1067,7 +1067,7 @@ export default {
         tender_tolerance: this.selectedData.tender_tolerance,
         addition_information: this.selectedData.addition_information,
         contact_id: this.get(this.selectedData, 'contact_full_name.id'),
-        inn: this.$store.state.auth.user.companies[0].inn,
+        inn: this.selectedData.companyName.inn,
         publication_date: this.parseDate(this.selectedData.publication_date),
         purchase_currency: this.get(this.selectedData, 'currency.id'),
         publication_allowed: Number(toPublish),
