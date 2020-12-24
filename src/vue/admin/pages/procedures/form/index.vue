@@ -10,7 +10,7 @@
           <accreditations-title v-if="!isPreview" :title="title" />
           <accreditations-title v-if="isPreview" title="Предпросмотр" />
         </div>
-        <div v-if="!isPreview">
+        <div v-if="!isPreview" class="flexBlock">
           <app-basic-information
             :selected-data="selectedData"
             :fields-data="fieldsData"
@@ -46,6 +46,7 @@
               :fields-data="fieldsData"
               :procedure-id-data="procedureIdData"
               :is-created-procedure="isCreatedProcedure"
+              :remove-block="removeBlock"
           ></app-security-and-guarantees>
           <app-invitation-to-participate
               :selected-data="selectedData"
@@ -56,11 +57,16 @@
           <app-payment-and-delivery
               :selected-data="selectedData"
               :fields-data="fieldsData"
+              :procedure-id-data="procedureIdData"
               :is-created-procedure="isCreatedProcedure"
+              :remove-block="removeBlock"
           ></app-payment-and-delivery>
           <app-additional-information
               :selected-data="selectedData"
               :is-created-procedure="isCreatedProcedure"
+              :fields-data="fieldsData"
+              :procedure-id-data="procedureIdData"
+              :remove-block="removeBlock"
           ></app-additional-information>
           <app-documentation
               :selected-data="selectedData"
@@ -68,6 +74,8 @@
               :is-created-procedure="isCreatedProcedure"
               :fields-data="fieldsData"
               :set-files="setFiles"
+              :procedure-id-data="procedureIdData"
+              :remove-block="removeBlock"
           ></app-documentation>
           <app-contact-information
               :selected-data="selectedData"
@@ -89,6 +97,8 @@
             v-if="isPreview"
             :data="selectedData"
             :calculated-data="procedureIdData"
+            :fields-data="fieldsData"
+            :procedure-id-data="procedureIdData"
             :validation="validation"
             :publish="publish"
             :uncheck-preview="uncheckPreview"
@@ -143,6 +153,12 @@ export default {
   data() {
     return {
       fieldsData: {
+        hideBlock: {
+          payment_info: false,
+          documentation: false,
+          additional_info: false,
+          application_security: false,
+        },
         markSize: [],
         tenderTradingFormat: [],
         tenderTradingType: [],
@@ -567,6 +583,9 @@ export default {
     }
   },
   methods: {
+    removeBlock(key) {
+      this.fieldsData.hideBlock[key] = !this.fieldsData.hideBlock[key]
+    },
     changeLotsCount(event) {
       if(event.id === 0) {
         this.selectedData.positions.map((item) => {
@@ -645,7 +664,6 @@ export default {
           data.guarantee && this.fieldsData.amountOfCollateral.find(x => x.id === data.guarantee.application_collateral.calc_amount)
       const blocking_period_daysA =
           data.guarantee && this.fieldsData.blockingPeriodDays.find(x => x.id === parseInt(data.guarantee.application_collateral.blocking_period))
-
       this.selectedData = {
         ...this.selectedData,
         currency,
@@ -655,9 +673,9 @@ export default {
         tender_trading_type,
         alternative_applications,
         stages_of_the_procurement_procedure,
-        securing_the_application: data.guarantee.application_ensuring,
         tender_available,
         id: data.id,
+        securing_the_application: this.get(data, 'guarantee.application_ensuring'),
         item_description: this.get(data, 'purchase_subject.description'),
         addition_information: data.addition_information,
         purchase_positional: this.parseBoolToNumber(this.get(data, 'purchase_subject.positional_purchase')),
@@ -699,6 +717,7 @@ export default {
           percentage_of_the_starting_price: this.get(data, 'guarantee.application_collateral.percent_of_init_price'),
         },
       }
+
       this.selectedData.positions = []
       if (data.purchase_subject.products.length) {
         data.purchase_subject.products.map((item, index) => {
@@ -993,7 +1012,13 @@ export default {
       this.selectedData.fields[id].isSave = true
     },
     filesValidate() {
-      if (!this.selectedData.file.length) {
+      if (
+          this.procedureIdData.procedureType === 'Commercial'
+            ? !this.fieldsData.hideBlock.documentation
+            : Array.isArray(this.selectedData.file)
+              ? !this.selectedData.file.length
+              : !this.selectedData.file
+      ) {
         this.isNotFiles = true
         return false
       }
@@ -1046,7 +1071,8 @@ export default {
         publication_date: this.parseDate(this.selectedData.publication_date),
         purchase_currency: this.get(this.selectedData, 'currency.id'),
         publication_allowed: Number(toPublish),
-        documents: this.selectedData.file,
+        documents: [],
+        old_documents: [],
         purchase_subject: {
           description: this.selectedData.item_description,
           lots_number: this.get(this.selectedData, 'count_lots.id'),
@@ -1067,6 +1093,15 @@ export default {
           delivery_address: this.get(this.selectedData, 'applications_delivery_address.id'),
         },
         additional_fields: [],
+      }
+
+      if (this.selectedData.file && this.selectedData.file[0] && this.selectedData.file[0].size) {
+        formData.documents = this.selectedData.file
+      }
+      if (this.selectedData.file && this.selectedData.file.length) {
+        this.selectedData.file.map((item) => {
+          formData.old_documents.push(item.id)
+        })
       }
       if (
           this.procedureIdData.procedureType !== 'Query' &&
@@ -1243,6 +1278,19 @@ export default {
         })
       }
 
+      if (this.fieldsData.hideBlock.payment_info) {
+        formData.payment_and_delivery = {}
+      }
+      if (this.fieldsData.hideBlock.documentation) {
+        formData.file = {}
+      }
+      if (this.fieldsData.hideBlock.additional_info) {
+        formData.addition_information = {}
+      }
+      if (this.fieldsData.hideBlock.application_security) {
+        formData.guarantee = {}
+      }
+
       const formDataObj = this.objectToFormData(formData)
       window.openLoader()
       this.sendProcedure(formDataObj, this.selectedData.id)
@@ -1276,6 +1324,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.flexBlock {
+  display: flex;
+  flex-direction: column;
+  .hideIt {
+    order: 10;
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      background: rgba(white, 0.5);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9;
+    }
+  }
+}
 .procedure-new {
   margin-bottom: 20px;
 }

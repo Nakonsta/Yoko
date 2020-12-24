@@ -138,7 +138,7 @@
               label="Сумма за позицию"
           ></text-input>
         </div>
-        <div v-if="key !== 0 || !isCreatedProcedure" class="col col-xs-12">
+        <div v-if="key !== 0 && !isCreatedProcedure" class="col col-xs-12">
           <div class="remove-btn" @click="removePosition(key)">
             <svg class="sprite-cancel"><use xmlns\:xlink="http://www.w3.org/1999/xlink" xlink\:href="\./img/sprite.svg#cancel"></use></svg>
           </div>

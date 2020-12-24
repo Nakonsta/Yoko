@@ -11,9 +11,10 @@
                     v-if="!viewType.isCreate && accreditation.status"
                     :status="accreditation.status"
                 ></accreditations-steps>
+                <accreditationsMessage v-if="viewType.isCreate" />
                 <accreditations-title
                     :title="`Заявка на аккредитацию ${viewType.isCreate ? '' : `№${id}`}`"
-                    margin="32px 0 0 0"
+                    :margin="!viewType.isCreate && accreditation.status ? '32px 0 0 0' : '0'"
                 ></accreditations-title>
 
                 <div class="divider"></div>
@@ -21,78 +22,25 @@
             <div class="accreditation-details__content">
                 <accreditation-details-card
                     title="Соглашение с оператором торгов"
-                    content="Настоящее Пользовательское соглашение (далее – Соглашение)
-                регулирует отношения по использованию единой системы электронной
-                торговли , доступ к которой осуществляется через всемирную
-                компьютерную сеть Интернет, в том числе, на сайте по адресу:
-                между Акционерным обществом , которое является юридическим
-                лицом, созданным на территории Российской Федерации и в
-                соответствии с законодательством Российской Федерации, с одной
-                стороны, и физическим/юридическим лицом, принявшим условия
-                настоящего Соглашения путём присоединения к настоящему
-                Соглашению в целом и безоговорочно, с другой стороны. Настоящее
-                Соглашение и отношения Сторон, возникшие из настоящего
-                Соглашения, регулируются законодательством Российской Федерации.
-
-                Настоящее Соглашение в соответствии со ст. 435 Гражданского
-                кодекса Российской Федерации является офертой - адресованной
-                любым физическим/юридическим лицам предложением заключить
-                Соглашение на указанных в нём условиях. Полное и безоговорочное
-                принятие условий настоящего Соглашения осуществляется в момент
-                заключения договора между Оператором и Участником. В свою
-                очередь, моментом заключения такого договора является совершение
-                Участником действий, направленных на использование
-                информационно-аналитической и торгово-операционной системы
-                электронной торговли , расположенной,в том числе, на сайте по
-                адресу: , путем поиска на сайте, просмотра сайта, регистрации на
-                сайте, направления сообщений через форму связи и т.д. Полный
-                перечень торговых площадок (расположенных на иных доменных
-                адресах), объединенных в единой системе электронной торговли
-                поименован на сайте по адресу . 
-								
-								В отношении порядка и условий
-                заключения настоящего Соглашения применяются нормы Гражданского
-                кодекса Российской Федерации, регулирующие порядок и условия
-                заключения договора присоединения (ст. 428 ГК РФ), направления
-                оферты и акцепта (ст. 435–444 ГК РФ)."
-                    :isAccepted="false"
+                    pdf="/content/sample.pdf"
+                    :isAccepted="accreditation.agreement"
                     :disabled="!viewType.isCreate"
+                    :hasError="errors.agreement"
+                    @on-agree="
+                        accreditation.agreement = $event
+                        errors.agreement = false
+                    "
                 ></accreditation-details-card>
                 <accreditation-details-card
                     title="Подтверждение отсутствия в РНП"
-                    content="Настоящее Пользовательское соглашение (далее – Соглашение)
-                регулирует отношения по использованию единой системы электронной
-                торговли , доступ к которой осуществляется через всемирную
-                компьютерную сеть Интернет, в том числе, на сайте по адресу:
-                между Акционерным обществом , которое является юридическим
-                лицом, созданным на территории Российской Федерации и в
-                соответствии с законодательством Российской Федерации, с одной
-                стороны, и физическим/юридическим лицом, принявшим условия
-                настоящего Соглашения путём присоединения к настоящему
-                Соглашению в целом и безоговорочно, с другой стороны. Настоящее
-                Соглашение и отношения Сторон, возникшие из настоящего
-                Соглашения, регулируются законодательством Российской Федерации.
-                Настоящее Соглашение в соответствии со ст. 435 Гражданского
-                кодекса Российской Федерации является офертой - адресованной
-                любым физическим/юридическим лицам предложением заключить
-                Соглашение на указанных в нём условиях. Полное и безоговорочное
-                принятие условий настоящего Соглашения осуществляется в момент
-                заключения договора между Оператором и Участником. В свою
-                очередь, моментом заключения такого договора является совершение
-                Участником действий, направленных на использование
-                информационно-аналитической и торгово-операционной системы
-                электронной торговли , расположенной,в том числе, на сайте по
-                адресу: , путем поиска на сайте, просмотра сайта, регистрации на
-                сайте, направления сообщений через форму связи и т.д. Полный
-                перечень торговых площадок (расположенных на иных доменных
-                адресах), объединенных в единой системе электронной торговли
-                поименован на сайте по адресу . В отношении порядка и условий
-                заключения настоящего Соглашения применяются нормы Гражданского
-                кодекса Российской Федерации, регулирующие порядок и условия
-                заключения договора присоединения (ст. 428 ГК РФ), направления
-                оферты и акцепта (ст. 435–444 ГК РФ)."
-                    :isAccepted="false"
+                    pdf="/content/sample.pdf"
+                    :isAccepted="accreditation.rnp"
                     :disabled="!viewType.isCreate"
+                    :hasError="errors.rnp"
+                    @on-agree="
+                        accreditation.rnp = $event
+                        errors.rnp = false
+                    "
                 ></accreditation-details-card>
 
                 <accreditation-details-select
@@ -107,14 +55,20 @@
                     <accreditation-details-checkbox
                         label="Поставщик"
                         :value="accreditation.provider_accreditation"
-                        @click="accreditation.provider_accreditation = $event"
+                        @click="
+                            accreditation.provider_accreditation = $event
+                            errors.noAccreditationType = false
+                        "
                         :disabled="!viewType.isCreate"
                         :hasError="errors.noAccreditationType"
                     ></accreditation-details-checkbox>
                     <accreditation-details-checkbox
                         label="Заказчик"
                         :value="accreditation.customer_accreditation"
-                        @click="accreditation.customer_accreditation = $event"
+                        @click="
+                            accreditation.customer_accreditation = $event
+                            errors.noAccreditationType = false
+                        "
                         :disabled="!viewType.isCreate"
                         :hasError="errors.noAccreditationType"
                     ></accreditation-details-checkbox>
@@ -163,10 +117,12 @@ import AccreditationDetailsSelect from '../../../components/admin/accreditations
 import AccreditationDetailsCheckbox from '../../../components/admin/accreditations/details/AccreditationDetailsCheckbox.vue'
 import AccreditationDetailsFileUploader from '../../../components/admin/accreditations/details/AccreditationDetailsFileUploader.vue'
 import AccreditationDetailsEmpty from '../../../components/admin/accreditations/details/AccreditationDetailsEmpty.vue'
+import accreditationsMessage from '../../../components/blocks/accreditationsMessage'
 
 export default {
     name: 'accreditation-details',
     components: {
+        accreditationsMessage,
         AccreditationsSteps,
         AccreditationsTitle,
         AccreditationDetailsSelect,
@@ -184,13 +140,17 @@ export default {
                 provider_accreditation: false,
                 customer_accreditation: false,
                 documents: {},
-                status: null
+                status: null,
+                rnp: false,
+                agreement: false
             },
             fileLabels: null,
             newFiles: {},
             errors: {
                 noCompany: false,
                 noAccreditationType: false,
+                rnp: false,
+                agreement: false,
                 files: {}
             }
         }
@@ -239,6 +199,7 @@ export default {
         },
         onSelect(value) {
             this.accreditation.entity_id = value.id
+            this.errors.noCompany = false
         },
         onFileUpload(file, key) {
             if (this.viewType.isCreate) {
@@ -246,13 +207,24 @@ export default {
             } else {
                 this.newFiles[key] = file
             }
+
+            this.errors.files[key] = false
+            this.errors = Object.assign({}, this.errors)
         },
         onFileRemove(file) {
-            Object.entries(this.newFiles).map(([key, value]) => {
-                if (value === file) {
-                    this.newFiles[key] = null
-                }
-            })
+            if (this.viewType.isCreate) {
+                Object.entries(this.accreditation.documents).map(([key, value]) => {
+                    if (value === file) {
+                        this.accreditation.documents[key] = null
+                    }
+                })
+            } else {
+                Object.entries(this.newFiles).map(([key, value]) => {
+                    if (value === file) {
+                        this.newFiles[key] = null
+                    }
+                })
+            }
         },
         validation(typeSend) {
             this.errors = {
@@ -270,6 +242,16 @@ export default {
 
             if (this.accreditation.entity_id === null) {
                 this.errors.noCompany = true
+                hasErrors = true
+            }
+
+            if (!this.accreditation.agreement) {
+                this.errors.agreement = true
+                hasErrors = true
+            }
+
+            if (!this.accreditation.rnp) {
+                this.errors.rnp = true
                 hasErrors = true
             }
 
@@ -328,6 +310,7 @@ export default {
             }
         },
         update() {
+            window.openLoader()
             const updateFiles = this.getNewUploadFiles()
             this.updateAccreditation(this.id, updateFiles)
                 .then(() => {
@@ -337,6 +320,7 @@ export default {
                 .catch(e => {
                     window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
                 })
+                .finally(() => window.closeLoader())
         },
         getNewUploadFiles() {
             const objFiles = {}
@@ -349,26 +333,22 @@ export default {
             return objFiles
         },
         send() {
+            window.openLoader()
             this.sendAccreditationCompany(this.objectToFormData(this.accreditation))
                 .then(() => {
                     window.notificationSuccess('Заявка на аккредитацию отправлена')
                     this.$router.replace('/personal/accreditations')
                 })
                 .catch(e => {
-                    if (e.response) {
-                        switch (e.response.data.message) {
-                            case 'Validation error':
-                                window.notificationError(
-                                    'Вы пытаетесь загрузить файлы неверного формата. Разрешенные форматы pdf, jpeg.'
-                                )
-                                break
-                            default:
-                                window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
-                        }
+                    if (e?.response?.data?.message ?? false) {
+                        window.notificationError(
+                            'Вы пытаетесь загрузить файлы неверного формата. Разрешенные форматы pdf, jpeg.'
+                        )
                     } else {
                         window.notificationError('Ошибка сервера. Попробуйте повторить позднее.')
                     }
                 })
+                .finally(() => window.closeLoader())
         }
     },
     created() {
@@ -386,12 +366,20 @@ export default {
 @import '../../../../assets/sass/mixins/mq';
 
 .accreditation-details {
-    padding: rem(80px) 0 rem(40px) !important;
+    padding: rem(40px) 0 rem(40px) !important;
     border-radius: 6px;
     background-color: #fff;
 
+    @media (max-width: 1024px) {
+        padding: rem(80px) 0 rem(40px) !important;
+    }
+
     &__header {
         padding: 0 rem(40px);
+
+        @include mq($until: mobileLandscape) {
+            padding: 0 rem(20px);
+        }
     }
 
     &__title {
@@ -405,6 +393,10 @@ export default {
 
     &__content {
         padding: 0 rem(40px);
+
+        @include mq($until: mobileLandscape) {
+            padding: 0 rem(20px);
+        }
     }
 
     &__checkboxes {
@@ -451,6 +443,7 @@ export default {
         margin: rem(48px) rem(40px) 0 rem(40px);
         background-color: $colorTurquoise;
         border: none;
+        outline: none;
         border-radius: 6px;
         transition: 0.3s;
 
@@ -458,6 +451,10 @@ export default {
         font-weight: 500;
         font-size: rem(14px);
         color: #ffffff;
+
+        @include mq($until: mobileLandscape) {
+            margin: rem(24px) rem(20px) 0 rem(20px);
+        }
 
         &:active,
         &:hover {

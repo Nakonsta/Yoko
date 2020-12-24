@@ -24,6 +24,7 @@ Inputmask.extendDefinitions({
 });
 Vue.directive('inputmask', {
     bind: function(el, binding) {
+        if( !binding || binding.value === false ) return;
         Inputmask(binding.value).mask(el);
     }
 });
