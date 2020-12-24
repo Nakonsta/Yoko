@@ -94,13 +94,30 @@
                 items: [],
                 totalItems: 0,
                 page: 1,
-                companies: [],
                 currentCompany: '',
             }
         },
         computed: {
             totalPages() {
                 return Math.ceil(this.totalItems / this.perPage)
+            },
+            companies() {
+                // список компаний пользователя
+                let companies = [];
+                switch( this.$store.getters.userRole ) {
+                    case 'buyer':
+                        companies = this.$store.getters.companyBuyer;
+                        break;
+                    case 'contractor':
+                        companies = this.$store.getters.companyContractor;
+                        break;
+                }
+                // обновляем фильтр - ставим нужную компанию
+                if( companies.length ) {
+                    this.currentCompany = companies[0].inn;
+                    this.currentFilter.inn = [this.currentCompany];
+                }
+                return companies;
             },
         },
         created() {
@@ -110,20 +127,6 @@
             if( this.searchQuery.length ) {
                 // если в урле есть запрос для поиска - ставим его
                 this.currentFilter.q = this.searchQuery;
-            }
-            // список компаний пользователя
-            switch( this.$store.getters.userRole ) {
-                case 'buyer':
-                    this.companies = this.$store.getters.companyBuyer;
-                    break;
-                case 'contractor':
-                    this.companies = this.$store.getters.companyContractor();
-                    break;
-            }
-            this.companies = this.$store.state.auth.user.companies;
-            if( this.companies.length ) {
-                this.currentCompany = this.companies[0].inn;
-                this.currentFilter.inn = [this.currentCompany];
             }
             function parseObjToArr(obj) {
                 const arr = [];
@@ -220,8 +223,10 @@
                                 if (newFilter[keyC]) {
                                     newFilter[keyC][key] = this.currentFilter[keyC][key];
                                 } else {
-                                    newFilter[keyC] = {};
-                                    newFilter[keyC][key] = this.currentFilter[keyC][key];
+                                    // newFilter[keyC] = {};
+                                    // newFilter[keyC][key] = this.currentFilter[keyC][key];
+                                    newFilter[keyC] = [];
+                                    newFilter[keyC].push(this.currentFilter[keyC][key]);
                                 }
                             }
                         }
@@ -339,11 +344,12 @@
         padding: 0 !important;
         background: transparent !important;
         &__add {
+            display: none;
             margin: 0 0 rem(24px);
             width: 100%;
-            @include mq($from: tablet) {
-                display: none;
-            }
+            //@include mq($from: tablet) {
+            //    display: none;
+            //}
         }
         &__search {
             margin: 0 0 rem(64px);
@@ -365,6 +371,21 @@
             width: calc(100% -  348px);
             @include mq($until: desktop) {
                 width: 100%;
+            }
+            > .btn {
+                margin: 0 0 rem(40px);
+                @include mq($until: desktop) {
+                    float: right;
+                }
+                @include mq($until: tablet) {
+                    float: none;
+                    display: block;
+                }
+            }
+            > .tabs {
+                @include mq($until: desktop) {
+                    clear: both;
+                }
             }
         }
     }

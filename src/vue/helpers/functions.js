@@ -51,10 +51,14 @@ export default {
             function appendFormData(data, root, formDataObj) {
                 root = root || ''
                 if (data instanceof File) {
-                    formDataObj.append(root, data)
+                    formDataObj.append(root, data);
+                } else if (data instanceof Date) {
+                    formDataObj.append(root, moment(data).format('DD.MM.YYYY'));
                 } else if (Array.isArray(data)) {
                     for (let i = 0; i < data.length; i++) {
-                        appendFormData(data[i], root + '[' + i + ']', formDataObj)
+                        if (data[i]) {
+                            appendFormData(data[i], root + '[' + i + ']', formDataObj)
+                        }
                     }
                 } else if (typeof data === 'object' && data) {
                     for (const key in data) {

@@ -67,6 +67,7 @@
     "glightbox": "^3.0.5",
     "inputmask": "^5.0.5",
     "js-cookie": "^2.2.1",
+    "lodash.clonedeep": "^4.5.0",
     "moment": "^2.29.1",
     "nouislider": "^14.2.0",
     "object-fit-images": "3.2.4",

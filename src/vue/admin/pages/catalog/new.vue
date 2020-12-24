@@ -656,7 +656,7 @@
                         </fieldset>
                         <fieldset class="files">
                             <div class="legend">Загрузить изображения</div>
-                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="" tag="div" :mode="validateFile">
+                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="markForSend.images"
                                         :preview="true"
@@ -1624,7 +1624,7 @@
                         </fieldset>
                         <fieldset class="files">
                             <div class="legend">Загрузить изображения</div>
-                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="" tag="div" :mode="validateFile">
+                            <ValidationProvider name="изображения" v-slot="{ errors, failed }" rules="required" tag="div" :mode="validateFile">
                                 <Uploader
                                         v-model="marksizeForSend.images"
                                         :preview="true"
@@ -1649,8 +1649,10 @@
 
 <script>
     import api from '../../../helpers/api';
+    import functions from '../../../helpers/functions';
+    import cloneDeep from 'lodash.clonedeep';
     import Uploader from "../../../components/uploder.vue";
-    import moment from 'moment';
+    // import moment from 'moment';
     import {ru} from "vuejs-datepicker/src/locale";
     import Multiple from "../../../components/forms/Multiple";
     import SelectInput from "../../../components/forms/Select";
@@ -1672,12 +1674,11 @@
             Multiple,
             Uploader,
         },
-        mixins: [api],
+        mixins: [api, functions],
         data: function () {
             return {
                 view: 'form',
                 company: null,
-                companies: [],
                 type: null,
                 types: [
                     {
@@ -1860,9 +1861,23 @@
                 },
             }
         },
+        computed: {
+            companies() {
+                // список компаний пользователя
+                let companies = [];
+                switch( this.$store.getters.userRole ) {
+                    case 'buyer':
+                        companies = this.$store.getters.companyBuyer;
+                        break;
+                    case 'contractor':
+                        companies = this.$store.getters.companyContractor;
+                        break;
+                }
+                return companies;
+            },
+        },
         created() {
             this.$emit('fullMode');
-            this.companies = this.$store.state.auth.loggedIn ? this.$store.state.auth.user.companies : [];
         },
         watch: {
             markImport: function (file) {
@@ -1958,47 +1973,54 @@
             fileRemove: function (field, layer, index) {
                 field.splice(index, 1);
             },
-            objectToFormData(data) {
-                const fData = new FormData();
-                function appendFormData(data, root, formDataObj) {
-                    root = root || '';
-                    if (data instanceof File) {
-                        formDataObj.append(root, data);
-                    } else if (data instanceof Date) {
-                        formDataObj.append(root, moment(data).format('DD.MM.YYYY'));
-                    } else if (Array.isArray(data)) {
-                        for (let i = 0; i < data.length; i++) {
-                            appendFormData(data[i], root + '[' + i + ']', formDataObj);
-                        }
-                    } else if (typeof data === 'object' && data) {
-                        for (const key in data) {
-                            // eslint-disable-next-line
-                            if (data.hasOwnProperty(key)) {
-                                if (root === '') {
-                                    appendFormData(data[key], key, formDataObj);
-                                } else {
-                                    appendFormData(data[key], root + '[' + key + ']', formDataObj);
-                                }
-                            }
-                        }
-                    } else if (data !== null && typeof data !== 'undefined') {
-                        formDataObj.append(root, data);
-                    }
-                }
-                appendFormData(data, '', fData);
-                return fData;
-            },
+            // objectToFormData(data) {
+            //     const fData = new FormData();
+            //     function appendFormData(data, root, formDataObj) {
+            //         root = root || '';
+            //         if (data instanceof File) {
+            //             formDataObj.append(root, data);
+            //         } else if (data instanceof Date) {
+            //             formDataObj.append(root, moment(data).format('DD.MM.YYYY'));
+            //         } else if (Array.isArray(data)) {
+            //             for (let i = 0; i < data.length; i++) {
+            //                 if (data[i]) {
+            //                     appendFormData(data[i], root + '[' + i + ']', formDataObj);
+            //                 }
+            //             }
+            //         } else if (typeof data === 'object' && data) {
+            //             for (const key in data) {
+            //                 // eslint-disable-next-line
+            //                 if (data.hasOwnProperty(key)) {
+            //                     if (root === '') {
+            //                         appendFormData(data[key], key, formDataObj);
+            //                     } else {
+            //                         appendFormData(data[key], root + '[' + key + ']', formDataObj);
+            //                     }
+            //                 }
+            //             }
+            //         } else if (data !== null && typeof data !== 'undefined') {
+            //             formDataObj.append(root, data);
+            //         }
+            //     }
+            //     appendFormData(data, '', fData);
+            //     return fData;
+            // },
             sendForm(evt) {
                 evt.preventDefault();
                 window.openLoader();
-                let fData = this.type.id === 'mark' ? this.markForSend : this.marksizeForSend;
+                // let fData = this.type.id === 'mark' ? this.markForSend : this.marksizeForSend;
+                let fData = cloneDeep(this.type.id === 'mark' ? this.markForSend : this.marksizeForSend);
                 for (let i=0; i< fData.documents.technical_conditions.length; i++) {
                     if (fData.documents.technical_conditions[i].file === null) {
                         fData.documents.technical_conditions.splice(i, 1);
                     }
+                }
+                for (let i=0; i< fData.documents.certificates.length; i++) {
                     if (fData.documents.certificates[i].file === null) {
                         fData.documents.certificates.splice(i, 1);
                     }
+                }
+                for (let i=0; i< fData.documents.guarantee_letters.length; i++) {
                     if (fData.documents.guarantee_letters[i].file === null) {
                         fData.documents.guarantee_letters.splice(i, 1);
                     }
@@ -2008,7 +2030,7 @@
                     this.sendCatalogMark(formDataObj)
                         .then(() => {
                             window.closeLoader();
-                            window.notificationSuccess('Ваша макра отправлен');
+                            window.notificationSuccess('Ваша марка отправлена на модерацию');
                         })
                         .catch((response) => {
                             console.log(response.message);
@@ -2019,7 +2041,7 @@
                     this.sendCatalogMarksize(formDataObj)
                         .then(() => {
                             window.closeLoader();
-                            window.notificationSuccess('Ваш макроразмер отправлен');
+                            window.notificationSuccess('Ваш макроразмер отправлен на модерацию');
                         })
                         .catch((response) => {
                             console.log(response.message);
