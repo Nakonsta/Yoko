@@ -37,6 +37,7 @@
                             :currentFilter="currentFilter"
                             :currentOrder="currentOrder"
                             @changeFilter="changeFilter"
+                            @getItems="getItems"
                         />
                         <paginate
                             v-if="isFirstLoad && totalPages"
@@ -256,6 +257,11 @@
                     .then((data) => {
                         this.isFirstLoad = true;
                         const items = data.data.data.items;
+                        if (!items.length && this.page > 1) {
+                            // если ничего не получили и у нас НЕ первая страница - грузим предыдущую
+                            this.changePagination(this.page-1);
+                            return;
+                        }
                         const companiesINN = [];
                         this.totalItems = data.data.data.total;
                         /* TODO: переделать запрос детальной информации о компании через новый роут (Отправка массива id компаний)

@@ -50,8 +50,11 @@
             </div>
         </div>
         <div class="procedures__items">
-            <div class="procedures__item procedures__item--empty" v-if="isFirstLoad && !items.length">
+            <div class="procedures__item procedures__item--empty" v-if="isFirstLoad && !items.length && !loading">
                 По вашему запросу ничего не найдено
+            </div>
+            <div class="procedures__item procedures__item--loading" v-if="!items.length && loading">
+
             </div>
             <div v-for="(item, index) in items" :key="item.id" class="procedures__item" v-if="isFirstLoad && items.length">
                 <div class="procedures__item-head">
@@ -102,10 +105,10 @@
                             <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                             <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
                             <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden', itemMarkExist(item, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
                                 <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
                             </a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'favorite')}">
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite', itemMarkExist(item, 'favorite') ? 'Процедура удалена из избранного' : 'Процедура добавлена в избранное')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'favorite')}">
                                 <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                             </a>
                         </div>
@@ -305,26 +308,36 @@
             itemMarkExist(item, mark) {
                 return item.marks.find((item) => item.mark_code === mark);
             },
-            updateItemMark(item, mark) {
+            updateItemMark(item, mark, msg) {
                 if( this.itemMarkExist(item, mark) ) {
                     this.removeMarketplaceProcedureMark(item.id, mark)
                         .then((response) => {
-                            // const mark = response.data.data;
+                            // const newMark = response.data.data;
                             item.marks.forEach((i, index) => {
                                 if (i.mark_code === mark) item.marks.splice(index, 1)
                             });
+                            window.notificationSuccess(msg);
+                            if (this.$store.getters.userRole === 'contractor' && ((mark === 'hidden' && this.view !== 'favorite') || (mark === 'favorite' && this.view === 'favorite'))) {
+                                this.$emit('getItems');
+                            }
                         })
                         .catch((e) => {
                             console.log(e);
+                            window.notificationError('Ошибка сервера');
                         });
                 } else {
                     this.addMarketplaceProcedureMark(item.id, mark)
                         .then((response) => {
-                            const mark = response.data.data;
-                            item.marks.push(mark);
+                            const newMark = response.data.data;
+                            item.marks.push(newMark);
+                            window.notificationSuccess(msg);
+                            if (this.$store.getters.userRole === 'contractor' && ((mark === 'hidden' && this.view !== 'favorite') || (mark === 'favorite' && this.view === 'favorite'))) {
+                                this.$emit('getItems');
+                            }
                         })
                         .catch((e) => {
                             console.log(e);
+                            window.notificationError('Ошибка сервера');
                         });
                 }
             },
@@ -479,6 +492,10 @@
 
             &--empty {
 
+            }
+
+            &--loading {
+                min-height: rem(200px);
             }
 
             @include mq($until: widescreen) {
