@@ -367,7 +367,7 @@ export default {
         fetchAccreditationSampleRequiredFiles() {
             return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/files`)
         },
-        fetchCompanyById(inn) {
+        fetchCompanyByInn(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
         },
         fetchMarksizeDetail(id) {

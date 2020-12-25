@@ -88,4 +88,28 @@ export default {
             width: 20%;
         }
     }
+
+    @include mq($until: widescreen) {
+        .table-cell {
+            &__title {
+                width: 30%;
+            }
+            &__quantity {
+                width: 15%;
+            }
+            &__measure {
+                width: 20%;
+            }
+            &__sum {
+                width: 20%;
+            }
+            &__vat {
+                width: 20%;
+            }
+            &__analogues {
+                width: 15%;
+            }
+        }
+    }
+
 </style>

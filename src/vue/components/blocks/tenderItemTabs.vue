@@ -141,10 +141,21 @@ export default {
                 line-height: 160%;
                 letter-spacing: 0.05em;
                 color: $colorGray;
+                white-space: nowrap;
                 cursor: pointer;
                 &:hover,
                 &:focus {
                     color: $colorTurquoise;
+                }
+            }
+        }
+    }
+
+    @include mq($until: widescreen) {
+        .tender-item {
+            &__tabs {
+                &-row {
+                    overflow-x: auto;
                 }
             }
         }

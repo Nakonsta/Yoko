@@ -185,7 +185,7 @@ export default {
                 })
         },
         getCompanyData() {
-            this.fetchCompanyById(this.tenderItemData.inn)
+            this.fetchCompanyByInn(this.tenderItemData.inn)
                 .then((response) => {
                     this.company = response.data.data;
                 })
@@ -238,6 +238,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    @import "../assets/sass/variables/variables";
+    @import "../assets/sass/variables/fluid-variables";
+    @import "../assets/sass/mixins/fluid-mixin";
+    @import "../assets/sass/mixins/mq";
+
     .tender-item {
         position: relative;
         &__top {
@@ -245,6 +250,14 @@ export default {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+        }
+    }
+
+    @include mq($until: desktop) {
+        .tender-item {
+            &__top {
+                flex-direction: column-reverse;
+            }
         }
     }
 </style>

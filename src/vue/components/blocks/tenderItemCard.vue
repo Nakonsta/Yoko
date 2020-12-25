@@ -401,4 +401,46 @@ export default {
             width: 20%;
         }
     }
+    @include mq($until: widescreen) {
+        .tender-item {
+            &__info {
+                width: calc(100% - 296px);
+            }
+            &__requsites {
+                flex-direction: column;
+            }
+            &__row {
+                flex-direction: column;
+            }
+        }
+        .table-cell {
+            &__title {
+                width: 30%;
+                padding-right: 0.75rem;
+            }
+            &__quantity {
+                width: 15%;
+            }
+            &__measure {
+                width: 20%;
+            }
+            &__sum {
+                width: 20%;
+            }
+            &__vat {
+                width: 20%;
+            }
+            &__analogues {
+                width: 15%;
+            }
+        }
+    }
+
+    @include mq($until: desktop) {
+        .tender-item {
+            &__info {
+                width: 100%;
+            }
+        }
+    }
 </style>

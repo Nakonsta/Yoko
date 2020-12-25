@@ -79,4 +79,17 @@ export default {
             }
         }
     }
+
+    @include mq($until: widescreen) {
+        .tender-item__menu {
+            width: 296px;
+        }
+    }
+
+    @include mq($until: desktop) {
+        .tender-item__menu {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+    }
 </style>
