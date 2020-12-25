@@ -203,11 +203,32 @@ export default {
         property_armor_options: "Броня",
         property_screen_view: "Вид экрана",
         property_gost: "ГОСТ",
+        property_filling: "Заполнение",
+        property_protective_cover: "Защитный покров",
+        property_isolation: "Изоляция",
+        property_execution: "Исполнение",
+        property_caliber: "Калибр",
+        property_material: "Материал",
+        property_material_fibers: "Материал волокон",
+        property_material_shell: "Материал оболочки",
+        property_armor_availability: "Наличие брони",
+        property_rated_operating_voltage: "Номинальное рабочее напряжение",
+        property_normative_document: "Нормативный документ",
+        property_use: "Применение",
+        property_insulation_resistance: "Сопротивление изоляции",
+        property_fiber_type: "Тип волокна",
+        property_veins_type: "Тип жил",
+        property_cable_type: "Тип кабеля",
+        property_laying_conditions: "Условия прокладки",
+        property_color_protective_hose_outer_sheath: "Цвет защитного шланга/наружной оболочки",
+        property_central_element: "Центральный элемент"
       },
       descriptionCharacters: {
-        property_veins_count: "Число жил",
-        property_section: "Сечение, мм2",
-        property_voltage: "Напряжение, кВ"
+        property_veins_type: "Токопроводящая жила",
+        property_isolation: "Изоляция",
+        property_screen_view: "Экран",
+        property_armor_availability: "Наличие брони",
+        property_material_shell: "Наружная оболчка"
       }
     }
   },
@@ -479,6 +500,15 @@ export default {
         ],
       }
       this.setCharacters(data);
+      this.setDocuments(data);
+
+      if (data.images) {
+        this.rootData.images = data.images;
+      }
+
+      if (data.marksizes) {
+        this.rootData.markoSize = data.marksizes;
+      }
     },
     setCharacters(data) {
       const characters = [];
@@ -503,7 +533,26 @@ export default {
       }
 
       if (descriptionCharacters.length) {
-        this.rootData.items = descriptionCharacters;
+        this.rootData.items = [{ title: "Описание", desc: data.description }, ...descriptionCharacters];
+      }
+    },
+    setDocuments(data) {
+      const {documents} = data;
+      if (documents) {
+        let result = [];
+        for (let key in documents) {
+          if (Array.isArray(documents[key])) {
+            result.push(...documents[key]);
+          }
+        }
+        result = result.map((item) => {
+          return {
+            id: item.id,
+            name: item.name,
+            link: item.url
+          }
+        });
+        this.rootData.links = result;
       }
     },
     handleTabLinkClick(link) {

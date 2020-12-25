@@ -2,7 +2,7 @@
   <div id="documents-mark">
     <div class="row">
       <div class="col col-lg-3 col-md-4 col-xs-12 mb2" v-for="(item, index) in root" :key="index">
-        <a class="btn btn--white btn--with-icon" :href="item.link">
+        <a class="btn btn--white btn--with-icon" :href="item.link" target="_blank">
           <svg class="sprite-download">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#download"></use>
           </svg>
