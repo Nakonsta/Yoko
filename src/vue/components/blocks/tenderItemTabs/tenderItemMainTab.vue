@@ -89,22 +89,22 @@
                             </div>
                             <div class="tender-item__lot-products">
                                 <div v-for="(product, key) in filterProductsToLots(tenderItemData.purchase_subject.products, index + 1)" :key="key" class="tender-item__lot-product-row">
-                                    <div class="tender-item__lot-product tender-item__lot-name">
+                                    <div class="tender-item__lot-product tender-item__lot-name" :data-name="product.marksize_id ? 'Наименование' : ''">
                                         {{ product.marksize_id }}
                                     </div>
-                                    <div class="tender-item__lot-product tender-item__lot-length">
+                                    <div class="tender-item__lot-product tender-item__lot-length" :data-name="product.quantity ? 'Длина' : ''">
                                         {{ product.quantity }}
                                     </div>
-                                    <div class="tender-item__lot-product tender-item__lot-measure">
+                                    <div class="tender-item__lot-product tender-item__lot-measure" :data-name="product.measure ? 'Единица' : ''">
                                         {{ measures[product.measure] }}
                                     </div>
-                                    <div class="tender-item__lot-product tender-item__lot-sum">
+                                    <div class="tender-item__lot-product tender-item__lot-sum" :data-name="product.price_for_one ? 'Сумма за позицию' : ''">
                                         {{ product.price_for_one }} &#8381;
                                     </div>
-                                    <div class="tender-item__lot-product tender-item__lot-vat">
+                                    <div class="tender-item__lot-product tender-item__lot-vat" :data-name="product.vat ? 'НДС' : ''">
                                         {{ product.vat }} %
                                     </div>
-                                    <div class="tender-item__lot-product tender-item__lot-analogue">
+                                    <div class="tender-item__lot-product tender-item__lot-analogue" data-name="Аналог">
                                         {{ product.availability_of_analogues ? 'Да' : 'Нет' }}
                                     </div>
                                 </div>

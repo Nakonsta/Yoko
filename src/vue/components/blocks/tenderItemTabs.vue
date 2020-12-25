@@ -160,6 +160,7 @@ export default {
             }
         }
     }
+
 </style>
 
 <style lang="scss">
@@ -348,4 +349,66 @@ export default {
             width: 67%;
         }
     }
+
+    @include mq($until: 575px) {
+        .tender-item {
+            &__tab {
+                &-row {
+                    flex-direction: column;
+                    &-name {
+                        width: 100%;
+                        &--company {
+                            padding-bottom: 0.5rem;
+                        }
+                    }
+                }
+            }
+            &__lot {
+                &-header {
+                    &-row {
+                        display: none;
+                    }
+                }
+                &-product {
+                    &-row {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+                &-name,
+                &-length,
+                &-measure,
+                &-sum,
+                &-vat,
+                &-analogue {
+                    position: relative;
+                    padding: rem(8px) 0 rem(8px) rem(155px);
+                    width: 100%;
+                    &::before {
+                        content: attr(data-name);
+                        position: absolute;
+                        top: rem(8px);
+                        left: 0;
+                        font-size: rem(14px);
+                        font-weight: 500;
+                        color: $colorGray;
+                    }
+                }
+            }
+            &__file {
+                &-header {
+                    &-row {
+                        display: none;
+                    }
+                }
+                &-item {
+                    &-row {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+            }
+        }
+    }
+
 </style>

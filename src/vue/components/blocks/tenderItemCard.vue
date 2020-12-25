@@ -443,4 +443,27 @@ export default {
             }
         }
     }
+
+    @include mq($until: 575px) {
+        .tender-item {
+            &__main {
+                flex-direction: column;
+            }
+            &__products {
+                &-actions {
+                    flex-direction: column-reverse;
+                }
+                &-apply {
+                    width: 100%;
+                    margin-bottom: 1rem;
+                }
+                &-table {
+                    padding-top: 2rem;
+                }
+                &-thead {
+                    display: none;
+                }
+            }
+        }
+    }
 </style>
