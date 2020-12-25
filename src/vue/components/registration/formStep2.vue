@@ -285,7 +285,7 @@ export default {
               this.getRegisteredCompany(this.companyId.id)
             } else {
               const inn = this.dataForm.inn.replace(/\s/g, '')
-
+              window.openLoader()
               this.fetchCompanyByInn(inn)
                 .then((response) => {
                   const company = response.data.data
@@ -300,6 +300,7 @@ export default {
                   } else {
                     this.$emit('newStep', 3)
                   }
+                  window.closeLoader()
                 })
                 .catch((e) => {
                   if (e.response.status === 404) {
@@ -308,22 +309,6 @@ export default {
                     window.notificationError('Ошибка сервера. Ошибка проверки ИНН')
                   }
                 })
-
-              // this.fetchInn(inn)
-              //     .then(({data}) => {
-              //       const arrInn = data.data.elements
-              //       const isOldCompany = arrInn.find((item) => item.inn === inn)
-              //       if (isOldCompany) {
-              //         this.dataForm.oldCompany = '1'
-              //         this.companyId = isOldCompany.id
-              //         this.getRegisteredCompany(this.companyId)
-              //       } else {
-              //         this.$emit('newStep', 3)
-              //       }
-              //     })
-              //     .catch((response) => {
-              //       window.notificationError('Ошибка сервера. Ошибка проверки ИНН')
-              //     })
             }
           }
         })
