@@ -268,6 +268,7 @@ export default {
       }
     },
     prevStep() {
+      this.$emit('resetCompany', 2)
       this.$emit('newStep', 2)
     },
     attachApplication(evt) {
