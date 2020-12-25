@@ -245,18 +245,18 @@ export default {
                 hasErrors = true
             }
 
-            if (!this.accreditation.agreement) {
-                this.errors.agreement = true
-                hasErrors = true
-            }
-
-            if (!this.accreditation.rnp) {
-                this.errors.rnp = true
-                hasErrors = true
-            }
-
+            let filesSize = 0
             if (this.viewType.isCreate) {
-                let filesSize = 0
+                if (!this.accreditation.agreement) {
+                    this.errors.agreement = true
+                    hasErrors = true
+                }
+
+                if (!this.accreditation.rnp) {
+                    this.errors.rnp = true
+                    hasErrors = true
+                }
+
                 Object.entries(this.accreditation.documents).forEach(([key, document]) => {
                     if (!(document instanceof File)) {
                         this.errors.files[key] = true
@@ -265,12 +265,7 @@ export default {
                         filesSize += document.size
                     }
                 })
-
-                if (!this.checkAllowFileSize(filesSize)) {
-                    hasErrors = true
-                }
             } else {
-                let filesSize = 0
                 Object.entries(this.newFiles).forEach(([key, file], i) => {
                     if (!(file instanceof File) && !this.accreditation.documents[i].file.accepted) {
                         this.errors.files[key] = true
@@ -281,10 +276,10 @@ export default {
                         }
                     }
                 })
+            }
 
-                if (!this.checkAllowFileSize(filesSize)) {
-                    hasErrors = true
-                }
+            if (!this.checkAllowFileSize(filesSize)) {
+                hasErrors = true
             }
 
             if (!hasErrors) {
