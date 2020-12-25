@@ -53,6 +53,12 @@
                     <div class="tender-item__actions-block">
                         <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                         <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
+                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
+                            <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
+                        </a>
+                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(tenderItemData, 'hidden')" :class="{active: itemMarkExist(tenderItemData, 'hidden')}">
+                            <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
+                        </a>
                     </div>
                 </div>
                 <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.start_price" class="tender-item__start-price">
@@ -85,7 +91,9 @@
         </div>
         <div class="tender-item__products">
             <div class="tender-item__products-actions">
-                <span @click="isProductsShown = !isProductsShown" class="tender-item__products-show">{{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}</span>
+                <span @click="isProductsShown = !isProductsShown" :class="[isProductsShown ? '': 'tender-item__products-show--hided', 'tender-item__products-show']">
+                    {{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}
+                </span>
                 <a href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
             </div>
             <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.products" class="tender-item__products-table">
@@ -125,6 +133,7 @@
 </template>
 
 <script>
+import api from '../../helpers/api'
 import Actions from './actions.vue'
 import TenderItemProductCard from './tenderItemProductCard.vue'
 
@@ -150,6 +159,8 @@ export default {
         Actions,
         TenderItemProductCard,
     },
+
+    mixins: [api],
     
     data() {
         return {
@@ -188,7 +199,33 @@ export default {
                 return status.name;
             }
             return item.status;
-        }
+        },
+        itemMarkExist(item, mark) {
+            return item.marks.find((item) => item.mark_code === mark);
+        },
+        updateItemMark(item, mark) {
+            if( !this.itemMarkExist(item, mark) ) {
+                this.addMarketplaceProcedureMark(item.id, mark)
+                    .then((response) => {
+                        const mark = response.data.data;
+                        item.marks.push(mark);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            } else {
+                this.removeMarketplaceProcedureMark(item.id, mark)
+                    .then((response) => {
+                        const mark = response.data.data;
+                        item.marks.forEach((i, index) => {
+                            if (i.mark_code === mark) item.marks.splice(index, 1)
+                        });
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            }
+        },
     }
 }
 </script>
@@ -311,6 +348,7 @@ export default {
                 position: relative;
                 padding-right: rem(18px);
                 cursor: pointer;
+                min-width: 150px;
                 &::after {
                     content: '';
                     position: absolute;
@@ -322,6 +360,10 @@ export default {
                     top: 50%;
                     right: 0;
                     transform: translateY(-50%);
+                    transition: all .5s ease-out;
+                }
+                &--hided::after {
+                    transform: translateY(-50%) rotate(180deg);
                 }
             }
             &-table {

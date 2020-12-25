@@ -234,6 +234,9 @@ export default {
                 font-size: rem(14px);
                 line-height: 160%;
                 border-bottom: 1px solid $borderColor;
+                &:last-child {
+                    border: none;
+                }
             }
         }
     }
