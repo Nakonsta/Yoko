@@ -555,6 +555,7 @@
                                 <Uploader
                                         v-model="item.file"
                                         :preview="true"
+                                        :class="{error: failed}"
                                         extensions=".pdf, .jpg, .png"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
                                 />
@@ -590,6 +591,7 @@
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
+                                        :class="{error: failed}"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
                                         :disabled="markForSend.documents.guarantee_letters[0].file !== null"
                                 />
@@ -611,6 +613,7 @@
                                         <div class="field__range-from">
                                             <DateInput
                                                     placeholder="Дата начала"
+                                                    validationName="дата начала"
                                                     v-model="item.properties.date_start"
                                                     :disabledFrom="item.properties.date_end"
                                                     :disabledTo="picker.disabledTo"
@@ -623,6 +626,7 @@
                                         <div class="field__range-to">
                                             <DateInput
                                                     placeholder="Дата окончания"
+                                                    validationName="дата окончания"
                                                     v-model="item.properties.date_end"
                                                     :disabledFrom="picker.disabledFrom"
                                                     :disabledTo="item.properties.date_start"
@@ -648,6 +652,7 @@
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
+                                        :class="{error: failed}"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
                                         :disabled="markForSend.documents.certificates[0].file !== null"
                                 />
@@ -661,6 +666,7 @@
                                         v-model="markForSend.images"
                                         :preview="true"
                                         extensions=".jpg, .png"
+                                        :class="{error: failed}"
                                         :metatypes="['image/jpeg','image/png']"
                                         :max="2"
                                 />
@@ -668,7 +674,7 @@
                             </ValidationProvider>
                         </fieldset>
                         <div class="btns">
-                            <button type="submit" class="btn" :disabled="!valid">Добавить</button>
+                            <button type="submit" class="btn">Добавить</button>
                             <a href="/personal/" class="btn btn--bdr">Отменить</a>
                         </div>
                         <div class="form__note">Обратите внимание, добавленная вами марка отправится на модерацию</div>
@@ -1524,6 +1530,7 @@
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
+                                        :class="{error: failed}"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
                                 />
                                 <span v-show="failed" class="field__error">{{ errors[0] }}</span>
@@ -1558,6 +1565,7 @@
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
+                                        :class="{error: failed}"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
                                         :disabled="marksizeForSend.documents.guarantee_letters[0].file !== null"
                                 />
@@ -1579,6 +1587,7 @@
                                         <div class="field__range-from">
                                             <DateInput
                                                     placeholder="Дата начала"
+                                                    validationName="дата начала"
                                                     v-model="item.properties.date_start"
                                                     :disabledFrom="item.properties.date_end"
                                                     :disabledTo="picker.disabledTo"
@@ -1591,6 +1600,7 @@
                                         <div class="field__range-to">
                                             <DateInput
                                                     placeholder="Дата окончания"
+                                                    validationName="дата окончания"
                                                     v-model="item.properties.date_end"
                                                     :disabledFrom="picker.disabledFrom"
                                                     :disabledTo="item.properties.date_start"
@@ -1616,6 +1626,7 @@
                                         v-model="item.file"
                                         :preview="true"
                                         extensions=".pdf, .jpg, .png"
+                                        :class="{error: failed}"
                                         :metatypes="['application/pdf','image/jpeg','image/png']"
                                         :disabled="marksizeForSend.documents.certificates[0].file !== null"
                                 />
@@ -1629,6 +1640,7 @@
                                         v-model="marksizeForSend.images"
                                         :preview="true"
                                         extensions=".jpg, .png"
+                                        :class="{error: failed}"
                                         :metatypes="['image/jpeg','image/png']"
                                         :max="2"
                                 />
@@ -1636,7 +1648,7 @@
                             </ValidationProvider>
                         </fieldset>
                         <div class="btns">
-                            <button type="submit" class="btn" :disabled="!valid">Добавить</button>
+                            <button type="submit" class="btn">Добавить</button>
                             <a href="/personal/" class="btn btn--bdr">Отменить</a>
                         </div>
                         <div class="form__note">Обратите внимание, добавленный вами маркоразмер отправится на модерацию</div>
@@ -1678,6 +1690,7 @@
         data: function () {
             return {
                 view: 'form',
+                scrollToErrorInstance: null,
                 company: null,
                 type: null,
                 types: [
@@ -1981,6 +1994,7 @@
             //             formDataObj.append(root, data);
             //         } else if (data instanceof Date) {
             //             formDataObj.append(root, moment(data).format('DD.MM.YYYY'));
+            //             formDataObj.append(root, moment(data).format('DD.MM.YYYY'));
             //         } else if (Array.isArray(data)) {
             //             for (let i = 0; i < data.length; i++) {
             //                 if (data[i]) {
@@ -2007,48 +2021,57 @@
             // },
             sendForm(evt) {
                 evt.preventDefault();
-                window.openLoader();
-                // let fData = this.type.id === 'mark' ? this.markForSend : this.marksizeForSend;
-                let fData = cloneDeep(this.type.id === 'mark' ? this.markForSend : this.marksizeForSend);
-                for (let i=0; i< fData.documents.technical_conditions.length; i++) {
-                    if (fData.documents.technical_conditions[i].file === null) {
-                        fData.documents.technical_conditions.splice(i, 1);
+                this.$refs.form.validate().then((res) => {
+                    if (res) {
+                        window.openLoader();
+                        // let fData = this.type.id === 'mark' ? this.markForSend : this.marksizeForSend;
+                        let fData = cloneDeep(this.type.id === 'mark' ? this.markForSend : this.marksizeForSend);
+                        for (let i=0; i< fData.documents.technical_conditions.length; i++) {
+                            if (fData.documents.technical_conditions[i].file === null) {
+                                fData.documents.technical_conditions.splice(i, 1);
+                            }
+                        }
+                        for (let i=0; i< fData.documents.certificates.length; i++) {
+                            if (fData.documents.certificates[i].file === null) {
+                                fData.documents.certificates.splice(i, 1);
+                            }
+                        }
+                        for (let i=0; i< fData.documents.guarantee_letters.length; i++) {
+                            if (fData.documents.guarantee_letters[i].file === null) {
+                                fData.documents.guarantee_letters.splice(i, 1);
+                            }
+                        }
+                        const formDataObj = this.objectToFormData(fData);
+                        if( this.type.id === 'mark' ) {
+                            this.sendCatalogMark(formDataObj)
+                                .then(() => {
+                                    window.closeLoader();
+                                    window.notificationSuccess('Ваша марка отправлена на модерацию');
+                                })
+                                .catch((response) => {
+                                    console.log(response.message);
+                                    window.closeLoader();
+                                    window.notificationError('Ошибка сервера');
+                                });
+                        } else {
+                            this.sendCatalogMarksize(formDataObj)
+                                .then(() => {
+                                    window.closeLoader();
+                                    window.notificationSuccess('Ваш макроразмер отправлен на модерацию');
+                                })
+                                .catch((response) => {
+                                    console.log(response.message);
+                                    window.closeLoader();
+                                    window.notificationError('Ошибка сервера');
+                                });
+                        }
+                    } else {
+                        clearInterval(this.scrollToErrorInstance)
+                        this.scrollToErrorInstance = setTimeout(() => {
+                            this.scrollToError()
+                        }, 500)
                     }
-                }
-                for (let i=0; i< fData.documents.certificates.length; i++) {
-                    if (fData.documents.certificates[i].file === null) {
-                        fData.documents.certificates.splice(i, 1);
-                    }
-                }
-                for (let i=0; i< fData.documents.guarantee_letters.length; i++) {
-                    if (fData.documents.guarantee_letters[i].file === null) {
-                        fData.documents.guarantee_letters.splice(i, 1);
-                    }
-                }
-                const formDataObj = this.objectToFormData(fData);
-                if( this.type.id === 'mark' ) {
-                    this.sendCatalogMark(formDataObj)
-                        .then(() => {
-                            window.closeLoader();
-                            window.notificationSuccess('Ваша марка отправлена на модерацию');
-                        })
-                        .catch((response) => {
-                            console.log(response.message);
-                            window.closeLoader();
-                            window.notificationError('Ошибка сервера');
-                        });
-                } else {
-                    this.sendCatalogMarksize(formDataObj)
-                        .then(() => {
-                            window.closeLoader();
-                            window.notificationSuccess('Ваш макроразмер отправлен на модерацию');
-                        })
-                        .catch((response) => {
-                            console.log(response.message);
-                            window.closeLoader();
-                            window.notificationError('Ошибка сервера');
-                        });
-                }
+                });
             },
             validateFile() {
                 return { on: ['blur', 'input', 'change'] };
@@ -2065,6 +2088,11 @@
                     const wb = XLSX.read(bstr, {type:'binary'});
                     const ws = wb.Sheets[wb.SheetNames[0]];
                     const data = XLSX.utils.sheet_to_json(ws, {header:1}); // get array
+                    if (data.length<2) {
+                        window.closeLoader();
+                        this.view = 'form';
+                        return;
+                    }
                     const item = data[1]; // get item row
                     data.splice(0, 2); // delete head & item rows
                     data.splice(9); // delete all trash rows
@@ -2237,8 +2265,8 @@
                         window.closeLoader();
                         this.view = 'form';
                     } else {
-                        let newMark = item[1];
-                        if (this.marksizeForSend.mark !== newMark) {
+                        let newMark = item[1] || '';
+                        if (this.marksizeForSend.mark !== newMark && newMark.length) {
                             // импортировали НОВОЕ markname
                             if (!newMark.length) {
                                 // markname пустое

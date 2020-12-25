@@ -80,6 +80,8 @@
                                 @input="multiselectChange($event, item.id)"
                                 @addTag="multiselectAddTag"
                             >
+                                <span slot="noOptions">Список пуст</span>
+                                <span slot="noResult">Список пуст</span>
                             </multiselect>
                         </div>
                         <div class="body-container" v-if="item.type === 'search'">
@@ -97,10 +99,13 @@
                                 :allow-empty="true"
                                 :multiple="true"
                                 :taggable="true"
+                                :loading="item.loading"
                                 @input="multiselectChange($event, item.id)"
                                 @addTag="multiselectAddTag"
                                 @search-change="callFilterSearch(item.search, index, $event)"
                             >
+                                <span slot="noOptions">Список пуст</span>
+                                <span slot="noResult">Список пуст</span>
                             </multiselect>
                         </div>
                     </template>

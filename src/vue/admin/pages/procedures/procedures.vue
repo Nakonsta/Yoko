@@ -1,6 +1,6 @@
 <template>
     <div class="marketplace">
-        <router-link class="btn marketplace__add" to="/personal/procedures/new">Создать процедуру</router-link>
+        <router-link class="btn marketplace__add" to="/personal/procedures/new" v-if="this.$store.getters.userRole === 'buyer'">Создать процедуру</router-link>
         <div class="marketplace__flex">
             <div class="marketplace__filter" ref="filterContainer">
                 <filterList
@@ -16,10 +16,10 @@
                 />
             </div>
             <div class="marketplace__body">
-                <router-link to="/personal/procedures/new" class="btn">Создать новую процедуру</router-link>
+                <router-link to="/personal/procedures/new" class="btn" v-if="this.$store.getters.userRole === 'buyer'">Создать новую процедуру</router-link>
                 <div class="tabs tabs--line" v-if="companies.length">
                     <ul>
-                        <li v-for="company in companies" :key="company.id" :class="{active: company.inn === currentCompany}"><a href="javascript:{}" @click="changeCompany($event, company)">{{ company.name }}</a></li>
+                        <li v-for="company in companies" :key="company.id" :class="{active: company.inn === currentCompany.inn}"><a href="javascript:{}" @click="changeCompany($event, company)">{{ company.name }}</a></li>
                     </ul>
                 </div>
                 <div class="marketplace__search">
@@ -74,6 +74,12 @@
             marketplaceList,
         },
         mixins: [api, formatDate],
+        props: {
+            type: {
+                default: 'list',
+                type: String,
+            }
+        },
         data: function() {
             return {
                 searchQuery: '',
@@ -94,7 +100,7 @@
                 items: [],
                 totalItems: 0,
                 page: 1,
-                currentCompany: '',
+                currentCompany: null,
             }
         },
         computed: {
@@ -109,89 +115,116 @@
                         companies = this.$store.getters.companyBuyer;
                         break;
                     case 'contractor':
-                        companies = this.$store.getters.companyContractor;
+                        if (this.type === 'applications') {
+                            companies = this.$store.getters.companyContractor;
+                        }
                         break;
                 }
                 // обновляем фильтр - ставим нужную компанию
                 if( companies.length ) {
-                    this.currentCompany = companies[0].inn;
-                    this.currentFilter.inn = [this.currentCompany];
+                    this.currentCompany = companies[0];
+                    this.currentFilter.inn = [this.currentCompany.inn];
                 }
                 return companies;
             },
         },
+        watch: {
+            $route(to, from) {
+                this.init();
+            }
+        },
         created() {
-            this.$emit('fullMode');
-            let params = new URLSearchParams(window.location.search.substring(1));
-            this.searchQuery = params.get('q') || '';
-            if( this.searchQuery.length ) {
-                // если в урле есть запрос для поиска - ставим его
-                this.currentFilter.q = this.searchQuery;
-            }
-            function parseObjToArr(obj) {
-                const arr = [];
-                for (const key in obj) {
-                    arr.push({
-                        id: key,
-                        name: obj[key],
-                    });
-                }
-                return arr;
-            }
-            this.fetchMarketplaceProceduresFilter()
-                .then((response) => {
-                    let filterData = response.data.data.procedures;
-                    this.filter.status = parseObjToArr(filterData.values.status);
-                    this.filter.push({
-                        id: 'tender_trading_type',
-                        value: 'Тип процедуры',
-                        type: 'checkbox',
-                        values: parseObjToArr(filterData.values.tender_trading_type),
-                    });
-                    this.filter.push({
-                        id: 'publication_date',
-                        value: 'Дата размещения',
-                        type: 'period',
-                        values: '',
-                    });
-                    this.filter.push({
-                        id: 'status',
-                        value: 'Статус',
-                        type: 'checkbox',
-                        values: parseObjToArr(filterData.values.status),
-                    });
-                    this.filter.push({
-                        id: 'tender_trading_format',
-                        value: 'Формат',
-                        type: 'checkbox',
-                        values: parseObjToArr(filterData.values.tender_trading_format),
-                    });
-                    this.itemsTypes = parseObjToArr(filterData.values.tender_trading_type);
-                    this.itemsFormats = parseObjToArr(filterData.values.tender_trading_format);
-                    this.itemsStatuses = parseObjToArr(filterData.values.status);
-                    this.loadingFilter = false;
-                })
-                .catch((e) => {
-                    console.log(e);
-                    this.loadingFilter = false;
-                });
-            this.fetchRegions()
-                .then((response) => {
-                    this.filter.push({
-                        type: 'select',
-                        id: 'region_id',
-                        value: 'Регион',
-                        placeholder: 'Выбрать регион',
-                        values: response.data.data,
-                        currentValues: [],
-                    });
-                })
-                .catch((e) => {
-                    console.log(e)
-                });
-            this.getItems();
+            this.init();
         },
         methods: {
+            init() {
+                this.$emit('fullMode');
+                let companies = this.companies; // run companies computed
+                let params = new URLSearchParams(window.location.search.substring(1));
+                this.searchQuery = params.get('q') || '';
+                if( this.searchQuery.length ) {
+                    // если в урле есть запрос для поиска - ставим его
+                    this.currentFilter.q = this.searchQuery;
+                }
+                function parseObjToArr(obj) {
+                    const arr = [];
+                    for (const key in obj) {
+                        arr.push({
+                            id: key,
+                            name: obj[key],
+                        });
+                    }
+                    return arr;
+                }
+                this.filter = [];
+                this.fetchMarketplaceProceduresFilter()
+                    .then((response) => {
+                        let filterData = response.data.data.procedures;
+                        this.filter.push({
+                            id: 'tender_trading_type',
+                            value: 'Тип процедуры',
+                            type: 'checkbox',
+                            values: parseObjToArr(filterData.values.tender_trading_type),
+                        });
+                        this.filter.push({
+                            id: 'publication_date',
+                            value: 'Дата размещения',
+                            type: 'period',
+                            values: '',
+                        });
+                        if (this.type !== 'drafts') {
+                            // не выводим в фильтр статусы для черновиков
+                            this.filter.push({
+                                id: 'status',
+                                value: 'Статус',
+                                type: 'checkbox',
+                                values: parseObjToArr(filterData.values.status),
+                            });
+                        }
+                        this.filter.push({
+                            id: 'tender_trading_format',
+                            value: 'Формат',
+                            type: 'checkbox',
+                            values: parseObjToArr(filterData.values.tender_trading_format),
+                        });
+                        this.itemsTypes = parseObjToArr(filterData.values.tender_trading_type);
+                        this.itemsFormats = parseObjToArr(filterData.values.tender_trading_format);
+                        this.itemsStatuses = parseObjToArr(filterData.values.status);
+                        this.loadingFilter = false;
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        this.loadingFilter = false;
+                    });
+                if (!this.companies.length) {
+                    // если у нас список процедур ДЛЯ компаний - не добавляем в фильтр компании и регион ибо не имеет смысла
+                    this.fetchRegions()
+                        .then((response) => {
+                            this.filter.push({
+                                type: 'select',
+                                id: 'region_id',
+                                value: 'Регион',
+                                placeholder: 'Выбрать регион',
+                                values: response.data.data,
+                                currentValues: [],
+                            });
+                        })
+                        .catch((e) => {
+                            console.log(e)
+                        });
+                    this.filter.push({
+                        type: 'search',
+                        id: 'company_id',
+                        value: 'Компания',
+                        placeholder: 'Выбрать компанию',
+                        values: [],
+                        currentValues: [],
+                        search: 'searchCompanies',
+                        loading: false,
+                    });
+                }
+                this.getItems();
+            },
             changePagination(page) {
                 this.page = page;
                 this.getItems();
@@ -200,8 +233,8 @@
                 evt.preventDefault();
                 this.page = 1;
                 this.currentFilter = {};
-                this.currentCompany = company.inn;
-                this.currentFilter.inn = [this.currentCompany];
+                this.currentCompany = company;
+                this.currentFilter.inn = [this.currentCompany.inn];
                 this.getItems();
             },
             changeFilter() {
@@ -253,11 +286,13 @@
                 if( search && search.length ) {
                     // чистим фильтр
                     this.page = 1;
+                    let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
-                    this.currentFilter = {
-                        inn: [this.currentCompany],
-                        q: search,
-                    };
+                    this.currentFilter.showing = showing;
+                    if( this.companies.length ) {
+                        this.currentFilter.inn = [this.currentCompany.inn];
+                    }
+                    this.currentFilter.q = search;
                     // перерисовываем фильтр
                     this.filterKey++;
                 }
@@ -265,12 +300,18 @@
                 if( search === false ) {
                     // чистим фильтр
                     this.page = 1;
+                    let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
-                    this.currentFilter.inn = [this.currentCompany];
+                    this.currentFilter.showing = showing;
+                    if( this.companies.length ) {
+                        this.currentFilter.inn = [this.currentCompany.inn];
+                    }
                     // перерисовываем фильтр
                     this.filterKey++;
                 }
                 let filter = {
+                    draft: this.$store.getters.userRole === 'buyer' && this.type === 'drafts',
+                    has_applications: this.$store.getters.userRole === 'contractor' && this.type === 'applications',
                     filter: this.parseFilter(),
                     order: this.currentOrder,
                 };
@@ -316,13 +357,17 @@
             searchCompanies(index, q) {
                 clearInterval(this.searchCompanyCounter);
                 if (q) {
+                    this.cancelCompaniesRequest();
                     this.searchCompanyCounter = setTimeout(() => {
+                        this.filter[index].loading = true;
                         this.fetchCompaniesByName(q)
                             .then((response) => {
-                                this.filter[index].values = response.data.data;
+                                this.filter[index].loading = false;
+                                this.filter[index].values = response.data.data.elements;
                             })
                             .catch((e) => {
                                 console.log(e);
+                                this.filter[index].loading = false;
                                 this.filter[index].values = [];
                             });
                     }, 1000);

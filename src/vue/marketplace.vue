@@ -175,6 +175,7 @@
                 values: [],
                 currentValues: [],
                 search: 'searchCompanies',
+                loading: false,
             });
             this.getItems();
         },
@@ -230,10 +231,10 @@
                 if( search && search.length ) {
                     // чистим фильтр
                     this.page = 1;
+                    let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
-                    this.currentFilter = {
-                        q: search,
-                    };
+                    this.currentFilter.showing = showing;
+                    this.currentFilter.q = search;
                     // перерисовываем фильтр
                     this.filterKey++;
                 }
@@ -241,7 +242,9 @@
                 if( search === false ) {
                     // чистим фильтр
                     this.page = 1;
+                    let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
+                    this.currentFilter.showing = showing;
                     // перерисовываем фильтр
                     this.filterKey++;
                 }
@@ -291,13 +294,17 @@
             searchCompanies(index, q) {
                 clearInterval(this.searchCompanyCounter);
                 if (q) {
+                    this.cancelCompaniesRequest();
                     this.searchCompanyCounter = setTimeout(() => {
+                        this.filter[index].loading = true;
                         this.fetchCompaniesByName(q)
                             .then((response) => {
-                                this.filter[index].values = response.data.data;
+                                this.filter[index].loading = false;
+                                this.filter[index].values = response.data.data.elements;
                             })
                             .catch((e) => {
                                 console.log(e);
+                                this.filter[index].loading = false;
                                 this.filter[index].values = [];
                             });
                     }, 1000);

@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="procedures__view" v-if="$store.getters.userRole === 'contactor'">
+            <div class="procedures__view" v-if="$store.getters.userRole === 'contractor'">
                 <span>Показывать:</span>
                 <div class="dropdown">
                     <div class="dropdown__value">{{ viewList[view] }}</div>
@@ -101,11 +101,11 @@
                         <div class="procedures__item-btns">
                             <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                             <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
-                            <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contactor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden')" v-if="$store.getters.userRole === 'contactor'" :class="{active: itemMarkExist(item, 'hidden')}">
+                            <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
                                 <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
                             </a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite')" v-if="$store.getters.userRole === 'contactor'" :class="{active: itemMarkExist(item, 'favorite')}">
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'favorite')}">
                                 <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                             </a>
                         </div>
@@ -307,21 +307,21 @@
             },
             updateItemMark(item, mark) {
                 if( this.itemMarkExist(item, mark) ) {
-                    this.addMarketplaceProcedureMark(item.id, mark)
+                    this.removeMarketplaceProcedureMark(item.id, mark)
                         .then((response) => {
-                            const mark = response.data.data;
-                            item.marks.push(mark);
+                            // const mark = response.data.data;
+                            item.marks.forEach((i, index) => {
+                                if (i.mark_code === mark) item.marks.splice(index, 1)
+                            });
                         })
                         .catch((e) => {
                             console.log(e);
                         });
                 } else {
-                    this.removeMarketplaceProcedureMark(item.id, mark)
+                    this.addMarketplaceProcedureMark(item.id, mark)
                         .then((response) => {
                             const mark = response.data.data;
-                            item.marks.forEach((i, index) => {
-                                if (i.mark_code === mark) item.marks.splice(index, 1)
-                            });
+                            item.marks.push(mark);
                         })
                         .catch((e) => {
                             console.log(e);
@@ -351,7 +351,7 @@
     .procedures {
         display: flex;
         flex-direction: column;
-        min-height: 100%;
+        /*min-height: 100%;*/
         &__head {
             display: flex;
             justify-content: space-between;
