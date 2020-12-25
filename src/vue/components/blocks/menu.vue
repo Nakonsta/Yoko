@@ -179,10 +179,10 @@ export default {
                 title: 'Создание процедуры',
                 to: '/personal/procedures/new'
               },
-              // {
-              //   title: 'Черновики процедур',
-              //   to: '/personal'
-              // },
+              {
+                title: 'Черновики процедур',
+                to: '/personal/procedures/drafts'
+              },
             ]
           },
           {
@@ -228,6 +228,23 @@ export default {
               {
                 title: 'Добавление продукции',
                 to: '/personal/catalog/new'
+              },
+            ]
+          },
+          {
+            icon: 'mdi-buffer',
+            title: 'Торговые процедуры',
+            to: '/personal/procedures',
+            order: 1,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Список процедур',
+                to: '/personal/procedures'
+              },
+              {
+                title: 'Участие в процедурах',
+                to: '/personal/procedures/applications'
               },
             ]
           },

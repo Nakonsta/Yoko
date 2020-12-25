@@ -1,5 +1,5 @@
 <template>
-  <div class="uploader" :class="{'error': isNotFiles,'disabled': disabled}">
+  <div class="uploader" :class="{'error': isNotFiles || error,'disabled': disabled}">
     <div v-show="!files.length && (!$attrs.value || !$attrs.value.length)">
       <slot></slot>
       <div
@@ -152,6 +152,10 @@ export default {
   name: 'Uploader',
   mixins: [api],
   props: {
+    error: {
+      default: false,
+      type: Boolean
+    },
     disabled: {
       default: false,
       type: Boolean

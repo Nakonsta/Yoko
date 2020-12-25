@@ -26,7 +26,18 @@ const routes = [
   {
     path: '/personal/procedures',
     component: Procedures,
+  },
+  {
+    path: '/personal/procedures/drafts',
+    component: Procedures,
     meta: { role: 'buyer' },
+    props: { type: 'drafts' },
+  },
+  {
+    path: '/personal/procedures/applications',
+    component: Procedures,
+    meta: { role: 'contractor' },
+    props: { type: 'applications' },
   },
   {
     path: '/personal/procedures/:id',
