@@ -24,12 +24,6 @@
             Заявления не найдены
         </div>
 
-        <accreditations-list v-else :items="accreditations"></accreditations-list>
-
-        <div v-if="!loading && accreditations.length === 0" class="accreditations__empty-search">
-            Заявления не найдены
-        </div>
-
         <paginate
             v-if="totalPages"
             class="accreditations__pagination"
@@ -131,6 +125,7 @@ export default {
         padding: rem(13px) rem(33px);
         background-color: $colorTurquoise;
         border: none;
+        outline: none;
         border-radius: 6px;
         transition: 0.3s;
 
@@ -192,6 +187,7 @@ export default {
             width: 30px;
             height: 30px;
             margin: 0 rem(5px);
+            outline: none;
 
             &.disabled {
                 a {

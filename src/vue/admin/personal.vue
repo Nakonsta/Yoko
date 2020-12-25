@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div :key="$store.state.newUserDataSignal" class="main">
       <template v-if="$store.getters.userRole !== 'guest'">
         <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
 

@@ -24,7 +24,7 @@
                 placeholder="Поиск по разделам"
                 :input="filterMenuList"
             ></text-input>
-            <div class="nav-icons">
+            <div class="nav-icons" v-if="this.notEmptyAccreditedCompanies">
               <div
                   v-if="!search.isVisible"
                   :class="{ active: enabled }"
@@ -54,30 +54,48 @@
             <div
                 :key="i"
                 v-if="enabled ? true : item.isActive"
-                v-for="(item, i) in filteredMenuItems[role]"
+                v-for="(item, i) in hideMenu(filteredMenuItems[role])"
             >
-              <div
-                  class="nav-inner__item"
-                  :class="{ parent: item.subItems.length }"
-              >
+              <template>
+                <div
+                    v-if="item.subItems.length"
+                    class="nav-inner__item"
+                    :class="{ parent: item.subItems.length, active: activeIndex === i }"
+                    @click="showSubMenu(i)"
+                >
+                  <span
+                      class="nav-inner__link"
+                      :class="{disabled: !item.isActive}"
+                  >
+                    <span v-text="item.title"/>
+                  </span>
+                  <div v-if="item.subItems.length" class="open-menu">
+                    <svg class="sprite-arrow" :class="{active: activeIndex === i}">
+                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#arrow-right"/>
+                    </svg>
+                  </div>
+                  <div class="switch" v-if="enabled" @click="enabledSwitch(i)">
+                    <span class="slider" :class="{active: item.isActive}"></span>
+                  </div>
+                </div>
                 <router-link
+                    v-else
                     router
                     exact
                     :to="!enabled ? item.to : ''"
-                    class="nav-inner__link"
-                    :class="{disabled: !item.isActive}"
+                    class="nav-inner__item"
                 >
-                  <span v-text="item.title"/>
+                  <span
+                      class="nav-inner__link"
+                      :class="{disabled: !item.isActive}"
+                  >
+                    <span v-text="item.title"/>
+                  </span>
+                  <div class="switch" v-if="enabled" @click="enabledSwitch(i)">
+                    <span class="slider" :class="{active: item.isActive}"></span>
+                  </div>
                 </router-link>
-                <div v-if="item.subItems.length" class="open-menu" @click="showSubMenu(i)">
-                  <svg class="sprite-arrow" :class="{active: activeIndex === i}">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#arrow-right"/>
-                  </svg>
-                </div>
-                <div class="switch" v-if="enabled" @click="enabledSwitch(i)">
-                  <span class="slider" :class="{active: item.isActive}"></span>
-                </div>
-              </div>
+              </template>
               <div v-if="activeIndex === i" class="submenu">
                 <router-link
                     router
@@ -139,9 +157,10 @@ export default {
         buyer: [
           {
             icon: 'mdi-home',
-            title: 'Главная',
+            title: 'Рабочий стол пользователя',
             to: '/personal',
             order: 0,
+            availableAll: true, // ключ для пунктов меню, которые доступны пользователю без аккредитации компаний
             isActive: true,
             subItems: [],
           },
@@ -160,19 +179,24 @@ export default {
                 title: 'Создание процедуры',
                 to: '/personal/procedures/new'
               },
-              {
-                title: 'Черновики процедур',
-                to: '/personal'
-              },
+              // {
+              //   title: 'Черновики процедур',
+              //   to: '/personal'
+              // },
             ]
           },
           {
             icon: 'mdi-buffer',
-            title: 'Аккредитация',
+            title: 'Заявки на аккредитацию',
             to: '/personal/accreditations',
             order: 1,
+            availableAll: true,
             isActive: true,
             subItems: [
+              {
+                title: 'Список заявок',
+                to: '/personal/accreditations'
+              },
               {
                 title: 'Создание заявки',
                 to: '/personal/accreditations/new'
@@ -183,24 +207,12 @@ export default {
         contractor: [
           {
             icon: 'mdi-home',
-            title: 'Главная',
+            title: 'Рабочий стол пользователя',
             to: '/personal',
             order: 0,
+            availableAll: true,
             isActive: true,
             subItems: [],
-          },
-          {
-            icon: 'mdi-buffer',
-            title: 'Аккредитация',
-            to: '/personal/accreditations',
-            order: 1,
-            isActive: true,
-            subItems: [
-              {
-                title: 'Создание заявки',
-                to: '/personal/accreditations/new'
-              },
-            ]
           },
           {
             icon: 'mdi-buffer',
@@ -209,9 +221,31 @@ export default {
             order: 1,
             isActive: true,
             subItems: [
+              // {
+              //   title: 'Список продукции',
+              //   to: '/personal/catalog'
+              // },
               {
                 title: 'Добавление продукции',
                 to: '/personal/catalog/new'
+              },
+            ]
+          },
+          {
+            icon: 'mdi-buffer',
+            title: 'Заявки на аккредитацию',
+            to: '/personal/accreditations',
+            order: 1,
+            availableAll: true,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Список заявок',
+                to: '/personal/accreditations'
+              },
+              {
+                title: 'Создание заявки',
+                to: '/personal/accreditations/new'
               },
             ]
           },
@@ -220,6 +254,25 @@ export default {
       },
       filteredMenuItems: [],
     }
+  },
+  computed: {
+    notEmptyAccreditedCompanies() {
+      const role = this.$store.getters.userRole
+      const companyBuyer = this.$store.getters.companyBuyer
+      const companyContractor = this.$store.getters.companyContractor
+
+      switch (role) {
+        case 'buyer':
+          return !!companyBuyer.length
+          break
+        case 'contractor':
+          return !!companyContractor.length
+          break
+        default:
+          return false
+          break
+      }
+    },
   },
   mounted() {
     // todo: пока отключим сохранение позиций меню на время разработки
@@ -237,6 +290,12 @@ export default {
     this.filteredMenuItems = this.menuItems
   },
   methods: {
+    hideMenu(arr) {
+      if (!this.notEmptyAccreditedCompanies) {
+        return arr.filter(item => item.availableAll)
+      }
+      return arr
+    },
     showSubMenu(index) {
       if (this.activeIndex === index) {
         this.activeIndex = undefined
