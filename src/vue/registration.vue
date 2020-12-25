@@ -65,6 +65,7 @@ import demands from './components/registration/demands.vue'
 import gis from './components/registration/gis.vue'
 import api from './helpers/api'
 import authorizationMixins from "./helpers/authorizationMixins";
+import functions from "@/helpers/functions";
 
 export default {
   name: 'App',
@@ -75,7 +76,7 @@ export default {
     demands,
     gis,
   },
-  mixins: [api, authorizationMixins],
+  mixins: [api, authorizationMixins, functions],
   data() {
     return {
       step: 1,

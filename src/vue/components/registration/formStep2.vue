@@ -289,7 +289,6 @@ export default {
               this.fetchCompanyByInn(inn)
                 .then((response) => {
                   const company = response.data.data
-                  console.log(company)
                   if (company) {
                     if (company.id) {
                       this.dataForm.oldCompany = '1'
@@ -308,6 +307,7 @@ export default {
                   } else {
                     window.notificationError('Ошибка сервера. Ошибка проверки ИНН')
                   }
+                  window.closeLoader()
                 })
             }
           }
