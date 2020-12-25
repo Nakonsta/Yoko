@@ -1,7 +1,7 @@
 <template>
   <div v-if="this.rootData">
     <mark-info :root="rootData"></mark-info>
-    <div class="tabs tabs--line js-tabs company__nav js-more">
+    <div class="tabs tabs--line js-tabs js-more">
       <ul class="js-more__items">
         <li
           v-for="item in tabLinks"
@@ -538,7 +538,6 @@ export default {
     getMarksizeDetailData(id) {
       this.fetchMarksizeDetail(id).then((response) => {
         const marksizeDetailData = response.data.data;
-        console.log("Response marksize detail", marksizeDetailData);
         this.prepareMarksizeDetailData(marksizeDetailData);
       })
     }

@@ -1,16 +1,17 @@
 <template>
-  <div>
+  <div v-if="rootData">
     <mark-info :root="rootData"></mark-info>
-    <div class="tabs tabs--line js-tabs company__nav js-more">
+    <div class="tabs tabs--line js-tabs js-more">
       <ul class="js-more__items">
-        <li class="active js-more__item"><a href="#description">Описание</a></li>
-        <li class="js-more__item"><a href="#markosize">Маркоразмеры</a></li>
-        <li class="js-more__item"><a href="#characters">Характеристики</a></li>
-        <li class="js-more__item"><a href="#appointment">Назначение</a></li>
-        <li class="js-more__item"><a href="#documents">Документация</a></li>
-        <li class="js-more__item"><a href="#analogs">Аналоги</a></li>
-        <li class="js-more__item"><a href="#manufacturer">Производители</a></li>
-        <li class="js-more__item"><a href="#additional">Дополнительная информация</a></li>
+        <li
+          v-for="item in tabLinks"
+          :key="item.url"
+          @click="handleTabLinkClick(item.url)"
+          class="js-more__item"
+          :class="item.url === '#' + currentTab ? 'active' : ''"
+        >
+          <a :href="item.url">{{ item.name }}</a>
+        </li>
         <li class="js-more__btn hidden">
           <button type="button" aria-haspopup="true" aria-expanded="false">
             <svg class="sprite-dropdown">
@@ -58,6 +59,7 @@ import MarkAnalog from './components/blocks/catalog-details/mark-analogs.vue'
 import MarkManufacturer from './components/blocks/catalog-details/mark-manufacturer.vue'
 import MarkAdditional from './components/blocks/catalog-details/mark-additional.vue'
 import { initTabs } from '../assets/js/main/modules/more.js'
+import api from './helpers/api';
 
 export default {
   name: 'MarkDetails',
@@ -72,9 +74,10 @@ export default {
     MarkManufacturer,
     MarkAdditional,
   },
+  mixins: [api],
   data() {
     return {
-      companyId: null,
+      markId: null,
       rootData: null,
       lists: {
         quantity: [
@@ -120,21 +123,107 @@ export default {
         voltage: null,
         company: null,
       },
+      tabLinks: [
+        {
+          name: "Описание",
+          url: "#description"
+        },
+        {
+          name: "Маркоразмеры",
+          url: "#markosize"
+        },
+        {
+          name: "Характеристики",
+          url: "#characters"
+        },
+        {
+          name: "Назначение",
+          url: "#appointment"
+        },
+        {
+          name: "Документация",
+          url: "#documents"
+        },
+        {
+          name: "Аналоги",
+          url: "#analogs"
+        },
+        {
+          name: "Производители",
+          url: "#manufacturer"
+        },
+        {
+          name: "Дополнительная информация",
+          url: "#additional"
+        }
+      ],
+      currentTab: "description",
+      characterTitles: {
+        property_active_resistance_zero: "Активное сопротивление жил (нулевой)",
+        property_active_resistance_main: "Активное сопротивление жил (основных)",
+        property_active_resistance_plane: "Активное сопротивление при прокладке в плоскости",
+        property_active_resistance_triangle: "Активное сопротивление при прокладке треугольником",
+        property_active_resistance: "Активное сопротивление",
+        property_voltage_versions: "Варианты исполнения вольтажа",
+        property_outer_diameter: "Внешний диаметр",
+        property_resistance_wave: "Волновое сопротивление",
+        property_diameter_cabel: "Диаметр кабеля",
+        property_diameter: "Диаметр",
+        property_voltage_allowable: "Допустимое напряжение",
+        property_capacitive_conductivity: "Емкостная проводимость",
+        property_capacity: "Емкость",
+        property_inductive_resistance_cores_zero: "Индуктивное сопротивление жил (нулевой)",
+        property_inductive_resistance_cores_main: "Индуктивное сопротивление жил (основных)",
+        property_inductive_resistance_zero_sequence: "Индуктивное сопротивление нулевой последовательности",
+        property_inductive_resistance: "Индуктивное сопротивление",
+        property_inductive_resistance_plane: "Индуктивное сопротивление при прокладке в плоскости",
+        property_inductive_resistance_triangle: "Индуктивное сопротивление при прокладке треугольником",
+        property_inductive_resistance_direct_sequence: "Индуктивное сопротивление прямой последовательности",
+        property_class_flexibility_vein: "Класс гибкости жилы (in:1,2,3,4,5,6)",
+        property_fiber_count: "Количеств волокон",
+        property_veins_count: "Количество жил",
+        property_number_pairs: "Количество пар",
+        property_number_triples: "Количество троек",
+        property_number_fours: "Количество четверок",
+        property_number_elements: "Количество элементов",
+        property_material_vein: "Материал жилы (in:Медь,Алюминий)",
+        property_minimum_bending_radius: "Минимальный радиус изгиба",
+        property_voltage: "Напряжение",
+        property_optical_module: "Оптические модули",
+        property_crushing_force: "Раздавливающее усилие",
+        property_fiber_size: "Размер волокНА",
+        property_fibers_size: "Размер волокОН",
+        property_tensile_force: "Растягивающее усилие",
+        property_section: "Сечение",
+        property_cable_cross_section: "Сечение кабеля",
+        property_lifetime: "Срок службы",
+        property_construction_length: "Строительная длина",
+        property_application_type: "Тип применения",
+        property_electrical_resistance: "Электрическое сопротивление",
+        property_armor_options: "Броня",
+        property_screen_view: "Вид экрана",
+        property_gost: "ГОСТ",
+      },
+      descriptionCharacters: {
+        property_veins_count: "Число жил",
+        property_section: "Сечение, мм2",
+        property_voltage: "Напряжение, кВ"
+      }
     }
   },
   created() {
-    this.fillUserData()
-    this.getMarkData()
+    this.initMarkId();
+    this.getMarkData(this.markId);
   },
   mounted() {
     initTabs()
   },
   methods: {
-    fillUserData() {
-      this.companyId = document.querySelector('.section--mark').getAttribute('data-id');
+    initMarkId() {
+      this.markId = document.querySelector('.section--mark').getAttribute('data-id');
       return false;
     },
-    getMarkData() {
+    prepareMarkData(data) {
       this.rootData = {
         items: [
           {
@@ -387,8 +476,55 @@ export default {
             desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.',
             images: ['./content/catalog/cat-1.jpg', './content/catalog/cat-2.jpg', './content/catalog/cat-3.jpg', './content/catalog/cat-4.jpg', './content/catalog/cat-5.jpg', './content/catalog/cat-6.jpg']
           }
-        ]
+        ],
       }
+      this.setCharacters(data);
+    },
+    setCharacters(data) {
+      const characters = [];
+      const descriptionCharacters = [];
+      for (let key in data) {
+        if (key.includes("property_")) {
+          const name = this.characterTitles[key] ? this.characterTitles[key] : key;
+          const value = data[key];
+
+          if (value) {
+            characters.push({name, desc: value[0]});
+          }
+
+          if (this.descriptionCharacters[key]) {
+            descriptionCharacters.push({title: this.descriptionCharacters[key], desc: value[0]});
+          }
+        }
+      }
+
+      if (characters.length) {
+        this.rootData.characters = characters;
+      }
+
+      if (descriptionCharacters.length) {
+        this.rootData.items = descriptionCharacters;
+      }
+    },
+    handleTabLinkClick(link) {
+      if (link) {
+        this.currentTab = link.replace("#", "").trim();
+        let elLink = document.getElementById(this.currentTab);
+        /**
+         * На табы вешается какой-то js обработчик извне, который не дает показывать контент таба по клику.
+         * пришлось пока сдлеать через setTimout с нулевой задержкой.
+         */
+        setTimeout(function () {
+          elLink.style.display = "block";
+        }, 0);
+      }
+    },
+    getMarkData(id) {
+      this.fetchMark(id).then((response) => {
+        const markData = response.data.data;
+        this.prepareMarkData(markData);
+        console.log("Response mark data", markData);
+      });
     }
   }
 }
