@@ -13,6 +13,11 @@
                 под заказ
             </span>
         </div>
+        <div v-if="item.company_id" class="table-cell__quantity cable-info__quantity" data-name="Компания">
+          <span>
+            Компания {{ item.company_id }}
+          </span>
+        </div>
         <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : ''">
             <template v-if=" $store.state.auth.loggedIn">
                 <span v-if="item.price">

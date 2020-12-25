@@ -69,6 +69,17 @@ if (descriptionMarkBlock) {
     })
 }
 
+// Детальная страница маркоразмера
+import MarkSizeDetails from "./marksize-details.vue";
+const markSizeDetailsBlock = document.querySelector("#marksize-details");
+if (markSizeDetailsBlock) {
+    let appMarkSize = new Vue({
+        el: markSizeDetailsBlock,
+        store: store,
+        render:  function(h) { return h(MarkSizeDetails); }
+    })
+}
+
 // Регистрация
 import Registration from './registration.vue'
 const registrationBlock = document.querySelector('#registration');
