@@ -91,6 +91,7 @@ export default {
         },
         onSearch(value) {
             this.search = value
+            this.currentPage = 1
 
             clearTimeout(this.debounceTimer)
             this.debounceTimer = setTimeout(() => this.getAccreditations(), 500)
