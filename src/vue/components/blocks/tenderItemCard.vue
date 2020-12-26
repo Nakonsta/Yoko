@@ -52,7 +52,9 @@
                     </div>
                     <div class="tender-item__actions-block">
                         <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                        <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
+                        <a href="javascript:{}" title="Приложенные файлы" @click="changeChange('documents')">
+                            <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
+                        </a>
                         <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
                             <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                         </a>
@@ -224,6 +226,22 @@ export default {
                     .catch((e) => {
                         console.log(e);
                     });
+            }
+        },
+        changeChange(tab) {
+            window.location.hash = tab;
+            this.$emit('changeTab', tab);
+            this.scrollToDocuments();
+            return false;
+        },
+        scrollToDocuments() {
+            const tabs = document.querySelector('.tender-item__tabs');
+            if(tabs) {
+                const top = window.scrollY + tabs.getBoundingClientRect().y;
+                window.scrollTo({
+                    top: top - 60,
+                    behavior: "smooth"
+                });
             }
         },
     }
