@@ -355,19 +355,29 @@ export default {
         }
     }
 
-    @include mq($until: 575px) {
+    @include mq($until: widescreen) {
         .tender-item {
-            &__tab {
-                &-row {
-                    flex-direction: column;
-                    &-name {
-                        width: 100%;
-                        &--company {
-                            padding-bottom: 0.5rem;
-                        }
-                    }
+            &__file {
+                &-document {
+                    width: 60%;
                 }
             }
+        }
+    }
+
+    @include mq($until: desktop) {
+        .tender-item {
+            &__tab {
+                &-row-name {
+                    width: 250px;
+                    padding-right: 2rem;
+                }
+            }
+        }
+    }
+
+    @include mq($until: 767px) {
+        .tender-item {
             &__lot {
                 &-header {
                     &-row {
@@ -397,6 +407,22 @@ export default {
                         font-size: rem(14px);
                         font-weight: 500;
                         color: $colorGray;
+                    }
+                }
+            }
+        }
+    }
+
+    @include mq($until: 575px) {
+        .tender-item {
+            &__tab {
+                &-row {
+                    flex-direction: column;
+                    &-name {
+                        width: 100%;
+                        &--company {
+                            padding-bottom: 0.5rem;
+                        }
                     }
                 }
             }
