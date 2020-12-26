@@ -9,15 +9,15 @@
                                 Наименование
                             </div>
                             <div class="tender-item__file-header tender-item__file-date">
-                                Дата и время размещения
+                                Дата и время создания
                             </div>
                         </div>
                         <div class="tender-item__file-products">
                             <div v-for="(file, index) in tenderItemData.documents" :key="index" class="tender-item__file-item-row">
-                                <div class="tender-item__file-item tender-item__file-name">
+                                <div class="tender-item__file-item tender-item__file-name" :data-name="file.name ? 'Наименование' : ''">
                                     <a :href="file.url" class="tender-item__protocol-link" download>{{ file.name }}</a>
                                 </div>
-                                <div class="tender-item__file-item tender-item__file-date">
+                                <div class="tender-item__file-item tender-item__file-date" :data-name="file.created_at ? 'Создан' : ''">
                                     {{ formatDate(file.created_at) }}
                                 </div>
                             </div>

@@ -14,10 +14,10 @@
                         </div>
                         <div class="tender-item__log-items">
                             <div v-for="(log, index) in tenderItemData.logs" :key="index" class="tender-item__log-item-row">
-                                <div class="tender-item__log-item tender-item__log-date">
+                                <div class="tender-item__log-item tender-item__log-date" :data-name="log.created_at ? 'Дата' : ''">
                                     {{ formatDate(log.created_at) }}
                                 </div>
-                                <div class="tender-item__log-item tender-item__log-name">
+                                <div class="tender-item__log-item tender-item__log-name" :data-name="log.created_at ? 'Событие' : ''">
                                     {{ log.description }}
                                 </div>
                             </div>

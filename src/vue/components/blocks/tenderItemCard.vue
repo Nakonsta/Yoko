@@ -52,7 +52,7 @@
                     </div>
                     <div class="tender-item__actions-block">
                         <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                        <a href="javascript:{}" title="Приложенные файлы" @click="changeChange('documents')">
+                        <a href="javascript:{}" title="Приложенные файлы" @click="changeActualTab('documents')">
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
                         </a>
                         <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
@@ -228,7 +228,7 @@ export default {
                     });
             }
         },
-        changeChange(tab) {
+        changeActualTab(tab) {
             window.location.hash = tab;
             this.$emit('changeTab', tab);
             this.scrollToDocuments();

@@ -20,13 +20,13 @@
                         </div>
                         <div class="tender-item__protocol-block">
                             <div v-for="(protocol, key) in filterProtocols(tenderItemData.protocols, group.value)" :key="key" class="tender-item__protocol-item-row">
-                                <div class="tender-item__protocol-item tender-item__protocol-name">
+                                <div class="tender-item__protocol-item tender-item__protocol-name" :data-name="protocol.name ? 'Название' : ''">
                                     <a :href="protocol.url" class="tender-item__protocol-link" download>{{ protocol.name }}</a>
                                 </div>
                                 <!-- <div class="tender-item__protocol-item tender-item__protocol-edition">
                                     {{ protocol.quantity }}
                                 </div> -->
-                                <div class="tender-item__protocol-item tender-item__protocol-created">
+                                <div class="tender-item__protocol-item tender-item__protocol-created" :data-name="protocol.created_at ? 'Создан' : ''">
                                     {{ formatDate(protocol.created_at) }}
                                 </div>
                             </div>

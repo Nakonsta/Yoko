@@ -15,8 +15,8 @@
             <div :class="[activeTab == 'documents' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="documents">
                 <span @click="changeActiveTab('documents')" class="tender-item__tab-link">Документы</span>
             </div>
-            <div class="tender-item__tab-item">
-                <span class="tender-item__tab-link">Разъяснения</span>
+            <div :class="[activeTab == 'chat' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="chat">
+                <span @click="changeActiveTab('chat')" class="tender-item__tab-link">Разъяснения</span>
             </div>
             <div :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
                 <span @click="changeActiveTab('protocols')" class="tender-item__tab-link">Протоколы</span>
@@ -38,6 +38,9 @@
             <div :class="[activeTab == 'documents' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="documents">
                 <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
             </div>
+            <div :class="[activeTab == 'chat' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="chat">
+                <TenderItemChatTab />
+            </div>
             <div :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
                 <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
             </div>
@@ -55,6 +58,7 @@ import TenderItemLotsTab from './tenderItemTabs/tenderItemLotsTab.vue'
 import TenderItemDocumentsTab from './tenderItemTabs/tenderItemDocumentsTab.vue'
 import TenderItemProtocolsTab from './tenderItemTabs/tenderItemProtocolsTab.vue'
 import TenderItemLogsTab from './tenderItemTabs/tenderItemLogsTab.vue'
+import TenderItemChatTab from './tenderItemTabs/tenderItemChatTab.vue'
 
 export default {
     name: 'TenderItemTabs',
@@ -80,7 +84,8 @@ export default {
         TenderItemLotsTab,
         TenderItemDocumentsTab,
         TenderItemProtocolsTab,
-        TenderItemLogsTab
+        TenderItemLogsTab,
+        TenderItemChatTab
     },
 
     created() {
@@ -405,6 +410,84 @@ export default {
                     &-row {
                         flex-direction: column;
                         align-items: flex-start;
+                    }
+                }
+                &-name,
+                &-date {
+                    position: relative;
+                    padding: rem(8px) 0 rem(8px) rem(120px);
+                    width: 100%;
+                    word-wrap: break-word;
+                    &::before {
+                        content: attr(data-name);
+                        position: absolute;
+                        top: rem(8px);
+                        left: 0;
+                        font-size: rem(14px);
+                        font-weight: 500;
+                        color: $colorGray;
+                    }
+                }
+            }
+            &__protocol {
+                &-title {
+                    font-size: rem(18px);
+                    line-height: rem(24px);
+                }
+                &-header {
+                    &-row {
+                        display: none;
+                    }
+                }
+                &-item {
+                    &-row {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+                &-name,
+                &-created {
+                    position: relative;
+                    padding: rem(8px) 0 rem(8px) rem(120px);
+                    width: 100%;
+                    word-wrap: break-word;
+                    &::before {
+                        content: attr(data-name);
+                        position: absolute;
+                        top: rem(8px);
+                        left: 0;
+                        font-size: rem(14px);
+                        font-weight: 500;
+                        color: $colorGray;
+                    }
+                }
+            }
+            &__log {
+                &-header {
+                    &-row {
+                        display: none;
+                    }
+                }
+                &-item {
+                    &-row {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+                &-name,
+                &-date {
+                    position: relative;
+                    padding: rem(8px) 0 rem(8px) rem(120px);
+                    width: 100%;
+                    word-wrap: break-word;
+                    &::before {
+                        content: attr(data-name);
+                        position: absolute;
+                        top: rem(8px);
+                        left: 0;
+                        font-size: rem(14px);
+                        font-weight: 500;
+                        color: $colorGray;
                     }
                 }
             }
