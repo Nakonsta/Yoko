@@ -78,9 +78,13 @@ export default {
 
   mixins: [api, functions],
   props: {
-    companyId: {
+    marksizeId: {
       type: String,
       default: null
+    },
+    companyList: {
+      type: Array,
+      default: () => ([])
     }
   },
   data() {
@@ -117,15 +121,12 @@ export default {
       this.getCompanyData(this.currentFilter)
     },
     getCompanyData(filterValues = null) {
-      const companyInfo = {
-        company_id: this.companyId,
-        page: this.page,
-        filter: filterValues
-      }
-      const fData = this.objectToFormData(companyInfo)
-      this.fetchMarksizeQuantity(this.companyId)
+      this.fetchMarksizeQuantity(this.marksizeId)
         .then((response) => {
-          this.items = response.data.data.items;
+          const { items = [] } = response.data.data;
+          if (items.length && this.companyList.length) {
+            this.items = this.prepareItems(items);
+          }
           this.totalPages = Math.ceil(response.data.data.total / 8);
           this.isFirstLoad = true
           this.isLoading = false
@@ -133,6 +134,14 @@ export default {
         .catch((e) => {
           console.log(e)
         })
+    },
+    prepareItems(dataItems) {
+      const result = dataItems.map((item) => {
+        const company = this.companyList.find((company) => company.id === item.company_id);
+        item.company = company;
+        return item;
+      });
+      return result;
     },
     changeFilter(filtersData) {
       this.isLoading = true

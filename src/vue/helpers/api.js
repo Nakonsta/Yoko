@@ -216,6 +216,13 @@ export default {
                 },
             });
         },
+        fetchCompaniesByIds(ids) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`,{
+                params: {
+                    ids: ids.join(','),
+                },
+            });
+        },
         fetchCompanyReportForm(data) {
             return axios.post(`${process.env.API_URL_NOTICE_SERVICE}/api/`, data); // todo поставить url "проверка компании"
         },

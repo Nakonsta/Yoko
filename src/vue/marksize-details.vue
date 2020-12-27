@@ -25,7 +25,7 @@
       <mark-description :root="rootData"></mark-description>
     </div>
     <div class="tabs__content company__content" id="marksize-list">
-      <mark-marksize-list :company-id="marksizeId" />
+      <mark-marksize-list :marksize-id="marksizeId" :company-list="rootData.companies" />
     </div>
     <div class="tabs__content company__content" id="container">
       Тара
@@ -520,7 +520,15 @@ export default {
         this.rootData.links = result;
       }
 
-      this.companyId = data.companies[0].company_id;
+      if (data.companies.length) {
+        this.companyId = data.companies[0].company_id;
+        const ids = data.companies.map((item) => item.company_id);
+        this.fetchCompaniesByIds(ids).then((response) => {
+          this.rootData.companies = response.data.data.elements;
+        })
+      }
+
+
     },
     handleTabLinkClick(link) {
       if (link) {
