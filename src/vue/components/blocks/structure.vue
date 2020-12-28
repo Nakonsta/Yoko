@@ -1,6 +1,8 @@
 <script>
+    import api from "@/helpers/api";
     export default {
         name: 'Structure',
+        mixins: [api],
         template: '<div class="structure"></div>',
         data: function () {
             return {
@@ -17,77 +19,43 @@
             },
         },
         created() {
-            // todo получание иерархии компании из API
-            this.root = {
-                img: '/content/hierarchy-1.jpg',
-                title: 'ПАО "Группа Компаний ПИК"',
-                children: [
-                    {
-                        img: '/content/clients-1.jpg',
-                        title: 'ООО «ГлавСтрой Санкт-Петербург»',
-                        direction: 'vertical',
-                        children: [
-                            {
-                                img: '/content/clients-2.jpg',
-                                title: 'ООО «ГлавСтрой Санкт-Петербург»',
-                            },
-                            {
-                                img: '/content/clients-3.jpg',
-                                title: 'ПАО "Группа Компаний ПИК"',
-                            },
-                        ]
-                    },
-                    {
-                        img: '/content/clients-4.jpg',
-                        title: 'ПАО "Группа Компаний ПИК"',
-                        direction: 'vertical',
-                        children: [
-                            {
-                                img: '/content/clients-5.jpg',
-                                title: 'ООО «ГлавСтрой Санкт-Петербург»',
-                                direction: 'vertical',
-                                children: [
-                                    {
-                                        img: '/content/clients-6.jpg',
-                                        title: 'ООО «ГлавСтрой Санкт-Петербург»',
-                                    },
-                                ]
-                            },
-                            {
-                                img: '/content/clients-7.jpg',
-                                title: 'ПАО "Группа Компаний ПИК"',
-                            },
-                        ]
-                    },
-                    {
-                        img: '/content/clients-1.jpg',
-                        title: 'ООО «ГлавСтрой Санкт-Петербург»',
-                        direction: 'horizontal',
-                        children: [
-                            {
-                                img: '/content/clients-2.jpg',
-                                title: 'ООО «ГлавСтрой Санкт-Петербург»',
-                            },
-                            {
-                                img: '/content/clients-3.jpg',
-                                title: 'ПАО "Группа Компаний ПИК"',
-                            },
-                        ]
-                    },
-                    {
-                        img: '/content/clients-2.jpg',
-                        title: 'ПАО "ПИК"',
-                        children: [
-                            {
-                                img: '/content/clients-7.jpg',
-                                title: 'ООО «ГлавСтрой Санкт-Петербург»',
-                            }
-                        ]
-                    },
-                ],
-            };
+            const el = document.querySelector('.section--company')
+            const companyId = el.dataset.id
+
+            this.fetchRegisteredCompanyFull(companyId)
+              .then(response => {
+                console.log(response.data.data)
+                this.getRootData(response.data.data)
+              })
         },
         methods: {
+            getRootData(obj) {
+                const root = []
+
+                    function parseDataCompany(data, root, firstNode = true) {
+                        let newObj = {
+                          img: '/content/company-default.jpg',
+                          title: data.name,
+                          children: [],
+                        }
+
+                        if (!firstNode) {
+                          newObj.direction = data.childes.length > 1 ? 'horizontal' : 'vertical'
+                        }
+
+                        root.push(newObj)
+
+                        if (data.childes.length) {
+                            data.childes.forEach(item => {
+                                parseDataCompany(item, newObj.children, false)
+                            })
+                        }
+                    }
+
+                parseDataCompany(obj, root)
+
+                this.root = root[0]
+            },
             init() {
                 // построение и привязка событий
                 this.build();
@@ -188,6 +156,12 @@
                     node.appendChild(children);
                     let childrenWrap = document.createElement('div');
                     childrenWrap.classList.add('structure__children-wrap');
+                    if (item.direction === undefined) {
+                      if (item.children.length === 1) {
+                        children.classList.add('structure__children--only-child');
+                        childrenWrap.classList.add('structure__children-wrap--only-child');
+                      }
+                    }
                     children.appendChild(childrenWrap);
                     for (let i = 0; i < item.children.length; i++) {
                         childrenWrap.appendChild(this.createNode(item.children[i]));
@@ -433,9 +407,17 @@
                             left: $nodeWidth/2;
                             right: $nodeWidth/2;
                         }
+                        &--only-child {
+                            &::after {
+                                content: none;
+                            }
+                        }
                         > .structure__children-wrap {
                             display: flex;
                             justify-content: space-between;
+                            &--only-child {
+                              justify-content: center;
+                            }
                             > .structure__node {
                                 > .structure__node-path-to {
                                     top: -$nodePathSize/2;
