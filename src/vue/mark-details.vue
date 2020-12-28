@@ -241,7 +241,7 @@ export default {
   },
   methods: {
     initMarkId() {
-      this.markId = document.querySelector('.section--mark').getAttribute('data-id');
+      this.markId = document.querySelector('#mark-details').getAttribute('data-id');
       return false;
     },
     prepareMarkData(data) {

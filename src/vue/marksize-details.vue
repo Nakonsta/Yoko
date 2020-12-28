@@ -223,7 +223,7 @@ export default {
   },
   methods: {
     initId() {
-      this.marksizeId = document.querySelector('.section--mark').getAttribute('data-id');
+      this.marksizeId = document.querySelector('#marksize-details').getAttribute('data-id');
       return false;
     },
     prepareMarksizeDetailData(data) {
