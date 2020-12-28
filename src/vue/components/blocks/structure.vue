@@ -34,7 +34,7 @@
 
                     function parseDataCompany(data, root, firstNode = true) {
                         let newObj = {
-                          img: '/content/clients-1.jpg',
+                          img: '/content/company-default.jpg',
                           title: data.name,
                           children: [],
                         }
@@ -55,17 +55,6 @@
                 parseDataCompany(obj, root)
 
                 this.root = root[0]
-            },
-            parseDataCompany(obj, parent = null) {
-                let newObj = {
-                    img: '/content/clients-1.jpg',
-                    title: 'ООО «ГлавСтрой Санкт-Петербург»',
-                    direction: 'horizontal',
-                    children: [],
-                }
-                if (parent) {
-                    parent.children.push(newObj)
-                }
             },
             init() {
                 // построение и привязка событий
