@@ -2269,7 +2269,7 @@
                         if (this.marksizeForSend.mark !== newMark && newMark.length) {
                             // импортировали НОВОЕ markname
                             if (!newMark.length) {
-                                // markname пустое
+                                // mark пустое
                                 // this.marksizeForSend = importedFields;
                                 this.marksizeForSend.mark === '';
                                 this.marksizeForSend.type = '';
@@ -2277,7 +2277,7 @@
                                 window.closeLoader();
                                 this.view = 'form';
                             } else {
-                                // markname НЕ пустое - проверяем
+                                // mark НЕ пустое - проверяем
                                 this.cancelCatalogMarkSearch();
                                 this.marks = [];
                                 this.loadingMarks = true;
@@ -2311,6 +2311,11 @@
                                         this.view = 'form';
                                     });
                             }
+                        } else {
+                            // mark не менялось
+                            this.loadingMarks = false;
+                            window.closeLoader();
+                            this.view = 'form';
                         }
                     }
                 };
