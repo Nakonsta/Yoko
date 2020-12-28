@@ -21,8 +21,8 @@
             <div :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
                 <span @click="changeActiveTab('protocols')" class="tender-item__tab-link">Протоколы</span>
             </div>
-            <div class="tender-item__tab-item">
-                <span class="tender-item__tab-link">Журнал событий</span>
+            <div :class="[activeTab == 'logs' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="logs">
+                <span @click="changeActiveTab('logs')" class="tender-item__tab-link">Журнал событий</span>
             </div>
         </div>
         <div class="tender-item__tabs-content">
@@ -41,6 +41,9 @@
             <div :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
                 <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
             </div>
+            <div :class="[activeTab == 'logs' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="logs">
+                <TenderItemLogsTab :tenderItemData="tenderItemData" />
+            </div>
         </div>
     </div>
 </template>
@@ -51,6 +54,7 @@ import TenderItemClientTab from './tenderItemTabs/tenderItemClientTab.vue'
 import TenderItemLotsTab from './tenderItemTabs/tenderItemLotsTab.vue'
 import TenderItemDocumentsTab from './tenderItemTabs/tenderItemDocumentsTab.vue'
 import TenderItemProtocolsTab from './tenderItemTabs/tenderItemProtocolsTab.vue'
+import TenderItemLogsTab from './tenderItemTabs/tenderItemLogsTab.vue'
 
 export default {
     name: 'TenderItemTabs',
@@ -75,7 +79,8 @@ export default {
         TenderItemClientTab,
         TenderItemLotsTab,
         TenderItemDocumentsTab,
-        TenderItemProtocolsTab
+        TenderItemProtocolsTab,
+        TenderItemLogsTab
     },
 
     created() {
@@ -136,10 +141,21 @@ export default {
                 line-height: 160%;
                 letter-spacing: 0.05em;
                 color: $colorGray;
+                white-space: nowrap;
                 cursor: pointer;
                 &:hover,
                 &:focus {
                     color: $colorTurquoise;
+                }
+            }
+        }
+    }
+
+    @include mq($until: widescreen) {
+        .tender-item {
+            &__tabs {
+                &-row {
+                    overflow-x: auto;
                 }
             }
         }
@@ -229,11 +245,15 @@ export default {
                 font-size: rem(14px);
                 line-height: 160%;
                 border-bottom: 1px solid $borderColor;
+                &:last-child {
+                    border: none;
+                }
             }
         }
     }
 
     .tender-item__protocol {
+        padding-bottom: rem(32px);
         &-title {
             font-weight: 700;
             font-size: rem(20px);
@@ -295,6 +315,37 @@ export default {
         &-link {
             color: $colorTurquoise;
             text-decoration: underline;
+        }
+    }
+
+    .tender-item__log {
+        padding-bottom: rem(24px);
+        color: $lightcolorText;
+        &-header {
+            &-row {
+                display: flex;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+                color: $colorGray;
+                padding-bottom: rem(12px);
+                border-bottom: 1px solid $borderColor;
+            }
+        }
+        &-item {
+            &-row {
+                display: flex;
+                padding: rem(16px) 0;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+            }
+        }
+        &-date {
+            width: 33%;
+        }
+        &-name {
+            width: 67%;
         }
     }
 </style>

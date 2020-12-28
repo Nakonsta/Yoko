@@ -20,7 +20,7 @@ export default {
             this.CancelTokens.catalogCancelToken = axios.CancelToken.source()
         },
         fetchInn(filterRequest) {
-            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, {params: filterRequest})
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, {params: { inn: filterRequest }})
         },
         fetchCompaniesByInn(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/users`)
@@ -375,7 +375,7 @@ export default {
         fetchAccreditationSampleRequiredFiles() {
             return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/files`)
         },
-        fetchCompanyById(inn) {
+        fetchCompanyByInn(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
         },
         fetchMarksizeDetail(id) {
