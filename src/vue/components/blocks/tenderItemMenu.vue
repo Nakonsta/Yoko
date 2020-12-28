@@ -2,25 +2,25 @@
     <div class="tender-item__menu">
         <div class="tender-item__menu-inner">
             <div :class="[activeTab == 'main-info' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('main-info')" class="tender-item__menu-link">Общая информация</span>
+                <span @click="changeActualTab('main-info')" class="tender-item__menu-link">Общая информация</span>
             </div>
             <div :class="[activeTab == 'client' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('client')" class="tender-item__menu-link">Заказчик</span>
+                <span @click="changeActualTab('client')" class="tender-item__menu-link">Заказчик</span>
             </div>
             <div :class="[activeTab == 'lots' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('lots')" class="tender-item__menu-link">Список лотов</span>
+                <span @click="changeActualTab('lots')" class="tender-item__menu-link">Список лотов</span>
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('documents')" class="tender-item__menu-link">Документы</span>
+                <span @click="changeActualTab('documents')" class="tender-item__menu-link">Документы</span>
             </div>
-            <div class="tender-item__menu-item">
-                <a href="#" class="tender-item__menu-link">Разъяснения</a>
+            <div :class="[activeTab == 'chat' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeActualTab('chat')" class="tender-item__menu-link">Разъяснения</span>
             </div>
             <div :class="[activeTab == 'protocols' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('protocols')" class="tender-item__menu-link">Протоколы</span>
+                <span @click="changeActualTab('protocols')" class="tender-item__menu-link">Протоколы</span>
             </div>
             <div :class="[activeTab == 'logs' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('logs')" class="tender-item__menu-link">Журнал событий</span>
+                <span @click="changeActualTab('logs')" class="tender-item__menu-link">Журнал событий</span>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@ export default {
     },
 
     methods: {
-        changeChange(tab) {
+        changeActualTab(tab) {
             window.location.hash = tab;
             this.$emit('changeTab', tab);
             return false;

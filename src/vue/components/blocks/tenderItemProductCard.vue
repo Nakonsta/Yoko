@@ -1,6 +1,6 @@
 <template>
     <div class="cable-info">
-        <div class="table-cell__title cable-info__title" data-name="Наименование позиции">
+        <div class="table-cell__title cable-info__title" data-name="Наименование">
             <span class="cable-info__title-text">
                 {{ item.marksize_id }}
             </span>
@@ -108,6 +108,51 @@ export default {
             }
             &__analogues {
                 width: 15%;
+            }
+        }
+    }
+
+    @include mq($until: 575px) {
+        .cable-info {
+            flex-direction: column;
+            align-items: flex-start;
+            &__title,
+            &__quantity,
+            &__measure,
+            &__sum,
+            &__vat,
+            &__analogues {
+                position: relative;
+                padding: rem(8px) 0 rem(8px) rem(155px);
+                &::before {
+                    content: attr(data-name);
+                    position: absolute;
+                    top: rem(8px);
+                    left: 0;
+                    font-size: rem(14px);
+                    font-weight: 500;
+                    color: $colorGray;
+                }
+            }
+        }
+        .table-cell {
+            &__title {
+                width: 100%;
+            }
+            &__quantity {
+                width: 100%;
+            }
+            &__measure {
+                width: 100%;
+            }
+            &__sum {
+                width: 100%;
+            }
+            &__vat {
+                width: 100%;
+            }
+            &__analogues {
+                width: 100%;
             }
         }
     }

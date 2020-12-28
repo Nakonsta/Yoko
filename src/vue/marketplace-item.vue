@@ -1,7 +1,13 @@
 <template>
     <div class="tender-item">
         <div class="tender-item__top">
-            <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" :company="company" :itemsStatuses="itemsStatuses" />
+            <TenderItemCard 
+                v-if="!isLoading"
+                :tenderItemData="tenderItemData"
+                :company="company"
+                :itemsStatuses="itemsStatuses"
+                @changeTab = "changeTab"
+            />
             <TenderItemMenu v-if="!isLoading" :activeTab="activeTab" @changeTab = "changeTab" />            
         </div>
         <div class="tender-item__tabs">
@@ -205,7 +211,8 @@ export default {
                     hash === 'lots' ||
                     hash === 'documents' ||
                     hash === 'protocols' ||
-                    hash === 'logs'
+                    hash === 'logs' ||
+                    hash === 'chat'
                 ) {
                     this.activeTab = hash
                 }
