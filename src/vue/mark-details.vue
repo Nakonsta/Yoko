@@ -572,7 +572,6 @@ export default {
       this.fetchMark(id).then((response) => {
         const markData = response.data.data;
         this.prepareMarkData(markData);
-        console.log("Response mark data", markData);
       });
     }
   }
