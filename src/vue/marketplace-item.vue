@@ -8,7 +8,7 @@
                 :itemsStatuses="itemsStatuses"
                 @changeTab = "changeTab"
             />
-            <TenderItemMenu v-if="!isLoading" :activeTab="activeTab" @changeTab = "changeTab" />            
+            <TenderItemMenu v-if="!isLoading" :tenderItemData="tenderItemData" :activeTab="activeTab" @changeTab = "changeTab" />            
         </div>
         <div class="tender-item__tabs">
             <TenderItemTabs 
@@ -205,14 +205,21 @@ export default {
         checkUrlHash() {
             if (window.location.hash) {
                 const hash = window.location.hash.substring(1);
-                if (
-                    hash === 'main-info' ||
+                if (this.tenderItemData.tender_trading_format === 'trading_223' &&
+                    (hash === 'main-info' ||
                     hash === 'client' ||
                     hash === 'lots' ||
                     hash === 'documents' ||
                     hash === 'protocols' ||
                     hash === 'logs' ||
-                    hash === 'chat'
+                    hash === 'chat')
+                ) {
+                    this.activeTab = hash
+                } else if (this.tenderItemData.tender_trading_format !== 'trading_223' &&
+                    (hash === 'main-info' ||
+                    hash === 'client' ||
+                    hash === 'documents' ||
+                    hash === 'logs')
                 ) {
                     this.activeTab = hash
                 }

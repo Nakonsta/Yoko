@@ -1,5 +1,5 @@
 <template>
-    <div class="tender-item__tab-inner">
+    <div v-if="company.name" class="tender-item__tab-inner">
         <div class="tender-item__tab-block">
             <div class="tender-item__tab-rows">
                 <div class="tender-item__tab-row">
@@ -127,6 +127,9 @@
                 </div>
             </div>
         </div> 
+    </div>
+    <div v-else class="tender-item__empty">
+        Информация о заказчике не предоставлена
     </div>
 </template>
 

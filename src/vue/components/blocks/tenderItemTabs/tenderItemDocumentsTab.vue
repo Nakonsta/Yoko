@@ -1,5 +1,5 @@
 <template>
-    <div class="tender-item__files">
+    <div v-if="tenderItemData.documents && tenderItemData.documents.length" class="tender-item__files">
         <div class="tender-item__files-block">
             <div class="tender-item__file-rows">
                 <div class="tender-item__file">
@@ -26,6 +26,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div v-else class="tender-item__empty">
+        Документов пока нет
     </div>
 </template>
 

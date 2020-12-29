@@ -7,16 +7,16 @@
             <div :class="[activeTab == 'client' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
                 <span @click="changeActualTab('client')" class="tender-item__menu-link">Заказчик</span>
             </div>
-            <div :class="[activeTab == 'lots' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'lots' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
                 <span @click="changeActualTab('lots')" class="tender-item__menu-link">Список лотов</span>
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
                 <span @click="changeActualTab('documents')" class="tender-item__menu-link">Документы</span>
             </div>
-            <div :class="[activeTab == 'chat' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'chat' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
                 <span @click="changeActualTab('chat')" class="tender-item__menu-link">Разъяснения</span>
             </div>
-            <div :class="[activeTab == 'protocols' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'protocols' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
                 <span @click="changeActualTab('protocols')" class="tender-item__menu-link">Протоколы</span>
             </div>
             <div :class="[activeTab == 'logs' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
@@ -34,7 +34,11 @@ export default {
         activeTab: {
             type: String,
             required: true,
-        }
+        },
+        tenderItemData: {
+            type: Object,
+            required: true,
+        },
     },
 
     methods: {
