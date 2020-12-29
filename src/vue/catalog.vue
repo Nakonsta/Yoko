@@ -1,16 +1,25 @@
 <template>
     <div class="catalog">
         <div class="catalog__search">
-            <search placeholder="Найти кабель" />
+            <search
+                    placeholder="Найти кабель"
+                    :canClear="true"
+                    :loading="searchLoading"
+                    :opened="searchOpened"
+                    @search="getItems"
+                    @autocomplete="getAutocomplete"
+                    :items="searchItems"
+            />
         </div>
         <div class="catalog__flex">
             <div ref="filterContainer" class="catalog__filter">
                 <filterList
-                    :loading="loadingFilter"
-                    :filter="filter"
-                    :currentFilter="currentFilter"
-                    :filterContainer="this.$refs.filterContainer"
-                    @changeFilter="changeFilter"
+                        :key="filterKey"
+                        :loading="loadingFilter"
+                        :filter="filter"
+                        :currentFilter="currentFilter"
+                        :filterContainer="this.$refs.filterContainer"
+                        @changeFilter="changeFilter"
                 />
             </div>
             <div class="catalog__body">
@@ -42,7 +51,7 @@
     import api from './helpers/api'
     import filterList from "./components/blocks/filter.vue";
     import catalogList from "./components/catalog/list.vue";
-    import search from "./components/searchSelect.vue";
+    import search from "./components/searchText.vue";
 
     export default {
         name: 'App',
@@ -59,12 +68,16 @@
                 loadingItems: true,
                 currentFilter: {},
                 filter: [],
+                filterKey: 0,
                 items: [],
                 totalItems: 0,
                 weightFilter: [],
                 perPage: 100,
                 page: 1,
-                tMark: 4,
+                searchCounter: null,
+                searchLoading: false,
+                searchOpened: false,
+                searchItems: [],
             }
         },
         computed: {
@@ -79,20 +92,20 @@
             pagination(page) {
                 this.page = page
                 this.cancelCatalogRequest()
-                this.getCatalogData(this.currentFilter)
+                this.getItems()
             },
             changeFilter() {
                 this.page = 1
                 this.totalProducts = -1
                 this.cancelCatalogRequest()
-                this.getCatalogData(this.currentFilter, true)
+                this.getItems()
             },
             getFilterData() {
                 this.totalProducts = -1
                 this.fetchFilter()
                     .then((responsive) => {
                         this.setFilterData(responsive.data.data)
-                        this.getCatalogData(null, true)
+                        this.getItems()
                         this.loadingFilter = false
                     })
                     .catch((e) => {
@@ -100,10 +113,31 @@
                         this.loadingFilter = false
                     })
             },
-            getCatalogData(filterValues = null) {
-                this.loadingItems = true
-
-                this.fetchCatalog(filterValues, this.page)
+            getItems(search = null) {
+                this.loadingItems = true;
+                this.searchOpened = false;
+                if( search && search.length ) {
+                    // чистим фильтр
+                    this.page = 1;
+                    this.currentFilter = {};
+                    // перерисовываем фильтр
+                    this.filterKey++;
+                }
+                // чистим поиск
+                if( search === false ) {
+                    // чистим фильтр
+                    this.page = 1;
+                    this.currentFilter = {};
+                    // перерисовываем фильтр
+                    this.filterKey++;
+                }
+                let filter = {
+                    filter: this.currentFilter,
+                };
+                if( search && search.length ) {
+                    filter.q = search;
+                }
+                this.fetchCatalog(filter, this.page)
                     .then((data) => {
                         let total = data.data.data.total
                         let catalogItem = data.data.data.items
@@ -120,6 +154,29 @@
                     .catch((e) => {
                         console.log(e)
                     })
+            },
+            getAutocomplete(string) {
+                clearInterval(this.searchCounter);
+                this.searchOpened = false;
+                this.searchLoading = false;
+                if (string) {
+                    this.searchCounter = setTimeout(() => {
+                        this.searchLoading = true;
+                        this.searchItems = [];
+                        this.fetchListSearchCatalog(string)
+                            .then((data) => {
+                                this.searchItems = data.data.data;
+                                this.searchOpened = true;
+                                this.searchLoading = false;
+                            })
+                            .catch((e) => {
+                                console.log(e);
+                                this.searchLoading = false;
+                            })
+                    }, 1000);
+                } else {
+                    this.searchItems = [];
+                }
             },
             setFilterData(data) {
                 function parseObjToArr(obj) {
@@ -163,19 +220,23 @@
     .catalog {
         &__flex {
             display: flex;
-            margin-top: rem(64px);
+        }
+        &__search {
+            margin-bottom: rem(64px);
         }
         &__filter {
-            width: rem(276px);
+            width: rem(348px);
             flex: none;
-            transform: translateY(rem(-15px));
             @include mq($until: tablet) {
                 display: none;
             }
         }
         &__body {
-            width: 100%;
+            width: calc(100% - #{rem(348px)});
             position: relative;
+            @include mq($until: desktop) {
+                width: 100%;
+            }
         }
     }
 </style>

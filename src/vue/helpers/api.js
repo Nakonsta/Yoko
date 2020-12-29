@@ -56,16 +56,12 @@ export default {
                 { cancelToken: this.CancelTokens.catalogProceduresCancelToken.token },
             )
         },
-        fetchCatalog(filter, page = 1) {
-            let body = {}
-            body.page = page
-
-            if (filter) {
-                body.filter = filter
-            }
-
+        fetchCatalog(filter = null, page = 1) {
             return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/`,
-                body,
+                {
+                    ...filter,
+                    page,
+                },
                 {cancelToken: this.CancelTokens.catalogCancelToken.token},
             );
         },
@@ -99,11 +95,15 @@ export default {
                 { params: { q: string } },
             )
         },
-        fetchListSearchCatalog(string) {
+        fetchListSearchCatalog(string, company_id = 0) {
+            let params = {
+                q: string,
+            };
+            if (company_id) {
+                params.company_id = company_id;
+            }
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/`, {
-                params: {
-                    q: string
-                }
+                params: params,
             });
         },
         authSignin(l, p) {

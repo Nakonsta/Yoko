@@ -217,14 +217,14 @@ export default {
           {
             icon: 'mdi-buffer',
             title: 'Каталог',
-            to: '/catalog',
+            to: '/personal/catalog',
             order: 1,
             isActive: true,
             subItems: [
-              // {
-              //   title: 'Список продукции',
-              //   to: '/personal/catalog'
-              // },
+              {
+                title: 'Список продукции',
+                to: '/personal/catalog'
+              },
               {
                 title: 'Добавление продукции',
                 to: '/personal/catalog/new'
