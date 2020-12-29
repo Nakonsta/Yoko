@@ -13,20 +13,19 @@
               </div>
               <div class="search__input">
                 <multiselect
-                  v-model="filtersData.cable"
+                  v-model="filtersData.company"
                   :options="options"
                   placeholder=""
                   selectedLabel=""
                   selectLabel=""
                   deselectLabel=""
-                  track-by="url"
-                  label="title"
+                  track-by="id"
+                  label="name"
                   open-direction="bottom"
                   :loading="isLoading"
                   :internal-search="false"
                   :preserveSearch="true"
                   @select="selectValue"
-                  @search-change="getListSearchCatalog"
                 >
                   <template v-slot:caret>
                     <span></span>
@@ -95,12 +94,23 @@ export default {
       isLoading: false,
       searchCounter: null,
       filtersData: {
-        cable: null,
+        company: null,
         metresFrom: null,
         metresTo: null,
         priceFrom: null,
         priceTo: null,
       }
+    }
+  },
+  props: {
+    optionList: {
+      type: Array,
+      default: () => ([])
+    }
+  },
+  watch: {
+    optionList() {
+      this.options = this.optionList;
     }
   },
   methods: {
@@ -114,7 +124,7 @@ export default {
         this.searchCounter = setTimeout(() => {
           this.isLoading = true
           this.cleanSearch()
-          this.fetchListSearchCatalog(string)
+          this.fetchListSearchCompany(string)
             .then((data) => {
               // this.startValueSearch()
               // this.groupingSearchList(data.data.data)
@@ -163,7 +173,7 @@ export default {
     resetFilter(evt) {
       evt.preventDefault()
       this.filtersData = {
-        cable: null,
+        company: null,
         metresFrom: null,
         metresTo: null,
         priceFrom: null,

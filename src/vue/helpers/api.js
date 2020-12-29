@@ -105,6 +105,13 @@ export default {
                 }
             });
         },
+        fetchListSearchCompany(string) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company/`, {
+                params: {
+                    q: string
+                }
+            });
+        },
         authSignin(l, p) {
             return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/signin`, {
                 login: l,
@@ -385,6 +392,12 @@ export default {
         },
         fetchMarksizeQuantity(id) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/quantity/`);
+        },
+        filterMarksizeQuantity(id, data) {
+            return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/quantity/`,
+                data,
+                {cancelToken: this.CancelTokens.companyCancelToken.token}
+            );
         }
     }
 }

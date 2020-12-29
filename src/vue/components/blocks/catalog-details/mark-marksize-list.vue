@@ -1,7 +1,7 @@
 <template>
   <div class="company-products">
     <div class="company-products__filters">
-      <mark-marksize-filter @changeFilter="changeFilter" @resetFilter="resetFilter"/>
+      <mark-marksize-filter @changeFilter="changeFilter" @resetFilter="resetFilter" :option-list="companyList" />
     </div>
     <div class="company-products__table">
       <div v-if="items.length && !isLoading" class="company-products__thead">
@@ -110,7 +110,7 @@ export default {
     }
   },
   created() {
-    this.getCompanyData()
+    this.getMarksizesData()
   },
 
   methods: {
@@ -118,22 +118,35 @@ export default {
       this.isLoading = true
       this.page = page
       this.cancelCompanyRequest()
-      this.getCompanyData(this.currentFilter)
+      this.getMarksizesData(this.currentFilter)
     },
-    getCompanyData(filterValues = null) {
-      this.fetchMarksizeQuantity(this.marksizeId)
-        .then((response) => {
-          const { items = [] } = response.data.data;
-          if (items.length && this.companyList.length) {
-            this.items = this.prepareItems(items);
-          }
-          this.totalPages = Math.ceil(response.data.data.total / 8);
-          this.isFirstLoad = true
-          this.isLoading = false
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+    getMarksizesData(filterValues = null) {
+      let companyId = null;
+      let filters = null;
+      if (filterValues) {
+        const { company_id, ...othersFilters } = filterValues;
+        companyId = company_id;
+        filters = othersFilters;
+      }
+      const marksizeInfo = {
+        company_id: companyId,
+        page: this.page,
+        filter: filters
+      }
+      const fData = this.objectToFormData(marksizeInfo)
+      this.filterMarksizeQuantity(this.marksizeId, fData).then((response) => {
+        const { items = [] } = response.data.data;
+        if (items.length && this.companyList.length) {
+          this.items = this.prepareItems(items);
+        } else {
+          this.items = [];
+        }
+        this.totalPages = Math.ceil(response.data.data.total / 8);
+        this.isFirstLoad = true
+        this.isLoading = false
+      }).catch((e) => {
+        console.log(e)
+      })
     },
     prepareItems(dataItems) {
       const result = dataItems.map((item) => {
@@ -146,10 +159,10 @@ export default {
     changeFilter(filtersData) {
       this.isLoading = true
       this.page = 1
-      if(filtersData.cable) {
-        this.currentFilter.q = filtersData.cable.title.toString()
+      if(filtersData.company) {
+        this.currentFilter.company_id = filtersData.company.id
       } else {
-        this.currentFilter.q = null
+        this.currentFilter.company_id = null
       }
       if(filtersData.metresFrom) {
         this.currentFilter.quantity.from = filtersData.metresFrom
@@ -172,7 +185,7 @@ export default {
         this.currentFilter.price.to = null
       }
       this.cancelCompanyRequest()
-      this.getCompanyData(this.currentFilter)
+      this.getMarksizesData(this.currentFilter)
     },
     resetFilter() {
       this.isLoading = true
@@ -187,7 +200,7 @@ export default {
           to: null,
         }
       }
-      this.getCompanyData(this.currentFilter)
+      this.getMarksizesData(this.currentFilter)
     },
     viewCertificate(value) {
       this.certificates = value.items;
