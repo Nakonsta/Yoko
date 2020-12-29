@@ -17,7 +17,7 @@
                 <a
                     v-for="product in item"
                     :href="product.url"
-                    :key="product.title"
+                    :key="product.id"
                     class="mark-catalog__product"
                 >
                     {{ product.title }}
