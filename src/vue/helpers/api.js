@@ -106,6 +106,13 @@ export default {
                 params: params,
             });
         },
+        fetchListSearchCompany(string) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company/`, {
+                params: {
+                    q: string
+                }
+            });
+        },
         authSignin(l, p) {
             return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/signin`, {
                 login: l,
@@ -222,6 +229,13 @@ export default {
                     name: name
                 },
                 cancelToken: this.CancelTokens.searchCompaniesCancelToken.token,
+            });
+        },
+        fetchCompaniesByIds(ids) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`,{
+                params: {
+                    ids: ids.join(','),
+                },
             });
         },
         fetchCompanyReportForm(data) {
@@ -378,11 +392,20 @@ export default {
         fetchCompanyByInn(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
         },
+        fetchMark(id) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/mark/${id}/`)
+        },
         fetchMarksizeDetail(id) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/`)
         },
         fetchMarksizeQuantity(id) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/quantity/`);
+        },
+        filterMarksizeQuantity(id, data) {
+            return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/quantity/`,
+                data,
+                {cancelToken: this.CancelTokens.companyCancelToken.token}
+            );
         }
     }
 }
