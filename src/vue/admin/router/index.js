@@ -9,6 +9,7 @@ import CatalogNew from '../pages/catalog/new.vue'
 import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
+import User from '../pages/user/user.vue'
 import page404 from '../pages/page404.vue'
 
 const routes = [
@@ -54,6 +55,10 @@ const routes = [
     path: "/personal/catalog/new",
     component:  CatalogNew,
     meta: { role: 'contractor' },
+  },
+  {
+    path: "/personal/user",
+    component:  User,
   },
   {
     path: "*",
