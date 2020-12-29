@@ -4,8 +4,9 @@ import store from "@/store";
 Vue.use(VueRouter);
 
 import AccreditationsDetail from '../pages/accreditations/details.vue'
+import Catalog from '../pages/catalog/items.vue'
 import CatalogNew from '../pages/catalog/new.vue'
-import Procedures from '../pages/procedures/procedures.vue'
+import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
 import page404 from '../pages/page404.vue'
@@ -43,6 +44,11 @@ const routes = [
     path: '/personal/procedures/:id',
     component: Procedure,
     meta: { role: 'buyer' },
+  },
+  {
+    path: "/personal/catalog",
+    component:  Catalog,
+    meta: { role: 'contractor' },
   },
   {
     path: "/personal/catalog/new",

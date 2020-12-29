@@ -56,16 +56,12 @@ export default {
                 { cancelToken: this.CancelTokens.catalogProceduresCancelToken.token },
             )
         },
-        fetchCatalog(filter, page = 1) {
-            let body = {}
-            body.page = page
-
-            if (filter) {
-                body.filter = filter
-            }
-
+        fetchCatalog(filter = null, page = 1) {
             return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/`,
-                body,
+                {
+                    ...filter,
+                    page,
+                },
                 {cancelToken: this.CancelTokens.catalogCancelToken.token},
             );
         },
@@ -99,8 +95,19 @@ export default {
                 { params: { q: string } },
             )
         },
-        fetchListSearchCatalog(string) {
+        fetchListSearchCatalog(string, company_id = 0) {
+            let params = {
+                q: string,
+            };
+            if (company_id) {
+                params.company_id = company_id;
+            }
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/`, {
+                params: params,
+            });
+        },
+        fetchListSearchCompany(string) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/company/`, {
                 params: {
                     q: string
                 }
@@ -222,6 +229,13 @@ export default {
                     name: name
                 },
                 cancelToken: this.CancelTokens.searchCompaniesCancelToken.token,
+            });
+        },
+        fetchCompaniesByIds(ids) {
+            return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`,{
+                params: {
+                    ids: ids.join(','),
+                },
             });
         },
         fetchCompanyReportForm(data) {
@@ -378,11 +392,20 @@ export default {
         fetchCompanyByInn(inn) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
         },
+        fetchMark(id) {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/mark/${id}/`)
+        },
         fetchMarksizeDetail(id) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/`)
         },
         fetchMarksizeQuantity(id) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/quantity/`);
+        },
+        filterMarksizeQuantity(id, data) {
+            return axios.post(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/marksize/${id}/quantity/`,
+                data,
+                {cancelToken: this.CancelTokens.companyCancelToken.token}
+            );
         }
     }
 }

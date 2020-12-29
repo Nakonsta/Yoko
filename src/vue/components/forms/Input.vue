@@ -24,7 +24,7 @@
           :min="type === 'number' && min ? min : false"
           @paste="paste"
       >
-      <div class="multiselect__spinner" v-show="loading"></div>
+      <div class="multiselect__spinner field__spinner" v-show="loading"></div>
       <tooltip v-if="!!content" :content="content" />
     </div>
     <span v-if="failed && !failedRules.excluded" class="field__error">{{ errors[0] }}</span>
@@ -151,7 +151,7 @@ export default {
     top: 13px;
     z-index: 10;
   }
-  .multiselect__spinner {
+  .input__spinner {
     background-color: transparent !important;
   }
 }

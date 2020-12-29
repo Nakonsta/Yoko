@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="procedures__view" v-if="$store.getters.userRole === 'contractor'">
+            <div class="procedures__view" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'">
                 <span>Показывать:</span>
                 <div class="dropdown">
                     <div class="dropdown__value">{{ viewList[view] }}</div>
@@ -105,7 +105,7 @@
                             <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                             <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
                             <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden', itemMarkExist(item, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden', itemMarkExist(item, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
                                 <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
                             </a>
                             <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite', itemMarkExist(item, 'favorite') ? 'Процедура удалена из избранного' : 'Процедура добавлена в избранное')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'favorite')}">
@@ -132,7 +132,6 @@
                             {{ formatDateNoTime(item.terms_tender_to) }}
                         </div>
                     </div>
-
                 </div>
                 <div class="procedures__item-foot">
                     <div class="procedures__item-flex">
@@ -142,7 +141,7 @@
                                 <path d="M9 1L5 4L1 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </a>
-                        <a href="javascript:{}" class="btn btn--bdr procedures__item-request">Отправить заявку</a>
+                        <a href="javascript:{}" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'">Отправить заявку</a>
                     </div>
                     <div class="procedures__item-products" v-if="item.isExpanded || expandAll">
                         <table>
@@ -259,9 +258,17 @@
                 view: 'all',
                 viewList: {
                     'all': 'все',
+                    'hidden': 'скрытые',
+                },
+            }
+        },
+        created() {
+            if (this.$store.getters.userRole === 'contractor') {
+                this.viewList = {
+                    'all': 'все',
                     'favorite': 'избранные',
                     'hidden': 'скрытые',
-                }
+                };
             }
         },
         methods: {
