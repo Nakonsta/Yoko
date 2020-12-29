@@ -5,6 +5,7 @@
         <select-input
             :is-single="true"
             :close="true"
+            rules=""
             v-model="dataForm.quantity"
             label="Количество жил, шт"
             placeholder="Выберите из списка"
@@ -15,6 +16,7 @@
         <select-input
             :is-single="true"
             :close="true"
+            rules=""
             v-model="dataForm.section"
             label="Сечение, мм²"
             placeholder="Выберите из списка"
@@ -25,6 +27,7 @@
         <select-input
             :is-single="true"
             :close="true"
+            rules=""
             v-model="dataForm.voltage"
             label="Напряжение, кВ"
             placeholder="Выберите из списка"
