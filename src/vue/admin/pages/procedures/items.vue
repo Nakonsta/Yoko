@@ -124,7 +124,6 @@
                 // обновляем фильтр - ставим нужную компанию
                 if( companies.length ) {
                     this.currentCompany = companies[0];
-                    this.currentFilter.inn = [this.currentCompany.inn];
                 }
                 return companies;
             },
@@ -235,7 +234,6 @@
                 this.page = 1;
                 this.currentFilter = {};
                 this.currentCompany = company;
-                this.currentFilter.inn = [this.currentCompany.inn];
                 this.getItems();
             },
             changeFilter() {
@@ -290,9 +288,6 @@
                     let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
                     this.currentFilter.showing = showing;
-                    if( this.companies.length ) {
-                        this.currentFilter.inn = [this.currentCompany.inn];
-                    }
                     this.currentFilter.q = search;
                     // перерисовываем фильтр
                     this.filterKey++;
@@ -304,11 +299,11 @@
                     let showing = this.currentFilter.showing || 'all';
                     this.currentFilter = {};
                     this.currentFilter.showing = showing;
-                    if( this.companies.length ) {
-                        this.currentFilter.inn = [this.currentCompany.inn];
-                    }
                     // перерисовываем фильтр
                     this.filterKey++;
+                }
+                if( this.companies.length && this.currentCompany) {
+                    this.currentFilter.inn = [this.currentCompany.inn];
                 }
                 let filter = {
                     draft: this.$store.getters.userRole === 'buyer' && this.type === 'drafts',
@@ -385,7 +380,7 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     @import "../../../../assets/sass/variables/variables";
     @import "../../../../assets/sass/variables/fluid-variables";
     @import "../../../../assets/sass/mixins/fluid-mixin";
@@ -410,7 +405,7 @@
             justify-content: space-between;
         }
         &__filter {
-            width: 348px;
+            width: rem(348px);
             @include mq($until: desktop) {
                 display: none;
             }
@@ -419,7 +414,7 @@
             }
         }
         &__body {
-            width: calc(100% -  348px);
+            width: calc(100% - #{rem(348px)});
             @include mq($until: desktop) {
                 width: 100%;
             }
