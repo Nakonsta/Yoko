@@ -50,7 +50,7 @@
                     <div class="tender-item__status">
                         {{ getTenderStatusName(tenderItemData) }}
                     </div>
-                    <div class="tender-item__actions-block">
+                    <div v-if="tenderItemData" class="tender-item__actions-block">
                         <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                         <a href="javascript:{}" title="Приложенные файлы" @click="changeActualTab('documents')">
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>

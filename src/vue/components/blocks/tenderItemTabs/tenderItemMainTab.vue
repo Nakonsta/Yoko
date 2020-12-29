@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="tenderItemData.purchase_subject || tenderItemData.purchase_subject.lot_amounts"  class="tender-item__tab-block">
+        <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.lot_amounts"  class="tender-item__tab-block">
             <div class="tender-item__lots-block">
                 <div class="tender-item__lots-rows">
                     <div v-for="(lot, index) in tenderItemData.purchase_subject.lot_amounts" :key="index" class="tender-item__lot">

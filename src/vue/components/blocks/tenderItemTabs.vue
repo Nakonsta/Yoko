@@ -9,16 +9,16 @@
             <div :class="[activeTab == 'client' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="client">
                 <span @click="changeActiveTab('client')" class="tender-item__tab-link">Заказчик</span>
             </div>
-            <div :class="[activeTab == 'lots' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="lots">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'lots' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="lots">
                 <span @click="changeActiveTab('lots')" class="tender-item__tab-link">Список лотов</span>
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="documents">
                 <span @click="changeActiveTab('documents')" class="tender-item__tab-link">Документы</span>
             </div>
-            <div :class="[activeTab == 'chat' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="chat">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'chat' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="chat">
                 <span @click="changeActiveTab('chat')" class="tender-item__tab-link">Разъяснения</span>
             </div>
-            <div :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
                 <span @click="changeActiveTab('protocols')" class="tender-item__tab-link">Протоколы</span>
             </div>
             <div :class="[activeTab == 'logs' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="logs">
@@ -32,16 +32,16 @@
             <div :class="[activeTab == 'client' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="client">
                 <TenderItemClientTab :company="company" />
             </div>
-            <div :class="[activeTab == 'lots' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="lots">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'lots' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="lots">
                 <TenderItemLotsTab :tenderItemData="tenderItemData" />
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="documents">
                 <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
             </div>
-            <div :class="[activeTab == 'chat' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="chat">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'chat' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="chat">
                 <TenderItemChatTab />
             </div>
-            <div :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
                 <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
             </div>
             <div :class="[activeTab == 'logs' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="logs">
