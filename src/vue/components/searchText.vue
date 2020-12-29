@@ -64,7 +64,7 @@
                 type: Boolean,
             },
             items: {
-                default: [],
+                default: () => [],
                 type: Array,
             },
             noResults: {
