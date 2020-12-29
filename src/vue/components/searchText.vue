@@ -8,7 +8,7 @@
         <a href="javascript:{}" class="search__clean" v-show="canClear && innerValue.length && !loading" @click="searchReset">
             <svg class="sprite-cancel"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#cancel"></use></svg>
         </a>
-        <div class="multiselect__spinner search__spinner" v-show="loading"></div>
+        <div class="multiselect__spinner search__spinner" v-if="dropdown" v-show="loading"></div>
         <input
             class="search__input"
             v-model="innerValue"
@@ -16,16 +16,18 @@
             @keyup="searchAutocomplete"
             @focus="showAutocomplete"
         />
-        <div class="search__list" v-show="isOpened && !loading && innerValue.length">
-            <template v-if="items.length">
-                <div class="search__item" v-for="(item, index) in items">
-                    <a @click="searchSelect" :href="item.url">{{ item.name }}</a>
-                </div>
-            </template>
-            <template v-else>
-                <div class="search__empty">{{ noResults }}</div>
-            </template>
-        </div>
+        <template v-if="dropdown">
+            <div class="search__list" v-show="isOpened && !loading && innerValue.length">
+                <template v-if="items.length">
+                    <div class="search__item" v-for="(item, index) in items">
+                        <a @click="searchSelect" :href="item.url">{{ item.name }}</a>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="search__empty">{{ noResults }}</div>
+                </template>
+            </div>
+        </template>
         <div class="search__button" @click="search">
             <span>Найти</span>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,6 +54,10 @@
                 type: String
             },
             canClear: {
+                default: false,
+                type: Boolean,
+            },
+            dropdown: {
                 default: false,
                 type: Boolean,
             },
@@ -107,18 +113,22 @@
                 // todo сделать переход
             },
             searchAutocomplete(evt) {
-                if (evt.key === 'Enter' || evt.keyCode === 13) {
-                    this.search();
-                } else {
-                    this.$emit('autocomplete', this.innerValue);
+                if (this.dropdown) {
+                    if (evt.key === 'Enter' || evt.keyCode === 13) {
+                        this.search();
+                    } else {
+                        this.$emit('autocomplete', this.innerValue);
+                    }
                 }
             },
             hideAutocomplete() {
                 this.isOpened = false;
             },
             showAutocomplete(evt) {
-                evt.stopPropagation();
-                this.isOpened = true;
+                if (this.dropdown) {
+                    evt.stopPropagation();
+                    this.isOpened = true;
+                }
             },
             searchReset() {
                 this.innerValue = '';

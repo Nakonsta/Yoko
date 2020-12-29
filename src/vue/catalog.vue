@@ -7,6 +7,7 @@
                     :loading="searchLoading"
                     :opened="searchOpened"
                     @search="getItems"
+                    :dropdown="true"
                     @autocomplete="getAutocomplete"
                     :items="searchItems"
             />
