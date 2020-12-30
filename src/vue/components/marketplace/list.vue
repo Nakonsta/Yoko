@@ -141,7 +141,10 @@
                                 <path d="M9 1L5 4L1 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </a>
-                        <a href="javascript:{}" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'">Отправить заявку</a>
+                        <div>
+                            <a href="javascript:{}" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'" style="margin-right: 1rem">Отправить заявку</a>
+                            <a :href="`/platform/${item.id}`" class="btn btn--bdr procedures__item-request">Подробнее</a>
+                        </div>
                     </div>
                     <div class="procedures__item-products" v-if="item.isExpanded || expandAll">
                         <table>
