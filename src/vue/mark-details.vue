@@ -509,6 +509,14 @@ export default {
       if (data.marksizes) {
         this.rootData.markoSize = data.marksizes;
       }
+
+      if (data.description) {
+        this.rootData.description = data.description;
+      }
+
+      if (data.appointment) {
+        this.rootData.appointment = data.appointment;
+      }
     },
     setCharacters(data) {
       const characters = [];
@@ -535,6 +543,14 @@ export default {
       if (descriptionCharacters.length) {
         this.rootData.items = [{ title: "Описание", desc: data.description }, ...descriptionCharacters];
       }
+
+      //TO-DO: сделать получение компаний на марках. Если их нет, тогда вообще убрать производителей.
+      if (data.companies) {
+        // set companies logic.
+      } else {
+        this.rootData.manufacturer = [];
+        this.hideLink("#manufacturer");
+      }
     },
     setDocuments(data) {
       const {documents} = data;
@@ -555,6 +571,19 @@ export default {
         this.rootData.links = result;
       }
     },
+    setManufacturer(companies) {
+      const result = companies.map((item) => {
+        const tags = [];
+        if (item.contractor) {
+          tags.push("Поставщик");
+        }
+        tags.push(item.businessSize.value);
+        item.ico = './content/company-default.jpg';
+        item.tags = tags;
+        return item;
+      });
+      this.rootData.manufacturer = result;
+    },
     handleTabLinkClick(link) {
       if (link) {
         this.currentTab = link.replace("#", "").trim();
@@ -566,6 +595,12 @@ export default {
         setTimeout(function () {
           elLink.style.display = "block";
         }, 0);
+      }
+    },
+    hideLink(url) {
+      let idx = this.tabLinks.findIndex((item) => item.url === url);
+      if (idx > -1) {
+        this.tabLinks.splice(idx, 1);
       }
     },
     getMarkData(id) {

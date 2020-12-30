@@ -21,10 +21,7 @@
         </li>
       </ul>
     </div>
-    <div class="tabs__content company__content" id="description" style="display: block;">
-      <mark-description :root="rootData"></mark-description>
-    </div>
-    <div class="tabs__content company__content" id="marksize-list">
+    <div class="tabs__content company__content" id="marksize-list" style="display: block;">
       <mark-marksize-list :marksize-id="marksizeId" :company-list="rootData.companies" />
     </div>
     <div class="tabs__content company__content" id="container">
@@ -125,12 +122,8 @@ export default {
         voltage: null,
         company: null,
       },
-      currentTab: "description",
+      currentTab: "marksize-list",
       tabLinks: [
-        {
-          name: "Описание",
-          url: "#description"
-        },
         {
           name: "Наличие",
           url: "#marksize-list"
@@ -520,15 +513,38 @@ export default {
         this.rootData.links = result;
       }
 
-      if (data.companies.length) {
+      if (data.companies && data.companies.length) {
         this.companyId = data.companies[0].company_id;
         const ids = data.companies.map((item) => item.company_id);
         this.fetchCompaniesByIds(ids).then((response) => {
           this.rootData.companies = response.data.data.elements;
+          this.setManufacturer(this.rootData.companies);
         })
+      } else {
+        this.rootData.manufacturer = [];
+        this.hideLink("#manufacturer");
       }
 
+      if (data.description) {
+        this.rootData.description = data.description;
+      }
 
+      if (data.appointment) {
+        this.rootData.appointment = data.appointment;
+      }
+    },
+    setManufacturer(companies) {
+      const result = companies.map((item) => {
+        const tags = [];
+        if (item.contractor) {
+          tags.push("Поставщик");
+        }
+        tags.push(item.businessSize.value);
+        item.ico = './content/company-default.jpg';
+        item.tags = tags;
+        return item;
+      });
+      this.rootData.manufacturer = result;
     },
     handleTabLinkClick(link) {
       if (link) {
@@ -548,6 +564,12 @@ export default {
         const marksizeDetailData = response.data.data;
         this.prepareMarksizeDetailData(marksizeDetailData);
       })
+    },
+    hideLink(url) {
+      let idx = this.tabLinks.findIndex((item) => item.url === url);
+      if (idx > -1) {
+        this.tabLinks.splice(idx, 1);
+      }
     }
   }
 }
