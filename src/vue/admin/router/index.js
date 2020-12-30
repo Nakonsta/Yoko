@@ -6,6 +6,8 @@ Vue.use(VueRouter);
 import AccreditationsDetail from '../pages/accreditations/details.vue'
 import Catalog from '../pages/catalog/items.vue'
 import CatalogNew from '../pages/catalog/new.vue'
+import CatalogList from '../pages/catalog/positions.vue'
+import CatalogDetail from '../pages/catalog/details.vue'
 import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
@@ -54,6 +56,14 @@ const routes = [
     path: "/personal/catalog/new",
     component:  CatalogNew,
     meta: { role: 'contractor' },
+  },
+  {
+    path: "/personal/catalog/positions",
+    component:  CatalogList,
+  },
+  {
+    path: "/personal/catalog/positions/:id",
+    component: CatalogDetail,
   },
   {
     path: "*",
