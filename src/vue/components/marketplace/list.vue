@@ -141,8 +141,8 @@
                                 <path d="M9 1L5 4L1 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </a>
-                        <div>
-                            <a href="javascript:{}" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'" style="margin-right: 1rem">Отправить заявку</a>
+                        <div class="procedures__item-buttons">
+                            <a href="javascript:{}" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'">Отправить заявку</a>
                             <a :href="`/platform/${item.id}`" class="btn btn--bdr procedures__item-request">Подробнее</a>
                         </div>
                     </div>
@@ -375,6 +375,22 @@
         display: flex;
         flex-direction: column;
         /*min-height: 100%;*/
+        &__item-buttons {
+            a {
+                &:first-child {
+                  margin-right: 1rem;
+                }
+            }
+            @media(max-width: 659px) {
+                order: -1;
+                a {
+                    &:first-child {
+                        margin-right: 0;
+                        margin-bottom: 1rem;
+                    }
+                }
+            }
+        }
         &__head {
             display: flex;
             justify-content: space-between;
