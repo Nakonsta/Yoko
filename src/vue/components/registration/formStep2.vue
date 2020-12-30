@@ -285,21 +285,30 @@ export default {
               this.getRegisteredCompany(this.companyId.id)
             } else {
               const inn = this.dataForm.inn.replace(/\s/g, '')
-              this.fetchInn(inn)
-                  .then(({data}) => {
-                    const arrInn = data.data.elements
-                    const isOldCompany = arrInn.find((item) => item.inn === inn)
-                    if (isOldCompany) {
+              window.openLoader()
+              this.fetchCompanyByInn(inn)
+                .then((response) => {
+                  const company = response.data.data
+                  if (company) {
+                    if (company.id) {
                       this.dataForm.oldCompany = '1'
-                      this.companyId = isOldCompany.id
-                      this.getRegisteredCompany(this.companyId)
-                    } else {
-                      this.$emit('newStep', 3)
+                      this.companyId = company.id
                     }
-                  })
-                  .catch((response) => {
+                    this.$emit('updateDataRegisteredCompany', company)
+                    this.$emit('newStep', 3)
+                  } else {
+                    this.$emit('newStep', 3)
+                  }
+                  window.closeLoader()
+                })
+                .catch((e) => {
+                  if (e.response.status === 404) {
+                    this.$emit('newStep', 3)
+                  } else {
                     window.notificationError('Ошибка сервера. Ошибка проверки ИНН')
-                  })
+                  }
+                  window.closeLoader()
+                })
             }
           }
         })

@@ -79,7 +79,7 @@
       ></checkbox-input>
       <select-input
           :is-single="true"
-          v-if="!dataForm.mailAddress.coincidesLegalAddress"
+          v-if="!dataForm.actualAddress.coincidesLegalAddress"
           v-model="dataForm.actualAddress.country"
           label="Страна"
           :options="lists.countries"
@@ -268,6 +268,7 @@ export default {
       }
     },
     prevStep() {
+      this.$emit('resetCompany', 2)
       this.$emit('newStep', 2)
     },
     attachApplication(evt) {

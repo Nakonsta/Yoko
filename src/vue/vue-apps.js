@@ -24,6 +24,7 @@ Inputmask.extendDefinitions({
 });
 Vue.directive('inputmask', {
     bind: function(el, binding) {
+        if( !binding || binding.value === false ) return;
         Inputmask(binding.value).mask(el);
     }
 });
@@ -65,6 +66,17 @@ if (descriptionMarkBlock) {
         el: descriptionMarkBlock,
         store: store,
         render: function(h) { return h(markDetails); }
+    })
+}
+
+// Детальная страница маркоразмера
+import MarkSizeDetails from "./marksize-details.vue";
+const markSizeDetailsBlock = document.querySelector("#marksize-details");
+if (markSizeDetailsBlock) {
+    let appMarkSize = new Vue({
+        el: markSizeDetailsBlock,
+        store: store,
+        render:  function(h) { return h(MarkSizeDetails); }
     })
 }
 

@@ -4,10 +4,11 @@ import store from "@/store";
 Vue.use(VueRouter);
 
 import AccreditationsDetail from '../pages/accreditations/details.vue'
+import Catalog from '../pages/catalog/items.vue'
 import CatalogNew from '../pages/catalog/new.vue'
 import CatalogList from '../pages/catalog/positions.vue'
 import CatalogDetail from '../pages/catalog/details.vue'
-import Procedures from '../pages/procedures/procedures.vue'
+import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
 import page404 from '../pages/page404.vue'
@@ -28,12 +29,28 @@ const routes = [
   {
     path: '/personal/procedures',
     component: Procedures,
+  },
+  {
+    path: '/personal/procedures/drafts',
+    component: Procedures,
     meta: { role: 'buyer' },
+    props: { type: 'drafts' },
+  },
+  {
+    path: '/personal/procedures/applications',
+    component: Procedures,
+    meta: { role: 'contractor' },
+    props: { type: 'applications' },
   },
   {
     path: '/personal/procedures/:id',
     component: Procedure,
     meta: { role: 'buyer' },
+  },
+  {
+    path: "/personal/catalog",
+    component:  Catalog,
+    meta: { role: 'contractor' },
   },
   {
     path: "/personal/catalog/new",

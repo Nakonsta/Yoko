@@ -9,20 +9,20 @@
             <div :class="[activeTab == 'client' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="client">
                 <span @click="changeActiveTab('client')" class="tender-item__tab-link">Заказчик</span>
             </div>
-            <div :class="[activeTab == 'lots' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="lots">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'lots' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="lots">
                 <span @click="changeActiveTab('lots')" class="tender-item__tab-link">Список лотов</span>
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="documents">
                 <span @click="changeActiveTab('documents')" class="tender-item__tab-link">Документы</span>
             </div>
-            <div class="tender-item__tab-item">
-                <span class="tender-item__tab-link">Разъяснения</span>
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'chat' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="chat">
+                <span @click="changeActiveTab('chat')" class="tender-item__tab-link">Разъяснения</span>
             </div>
-            <div :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
                 <span @click="changeActiveTab('protocols')" class="tender-item__tab-link">Протоколы</span>
             </div>
-            <div class="tender-item__tab-item">
-                <span class="tender-item__tab-link">Журнал событий</span>
+            <div :class="[activeTab == 'logs' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="logs">
+                <span @click="changeActiveTab('logs')" class="tender-item__tab-link">Журнал событий</span>
             </div>
         </div>
         <div class="tender-item__tabs-content">
@@ -32,14 +32,20 @@
             <div :class="[activeTab == 'client' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="client">
                 <TenderItemClientTab :company="company" />
             </div>
-            <div :class="[activeTab == 'lots' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="lots">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'lots' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="lots">
                 <TenderItemLotsTab :tenderItemData="tenderItemData" />
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="documents">
                 <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
             </div>
-            <div :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'chat' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="chat">
+                <TenderItemChatTab />
+            </div>
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
                 <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
+            </div>
+            <div :class="[activeTab == 'logs' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="logs">
+                <TenderItemLogsTab :tenderItemData="tenderItemData" />
             </div>
         </div>
     </div>
@@ -51,6 +57,8 @@ import TenderItemClientTab from './tenderItemTabs/tenderItemClientTab.vue'
 import TenderItemLotsTab from './tenderItemTabs/tenderItemLotsTab.vue'
 import TenderItemDocumentsTab from './tenderItemTabs/tenderItemDocumentsTab.vue'
 import TenderItemProtocolsTab from './tenderItemTabs/tenderItemProtocolsTab.vue'
+import TenderItemLogsTab from './tenderItemTabs/tenderItemLogsTab.vue'
+import TenderItemChatTab from './tenderItemTabs/tenderItemChatTab.vue'
 
 export default {
     name: 'TenderItemTabs',
@@ -75,7 +83,9 @@ export default {
         TenderItemClientTab,
         TenderItemLotsTab,
         TenderItemDocumentsTab,
-        TenderItemProtocolsTab
+        TenderItemProtocolsTab,
+        TenderItemLogsTab,
+        TenderItemChatTab
     },
 
     created() {
@@ -136,6 +146,7 @@ export default {
                 line-height: 160%;
                 letter-spacing: 0.05em;
                 color: $colorGray;
+                white-space: nowrap;
                 cursor: pointer;
                 &:hover,
                 &:focus {
@@ -144,6 +155,17 @@ export default {
             }
         }
     }
+
+    @include mq($until: widescreen) {
+        .tender-item {
+            &__tabs {
+                &-row {
+                    overflow-x: auto;
+                }
+            }
+        }
+    }
+
 </style>
 
 <style lang="scss">
@@ -229,11 +251,15 @@ export default {
                 font-size: rem(14px);
                 line-height: 160%;
                 border-bottom: 1px solid $borderColor;
+                &:last-child {
+                    border: none;
+                }
             }
         }
     }
 
     .tender-item__protocol {
+        padding-bottom: rem(32px);
         &-title {
             font-weight: 700;
             font-size: rem(20px);
@@ -297,4 +323,201 @@ export default {
             text-decoration: underline;
         }
     }
+
+    .tender-item__log {
+        padding-bottom: rem(24px);
+        color: $lightcolorText;
+        &-header {
+            &-row {
+                display: flex;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+                color: $colorGray;
+                padding-bottom: rem(12px);
+                border-bottom: 1px solid $borderColor;
+            }
+        }
+        &-item {
+            &-row {
+                display: flex;
+                padding: rem(16px) 0;
+                font-weight: 500;
+                font-size: rem(14px);
+                line-height: 160%;
+            }
+        }
+        &-date {
+            width: 33%;
+        }
+        &-name {
+            width: 67%;
+        }
+    }
+
+    @include mq($until: widescreen) {
+        .tender-item {
+            &__file {
+                &-document {
+                    width: 60%;
+                }
+            }
+        }
+    }
+
+    @include mq($until: desktop) {
+        .tender-item {
+            &__tab {
+                &-row-name {
+                    width: 250px;
+                    padding-right: 2rem;
+                }
+            }
+        }
+    }
+
+    @include mq($until: 767px) {
+        .tender-item {
+            &__lot {
+                &-header {
+                    &-row {
+                        display: none;
+                    }
+                }
+                &-product {
+                    &-row {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+                &-name,
+                &-length,
+                &-measure,
+                &-sum,
+                &-vat,
+                &-analogue {
+                    position: relative;
+                    padding: rem(8px) 0 rem(8px) rem(155px);
+                    width: 100%;
+                    &::before {
+                        content: attr(data-name);
+                        position: absolute;
+                        top: rem(8px);
+                        left: 0;
+                        font-size: rem(14px);
+                        font-weight: 500;
+                        color: $colorGray;
+                    }
+                }
+            }
+        }
+    }
+
+    @include mq($until: 575px) {
+        .tender-item {
+            &__tab {
+                &-row {
+                    flex-direction: column;
+                    &-name {
+                        width: 100%;
+                        &--company {
+                            padding-bottom: 0.5rem;
+                        }
+                    }
+                }
+            }
+            &__file {
+                &-header {
+                    &-row {
+                        display: none;
+                    }
+                }
+                &-item {
+                    &-row {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+                &-name,
+                &-date {
+                    position: relative;
+                    padding: rem(8px) 0 rem(8px) rem(120px);
+                    width: 100%;
+                    word-wrap: break-word;
+                    &::before {
+                        content: attr(data-name);
+                        position: absolute;
+                        top: rem(8px);
+                        left: 0;
+                        font-size: rem(14px);
+                        font-weight: 500;
+                        color: $colorGray;
+                    }
+                }
+            }
+            &__protocol {
+                &-title {
+                    font-size: rem(18px);
+                    line-height: rem(24px);
+                }
+                &-header {
+                    &-row {
+                        display: none;
+                    }
+                }
+                &-item {
+                    &-row {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+                &-name,
+                &-created {
+                    position: relative;
+                    padding: rem(8px) 0 rem(8px) rem(120px);
+                    width: 100%;
+                    word-wrap: break-word;
+                    &::before {
+                        content: attr(data-name);
+                        position: absolute;
+                        top: rem(8px);
+                        left: 0;
+                        font-size: rem(14px);
+                        font-weight: 500;
+                        color: $colorGray;
+                    }
+                }
+            }
+            &__log {
+                &-header {
+                    &-row {
+                        display: none;
+                    }
+                }
+                &-item {
+                    &-row {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+                &-name,
+                &-date {
+                    position: relative;
+                    padding: rem(8px) 0 rem(8px) rem(120px);
+                    width: 100%;
+                    word-wrap: break-word;
+                    &::before {
+                        content: attr(data-name);
+                        position: absolute;
+                        top: rem(8px);
+                        left: 0;
+                        font-size: rem(14px);
+                        font-weight: 500;
+                        color: $colorGray;
+                    }
+                }
+            }
+        }
+    }
+
 </style>

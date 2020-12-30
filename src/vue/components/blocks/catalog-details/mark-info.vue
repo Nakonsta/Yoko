@@ -6,18 +6,15 @@
           <VueSlickCarousel
               ref="c2"
               class="gallery-thumbs"
-              v-bind="window.width > 1200 ? settings : {}"
+              v-bind="window.width > 1200 ? settings : { arrows: false }"
               :asNavFor="$refs.c1"
-              :slidesToShow="show"
+              :slidesToShow="this.show"
               :swipeToSlide="true"
               :focusOnSelect="true"
           >
-            <div><img draggable="false" src="/content/catalog/slider-add-1.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-2.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-3.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-4.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-4.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider-add-4.jpg" /></div>
+            <div v-for="(src, i) in sliderImagesThumbs" :key="i">
+              <img draggable="false" :src="src" />
+            </div>
           </VueSlickCarousel>
           <VueSlickCarousel
               ref="c1"
@@ -25,13 +22,12 @@
               :asNavFor="$refs.c2"
               :arrows="false"
               :focusOnSelect="true"
+              :dots="window.width <= 600 ? true : false"
+              dotsClass="dots"
           >
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
-            <div><img draggable="false" src="/content/catalog/slider.jpg" /></div>
+            <div v-for="(item, idx) in sliderImagesTop" :key="idx">
+              <img draggable="false" :src="item" style="max-height: 200px;" />
+            </div>
           </VueSlickCarousel>
         </div>
       </div>
@@ -55,7 +51,7 @@ export default {
   },
   data() {
     return {
-      show: 1,
+      show: 2,
       window: {
         width: 0,
       },
@@ -63,6 +59,24 @@ export default {
         "vertical": true,
         "verticalSwiping": true,
       },
+      sliderImagesThumbs: [
+        "https://stage-operator.ec.extyl.pro/storage/products/404/sample.jpg",
+        "/content/catalog/slider-add-1.jpg",
+        "/content/catalog/slider-add-2.jpg",
+        "/content/catalog/slider-add-3.jpg",
+        "/content/catalog/slider-add-4.jpg",
+        "/content/catalog/slider-add-4.jpg",
+        "/content/catalog/slider-add-4.jpg",
+        "https://stage-operator.ec.extyl.pro/storage/products/405/sample.png"
+      ],
+      sliderImagesTop: [
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg",
+        "/content/catalog/slider.jpg"
+      ]
     }
   },
   props: {
@@ -71,8 +85,14 @@ export default {
       type: Object
     }
   },
+  watch: {
+    root() {
+      this.initSliderImages();
+    }
+  },
   mounted() {
     this.show = 4
+    this.initSliderImages();
   },
   created() {
     window.addEventListener('resize', this.handleResize);
@@ -84,6 +104,14 @@ export default {
   methods: {
     handleResize() {
       this.window.width = window.innerWidth;
+    },
+    initSliderImages() {
+      let { images = [] } = this.root;
+      if (images.length) {
+        this.sliderImagesTop = images;
+        this.sliderImagesThumbs = images;
+        this.show = images.length;
+      }
     }
   }
 }
@@ -112,11 +140,15 @@ export default {
         margin-right: rem(32px);
         flex-direction: column;
       }
+      @media(max-width: 600px) {
+        display: none;
+      }
       .slick-slide {
         img {
           padding: rem(5px);
           border-radius: rem(6px);
           border: 1px solid transparent;
+          max-height: 100px;
         }
       }
       .slick-current {
@@ -164,9 +196,72 @@ export default {
         order: 1;
         width: calc(100% - 116px);
       }
+      @media (max-width: 600px) {
+        margin-bottom: rem(75px);
+      }
     }
   }
   img {
     max-width: 100%;
+  }
+  .dots {
+    display: flex;
+    position: absolute;
+    left: 0;
+    bottom: -40px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+    align-items: center;
+    li {
+      position: relative;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin: 0 5px;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    li button {
+      font-size: 0;
+      line-height: 0;
+      display: block;
+      width: 20px;
+      height: 20px;
+      padding: 5px;
+      cursor: pointer;
+      color: transparent;
+      border: 0;
+      outline: none;
+      background: transparent;
+
+      &:hover, &:focus {
+        outline: none;
+      }
+
+      &:before {
+        background-color: #373735;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        content: '';
+        text-align: center;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+
+    li.slick-active {
+      button:before {
+        opacity: 1;
+        background-color: $colorTurquoise;
+      }
+    }
   }
 </style>

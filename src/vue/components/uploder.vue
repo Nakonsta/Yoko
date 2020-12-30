@@ -1,5 +1,5 @@
 <template>
-  <div class="uploader" :class="{'error': isNotFiles}">
+  <div class="uploader" :class="{'error': isNotFiles || error,'disabled': disabled}">
     <div v-show="!files.length && (!$attrs.value || !$attrs.value.length)">
       <slot></slot>
       <div
@@ -152,6 +152,10 @@ export default {
   name: 'Uploader',
   mixins: [api],
   props: {
+    error: {
+      default: false,
+      type: Boolean
+    },
     disabled: {
       default: false,
       type: Boolean
@@ -245,6 +249,7 @@ export default {
     drop: function (evt) {
       evt.preventDefault();
       evt.stopPropagation();
+      if( this.disabled ) return;
       this.$el.querySelector('.uploader__file').classList.remove('hover');
       let self = this;
       self.files = [];
@@ -260,6 +265,7 @@ export default {
       else if (this.preview) this.previewFiles();
     },
     change: function (evt) {
+      if( this.disabled ) return;
       let self = this;
       self.files = [];
       Array.prototype.forEach.call(evt.target.files, function (file) {
@@ -318,7 +324,7 @@ export default {
       } else {
         this.$attrs.value.splice(index, 1);
       }
-      this.$emit('input', this.files.length ? true : '');
+      this.$emit('input', this.files.length ? true : null);
     },
     previewFiles: function () {
       let reader = null;
@@ -358,19 +364,34 @@ export default {
     },
     previewCancel: function (item, index) {
       this.files.splice(index, 1);
-      this.$emit('input', this.files.length ? true : '');
+      this.$emit('input', this.files.length ? true : null);
     },
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../../assets/sass/variables/variables";
 @import "../../assets/sass/variables/fluid-variables";
 @import "../../assets/sass/mixins/fluid-mixin";
 @import "../../assets/sass/mixins/mq";
 
 .uploader {
+  &.disabled {
+    color: #cdcdcd;
+    svg {
+      fill: #cdcdcd;
+    }
+    .uploader__file {
+      background: #f3f3f3;
+    }
+    .uploader__file-btn {
+      border-color: #cdcdcd;
+      color: #cdcdcd !important;
+      background-color: transparent !important;
+      pointer-events: none;
+    }
+  }
   p {
     margin: 0 0 rem(24px);
     font-size: rem(16px);

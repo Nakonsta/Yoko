@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="procedures__view" v-if="$store.state.auth.loggedIn">
+            <div class="procedures__view" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'">
                 <span>Показывать:</span>
                 <div class="dropdown">
                     <div class="dropdown__value">{{ viewList[view] }}</div>
@@ -50,8 +50,11 @@
             </div>
         </div>
         <div class="procedures__items">
-            <div class="procedures__item procedures__item--empty" v-if="isFirstLoad && !items.length">
+            <div class="procedures__item procedures__item--empty" v-if="isFirstLoad && !items.length && !loading">
                 По вашему запросу ничего не найдено
+            </div>
+            <div class="procedures__item procedures__item--loading" v-if="!items.length && loading">
+
             </div>
             <div v-for="(item, index) in items" :key="item.id" class="procedures__item" v-if="isFirstLoad && items.length">
                 <div class="procedures__item-head">
@@ -101,11 +104,11 @@
                         <div class="procedures__item-btns">
                             <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                             <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
-                            <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contactor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden')" v-if="$store.getters.userRole === 'contactor'" :class="{active: itemMarkExist(item, 'hidden')}">
+                            <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden', itemMarkExist(item, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
                                 <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
                             </a>
-                            <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite')" v-if="$store.getters.userRole === 'contactor'" :class="{active: itemMarkExist(item, 'favorite')}">
+                            <a href="javascript:{}" :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(item, 'favorite', itemMarkExist(item, 'favorite') ? 'Процедура удалена из избранного' : 'Процедура добавлена в избранное')" v-if="$store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'favorite')}">
                                 <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                             </a>
                         </div>
@@ -129,7 +132,6 @@
                             {{ formatDateNoTime(item.terms_tender_to) }}
                         </div>
                     </div>
-
                 </div>
                 <div class="procedures__item-foot">
                     <div class="procedures__item-flex">
@@ -139,7 +141,7 @@
                                 <path d="M9 1L5 4L1 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </a>
-                        <a href="javascript:{}" class="btn btn--bdr procedures__item-request">Отправить заявку</a>
+                        <a href="javascript:{}" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'">Отправить заявку</a>
                     </div>
                     <div class="procedures__item-products" v-if="item.isExpanded || expandAll">
                         <table>
@@ -163,7 +165,7 @@
                             </thead>
                             <tbody>
                                 <tr
-                                    v-for="product in item.products"
+                                    v-for="product in item.purchase_subject.products"
                                     :key="product.id"
                                     class="procedures__item-product"
                                 >
@@ -256,9 +258,17 @@
                 view: 'all',
                 viewList: {
                     'all': 'все',
+                    'hidden': 'скрытые',
+                },
+            }
+        },
+        created() {
+            if (this.$store.getters.userRole === 'contractor') {
+                this.viewList = {
+                    'all': 'все',
                     'favorite': 'избранные',
                     'hidden': 'скрытые',
-                }
+                };
             }
         },
         methods: {
@@ -305,26 +315,36 @@
             itemMarkExist(item, mark) {
                 return item.marks.find((item) => item.mark_code === mark);
             },
-            updateItemMark(item, mark) {
+            updateItemMark(item, mark, msg) {
                 if( this.itemMarkExist(item, mark) ) {
-                    this.addMarketplaceProcedureMark(item.id, mark)
-                        .then((response) => {
-                            const mark = response.data.data;
-                            item.marks.push(mark);
-                        })
-                        .catch((e) => {
-                            console.log(e);
-                        });
-                } else {
                     this.removeMarketplaceProcedureMark(item.id, mark)
                         .then((response) => {
-                            const mark = response.data.data;
+                            // const newMark = response.data.data;
                             item.marks.forEach((i, index) => {
                                 if (i.mark_code === mark) item.marks.splice(index, 1)
                             });
+                            window.notificationSuccess(msg);
+                            if (this.$store.getters.userRole === 'contractor' && ((mark === 'hidden' && this.view !== 'favorite') || (mark === 'favorite' && this.view === 'favorite'))) {
+                                this.$emit('getItems');
+                            }
                         })
                         .catch((e) => {
                             console.log(e);
+                            window.notificationError('Ошибка сервера');
+                        });
+                } else {
+                    this.addMarketplaceProcedureMark(item.id, mark)
+                        .then((response) => {
+                            const newMark = response.data.data;
+                            item.marks.push(newMark);
+                            window.notificationSuccess(msg);
+                            if (this.$store.getters.userRole === 'contractor' && ((mark === 'hidden' && this.view !== 'favorite') || (mark === 'favorite' && this.view === 'favorite'))) {
+                                this.$emit('getItems');
+                            }
+                        })
+                        .catch((e) => {
+                            console.log(e);
+                            window.notificationError('Ошибка сервера');
                         });
                 }
             },
@@ -351,7 +371,7 @@
     .procedures {
         display: flex;
         flex-direction: column;
-        min-height: 100%;
+        /*min-height: 100%;*/
         &__head {
             display: flex;
             justify-content: space-between;
@@ -479,6 +499,10 @@
 
             &--empty {
 
+            }
+
+            &--loading {
+                min-height: rem(200px);
             }
 
             @include mq($until: widescreen) {

@@ -30,14 +30,13 @@
         </div>
         <div v-if="step === 3">
           <form-step3
-              :data-form="
-                forms.form2.oldCompany === '1' ? oldCompany : forms.form3
-              "
+              :data-form="forms.form3"
               :organization-type="forms.form2.organizationType"
               :old-company="forms.form2.oldCompany"
               :inn="forms.form2.inn"
               :lists="lists"
               :step="step"
+              @resetCompany="resetCompany"
               @newStep="setStep"
               @startRegistration="registration"
           >
@@ -66,6 +65,7 @@ import demands from './components/registration/demands.vue'
 import gis from './components/registration/gis.vue'
 import api from './helpers/api'
 import authorizationMixins from "./helpers/authorizationMixins";
+import functions from "@/helpers/functions";
 
 export default {
   name: 'App',
@@ -76,7 +76,7 @@ export default {
     demands,
     gis,
   },
-  mixins: [api, authorizationMixins],
+  mixins: [api, authorizationMixins, functions],
   data() {
     return {
       step: 1,
@@ -192,6 +192,33 @@ export default {
     this.getFieldsData()
   },
   methods: {
+    resetCompany() {
+      this.forms.form3 = {
+        fullCompanyName: '',
+        abbreviatedName: '',
+        ogrn: '',
+        kpp: '',
+        smallBusinessFlag: false,
+        declarationFile: undefined,
+        legalAddress: {
+          country: null,
+          address: '',
+          mailIndex: '',
+        },
+        actualAddress: {
+          coincidesLegalAddress: false,
+          country: null,
+          address: '',
+          mailIndex: '',
+        },
+        mailAddress: {
+          coincidesLegalAddress: false,
+          country: null,
+          address: '',
+          mailIndex: '',
+        },
+      }
+    },
     parseOKPD2OKVED(arr) {
       return arr.map((item) => {
         return {
@@ -210,7 +237,7 @@ export default {
     updateDataRegisteredCompany(data) {
       this.forms.form2.inn = data.inn
 
-      this.oldCompany = {
+      this.forms.form3 = {
         id: data.id,
         fullCompanyName: data.name,
         abbreviatedName: data.shortName,

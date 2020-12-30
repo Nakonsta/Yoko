@@ -13,6 +13,17 @@
                 под заказ
             </span>
         </div>
+        <div v-if="item.company_id" class="table-cell__company cable-info__company" data-name="Компания">
+          <span>
+            {{ item.company.name }}
+          </span>
+          <span class="cable-info__company-desc">
+            Рейтинг компании:
+          </span>
+          <span>
+            {{ item.company.rating }}
+          </span>
+        </div>
         <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : ''">
             <template v-if=" $store.state.auth.loggedIn">
                 <span v-if="item.price">
@@ -163,6 +174,17 @@ export default {
         &__quantity {
             font-size: rem(14px);
         }
+        &__company {
+            font-size: rem(14px);
+            > span {
+              &:first-child {
+                display: block;
+              }
+            }
+            &-desc {
+              font-weight: 400;
+            }
+        }
         &__price {
             font-size: rem(16px);
             color: $colorTurquoise;
@@ -229,13 +251,16 @@ export default {
 
     .table-cell {
         &__title {
-            width: 25%;
+            width: 21%;
         }
         &__quantity {
-            width: 20%;
+            width: 10%;
         }
         &__price {
             width: 20%;
+        }
+        &__company {
+          width: 25%;
         }
         &__certificates {
             width: 35%;
@@ -311,6 +336,7 @@ export default {
             align-items: flex-start;
             &__title,
             &__quantity,
+            &__company,
             &__price,
             &__certificates {
                 position: relative;
@@ -334,6 +360,9 @@ export default {
                 width: 100%;
             }
             &__quantity {
+                width: 100%;
+            }
+            &__company {
                 width: 100%;
             }
             &__price {

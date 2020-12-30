@@ -96,6 +96,7 @@ input[type=number]
     margin: 0 0 rem(10px)
     font-size: rem(16px)
     line-height: (22/16)
+    font-weight: 500
     &--radio
       margin-bottom: rem(16px)
 
@@ -108,6 +109,14 @@ input[type=number]
   &__add
     margin: 0 0 rem(32px)
     font-weight: 500
+
+    &.disabled
+      a
+        color: #cdcdcd !important
+        pointer-events: none
+
+        svg
+          fill: #cdcdcd !important
 
     a
       padding-left: 30px
@@ -290,6 +299,9 @@ div.field__range
 
   .field
     padding-right: rem(58px)
+
+    &:disabled ~ .sprite-calendar
+      fill: #cdcdcd
 
   .sprite-calendar
     display: block

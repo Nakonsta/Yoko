@@ -1,8 +1,14 @@
 <template>
     <div class="tender-item">
         <div class="tender-item__top">
-            <TenderItemCard v-if="!isLoading" :tenderItemData="tenderItemData" :company="company" />
-            <TenderItemMenu v-if="!isLoading" :activeTab="activeTab" @changeTab = "changeTab" />            
+            <TenderItemCard 
+                v-if="!isLoading"
+                :tenderItemData="tenderItemData"
+                :company="company"
+                :itemsStatuses="itemsStatuses"
+                @changeTab = "changeTab"
+            />
+            <TenderItemMenu v-if="!isLoading" :tenderItemData="tenderItemData" :activeTab="activeTab" @changeTab = "changeTab" />            
         </div>
         <div class="tender-item__tabs">
             <TenderItemTabs 
@@ -153,7 +159,8 @@ export default {
                 shortName: null,
                 updatedAt: null,
                 website: null,
-            }
+            },
+            itemsStatuses: [],
         }
     },
 
@@ -161,6 +168,7 @@ export default {
         this.getTenderItemId()
         this.getTenderItemMainData(this.tenderItemId)
         this.checkUrlHash()
+        this.getMarketplaceProceduresFilter()
     },
 
     methods: {
@@ -183,7 +191,7 @@ export default {
                 })
         },
         getCompanyData() {
-            this.fetchCompanyById(this.tenderItemData.inn)
+            this.fetchCompanyByInn(this.tenderItemData.inn)
                 .then((response) => {
                     this.company = response.data.data;
                 })
@@ -197,23 +205,58 @@ export default {
         checkUrlHash() {
             if (window.location.hash) {
                 const hash = window.location.hash.substring(1);
-                if (
-                    hash === 'main-info' ||
+                if (this.tenderItemData.tender_trading_format === 'trading_223' &&
+                    (hash === 'main-info' ||
                     hash === 'client' ||
                     hash === 'lots' ||
                     hash === 'documents' ||
-                    hash === 'protocols'
+                    hash === 'protocols' ||
+                    hash === 'logs' ||
+                    hash === 'chat')
+                ) {
+                    this.activeTab = hash
+                } else if (this.tenderItemData.tender_trading_format !== 'trading_223' &&
+                    (hash === 'main-info' ||
+                    hash === 'client' ||
+                    hash === 'documents' ||
+                    hash === 'logs')
                 ) {
                     this.activeTab = hash
                 }
             }
             return false
+        },
+        parseObjToArr(obj) {
+            const arr = [];
+            for (const key in obj) {
+                arr.push({
+                    id: key,
+                    name: obj[key],
+                });
+            }
+            return arr;
+        },
+        getMarketplaceProceduresFilter() {
+            this.fetchMarketplaceProceduresFilter()
+                .then((response) => {
+                    let filterData = response.data.data.procedures;
+                    console.log(filterData);
+                    this.itemsStatuses = this.parseObjToArr(filterData.values.status);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+    @import "../assets/sass/variables/variables";
+    @import "../assets/sass/variables/fluid-variables";
+    @import "../assets/sass/mixins/fluid-mixin";
+    @import "../assets/sass/mixins/mq";
+
     .tender-item {
         position: relative;
         &__top {
@@ -221,6 +264,14 @@ export default {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+        }
+    }
+
+    @include mq($until: desktop) {
+        .tender-item {
+            &__top {
+                flex-direction: column-reverse;
+            }
         }
     }
 </style>

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export default {
     methods: {
         declOfNum(n, text_forms) {
@@ -46,15 +48,19 @@ export default {
             return fData
         },
         objectToFormData(data) {
-            const fData = new FormData()
+            const fData = new FormData();
 
             function appendFormData(data, root, formDataObj) {
                 root = root || ''
                 if (data instanceof File) {
-                    formDataObj.append(root, data)
+                    formDataObj.append(root, data);
+                } else if (data instanceof Date) {
+                    formDataObj.append(root, moment(data).format('YYYY-MM-DD'));
                 } else if (Array.isArray(data)) {
                     for (let i = 0; i < data.length; i++) {
-                        appendFormData(data[i], root + '[' + i + ']', formDataObj)
+                        if (data[i]) {
+                            appendFormData(data[i], root + '[' + i + ']', formDataObj)
+                        }
                     }
                 } else if (typeof data === 'object' && data) {
                     for (const key in data) {
@@ -112,6 +118,16 @@ export default {
                 return `${result} ${convertTo.toUpperCase()}`;
             } else {
                 return result;   
+            }
+        },
+        scrollToError() {
+            const slide = document.querySelector('.error');
+            if(slide) {
+                const top = window.scrollY + slide.getBoundingClientRect().y;
+                window.scrollTo({
+                    top: top - 60,
+                    behavior: "smooth"
+                });
             }
         },
     }

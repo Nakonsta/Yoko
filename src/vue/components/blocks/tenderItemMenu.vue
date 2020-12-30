@@ -2,25 +2,25 @@
     <div class="tender-item__menu">
         <div class="tender-item__menu-inner">
             <div :class="[activeTab == 'main-info' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('main-info')" class="tender-item__menu-link">Общая информация</span>
+                <span @click="changeActualTab('main-info')" class="tender-item__menu-link">Общая информация</span>
             </div>
             <div :class="[activeTab == 'client' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('client')" class="tender-item__menu-link">Заказчик</span>
+                <span @click="changeActualTab('client')" class="tender-item__menu-link">Заказчик</span>
             </div>
-            <div :class="[activeTab == 'lots' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('lots')" class="tender-item__menu-link">Список лотов</span>
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'lots' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeActualTab('lots')" class="tender-item__menu-link">Список лотов</span>
             </div>
             <div :class="[activeTab == 'documents' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('documents')" class="tender-item__menu-link">Документы</span>
+                <span @click="changeActualTab('documents')" class="tender-item__menu-link">Документы</span>
             </div>
-            <div class="tender-item__menu-item">
-                <a href="#" class="tender-item__menu-link">Разъяснения</a>
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'chat' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeActualTab('chat')" class="tender-item__menu-link">Разъяснения</span>
             </div>
-            <div :class="[activeTab == 'protocols' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
-                <span @click="changeChange('protocols')" class="tender-item__menu-link">Протоколы</span>
+            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'protocols' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeActualTab('protocols')" class="tender-item__menu-link">Протоколы</span>
             </div>
-            <div class="tender-item__menu-item">
-                <a href="#" class="tender-item__menu-link">Журнал событий</a>
+            <div :class="[activeTab == 'logs' ? 'tender-item__menu-item--active' : '', 'tender-item__menu-item']">
+                <span @click="changeActualTab('logs')" class="tender-item__menu-link">Журнал событий</span>
             </div>
         </div>
     </div>
@@ -34,11 +34,15 @@ export default {
         activeTab: {
             type: String,
             required: true,
-        }
+        },
+        tenderItemData: {
+            type: Object,
+            required: true,
+        },
     },
 
     methods: {
-        changeChange(tab) {
+        changeActualTab(tab) {
             window.location.hash = tab;
             this.$emit('changeTab', tab);
             return false;
@@ -77,6 +81,19 @@ export default {
             &:focus {
                 color: $colorTurquoise;
             }
+        }
+    }
+
+    @include mq($until: widescreen) {
+        .tender-item__menu {
+            width: 296px;
+        }
+    }
+
+    @include mq($until: desktop) {
+        .tender-item__menu {
+            width: 100%;
+            margin-bottom: 2rem;
         }
     }
 </style>

@@ -48,9 +48,21 @@
             <div class="tender-item__right">
                 <div class="tender-item__actions">
                     <div class="tender-item__status">
-                        {{ tenderItemData.status }}
+                        {{ getTenderStatusName(tenderItemData) }}
                     </div>
-                    <Actions />
+                    <div v-if="tenderItemData" class="tender-item__actions-block">
+                        <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
+                        <a href="javascript:{}" title="Приложенные файлы" @click="changeActualTab('documents')">
+                            <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
+                        </a>
+                        <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
+                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" v-if="$store.getters.userRole === 'contractor'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
+                            <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
+                        </a>
+                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'" v-if="$store.state.auth.loggedIn" @click="updateItemMark(tenderItemData, 'hidden')" :class="{active: itemMarkExist(tenderItemData, 'hidden')}">
+                            <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
+                        </a>
+                    </div>
                 </div>
                 <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.start_price" class="tender-item__start-price">
                     <div class="tender-item__start-price-text">
@@ -82,8 +94,10 @@
         </div>
         <div class="tender-item__products">
             <div class="tender-item__products-actions">
-                <a href="#" class="tender-item__products-show">{{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}</a>
-                <a href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
+                <span @click="isProductsShown = !isProductsShown" :class="[isProductsShown ? '': 'tender-item__products-show--hided', 'tender-item__products-show']">
+                    {{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}
+                </span>
+                <a v-if="$store.getters.userRole === 'contractor'" href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
             </div>
             <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.products" class="tender-item__products-table">
                 <div v-if="tenderItemData.purchase_subject.products.length" class="tender-item__products-thead company-products__thead">
@@ -106,8 +120,15 @@
                         Аналог
                     </div>
                 </div>
-                <div v-for="(item, key) in tenderItemData.purchase_subject.products" :key="key">
-                    <TenderItemProductCard :item="item" />
+                <div v-if="isProductsShown">
+                    <div v-for="(item, key) in tenderItemData.purchase_subject.products" :key="key">
+                        <TenderItemProductCard :item="item" />
+                    </div>
+                </div>
+                <div v-else>
+                    <div v-for="(item, key) in tenderItemData.purchase_subject.products.slice(0,3)" :key="key">
+                        <TenderItemProductCard :item="item" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,6 +136,7 @@
 </template>
 
 <script>
+import api from '../../helpers/api'
 import Actions from './actions.vue'
 import TenderItemProductCard from './tenderItemProductCard.vue'
 
@@ -129,13 +151,19 @@ export default {
         company: {
             type: Object,
             required: true,
-        }
+        },
+        itemsStatuses: {
+            default: [],
+            type: Array
+        },
     },
 
     components: {
         Actions,
         TenderItemProductCard,
     },
+
+    mixins: [api],
     
     data() {
         return {
@@ -152,9 +180,6 @@ export default {
         }
     },
 
-    created() {
-    },
-
     methods: {
         formatDateNoTime(string) {
             var d = new Date(string),
@@ -168,6 +193,60 @@ export default {
                 day = '0' + day;
 
             return [day, month, year].join('.');
+        },
+        getTenderStatusName(item) {
+            const status = this.itemsStatuses.find(
+                (status) => status.id === item.status,
+            );
+            if (status) {
+                return status.name;
+            }
+            return item.status;
+        },
+        itemMarkExist(item, mark) {
+            if (item.marks) {
+                return item.marks.find((item) => item.mark_code === mark);
+            }
+            return false;
+        },
+        updateItemMark(item, mark) {
+            if( !this.itemMarkExist(item, mark) ) {
+                this.addMarketplaceProcedureMark(item.id, mark)
+                    .then((response) => {
+                        const mark = response.data.data;
+                        item.marks.push(mark);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            } else {
+                this.removeMarketplaceProcedureMark(item.id, mark)
+                    .then((response) => {
+                        const mark = response.data.data;
+                        item.marks.forEach((i, index) => {
+                            if (i.mark_code === mark) item.marks.splice(index, 1)
+                        });
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            }
+        },
+        changeActualTab(tab) {
+            window.location.hash = tab;
+            this.$emit('changeTab', tab);
+            this.scrollToDocuments();
+            return false;
+        },
+        scrollToDocuments() {
+            const tabs = document.querySelector('.tender-item__tabs');
+            if(tabs) {
+                const top = window.scrollY + tabs.getBoundingClientRect().y;
+                window.scrollTo({
+                    top: top - 60,
+                    behavior: "smooth"
+                });
+            }
         },
     }
 }
@@ -262,6 +341,19 @@ export default {
         }
         &__actions {
             padding-bottom: rem(38px);
+            display: flex;
+            align-items: center;
+            &-block {
+                display: flex;
+                align-items: center;
+                margin-left: 1rem;
+                svg {
+                    display: block;
+                    width: 20px;
+                    height: 20px;
+                    margin-left: 1rem;
+                }
+            }
         }
         &__products {
             &-actions {
@@ -277,6 +369,8 @@ export default {
                 color: $colorTurquoise;
                 position: relative;
                 padding-right: rem(18px);
+                cursor: pointer;
+                min-width: 150px;
                 &::after {
                     content: '';
                     position: absolute;
@@ -288,6 +382,10 @@ export default {
                     top: 50%;
                     right: 0;
                     transform: translateY(-50%);
+                    transition: all .5s ease-out;
+                }
+                &--hided::after {
+                    transform: translateY(-50%) rotate(180deg);
                 }
             }
             &-table {
@@ -323,6 +421,71 @@ export default {
         }
         &__analogues {
             width: 20%;
+        }
+    }
+    @include mq($until: widescreen) {
+        .tender-item {
+            &__info {
+                width: calc(100% - 296px);
+            }
+            &__requsites {
+                flex-direction: column;
+            }
+            &__row {
+                flex-direction: column;
+            }
+        }
+        .table-cell {
+            &__title {
+                width: 30%;
+                padding-right: 0.75rem;
+            }
+            &__quantity {
+                width: 15%;
+            }
+            &__measure {
+                width: 20%;
+            }
+            &__sum {
+                width: 20%;
+            }
+            &__vat {
+                width: 20%;
+            }
+            &__analogues {
+                width: 15%;
+            }
+        }
+    }
+
+    @include mq($until: desktop) {
+        .tender-item {
+            &__info {
+                width: 100%;
+            }
+        }
+    }
+
+    @include mq($until: 575px) {
+        .tender-item {
+            &__main {
+                flex-direction: column;
+            }
+            &__products {
+                &-actions {
+                    flex-direction: column-reverse;
+                }
+                &-apply {
+                    width: 100%;
+                    margin-bottom: 1rem;
+                }
+                &-table {
+                    padding-top: 2rem;
+                }
+                &-thead {
+                    display: none;
+                }
+            }
         }
     }
 </style>

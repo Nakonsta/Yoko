@@ -1,9 +1,9 @@
 <template>
-    <div class="tender-item__tab-inner">
+    <div v-if="company.name" class="tender-item__tab-inner">
         <div class="tender-item__tab-block">
             <div class="tender-item__tab-rows">
                 <div class="tender-item__tab-row">
-                    <div class="tender-item__tab-row-name">
+                    <div class="tender-item__tab-row-name tender-item__tab-row-name--company">
                         {{ company.shortName ? company.shortName : company.name }}
                     </div>
                     <div v-if="company.rating" class="tender-item__tab-row-value tender-item__tab-row-value--flex">
@@ -127,6 +127,9 @@
                 </div>
             </div>
         </div> 
+    </div>
+    <div v-else class="tender-item__empty">
+        Информация о заказчике не предоставлена
     </div>
 </template>
 
