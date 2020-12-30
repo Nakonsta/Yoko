@@ -194,7 +194,7 @@ export default {
       }
       @media(min-width: 1200px) {
         order: 1;
-        width: calc(100% - 116px);
+        width: calc(100% - 120px);
       }
       @media (max-width: 600px) {
         margin-bottom: rem(75px);
