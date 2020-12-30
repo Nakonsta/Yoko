@@ -657,6 +657,7 @@ export default {
     @media(min-width: 1024px){
       display: flex;
       margin: 0 -20px;
+      flex-wrap: wrap;
     }
   }
   &__col{
