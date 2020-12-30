@@ -530,7 +530,7 @@ export default {
             characters.push({name, desc: value[0]});
           }
 
-          if (this.descriptionCharacters[key]) {
+          if (value && this.descriptionCharacters[key]) {
             descriptionCharacters.push({title: this.descriptionCharacters[key], desc: value[0]});
           }
         }
@@ -544,9 +544,12 @@ export default {
         this.rootData.items = [{ title: "Описание", desc: data.description }, ...descriptionCharacters];
       }
 
-      //TO-DO: сделать получение компаний на марках. Если их нет, тогда вообще убрать производителей.
-      if (data.companies) {
-        // set companies logic.
+      if (data.companies && data.companies.length) {
+        const ids = data.companies.map((item) => item.company_id);
+        this.fetchCompaniesByIds(ids).then((response) => {
+          this.rootData.companies = response.data.data.elements;
+          this.setManufacturer(this.rootData.companies);
+        });
       } else {
         this.rootData.manufacturer = [];
         this.hideLink("#manufacturer");

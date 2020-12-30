@@ -76,7 +76,6 @@ export default {
   data() {
     return {
       marksizeId: null,
-      companyId: null,
       rootData: null,
       lists: {
         quantity: [
@@ -514,7 +513,6 @@ export default {
       }
 
       if (data.companies && data.companies.length) {
-        this.companyId = data.companies[0].company_id;
         const ids = data.companies.map((item) => item.company_id);
         this.fetchCompaniesByIds(ids).then((response) => {
           this.rootData.companies = response.data.data.elements;
