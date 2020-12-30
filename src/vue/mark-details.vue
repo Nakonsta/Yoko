@@ -509,6 +509,14 @@ export default {
       if (data.marksizes) {
         this.rootData.markoSize = data.marksizes;
       }
+
+      if (data.description) {
+        this.rootData.description = data.description;
+      }
+
+      if (data.appointment) {
+        this.rootData.appointment = data.appointment;
+      }
     },
     setCharacters(data) {
       const characters = [];
@@ -522,7 +530,7 @@ export default {
             characters.push({name, desc: value[0]});
           }
 
-          if (this.descriptionCharacters[key]) {
+          if (value && this.descriptionCharacters[key]) {
             descriptionCharacters.push({title: this.descriptionCharacters[key], desc: value[0]});
           }
         }
@@ -534,6 +542,17 @@ export default {
 
       if (descriptionCharacters.length) {
         this.rootData.items = [{ title: "Описание", desc: data.description }, ...descriptionCharacters];
+      }
+
+      if (data.companies && data.companies.length) {
+        const ids = data.companies.map((item) => item.company_id);
+        this.fetchCompaniesByIds(ids).then((response) => {
+          this.rootData.companies = response.data.data.elements;
+          this.setManufacturer(this.rootData.companies);
+        });
+      } else {
+        this.rootData.manufacturer = [];
+        this.hideLink("#manufacturer");
       }
     },
     setDocuments(data) {
@@ -555,6 +574,19 @@ export default {
         this.rootData.links = result;
       }
     },
+    setManufacturer(companies) {
+      const result = companies.map((item) => {
+        const tags = [];
+        if (item.contractor) {
+          tags.push("Поставщик");
+        }
+        tags.push(item.businessSize.value);
+        item.ico = './content/company-default.jpg';
+        item.tags = tags;
+        return item;
+      });
+      this.rootData.manufacturer = result;
+    },
     handleTabLinkClick(link) {
       if (link) {
         this.currentTab = link.replace("#", "").trim();
@@ -566,6 +598,12 @@ export default {
         setTimeout(function () {
           elLink.style.display = "block";
         }, 0);
+      }
+    },
+    hideLink(url) {
+      let idx = this.tabLinks.findIndex((item) => item.url === url);
+      if (idx > -1) {
+        this.tabLinks.splice(idx, 1);
       }
     },
     getMarkData(id) {

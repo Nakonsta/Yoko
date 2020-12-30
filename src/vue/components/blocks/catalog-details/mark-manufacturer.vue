@@ -10,15 +10,15 @@
             <div class="group-el__ratings">
               <div class="group-el__ratings-el">
                 <svg class="sprite-field-time"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#time"></use></svg>
-                {{ item.rating.rate }}
+                {{ item.activityIndex }}
               </div>
               <div class="group-el__ratings-el">
                 <svg class="sprite-field-time"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#time"></use></svg>
-                {{ item.rating.time }}
+                {{ item.innerRating }}
               </div>
               <div class="group-el__ratings-el">
                 <svg class="sprite-field-fav"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#fav"></use></svg>
-                {{ item.rating.fav }}
+                {{ item.rating }}
               </div>
             </div>
           </div>

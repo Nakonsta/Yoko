@@ -41,7 +41,7 @@
     </div>
     <div class="mark-catalog__item-body filter-body">
       <div v-for="item in items" :key="item.id" class="mark-catalog__product">
-        {{ item.name }}
+        <a class="marksize-link" :href="item.url">{{ item.name }}</a>
       </div>
     </div>
   </div>
@@ -151,4 +151,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+  .marksize-link {
+    color: inherit;
+  }
+</style>
