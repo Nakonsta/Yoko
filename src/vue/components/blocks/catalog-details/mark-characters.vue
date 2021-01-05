@@ -3,7 +3,7 @@
     <div class="row row--null">
       <div class="col col-md-6 col-xs-12">
         <ul class="list--counter">
-          <li v-for="(item, index) in items[0]" :key="index">
+          <li v-for="(item, index) in columnFirst" :key="index">
             <span class="key">{{ item.name }}</span>
             <span class="value">{{ item.desc }}</span>
           </li>
@@ -11,7 +11,7 @@
       </div>
       <div class="col col-md-6 col-xs-12">
         <ul class="list--counter">
-          <li v-for="(item, index) in items[1]" :key="'0'+index">
+          <li v-for="(item, index) in columnSecond" :key="'0'+index">
             <span class="key">{{ item.name }}</span>
             <span class="value">{{ item.desc }}</span>
           </li>
@@ -25,17 +25,19 @@
 export default {
   name: "MarkCharacters",
   data() {
-    return {
-      items: []
-    }
+    return {}
   },
-  created() {
-    this.items[0] = this.root.slice(0, this.root.length / 1.6);
-    this.items[1] = this.root.slice(this.root.length / 1.6);
+  computed: {
+    columnFirst() {
+      return this.root.slice(0, this.root.length / 1.9);
+    },
+    columnSecond() {
+      return this.root.slice(this.root.length / 1.9);
+    }
   },
   props: {
     root: {
-      default: null,
+      default: () => [],
       type: Array,
     }
   }

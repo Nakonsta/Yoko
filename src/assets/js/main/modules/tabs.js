@@ -7,7 +7,7 @@ document.addEventListener('click', (e) => {
     hash = el.getAttribute('href').substr(1);
     el.closest('.js-tabs').querySelectorAll('a').forEach((link) => {
         let tab = document.getElementById(link.getAttribute('href').substr(1));
-        if( el === link ) {
+        if( el.getAttribute('href') === link.getAttribute('href') ) {
             if (tab) {
                 if (tab.classList.contains('laws__folders')) {
                     tab.style.display = 'flex';
@@ -37,7 +37,6 @@ document.addEventListener('click', (e) => {
 
 // инициализация при загрузке
 document.querySelectorAll('.js-tabs').forEach((tabs) => {
-    console.log(tabs);
     let link = tabs.querySelector('li a[href="#'+hash+'"]') || tabs.querySelector('li.active a') || tabs.querySelector('li:nth-child(1) a');
     if (link) {
         link.click();

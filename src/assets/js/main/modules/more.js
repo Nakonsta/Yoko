@@ -1,5 +1,5 @@
 //https://css-tricks.com/container-adapting-tabs-with-more-button/
-export function initTabs() {
+export function initMore() {
     document.querySelectorAll('.js-more').forEach((container) => {
         const primary = container.querySelector('.js-more__items');
         const primaryItems = container.querySelectorAll('.js-more__item:not(.-more)');
@@ -85,4 +85,4 @@ export function initTabs() {
     });
 }
 
-initTabs();
+initMore();

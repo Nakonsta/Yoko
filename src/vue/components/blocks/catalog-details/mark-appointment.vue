@@ -1,12 +1,12 @@
 <template>
-  <div id="appointment-mark">
+  <div id="appointment-mark" class="typography">
     <p>{{ root.appointment }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "DescriptionMark",
+  name: "AppointmentMark",
   props: {
     root: {
       default: null,

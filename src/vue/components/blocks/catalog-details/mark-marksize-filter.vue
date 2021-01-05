@@ -25,7 +25,6 @@
                   :loading="isLoading"
                   :internal-search="false"
                   :preserveSearch="true"
-                  @select="selectValue"
                 >
                   <template v-slot:caret>
                     <span></span>
@@ -103,69 +102,20 @@ export default {
     }
   },
   props: {
-    optionList: {
+    companies: {
       type: Array,
       default: () => ([])
     }
   },
   watch: {
-    optionList() {
-      this.options = this.optionList;
+    companies() {
+      this.options = this.companies;
     }
   },
+  created() {
+    this.options = this.companies;
+  },
   methods: {
-    selectValue(value) {
-      // window.location.href = value.url
-    },
-    getListSearchCatalog(string) {
-      console.log(string)
-      clearInterval(this.searchCounter)
-      if (string) {
-        this.searchCounter = setTimeout(() => {
-          this.isLoading = true
-          this.cleanSearch()
-          this.fetchListSearchCompany(string)
-            .then((data) => {
-              // this.startValueSearch()
-              // this.groupingSearchList(data.data.data)
-              this.options = data.data.data
-              this.isLoading = false
-            })
-            .catch((e) => {
-              console.log(e)
-              this.isLoading = false
-            })
-        }, 1000)
-      } else {
-        this.cleanSearch()
-        this.isLoading = false
-      }
-    },
-    startValueSearch() {
-      this.options = [
-        {
-          groupTitle: 'Марка',
-          items: []
-        },
-        {
-          groupTitle: 'Размер',
-          items: []
-        }
-      ]
-    },
-    cleanSearch() {
-      this.options = []
-    },
-    groupingSearchList(arr) {
-      arr.forEach((item) => {
-        if (item.is_mark) {
-          this.options[0].items.push(item)
-        }
-        if (item.is_mark_size) {
-          this.options[1].items.push(item)
-        }
-      })
-    },
     changeFilter(evt) {
       evt.preventDefault()
       this.$emit('changeFilter', this.filtersData)
@@ -247,10 +197,24 @@ export default {
 }
 .search {
   box-shadow: none;
+  position: relative;
+  &__icon {
+    display: block;
+    margin-top: rem(-8px);
+    width: rem(16px);
+    height: rem(16px);
+    position: absolute;
+    top: 50%;
+    left: rem(16px);
+    pointer-events: none;
+    z-index: 51;
+  }
 }
 .multiselect {
-  border: 1px solid $borderColor;
-  border-radius: 4px;
+  border-radius: rem(4px);
+}
+::v-deep .multiselect__input {
+  margin-bottom: 0 !important;
 }
 ::v-deep .search__input .multiselect__tags {
   padding: rem(12px) rem(21px) rem(12px) rem(48px);
