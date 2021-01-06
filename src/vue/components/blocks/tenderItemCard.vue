@@ -52,7 +52,7 @@
                     </div>
                     <div v-if="tenderItemData" class="tender-item__actions-block">
                         <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                        <a href="javascript:{}" title="Приложенные файлы" @click="changeActualTab('documents')">
+                        <a href="javascript:{}" title="Приложенные файлы" @click="changeActiveTab('#documents')">
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
                         </a>
                         <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
@@ -232,21 +232,10 @@ export default {
                     });
             }
         },
-        changeActualTab(tab) {
+        changeActiveTab(tab) {
             window.location.hash = tab;
-            this.$emit('changeTab', tab);
-            this.scrollToDocuments();
+            this.$emit('changeTab', tab, true);
             return false;
-        },
-        scrollToDocuments() {
-            const tabs = document.querySelector('.tender-item__tabs');
-            if(tabs) {
-                const top = window.scrollY + tabs.getBoundingClientRect().y;
-                window.scrollTo({
-                    top: top - 60,
-                    behavior: "smooth"
-                });
-            }
         },
     }
 }
