@@ -69,28 +69,19 @@
                     <dl class="procedures__item-contact">
                         <dt>Контактное лицо</dt>
                         <dd>
-                            <!--<a href="javascript:{}" @click="openPopup">{{ item.contact_last_name }} {{ item.contact_name }}</a> todo контактное лицо -->
-                            <a href="javascript:{}" @click="openPopup($event)">Константинов Константин</a>
-                            <div class="procedures__item-popup">
-                                <div class="procedures__item-popup-title">Константинов Константин Константинович</div>
-                                <div class="procedures__item-popup-subtitle">Менеджер по закупкам<br /> ПАО "Группа компаний ПИК"</div>
-                                <div class="procedures__item-popup-info">Телефон:<br /> <span>+7 (999) 999 99 99</span></div>
-                                <div class="procedures__item-popup-info">E-mail:<br /> <span>konst@pik.ru</span></div>
-                            </div>
+                            <popupCompanyContact
+                                    :company="item.company"
+                                    v-if="item.company"
+                            />
                         </dd>
                     </dl>
                     <dl class="procedures__item-delivery">
                         <dt>Доставка</dt>
                         <dd>
                             <template v-if="item.customer_delivery">
-                                <a href="javascript:{}" @click="openPopup($event)">Требуется</a>
-                                <div class="procedures__item-popup">
-                                    <div class="procedures__item-popup-title">Доставка</div>
-                                    <div class="procedures__item-popup-subtitle">№{{ item.id }}<br /> ПАО "Группа компаний ПИК"</div>
-                                    <div class="procedures__item-popup-info">Статус:<br /> <span>Доставка требуется</span></div>
-                                    <div class="procedures__item-popup-info">Адрес доставки:<br /> <span>Россия, Москва, 115114, Дербеневская наб. 20с2</span></div>
-                                    <div class="procedures__item-popup-info">Дата доставки:<br /> <span>26.08.2020</span></div>
-                                </div>
+                                <popupTenderDelivery
+                                        :delivery="item.company"
+                                />
                             </template>
                             <template v-else>
                                 Не требуется
@@ -197,10 +188,16 @@
 <script>
     import api from '../../helpers/api';
     import formatDate from '../../helpers/formatDate'
+    import popupCompanyContact from "@/components/blocks/popupCompanyContact";
+    import popupTenderDelivery from "@/components/blocks/popupTenderDelivery";
 
     export default {
         name: 'marketplaceItems',
         mixins: [api, formatDate],
+        components: {
+            popupCompanyContact,
+            popupTenderDelivery,
+        },
         props: {
             filter: {
                 default: () => {},
@@ -814,41 +811,6 @@
             }
 
             &-product {}
-
-            &-popup {
-                font-weight: 500;
-                .procedures__item & {
-                    display: none;
-                }
-                &-title {
-                    margin: 0 0 rem(36px);
-                    width: calc(100% - 40px);
-                    font-weight: normal;
-                    font-size: rem(24px);
-                    line-height: (34/24);
-                }
-
-                &-subtitle {
-                    margin: 0 0 rem(24px);
-                    color: $colorGray;
-                }
-
-                &-info {
-                    margin: rem(24px) 0 0;
-                    color: $colorGray;
-
-                    a,
-                    span {
-                        color: $colorText;
-                    }
-
-                    a {
-                        &:hover {
-                            color: $colorTurquoiseHover;
-                        }
-                    }
-                }
-            }
         }
     }
     @keyframes blur {
