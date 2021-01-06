@@ -334,14 +334,9 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  .tabs.tabs--line {
-    //overflow: hidden;
-  }
   #manufacturers,
   #documents {
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
+    padding: 0;
     background: transparent;
   }
 </style>

@@ -104,14 +104,13 @@
       },
       openTab(evt, hash) {
         evt.preventDefault();
-        let link = document.querySelector('.js-tabs li a[href="#'+hash+'"]'),
-          el = document.getElementById(hash);
+        let link = document.querySelector('.js-tabs li a[href="#'+hash+'"]');
         if (link) {
           link.click();
-        }
-        if (el) {
-          el.scrollIntoView({
-            behavior: "smooth",
+          const top = window.scrollY + link.getBoundingClientRect().y;
+          window.scrollTo({
+            top: top,
+            behavior: "smooth"
           });
         }
       }
