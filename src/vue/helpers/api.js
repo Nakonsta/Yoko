@@ -442,6 +442,12 @@ export default {
                 data,
                 {cancelToken: this.CancelTokens.companyCancelToken.token}
             );
-        }
+        },
+        sendMarketplaceQuestion(id, data) {
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q`, data)
+        },
+        sendMarketplaceAnswer(id, question_id, data) {
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q/${question_id}/a`, data)
+        },
     }
 }

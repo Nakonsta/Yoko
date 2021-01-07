@@ -44,7 +44,7 @@
 
 <script>
 import api from './helpers/api'
-import functions from './helpers/functions'
+import functions from "@/helpers/functions";
 import TenderItemCard from './components/blocks/tenderItemCard.vue'
 import TenderItemMenu from './components/blocks/tenderItemMenu.vue'
 import TenderItemTabs from './components/blocks/tenderItemTabs.vue'
@@ -56,10 +56,10 @@ export default {
     components: {
         TenderItemCard,
         TenderItemMenu,
-        TenderItemTabs
+        TenderItemTabs,
     },
 
-    mixins: [api],
+    mixins: [api, functions],
 
     data() {
         return {
@@ -280,11 +280,7 @@ export default {
                 }
                 if (scroll) {
                     // если надо - крутим к табу
-                    const top = window.scrollY + tabs.getBoundingClientRect().y;
-                    window.scrollTo({
-                        top: top,
-                        behavior: "smooth"
-                    });
+                    this.scrollTo(tabs);
                 }
             }
         },

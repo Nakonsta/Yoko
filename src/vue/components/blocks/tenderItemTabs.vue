@@ -30,8 +30,8 @@
         <div class="tabs__content" id="documents">
             <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
         </div>
-        <div class="tabs__content" id="chat" v-if="tenderItemData.tender_trading_format === 'trading_223'">
-            <TenderItemChatTab />
+        <div id="chat" v-if="tenderItemData.tender_trading_format === 'trading_223'">
+            <TenderItemChatTab :tenderItemData="tenderItemData" :company="company" />
         </div>
         <div class="tabs__content" id="protocols" v-if="tenderItemData.tender_trading_format === 'trading_223'">
             <TenderItemProtocolsTab :tenderItemData="tenderItemData" />

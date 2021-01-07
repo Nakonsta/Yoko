@@ -2,19 +2,22 @@ import moment from 'moment';
 
 export default {
     methods: {
-        declOfNum(n, text_forms) {
-            n = Math.abs(n) % 100;
-            var n1 = n % 10;
-            if (n > 10 && n < 20) {
-                return text_forms[2];
+        declOfNum(num, expressions) {
+            let result,
+                count = num % 100;
+            if (count >= 5 && count <= 20) {
+                result = expressions['2'];
+            } else {
+                count = count % 10;
+                if (count === 1) {
+                    result = expressions['0'];
+                } else if (count >= 2 && count <= 4) {
+                    result = expressions['1'];
+                } else {
+                    result = expressions['2'];
+                }
             }
-            if (n1 > 1 && n1 < 5) {
-                return text_forms[1];
-            }
-            if (n1 == 1) {
-                return text_forms[0];
-            }
-            return text_forms[2];
+            return result;
         },
         objectToFormDataJava(data) {
             const fData = new FormData()
@@ -120,15 +123,16 @@ export default {
                 return result;   
             }
         },
+        scrollTo(el, offset = 0) {
+            if (!el) return;
+            window.scrollTo({
+                top: window.scrollY + el.getBoundingClientRect().y - offset,
+                behavior: "smooth"
+            });
+        },
         scrollToError() {
             const slide = document.querySelector('.error');
-            if(slide) {
-                const top = window.scrollY + slide.getBoundingClientRect().y;
-                window.scrollTo({
-                    top: top - 60,
-                    behavior: "smooth"
-                });
-            }
+            this.scrollTo(el, 60);
         },
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="tender-delivery">
-        <a href="javascript:{}" @click="open($event)">Требуется</a>
-        <div class="tender-delivery__popup">
+        <a href="javascript:{}" @click="open">Требуется</a>
+        <div class="tender-delivery__popup" ref="popup">
             <div class="tender-delivery__title">Доставка</div>
             <div class="tender-delivery__subtitle">№ {{ tender.id }}<br /> {{ company.name }}</div>
             <div class="tender-delivery__content">Статус:<br /> <span>Доставка требуется</span></div>
@@ -29,10 +29,10 @@ export default {
     },
     created() {},
     methods: {
-        open(evt) {
+        open() {
             let popupContainer = document.querySelector('#default .popup__content-container');
             while(popupContainer.firstChild) popupContainer.removeChild(popupContainer.firstChild);
-            popupContainer.appendChild(evt.target.nextElementSibling.cloneNode(true));
+            popupContainer.appendChild(this.$refs['popup'].cloneNode(true));
             window.openPopupById('default');
         },
     },

@@ -1,7 +1,7 @@
 <template>
     <div class="company-contact">
-        <a href="javascript:{}" @click="open($event)">{{ company.directorFio }}</a>
-        <div class="company-contact__popup">
+        <a href="javascript:{}" @click="open">{{ company.directorFio }}</a>
+        <div class="company-contact__popup" ref="popup">
             <div class="company-contact__title">{{ company.directorFio }}</div>
             <div class="company-contact__subtitle">Генеральный директор<br /> {{ company.name }}</div>
             <div class="company-contact__content" v-if="company.phone">Телефон:<br /> <span>{{ company.phone }}</span></div>
@@ -21,10 +21,10 @@ export default {
     },
     created() {},
     methods: {
-        open(evt) {
+        open() {
             let popupContainer = document.querySelector('#default .popup__content-container');
             while(popupContainer.firstChild) popupContainer.removeChild(popupContainer.firstChild);
-            popupContainer.appendChild(evt.target.nextElementSibling.cloneNode(true));
+            popupContainer.appendChild(this.$refs['popup'].cloneNode(true));
             window.openPopupById('default');
         },
     },
