@@ -64,7 +64,7 @@
                     </div>
                     <div v-if="tenderItemData" class="tender-item__actions-block">
                         <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                        <a href="javascript:{}" title="Приложенные файлы" @click="changeActiveTab('#documents')">
+                        <a href="javascript:{}" title="Приложенные файлы" @click="changeActiveTab($event, '#documents')">
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
                         </a>
                         <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
@@ -236,10 +236,9 @@ export default {
                     });
             }
         },
-        changeActiveTab(tab) {
-            window.location.hash = tab;
-            this.$emit('changeTab', tab, true);
-            return false;
+        changeActiveTab(evt, tab) {
+            evt.preventDefault();
+            this.$emit('changeTab', evt, tab, true);
         },
     }
 }

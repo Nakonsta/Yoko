@@ -90,9 +90,8 @@ export default {
 
     methods: {
         changeActiveTab(evt, hash) {
-            window.location.hash = hash;
-            this.$emit('changeTab', hash);
-            return false;
+            evt.preventDefault();
+            this.$emit('changeTab', evt, hash);
         },
     }
 }
@@ -106,7 +105,9 @@ export default {
 
     .tender-item {
         &__tabs {
-            padding-top: rem(79px);
+            @include mq($from: tablet) {
+                padding-top: rem(80px);
+            }
             &-row {
                 display: flex;
                 border-bottom: 1px solid #D3D3D3;

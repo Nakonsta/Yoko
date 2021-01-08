@@ -265,7 +265,8 @@ export default {
                     console.log(e)
                 })
         },
-        changeTab(hash, scroll = false) {
+        changeTab(evt, hash, scroll = false) {
+            evt.preventDefault();
             this.activeTab = hash;
             hash = hash.replace('#', '');
             const el = document.getElementById(hash),
@@ -275,14 +276,16 @@ export default {
                     // если таб закрыт - открываем
                     let link = tabs.querySelector('li a[href="#' + hash + '"]');
                     if (link) {
+                        if (scroll || window.innerWidth <= 767) {
+                            // если надо - крутим к табу
+                            this.scrollTo(tabs);
+                        }
                         link.click();
+                        this.setWindowHash(hash);
                     }
                 }
-                if (scroll) {
-                    // если надо - крутим к табу
-                    this.scrollTo(tabs);
-                }
             }
+            return false;
         },
         checkUrlHash() {
             if (window.location.hash) {

@@ -36,8 +36,7 @@ export default {
     methods: {
         changeActiveTab(evt, hash) {
             evt.preventDefault();
-            window.location.hash = hash;
-            this.$emit('changeTab', hash, true);
+            this.$emit('changeTab', evt, hash, true);
         }
     }
 }

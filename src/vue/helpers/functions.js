@@ -134,5 +134,12 @@ export default {
             const slide = document.querySelector('.error');
             this.scrollTo(el, 60);
         },
+        setWindowHash(hash) {
+            if (history.pushState) {
+                window.history.pushState(null, null, '#' + hash);
+            } else {
+                window.location.hash = '#' + hash;
+            }
+        },
     }
 }
