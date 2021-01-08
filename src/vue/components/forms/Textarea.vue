@@ -133,7 +133,7 @@ export default {
       }
     },
     initAutoheight() {
-      if (this.autoheight) {
+      if (this.autoheight && !this.pseudo) {
         this.pseudo = document.createElement('div');
         this.pseudo.style.position = 'absolute';
         this.pseudo.style.top = '-9999px';
@@ -143,7 +143,7 @@ export default {
         this.$refs['field'].style.overflow = 'hidden';
         window.addEventListener('resize', this.updateAutoheight);
         this.updateAutoheight();
-      } else {
+      } else if (!this.autoheight && this.pseudo) {
         window.removeEventListener('resize', this.updateAutoheight);
         this.pseudo.parentNode.removeChild(this.pseudo);
         this.pseudo = null;
@@ -175,7 +175,7 @@ export default {
         return r;
       }
       if (!this.autoheight) return;
-      if (this.autoheight && !this.pseudo) {
+      if (!this.pseudo) {
         this.initAutoheight();
       }
       let textarea = this.$refs['field'],
