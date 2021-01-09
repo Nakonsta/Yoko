@@ -103,11 +103,34 @@
                                     </svg>
                                 </a>
                             </div>
-                            <div class="support-form__item-info support-form__item-info--padding-top">
-                                Загрузите заявления в формате:  pdf, jpeg, png
-                            </div>
-
                         </div>
+                        <InputInput
+                            label="Номер"
+                            placeholder=""
+                            v-model="userData.documentNumber"
+                            :maxlength="100"
+                            :rules="{required: !userData.documentWithoutNumber }"
+                            :disabled="userData.documentWithoutNumber"
+                        />                        
+                        <label class="checkbox">
+                            <input 
+                                class=""
+                                type="checkbox"
+                                name="confident"
+                                @change="toggleDocumentNumeration"
+                            >
+                            <span class="checkbox__body"></span>
+                            <span class="checkbox__text">БН</span>
+                        </label>
+                        <datepicker
+                            placeholder="Срок действия"
+                            :format="picker.format"
+                            :language="picker.locale"
+                            input-class="field"
+                            v-model="picker.start_date"
+                        >
+                            <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
+                        </datepicker>             
                     </div>
                 </div>
                 <div class="form__grid">
@@ -213,6 +236,7 @@
 import InputInput from "../../../components/forms/Input";
 import PhoneCodeCountries from "../../../components/phoneCodeCountries.vue";
 import api from "../../../helpers/api";
+import {ru} from "vuejs-datepicker/src/locale";
 
 export default {
     name: 'User',
@@ -236,6 +260,8 @@ export default {
                 secondName: null,
                 position: null,
                 documents: [],
+                documentNumber: null,
+                documentWithoutNumber: false,
                 phone: null,
                 currentPhoneCode: {
                     id: 0,
@@ -252,6 +278,14 @@ export default {
             emailChanging: {
                 password: '',
                 newEmail: ''
+            },
+            picker: {
+                start_date: '',
+                end_date: '',
+                format: "yyyy-MM-dd",
+                locale: ru,
+                disabledFrom: null,
+                disabledTo: null,
             },
             lists: {
                 countries: [
@@ -346,6 +380,10 @@ export default {
         removeFile(key) {
             this.userData.documents.splice(key, 1)
         },
+        toggleDocumentNumeration() {
+            this.userData.documentNumber = null;
+            this.userData.documentWithoutNumber = !this.userData.documentWithoutNumber;
+        }
     }
 }
 </script>
@@ -377,6 +415,10 @@ export default {
             color: $colorTurquoise;
             margin: -1rem 0 2rem 2.85714rem;
             cursor: pointer;
+        }
+        &__attachment {
+            display: flex;
+            align-items: flex-start;
         }
         .field__label {
             font-size: 1.14286rem;
