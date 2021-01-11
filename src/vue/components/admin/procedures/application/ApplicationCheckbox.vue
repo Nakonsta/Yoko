@@ -10,7 +10,7 @@
 </template>
 <script>
 export default {
-    name: 'procedure-application-checkbox',
+    name: 'application-checkbox',
     props: {
         value: {
             type: Boolean
@@ -28,9 +28,9 @@ export default {
     computed: {
         classes() {
             return [
-                'procedure-application-checkbox',
-                { 'procedure-application-checkbox--disabled': this.disabled },
-                { 'procedure-application-checkbox--error': this.hasError }
+                'application-checkbox',
+                { 'application-checkbox--disabled': this.disabled },
+                { 'application-checkbox--error': this.hasError }
             ]
         }
     },
@@ -49,7 +49,7 @@ export default {
 @import '../../../../../assets/sass/mixins/fluid-mixin';
 @import '../../../../../assets/sass/mixins/mq';
 
-.procedure-application-checkbox {
+.application-checkbox {
     display: inline-flex;
     flex-flow: row nowrap;
     justify-content: flex-start;

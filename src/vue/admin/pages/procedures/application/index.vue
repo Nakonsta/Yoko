@@ -1,145 +1,60 @@
 <template>
-    <div class="procedure-application">
+    <div class="application">
         <div v-if="loading" class="preloader">
             <div class="preloader__preloader">
                 <div class="preloader__loader"></div>
             </div>
         </div>
-        <div v-else class="procedure-application__content">
-            <procedure-application-title
-                title="Заявка на участие в торговой процедуре"
-                margin="0 0 32px"
-            ></procedure-application-title>
-            <div class="procedure-application__section">
-                <procedure-application-title
-                    title="Сведения о закупке"
-                    subtitle
-                ></procedure-application-title>
-                <div class="divider"></div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Номер закупки:</div>
-                    <router-link class="procedure-application__section-link" to="#">{{
-                        procedure.id
-                    }}</router-link>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Номер в ЕИС:</div>
-                    <a class="procedure-application__section-link">46251781948</a>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">
-                        Дата окончания подачи заявок:
-                    </div>
-                    <div class="procedure-application__section-text">
-                        {{ procedure.purchase_term.application_end_date }}
-                    </div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Объект закупки:</div>
-                    <div class="procedure-application__section-text">
-                        {{ procedure.purchase_subject.description }}
-                    </div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Способ закупки:</div>
-                    <div class="procedure-application__section-text">{{ tradingType.type }}</div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Компания - организатор:</div>
-                    <a class="procedure-application__section-link">ПАО “Группа ПИК”</a>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Начальная цена с НДС:</div>
-                    <div class="procedure-application__section-text">
-                        {{ procedure.purchase_subject.start_price | numberWithSpaces }} ₽
-                    </div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Валюта:</div>
-                    <div class="procedure-application__section-text">{{ currencyType }}</div>
-                </div>
-                <div class="divider divider--no-margin"></div>
-            </div>
-            <div class="procedure-application__section">
-                <procedure-application-title
-                    title="Сведения об обеспечении"
-                    subtitle
-                ></procedure-application-title>
-                <div class="divider"></div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Обеспечение контракта:</div>
-                    <div class="procedure-application__section-text">Без обеспечения</div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Обеспечение заявки:</div>
-                    <div class="procedure-application__section-text">15 000 ₽</div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Подтверждающий документ:</div>
-                </div>
-                <div class="divider divider--no-margin"></div>
-            </div>
-            <div class="procedure-application__section">
-                <procedure-application-title
-                    title="Сведения о лоте"
-                    subtitle
-                ></procedure-application-title>
-                <div class="divider"></div>
-            </div>
-            <div class="procedure-application__section">
-                <procedure-application-title
-                    title="Сведения об участнике"
-                    subtitle
-                ></procedure-application-title>
-                <div class="divider"></div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Название:</div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Полное название:</div>
-                    <div class="procedure-application__section-text"></div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">ИНН:</div>
-                    <div class="procedure-application__section-text">{{}}</div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Юридический адрес:</div>
-                    <div class="procedure-application__section-text"></div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Фактический адрес:</div>
-                    <div class="procedure-application__section-text"></div>
-                </div>
-                <div class="procedure-application__section-row">
-                    <div class="procedure-application__section-title">Контактное лицо:</div>
-                    <div class="procedure-application__section-text"></div>
-                </div>
-                <div class="divider divider--no-margin"></div>
-            </div>
-            <div class="procedure-application__section">
-                <procedure-application-title
-                    title="Дополнительные документы"
-                    subtitle
-                ></procedure-application-title>
-                <div class="procedure-application__section-title">Дополнительная информация</div>
-                <div class="procedure-application__textarea">
-                    <textarea rows="3" placeholder="Введите текст"></textarea>
-                    <procedure-application-tooltip></procedure-application-tooltip>
-                </div>
-                <div class="divider divider--no-margin"></div>
-            </div>
-            <procedure-application-checkbox
+        <div v-else class="application__content">
+            <application-title title="Заявка на участие в торговой процедуре" margin="0 0 32px"></application-title>
+            <application-purchase-block
+                :procedure="procedure"
+                :currency-type="currencyType"
+                :trading-type="tradingType.text"
+            ></application-purchase-block>
+            <application-security-block
+                :procedure="procedure"
+                :application="application"
+                :currency-type="currencyType"
+                @on-upload="application.documents.security = [$event]"
+            ></application-security-block>
+
+            <application-lots-block
+                :procedure="procedure"
+                :application="application"
+                :is-auction="viewType.isAuction"
+                :lots="lots"
+                @on-upload="application.documents.lots = [$event]"
+                @on-check="application.agreement = $event"
+            ></application-lots-block>
+            <application-title
+                v-if="viewType.isAuction"
+                title="2 часть заявки"
+                font-size="20px"
+                margin="0 0 16px"
+            ></application-title>
+            <application-company-block
+                :procedure="procedure"
+                :application="application"
+                @on-company-select="onCompanySelect"
+            ></application-company-block>
+            <application-additional-block
+                :procedure="procedure"
+                :application="application"
+                @on-upload="application.documents.additional_documents = $event"
+                @on-input="application.description = $event"
+            ></application-additional-block>
+
+            <application-checkbox
+                :value="viewType.isAuction ? application.autoBot : application.agreement"
                 :label="tradingType.checkboxLabel"
-            ></procedure-application-checkbox>
-            <div v-if="viewType.isCreate" class="procedure-application__buttons">
-                <button disabled class="procedure-application__button">
+                @click="viewType.isAuction ? (application.autoBot = $event) : (application.agreement = $event)"
+            ></application-checkbox>
+            <div v-if="viewType.isCreate || viewType.isDraft" class="application__buttons">
+                <button class="application__button" @click="createApplication">
                     Подписать и отправить
                 </button>
-                <button
-                    disabled
-                    class="procedure-application__button procedure-application__button--second"
-                >
+                <button class="application__button application__button--second" @click="createApplicationDraft">
                     Сохранить черновик
                 </button>
             </div>
@@ -150,14 +65,25 @@
 import api from '../../../../helpers/api'
 import functions from '../../../../helpers/functions'
 
-import ProcedureApplicationTitle from '../../../../components/admin/procedures/application/ProcedureApplicationTitle.vue'
-import ProcedureApplicationCheckbox from '../../../../components/admin/procedures/application/ProcedureApplicationCheckbox.vue'
-import ProcedureApplicationTooltip from '../../../../components/admin/procedures/application/ProcedureApplicationTooltip.vue'
+import ApplicationTitle from '../../../../components/admin/procedures/application/ApplicationTitle.vue'
+import ApplicationCheckbox from '../../../../components/admin/procedures/application/ApplicationCheckbox.vue'
+import ApplicationTooltip from '../../../../components/admin/procedures/application/ApplicationTooltip.vue'
+import ApplicationPurchaseBlock from '../../../../components/admin/procedures/application/blocks/ApplicationPurchaseBlock.vue'
+import ApplicationSecurityBlock from '../../../../components/admin/procedures/application/blocks/ApplicationSecurityBlock.vue'
+import ApplicationLotsBlock from '../../../../components/admin/procedures/application/blocks/ApplicationLotsBlock.vue'
+import ApplicationCompanyBlock from '../../../../components/admin/procedures/application/blocks/ApplicationCompanyBlock.vue'
+import ApplicationAdditionalBlock from '../../../../components/admin/procedures/application/blocks/ApplicationAdditionalBlock.vue'
+
 export default {
     components: {
-        ProcedureApplicationTooltip,
-        ProcedureApplicationCheckbox,
-        ProcedureApplicationTitle
+        ApplicationAdditionalBlock,
+        ApplicationCompanyBlock,
+        ApplicationLotsBlock,
+        ApplicationSecurityBlock,
+        ApplicationPurchaseBlock,
+        ApplicationTooltip,
+        ApplicationCheckbox,
+        ApplicationTitle
     },
     mixins: [api, functions],
     filters: {
@@ -167,9 +93,26 @@ export default {
     },
     data() {
         return {
-            procedure: {},
-            application: {},
-            loading: true
+            procedure: {
+                application: {},
+                selectedCompany: {}
+            },
+            application: {
+                accepted: 1,
+                tender_trading_type: '',
+                inn: '',
+                description: '',
+                documents: {
+                    security: {},
+                    additional_documents: [],
+                    lots: []
+                },
+                products: [],
+                autoBot: false,
+                agreement: false
+            },
+            loading: true,
+            lots: []
         }
     },
     computed: {
@@ -179,103 +122,243 @@ export default {
         appId() {
             return this.$route.params.appid
         },
-        companies() {
-            return this.$store.getters.userRole.toLowerCase() === 'buyer'
-                ? this.$store.getters.companyBuyer
-                : this.$store.getters.companyContractor
+        viewType() {
+            console.log(this.application.status)
+            return {
+                isCreate: this.appId === 'new',
+                isAuction: this.procedure.tender_trading_type == 'auction',
+                isDraft: false
+            }
         },
         tradingType() {
             switch (this.procedure.tender_trading_type) {
                 case 'request_prices':
                     return {
-                        type: 'Запрос цен',
+                        text: 'Запрос цен',
                         checkboxLabel: 'Согласие участника закупки на "поставку товара"'
                     }
                     break
-                case '':
-                    return { type: 'Аукцион', checkboxLabel: 'Подключить автобота' }
-                    break
-                case '':
+                case 'auction':
                     return {
-                        type: 'Запрос предложений',
-                        checkboxLabel: 'Согласие участника закупки на "поставку товара"'
+                        text: 'Аукцион',
+                        checkboxLabel: 'Подключить автобота'
                     }
                     break
-                case '':
+                case 'request_offers':
                     return {
-                        type: 'Конкурс',
+                        text: 'Запрос предложений',
                         checkboxLabel: 'Согласие участника закупки на "поставку товара"'
                     }
                     break
-                case '':
+                case 'contest':
                     return {
-                        type: 'Закупка у единственного поставщика',
+                        text: 'Конкурс',
                         checkboxLabel: 'Согласие участника закупки на "поставку товара"'
                     }
                     break
-                case '':
+                case 'purchase_from_supplier':
                     return {
-                        type: 'Коммерческая закупка',
+                        text: 'Закупка у единственного поставщика',
                         checkboxLabel: 'Согласие участника закупки на "поставку товара"'
                     }
                     break
-            }
-        },
-        viewType() {
-            return {
-                isCreate: this.appId === 'new'
+                default:
+                    return {
+                        text: 'Коммерческая закупка',
+                        checkboxLabel: 'Согласие участника закупки на "поставку товара"'
+                    }
             }
         },
         currencyType() {
             switch (this.procedure.purchase_currency) {
                 case 'rub':
-                    return 'Рубль'
+                    return { text: 'Рубль', symbol: '₽' }
                     break
                 case 'eur':
-                    return 'Евро'
+                    return { text: 'Евро', symbol: '€' }
                     break
                 case 'usd':
-                    return 'Доллар'
+                    return { text: 'Доллар', symbol: '$' }
                     break
                 default:
-                    return 'Неизвестно'
+                    return { text: 'Рубль', symbol: '₽' }
                     break
             }
         }
     },
     methods: {
         getProcedureDetails() {
-            this.loading = true
-            this.fetchTenderItem(this.id)
-                .then(({ data }) => {
-                    this.procedure = data?.data ?? {}
-                    console.log(this.procedure)
+            return this.fetchTenderItem(this.id).then(({ data }) => {
+                this.procedure = Object.assign(this.procedure, data.data)
+                this.createLots()
+                console.log(this.procedure)
+                return this.fetchCompanyById([this.procedure.inn]).then(({ data }) => {
+                    this.procedure.company = data.data
                 })
-                .finally(() => (this.loading = false))
+            })
+        },
+        getApplication() {
+            return this.fetchProcedureApplication(this.appId).then(({ data }) => {
+                this.application = Object.assign(this.application, data.data)
+
+                this.viewType.isDraft = this.application.status === 'draft'
+
+                this.application.documents.forEach((document, i) => {
+                    if (this.application.documents[document.properties.group]) {
+                        this.application.documents[document.properties.group].push(document)
+                    } else {
+                        this.application.documents[document.properties.group] = [document]
+                    }
+
+                    delete this.application.documents[i]
+                })
+            })
+        },
+        createApplicationDraft() {
+            window.openLoader()
+            this.sendProcedureApplicationDraft(this.id, this.createApplicationObject())
+                .then(({ data }) => {
+                    window.location.reload()
+                })
+                .finally(() => window.closeLoader())
         },
         createApplication() {
-            this.loading = true
-            this.sendProcedureApplication(this.id)
-                // .then(({ data }) => {})
-                .finally(() => (this.loading = false))
+            window.openLoader()
+            if (this.viewType.isCreate) {
+                this.sendProcedureApplicationDraft(this.id, this.createApplicationObject()).then(({ data }) => {
+                    this.sendProcedureApplication(this.id, this.appId)
+                        .then(() => {
+                            window.location.reload()
+                        })
+                        .finally(() => window.closeLoader())
+                })
+            } else {
+                this.sendProcedureApplication(this.id, this.appId)
+                    .then(() => {
+                        window.location.reload()
+                    })
+                    .finally(() => window.closeLoader())
+            }
+        },
+        createApplicationObject() {
+            this.application.products = []
+            this.lots.forEach(lot => {
+                if (lot.checked) {
+                    lot.products.forEach(product => {
+                        product.product_id = product.id
+                        product.country = product.country.code
+                        product.currency = this.currencyType.type
+
+                        this.application.products.push(product)
+                    })
+                }
+            })
+
+            this.application.inn = this.procedure.selectedCompany.inn
+            this.application.tender_trading_type = this.procedure.tender_trading_type
+
+            return this.objectToFormData(this.application)
+        },
+        createLots() {
+            let lots = []
+            this.procedure.purchase_subject.lot_amounts.forEach((amount, i) => {
+                const lot = {
+                    name: `Лот ${i + 1}`,
+                    id: i + 1,
+                    checked: false,
+                    amount: Number(amount).toFixed(2),
+                    currency: this.currencyType,
+                    country: {
+                        code: 'RU',
+                        flag:
+                            'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAa0lEQVR42u3QwQkAMAgAMfdf2hYc4yIc6NPM7k659PMAAAAAAAAAAAAAAFy1AQAAAAAAAAAAAAAAAIC/zF2VAAAAAAAAAAAAAAAAAODqCQAAAAAAAAAAAAAAAAAAgGwAAAAAAAAAAAAAAER72yqN3ef7lPIAAAAASUVORK5CYII=',
+                        id: 131,
+                        name: 'Россия',
+                        name_en: 'Russia',
+                        phone_code: 7
+                    },
+                    products: []
+                }
+
+                if (!this.viewType.isCreate) {
+                    const accepetedProducts = []
+                    this.procedure.purchase_subject.products.forEach(product => {
+                        this.application.subject.products.forEach(applicationProduct => {
+                            if (product.id === applicationProduct.purchase_subject_products_id) {
+                                if (product.lot == i + 1) {
+                                    product.product_id = product.id
+                                    product.country = lot.country
+
+                                    product.amount_per_position = parseFloat(
+                                        parseInt(product.quantity, 10) *
+                                            parseFloat(product.price_for_one, 10) *
+                                            (1 + parseInt(product.vat, 10) / 100)
+                                    ).toFixed(2)
+
+                                    lot.products.push(product)
+                                    lot.checked = true
+                                }
+                            }
+                        })
+                    })
+                } else {
+                    this.procedure.purchase_subject.products.forEach(product => {
+                        if (product.lot == i + 1) {
+                            product.product_id = product.id
+                            product.country = lot.country
+
+                            product.amount_per_position = parseFloat(
+                                parseInt(product.quantity, 10) *
+                                    parseFloat(product.price_for_one, 10) *
+                                    (1 + parseInt(product.vat, 10) / 100)
+                            ).toFixed(2)
+
+                            lot.products.push(product)
+                        }
+                    })
+                }
+
+                if (lot.products.length) {
+                    lots.push(lot)
+                }
+            })
+
+            this.lots = lots.slice()
+        },
+        onCompanySelect(value) {
+            this.procedure.selectedCompany = value
         }
     },
     created() {
-        this.getProcedureDetails()
+        if (this.viewType.isCreate) {
+            this.loading = true
+            this.getProcedureDetails().finally(() => (this.loading = false))
+        } else {
+            this.loading = true
+            Promise.all([this.getApplication(), this.getProcedureDetails()]).finally(() => (this.loading = false))
+        }
     }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../../../../../assets/sass/variables/variables';
 @import '../../../../../assets/sass/variables/fluid-variables';
 @import '../../../../../assets/sass/mixins/fluid-mixin';
 @import '../../../../../assets/sass/mixins/mq';
 
-.procedure-application {
+.application {
     padding: rem(40px);
     background-color: #fff;
     border-radius: 6px;
     min-height: 300px;
+
+    @include mq($until: desktop) {
+        padding: rem(80px) rem(40px) rem(40px);
+    }
+
+    * {
+        outline: none;
+    }
 
     &__content {
         width: 100%;
@@ -287,12 +370,14 @@ export default {
         justify-content: flex-start;
         align-items: flex-start;
 
+        position: relative;
+
         margin-bottom: rem(48px);
     }
 
     &__section-row {
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: column nowrap;
         justify-content: flex-start;
         align-items: flex-start;
         align-content: flex-start;
@@ -300,7 +385,8 @@ export default {
         width: 100%;
         margin-bottom: rem(24px);
 
-        @include mq($until: tablet) {
+        @include mq($from: tablet) {
+            align-items: center;
             flex-flow: row wrap;
         }
     }
@@ -330,22 +416,16 @@ export default {
     }
 
     &__section-link {
+        outline: none;
+        border: none;
+        background-color: transparent;
         margin-right: auto;
+        padding: 0;
 
         font-family: Roboto;
         font-size: rem(14px);
         text-decoration-line: underline;
         color: $colorTurquoise;
-    }
-
-    &__textarea {
-        width: 100%;
-
-        textarea {
-            width: 100%;
-            resize: none;
-            border-color: $colorGray;
-        }
     }
 
     &__buttons {
@@ -359,7 +439,11 @@ export default {
     }
 
     &__button {
-        padding: rem(13px) rem(60px);
+        width: 100%;
+        max-width: 278px;
+        margin-right: rem(16px);
+        margin-bottom: rem(16px);
+        padding: rem(13px) 0;
         background-color: $colorTurquoise;
         border-radius: 6px;
         border: 1px solid $colorTurquoise;
@@ -386,7 +470,7 @@ export default {
         }
 
         &--second {
-            margin-left: rem(16px);
+            margin: 0;
             background-color: #f4f4f4;
             color: $colorTurquoise;
 

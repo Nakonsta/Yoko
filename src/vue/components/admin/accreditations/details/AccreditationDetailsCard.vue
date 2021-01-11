@@ -322,37 +322,6 @@ export default {
         }
     }
 
-    &__pagination-action {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: 14px;
-        height: 14px;
-        cursor: pointer;
-
-        &--prev {
-            transform: rotate(180deg);
-        }
-
-        &--disabled {
-            cursor: default;
-
-            path {
-                stroke: $colorGray;
-            }
-        }
-
-        svg {
-            width: 14px;
-            height: 14px;
-
-            path {
-                transition: 0.3s;
-            }
-        }
-    }
-
     &__footer {
         display: flex;
         flex-flow: row wrap;

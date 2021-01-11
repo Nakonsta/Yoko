@@ -7,11 +7,14 @@
 </template>
 <script>
 export default {
-    name: 'procedure-application-title',
+    name: 'application-title',
     props: {
         title: {
             type: String,
             required: true
+        },
+        fontSize: {
+            type: String
         },
         margin: {
             type: String
@@ -26,10 +29,10 @@ export default {
     },
     computed: {
         classes() {
-            return ['procedure-application-title', {'procedure-application-title--subtitle': this.subtitle}]
+            return ['application-title', { 'application-title--subtitle': this.subtitle }]
         },
         styles() {
-            return { padding: this.padding, margin: this.margin }
+            return { padding: this.padding, margin: this.margin, 'font-size': this.fontSize }
         }
     }
 }
@@ -40,7 +43,7 @@ export default {
 @import '../../../../../assets/sass/mixins/fluid-mixin';
 @import '../../../../../assets/sass/mixins/mq';
 
-.procedure-application-title {
+.application-title {
     font-family: Roboto;
     font-weight: bold;
     font-size: rem(24px);
