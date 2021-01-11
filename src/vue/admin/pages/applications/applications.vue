@@ -1,6 +1,7 @@
 <template>
   <div class="applications">
      <accreditations-title title="Заявки на участие в процедурах"></accreditations-title>
+     {{companies}}
     <div class="applications__filters">
       <application-sort @on-sort="onSort"></application-sort>
       <application-filter @on-filter="onFilter"></application-filter>
@@ -103,13 +104,25 @@ export default {
       ]
     }
   },
+  computed: {
+    companies(){
+      return this.$store.getters.companyContractor;
+    }
+  },
   methods:{
+    getApplications(){
+      const inn = this.companies[0].inn
+      this.fetchApplicationsList(inn)
+    },
     onSort(){
 
     },
     onFilter(){
 
     }
+  },
+  created(){
+    this.getApplications()
   }
 }
 </script>

@@ -442,6 +442,32 @@ export default {
                 data,
                 {cancelToken: this.CancelTokens.companyCancelToken.token}
             );
+        },
+        fetchApplicationsList(inn) {
+          /*const defaultProps = {
+            draft: 0,
+            orderBy: 'id',
+            orderDir: 'DESC',
+            page: 1,
+            search: '',
         }
+
+        const requestProps = Object.assign(defaultProps, props ?? {})
+
+        const fData = new FormData()
+
+        fData.append('page', requestProps.page)
+        fData.append('order[by]', requestProps.orderBy)
+        fData.append('order[direction]', requestProps.orderDir)
+
+        if (requestProps.search !== '') {
+            fData.append('q', requestProps.search)
+        }*/
+        const fData = new FormData()
+        fData.append('inn', inn)
+          return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
+            fData
+          )
+        }        
     }
 }
