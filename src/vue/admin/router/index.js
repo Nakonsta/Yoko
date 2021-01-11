@@ -10,6 +10,7 @@ import CatalogList from '../pages/catalog/positions.vue'
 import CatalogDetail from '../pages/catalog/details.vue'
 import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
+import ProcedureApplicationDetails from "../pages/procedures/application/index.vue";
 import Accreditations from '../pages/accreditations/accreditations.vue'
 import User from '../pages/user/user.vue'
 import page404 from '../pages/page404.vue'
@@ -42,6 +43,7 @@ const routes = [
     component: Procedures,
     meta: { role: 'contractor' },
     props: { type: 'applications' },
+    meta: { role: "buyer" },
   },
   {
     path: "/personal/procedures/:id",
@@ -59,9 +61,8 @@ const routes = [
     meta: { role: "contractor" },
   },
   {
-    path: "/personal/procedures/:id/applications/:appid",
+    path: "/personal/procedure/:id/application/:appid",
     component: ProcedureApplicationDetails,
-    meta: { role: "contractor" },
   },
   {
     path: "/personal/user",
