@@ -61,7 +61,7 @@ const routes = [
     meta: { role: "contractor" },
   },
   {
-    path: "/personal/procedure/:id/application/:appid",
+    path: "/personal/procedures/:id/applications/:appid",
     component: ProcedureApplicationDetails,
   },
   {
