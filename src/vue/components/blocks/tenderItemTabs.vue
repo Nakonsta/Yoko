@@ -1,52 +1,43 @@
 <template>
     <div class="tender-item__tabs">
-        <div class="tender-item__tabs-row">
-            <div :class="[activeTab == 'main-info' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="main-info">
-                <span @click="changeActiveTab('main-info')" class="tender-item__tab-link">
-                    Общая информация
-                </span>
-            </div>
-            <div :class="[activeTab == 'client' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="client">
-                <span @click="changeActiveTab('client')" class="tender-item__tab-link">Заказчик</span>
-            </div>
-            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'lots' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="lots">
-                <span @click="changeActiveTab('lots')" class="tender-item__tab-link">Список лотов</span>
-            </div>
-            <div :class="[activeTab == 'documents' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="documents">
-                <span @click="changeActiveTab('documents')" class="tender-item__tab-link">Документы</span>
-            </div>
-            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'chat' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="chat">
-                <span @click="changeActiveTab('chat')" class="tender-item__tab-link">Разъяснения</span>
-            </div>
-            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'protocols' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="protocols">
-                <span @click="changeActiveTab('protocols')" class="tender-item__tab-link">Протоколы</span>
-            </div>
-            <div :class="[activeTab == 'logs' ? 'tender-item__tab-item--active' : '', 'tender-item__tab-item']" data-tab="logs">
-                <span @click="changeActiveTab('logs')" class="tender-item__tab-link">Журнал событий</span>
-            </div>
+        <div class="tabs tabs--line js-tabs js-more" ref="tabs" v-if="tabs">
+            <ul class="js-more__items">
+                <li
+                        v-for="item in tabs"
+                        :key="item.url"
+                        class="js-more__item"
+                >
+                    <a :href="item.url" @click="changeActiveTab($event, item.url)">{{ item.name }}</a>
+                </li>
+                <li class="js-more__btn hidden">
+                    <button type="button" aria-haspopup="true" aria-expanded="false">
+                        <svg class="sprite-dropdown">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#dropdown"></use>
+                        </svg>
+                    </button>
+                </li>
+            </ul>
         </div>
-        <div class="tender-item__tabs-content">
-            <div :class="[activeTab == 'main-info' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="main-info">
-                <TenderItemMainTab :tenderItemData="tenderItemData" :company="company" />
-            </div>
-            <div :class="[activeTab == 'client' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="client">
-                <TenderItemClientTab :company="company" />
-            </div>
-            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'lots' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="lots">
-                <TenderItemLotsTab :tenderItemData="tenderItemData" />
-            </div>
-            <div :class="[activeTab == 'documents' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="documents">
-                <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
-            </div>
-            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'chat' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="chat">
-                <TenderItemChatTab />
-            </div>
-            <div v-if="tenderItemData.tender_trading_format === 'trading_223'" :class="[activeTab == 'protocols' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="protocols">
-                <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
-            </div>
-            <div :class="[activeTab == 'logs' ? 'tender-item__tab--active' : '', 'tender-item__tab']" data-tab="logs">
-                <TenderItemLogsTab :tenderItemData="tenderItemData" />
-            </div>
+        <div class="tabs__content" id="info">
+            <TenderItemMainTab :tenderItemData="tenderItemData" :company="company" />
+        </div>
+        <div class="tabs__content" id="client">
+            <TenderItemClientTab :company="company" />
+        </div>
+        <div class="tabs__content" id="lots" v-if="tenderItemData.tender_trading_format === 'trading_223'">
+            <TenderItemLotsTab :tenderItemData="tenderItemData" />
+        </div>
+        <div class="tabs__content" id="documents">
+            <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
+        </div>
+        <div id="chat" v-if="tenderItemData.tender_trading_format === 'trading_223'">
+            <TenderItemChatTab :tenderItemData="tenderItemData" :company="company" />
+        </div>
+        <div class="tabs__content" id="protocols" v-if="tenderItemData.tender_trading_format === 'trading_223'">
+            <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
+        </div>
+        <div class="tabs__content" id="logs">
+            <TenderItemLogsTab :tenderItemData="tenderItemData" />
         </div>
     </div>
 </template>
@@ -72,6 +63,11 @@ export default {
             type: Object,
             required: true,
         },
+        tabs: {
+            type: Array,
+            default: () => [],
+            required: true,
+        },
         activeTab: {
             type: String,
             required: true,
@@ -93,10 +89,9 @@ export default {
     },
 
     methods: {
-        changeActiveTab(tab) {
-            window.location.hash = tab;
-            this.$emit('changeTab', tab);
-            return false;
+        changeActiveTab(evt, hash) {
+            evt.preventDefault();
+            this.$emit('changeTab', evt, hash);
         },
     }
 }
@@ -110,7 +105,9 @@ export default {
 
     .tender-item {
         &__tabs {
-            padding-top: rem(79px);
+            @include mq($from: tablet) {
+                padding-top: rem(80px);
+            }
             &-row {
                 display: flex;
                 border-bottom: 1px solid #D3D3D3;

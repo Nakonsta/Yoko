@@ -24,7 +24,10 @@
                             Контактное лицо
                         </div>
                         <div class="tender-item__row-value">
-                            {{ company.directorFio }}
+                            <popupCompanyContact
+                                    :company="company"
+                                    v-if="company"
+                            />
                         </div>
                     </div>
                     <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.delivery_to" class="tender-item__row">
@@ -32,7 +35,16 @@
                             Доставка
                         </div>
                         <div class="tender-item__row-value">
-                            {{ tenderItemData.purchase_term.delivery_to ? 'Требуется' : 'Не требуется' }}
+                            <template v-if="tenderItemData.purchase_term.delivery_to">
+                                <popupTenderDelivery
+                                        :company="company"
+                                        v-if="company"
+                                        :tender="tenderItemData"
+                                />
+                            </template>
+                            <template v-else>
+                                Не требуется
+                            </template>
                         </div>
                     </div>
                     <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.description" class="tender-item__row">
@@ -52,7 +64,7 @@
                     </div>
                     <div v-if="tenderItemData" class="tender-item__actions-block">
                         <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                        <a href="javascript:{}" title="Приложенные файлы" @click="changeActualTab('documents')">
+                        <a href="javascript:{}" title="Приложенные файлы" @click="changeActiveTab($event, '#documents')">
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
                         </a>
                         <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
@@ -137,8 +149,11 @@
 
 <script>
 import api from '../../helpers/api'
+import formatDate from "@/helpers/formatDate"
 import Actions from './actions.vue'
 import TenderItemProductCard from './tenderItemProductCard.vue'
+import popupCompanyContact from "@/components/blocks/popupCompanyContact"
+import popupTenderDelivery from "@/components/blocks/popupTenderDelivery"
 
 export default {
     name: 'TenderItemCard',
@@ -161,9 +176,11 @@ export default {
     components: {
         Actions,
         TenderItemProductCard,
+        popupCompanyContact,
+        popupTenderDelivery,
     },
 
-    mixins: [api],
+    mixins: [api, formatDate],
     
     data() {
         return {
@@ -181,19 +198,6 @@ export default {
     },
 
     methods: {
-        formatDateNoTime(string) {
-            var d = new Date(string),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-            if (month.length < 2) 
-                month = '0' + month;
-            if (day.length < 2) 
-                day = '0' + day;
-
-            return [day, month, year].join('.');
-        },
         getTenderStatusName(item) {
             const status = this.itemsStatuses.find(
                 (status) => status.id === item.status,
@@ -232,21 +236,9 @@ export default {
                     });
             }
         },
-        changeActualTab(tab) {
-            window.location.hash = tab;
-            this.$emit('changeTab', tab);
-            this.scrollToDocuments();
-            return false;
-        },
-        scrollToDocuments() {
-            const tabs = document.querySelector('.tender-item__tabs');
-            if(tabs) {
-                const top = window.scrollY + tabs.getBoundingClientRect().y;
-                window.scrollTo({
-                    top: top - 60,
-                    behavior: "smooth"
-                });
-            }
+        changeActiveTab(evt, tab) {
+            evt.preventDefault();
+            this.$emit('changeTab', evt, tab, true);
         },
     }
 }

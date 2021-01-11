@@ -55,7 +55,7 @@ export default {
 
   .group-el {
     padding: rem(24px);
-    margin-bottom: 1rem;
+    margin-bottom: rem(26px);
     background-color: white;
     display: flex;
     flex-direction: column;

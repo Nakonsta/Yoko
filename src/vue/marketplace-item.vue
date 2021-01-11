@@ -8,7 +8,13 @@
                 :itemsStatuses="itemsStatuses"
                 @changeTab = "changeTab"
             />
-            <TenderItemMenu v-if="!isLoading" :tenderItemData="tenderItemData" :activeTab="activeTab" @changeTab = "changeTab" />            
+            <TenderItemMenu
+                v-if="!isLoading"
+                :tenderItemData="tenderItemData"
+                :activeTab="activeTab"
+                @changeTab = "changeTab"
+                :tabs="tabs"
+            />
         </div>
         <div class="tender-item__tabs">
             <TenderItemTabs 
@@ -17,6 +23,8 @@
                 :company="company"
                 :activeTab="activeTab"
                 @changeTab = "changeTab"
+                :tabs="tabs"
+                ref="tabs"
             />
         </div>
         <transition name="fade-loader">
@@ -36,10 +44,11 @@
 
 <script>
 import api from './helpers/api'
-import functions from './helpers/functions'
+import functions from "@/helpers/functions";
 import TenderItemCard from './components/blocks/tenderItemCard.vue'
 import TenderItemMenu from './components/blocks/tenderItemMenu.vue'
 import TenderItemTabs from './components/blocks/tenderItemTabs.vue'
+import { initMore } from '../assets/js/main/modules/more.js'
 
 export default {
     name: 'MarketplaceItem',
@@ -47,16 +56,16 @@ export default {
     components: {
         TenderItemCard,
         TenderItemMenu,
-        TenderItemTabs
+        TenderItemTabs,
     },
 
-    mixins: [api],
+    mixins: [api, functions],
 
     data() {
         return {
             tenderItemId: '',
             isLoading: true,
-            activeTab: 'main-info',
+            activeTab: 'info',
             tenderItemData: {
                 addition_information: null,
                 additional_fields: [],
@@ -171,6 +180,63 @@ export default {
         this.getMarketplaceProceduresFilter()
     },
 
+    mounted() {
+        initMore();
+    },
+
+    computed: {
+        tabs: function () {
+            let result = [];
+            result.push({
+                name: "Общая информация",
+                url: "#info"
+            });
+            result.push({
+                name: "Заказчик",
+                url: "#client"
+            });
+            if (this.tenderItemData.tender_trading_format === 'trading_223') {
+                result.push({
+                    name: "Список лотов",
+                    url: "#lots"
+                });
+            }
+            result.push({
+                name: "Документы",
+                url: "#documents"
+            });
+            if (this.tenderItemData.tender_trading_format === 'trading_223') {
+                result.push({
+                    name: "Разъяснения",
+                    url: "#chat"
+                });
+                result.push({
+                    name: "Протоколы",
+                    url: "#protocols"
+                });
+            }
+            result.push({
+                name: "Журнал событий",
+                url: "#logs"
+            });
+            return result;
+        }
+    },
+
+    watch: {
+        tabs(newValue) {
+            this.$nextTick(() => {
+                initMore();
+                let tabs = this.$refs['tabs'].$refs['tabs'],
+                    hash = window.location.hash.substr(1),
+                    link = tabs.querySelector('li a[href="#'+hash+'"]') || tabs.querySelector('li.active a') || tabs.querySelector('li:nth-child(1) a');
+                if (link) {
+                    link.click();
+                }
+            });
+        }
+    },
+
     methods: {
         getTenderItemId() {
             this.tenderItemId = document.querySelector('#marketplace-item').getAttribute('data-id')
@@ -199,8 +265,27 @@ export default {
                     console.log(e)
                 })
         },
-        changeTab(tab) {
-            this.activeTab = tab;
+        changeTab(evt, hash, scroll = false) {
+            evt.preventDefault();
+            this.activeTab = hash;
+            hash = hash.replace('#', '');
+            const el = document.getElementById(hash),
+                tabs = this.$refs['tabs'].$refs['tabs'];
+            if (el) {
+                if (el.style.display === 'none') {
+                    // если таб закрыт - открываем
+                    let link = tabs.querySelector('li a[href="#' + hash + '"]');
+                    if (link) {
+                        if (scroll || window.innerWidth <= 767) {
+                            // если надо - крутим к табу
+                            this.scrollTo(tabs);
+                        }
+                        link.click();
+                        this.setWindowHash(hash);
+                    }
+                }
+            }
+            return false;
         },
         checkUrlHash() {
             if (window.location.hash) {

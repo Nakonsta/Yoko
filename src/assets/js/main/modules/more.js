@@ -1,5 +1,5 @@
 //https://css-tricks.com/container-adapting-tabs-with-more-button/
-export function initTabs() {
+export function initMore() {
     document.querySelectorAll('.js-more').forEach((container) => {
         const primary = container.querySelector('.js-more__items');
         const primaryItems = container.querySelectorAll('.js-more__item:not(.-more)');
@@ -33,11 +33,15 @@ export function initTabs() {
 
         const secondaryItems = secondary.querySelectorAll('.js-more__item');
         const allItems = container.querySelectorAll('li');
-        moreBtn.addEventListener('click', (e) => {
+
+        // open more
+        function showMore(e) {
             e.preventDefault();
             container.classList.toggle('show-secondary');
             moreBtn.setAttribute('aria-expanded', container.classList.contains('show-secondary') ? 'true' : 'false');
-        });
+        }
+        moreBtn.removeEventListener('click', showMore);
+        moreBtn.addEventListener('click', showMore);
 
         function doAdapt() {
             allItems.forEach((item) => {
@@ -68,9 +72,11 @@ export function initTabs() {
         }
 
         doAdapt(); // adapt immediately on load
+        window.removeEventListener('resize', doAdapt);
         window.addEventListener('resize', doAdapt); // adapt on window resize
 
-        document.addEventListener('click', (e) => {
+        // close more
+        function closeMore(e) {
             let el = e.target;
             while (el) {
                 if (el === secondary || el === moreBtn) {
@@ -80,9 +86,11 @@ export function initTabs() {
             }
             container.classList.remove('show-secondary');
             moreBtn.setAttribute('aria-expanded', 'false');
-        });
+        }
+        document.removeEventListener('click', closeMore);
+        document.addEventListener('click', closeMore);
 
     });
 }
 
-initTabs();
+initMore();

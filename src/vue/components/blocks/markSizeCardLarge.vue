@@ -5,7 +5,7 @@
                 {{ item.title }}
             </span>
         </div>
-        <div class="table-cell__quantity cable-info__quantity" :data-name="item.quantity ? 'Остаток, м' : ''">
+        <div class="table-cell__quantity cable-info__quantity" :data-name="item.quantity ? 'Остаток, м' : 'Наличие'">
             <span v-if="item.quantity">
                 {{ item.quantity }} м
             </span>
@@ -24,7 +24,7 @@
             {{ item.company.rating }}
           </span>
         </div>
-        <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : ''">
+        <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : 'Цена, руб'">
             <template v-if=" $store.state.auth.loggedIn">
                 <span v-if="item.price">
                     {{ item.price }} &#8381;
