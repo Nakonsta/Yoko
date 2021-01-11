@@ -15,7 +15,9 @@
         </div>
         <div v-if="item.company_id" class="table-cell__company cable-info__company" data-name="Компания">
           <span>
-            {{ item.company.name }}
+            <a :href="`/compregister/${item.company.id}`">
+              {{ item.company.name }}
+            </a>
           </span>
           <span class="cable-info__company-desc">
             Рейтинг компании:
@@ -180,9 +182,16 @@ export default {
               &:first-child {
                 display: block;
               }
-            }
-            &-desc {
-              font-weight: 400;
+              > a {
+                transition: .3s color;
+                color: #31ACB8;
+                &:hover {
+                  color: #4cb9c3;
+                }
+              }
+              &-desc {
+                font-weight: 400;
+              }
             }
         }
         &__price {
