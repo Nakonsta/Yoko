@@ -1,10 +1,7 @@
 <template>
-    <div class="procedure-application-tooltip">
+    <div class="application-tooltip">
         <svg>
-            <use
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                xlink:href="\./img/sprite.svg#hint"
-            ></use>
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hint"></use>
         </svg>
         <span>
             <slot>{{ text }}</slot>
@@ -13,7 +10,7 @@
 </template>
 <script>
 export default {
-    name: 'procedure-application-tooltip',
+    name: 'application-tooltip',
     props: {
         text: {
             type: String
@@ -24,24 +21,21 @@ export default {
     },
     computed: {
         classes() {
-            return [
-                'procedure-application-tooltip',
-                { 'procedure-application-tooltip--disabled': this.disabled }
-            ]
+            return ['application-tooltip', { 'application-tooltip--disabled': this.disabled }]
         }
     }
 }
 </script>
 <style lang="scss" scoped>
 @import '../../../../../assets/sass/variables/variables';
-.procedure-application-tooltip {
+.application-tooltip {
     display: flex;
     justify-content: center;
     align-items: center;
 
     width: 20px;
     height: 20px;
-    border: 1px solid $colorGray;
+    border: 1px solid $borderColor;
     border-radius: 100%;
     cursor: pointer;
 
