@@ -1,6 +1,15 @@
 <template>
     <div class="tender-item__menu">
-        <div class="tender-item__menu-inner">
+        <div v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)" class="tender-item__menu-inner">
+            <div
+                    v-for="(item, key) in buyerMenu"
+                    :key="key"
+                    class="tender-item__menu-item"
+            >
+                <span class="tender-item__menu-link">{{ item }}</span>
+            </div>
+        </div>
+        <div v-else class="tender-item__menu-inner">
             <div
                     v-for="item in tabs"
                     :key="item.url"
@@ -27,7 +36,16 @@ export default {
             default: () => [],
             required: true,
         },
+        buyerMenu: {
+            type: Array,
+            default: () => [],
+            required: true,
+        },
         tenderItemData: {
+            type: Object,
+            required: true,
+        },
+        company: {
             type: Object,
             required: true,
         },

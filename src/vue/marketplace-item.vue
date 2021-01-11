@@ -14,6 +14,8 @@
                 :activeTab="activeTab"
                 @changeTab = "changeTab"
                 :tabs="tabs"
+                :company="company"
+                :buyerMenu="buyerMenu"
             />
         </div>
         <div class="tender-item__tabs">
@@ -170,6 +172,13 @@ export default {
                 website: null,
             },
             itemsStatuses: [],
+            buyerMenu: [
+                'Редактировать',
+                'Отменить',
+                'Экспортировать',
+                'Прикрепить протоколы',
+                'Выбор победителя'
+            ]
         }
     },
 
