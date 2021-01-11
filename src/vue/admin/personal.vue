@@ -1,13 +1,22 @@
 <template>
-    <div :key="$store.state.newUserDataSignal" class="main">
-      <template v-if="$store.getters.userRole !== 'guest'">
-        <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
+    <div>
+      <breadCrumbs
+          :crumbs="breadCrumbs"
+      />
+      <div class="section section--green">
+        <div class="container">
+          <div :key="$store.state.newUserDataSignal" class="main">
+            <template v-if="$store.getters.userRole !== 'guest'">
+              <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
 
-        <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
-          <router-view @fullMode="getModeFromPage" />
+              <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
+                <router-view @fullMode="getModeFromPage" />
+              </div>
+            </template>
+            <noAuthBlock v-else />
+          </div>
         </div>
-      </template>
-      <noAuthBlock v-else />
+      </div>
     </div>
 </template>
 
@@ -17,6 +26,7 @@ import api from '../helpers/api'
 import functions from '../helpers/functions'
 import AppMenu from '../components/blocks/Menu.vue'
 import noAuthBlock from '../components/blocks/noAuthBlock'
+import breadCrumbs from "@/components/blocks/breadCrumbs";
 
 export default {
     name: 'Personal',
@@ -24,12 +34,23 @@ export default {
         AppMenu,
         draggable,
         noAuthBlock,
+        breadCrumbs
     },
     mixins: [api, functions],
     data() {
         return {
-        windowWidth: window.innerWidth,
-        fullMode: false,
+            breadCrumbs: [
+                {
+                    name: 'Главная',
+                    link: '/'
+                },
+                {
+                    name: 'Личный кабинет',
+                    link: '/personal'
+                }
+            ],
+            windowWidth: window.innerWidth,
+            fullMode: false,
         }
     },
     watch: {

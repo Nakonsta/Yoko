@@ -15,7 +15,7 @@
         электронной площадке
       </div>
       <div class="gis__link">
-        <a href="#" target="_blank">
+        <a href="https://zakupki.gov.ru/epz/main/public/download/downloadDocument.html?id=33257" target="_blank">
           СКАЧАТЬ ПЛАГИН ГИС НР
           <svg
             width="16"
