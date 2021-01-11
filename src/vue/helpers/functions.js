@@ -141,5 +141,56 @@ export default {
                 window.location.hash = '#' + hash;
             }
         },
+        getStrRand(length = 32, characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890') {
+            let result = '';
+            for ( let i=0; i<length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        },
+        getAvatar(user = null) {
+            let name = '';
+            // user is string name OR object OR userID
+            if (user) {
+                if (user === parseInt(user, 10)) {
+                    // user is userID
+                    // todo получение пользователя
+                }
+                if (typeof user === 'string' && user.length) {
+                    // если user строка - парсим её
+                    user = user.split(' ');
+                    if (user.length > 1) {
+                        name = user[0].substring(0, 1) + user[1].substring(0, 1);
+                    } else {
+                        name = user[0].substring(0, 2);
+                    }
+                } else if (typeof user === 'object') {
+                    // если user - объект
+                    name = user.lastName.substring(0, 1) + user.name.substring(0, 1);
+                }
+            }
+            if (!name.length) {
+                // если не смогли получить пользователя - отдаём случайную строку ибо вообще не понятно что делать
+                // name = this.getStrRand(2, 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЮЯ');
+            }
+            let color = this.getAvatarBackground(name, 120);
+            return {
+                name: name,
+                color: color,
+            };
+        },
+        getAvatarBackground(str, brightness) {
+            function randomChannel(code, brightness){
+                code = (code % 255) / 255;
+                let r = 255-brightness,
+                    n = 0|((code * r) + brightness),
+                    s = n.toString(16);
+                return s.length===1 ? '0'+s : s;
+            }
+            return '#' + randomChannel(str.charCodeAt(0)||120, brightness) + randomChannel(str.charCodeAt(1)||120, brightness) + randomChannel(120, brightness);
+        },
+        nl2br(str) {
+            return str.replace(/([^>])\n+/g, '$1<br/>');
+        },
     }
 }

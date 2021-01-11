@@ -1,7 +1,7 @@
 <template>
     <div class="qa">
-        <div class="qa__person">
-            <div class="qa__avatar"></div>
+        <div class="qa__person" v-if="company">
+            <div class="qa__avatar avatar avatar--alt" :style="{backgroundColor: companyAvatar.color}">{{ companyAvatar.name }}</div>
             <div class="qa__person-wrap">
                 <div><a href="#">{{ company.shortName ? company.shortName : company.name }}</a></div>
                 <popupCompanyContact
@@ -13,32 +13,32 @@
         <div class="qa__content">
             <div class="qa__items">
                 <template v-if="tenderItemData.qa && tenderItemData.qa.length">
-                    <div class="qa__item" v-for="(question, index) in tenderItemData.qa" :key="question.id">
+                    <div class="qa__item" v-for="(question, index) in tenderItemData.qa" :key="question.id" :ref="'question-'+question.id">
                         <div class="qa__item-question">
-                            <div class="qa__avatar"></div>
-                            <p>{{ question.message }}</p>
+                            <div class="qa__avatar avatar"></div>
+                            <p v-html="nl2br(question.message)"></p>
                             <ul v-if="question.documents">
                                 <li v-for="document in question.documents">
                                     <a :href="document.url"><svg class="sprite-browse"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#browse"></use></svg> {{ document.name }}</a>
                                 </li>
                             </ul>
                             <div class="qa__item-meta">
-                                <time>{{ formatDate(question.date) }}</time>
+                                <time>{{ formatDate(question.created_at) }}</time>
                                 <a href="javascript:{}" @click="reply(index)" v-if="userCanReply">Ответить</a>
                             </div>
                         </div>
                         <template v-if="question.answers && question.answers.length">
-                            <div class="qa__item-answer" v-for="answer in question.answers" :key="answer.id">
-                                <div class="qa__avatar"></div>
+                            <div class="qa__item-answer" v-for="answer in question.answers" :key="answer.id" :ref="'answer-'+answer.id">
+                                <div class="qa__avatar avatar avatar--alt" :style="{backgroundColor: companyAvatar.color}">{{ companyAvatar.name }}</div>
                                 <div class="qa__item-author"><a href="javascript:{}" @click="openCompanyContact()">{{ company.directorFio }}</a></div>
-                                <p>{{ answer.message }}</p>
+                                <p v-html="nl2br(answer.message)"></p>
                                 <ul v-if="answer.documents">
                                     <li v-for="document in answer.documents">
                                         <a :href="document.url"><svg class="sprite-browse"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#browse"></use></svg> {{ document.name }}</a>
                                     </li>
                                 </ul>
                                 <div class="qa__item-meta">
-                                    <time>{{ formatDate(answer.date) }}</time>
+                                    <time>{{ formatDate(answer.created_at) }}</time>
                                 </div>
                             </div>
                         </template>
@@ -54,42 +54,42 @@
                 <form @submit.prevent="sendForm" slot-scope="{ valid }">
                     <div class="qa__item qa__item--reply" v-if="replyTo">
                         <div class="qa__item-question">
-                            <div class="qa__avatar">У{{ replyTo.index }}</div>
-                            <p>{{ replyTo.message }}</p>
+                            <div class="qa__avatar avatar">У{{ replyTo.index }}</div>
+                            <p v-html="nl2br(replyTo.message)"></p>
                             <ul v-if="replyTo.documents">
                                 <li v-for="document in replyTo.documents">
                                     <a :href="document.url"><svg class="sprite-browse"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#browse"></use></svg> {{ document.name }}</a>
                                 </li>
                             </ul>
                             <div class="qa__item-meta">
-                                <time>{{ formatDate(replyTo.date) }}</time>
+                                <time>{{ formatDate(replyTo.created_at) }}</time>
                             </div>
                         </div>
                         <a href="javascript:{}" class="qa__item-cancel" @click="replyCancel"><svg class="sprite-cancel"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#cancel"></use></svg></a>
                     </div>
                     <div class="qa__form-field">
                         <label
-                                :class="{'qa__form-upload': true, 'disabled': formForSend.documents.length >= documentsMax || (userCanReply && !replyTo)}"
+                                :class="{'qa__form-upload': true, 'disabled': formForSend.documents.length >= documentsMax || formDisabled}"
                         >
                             <input
                                     type="file"
                                     multiple="multiple"
                                     @change="addFiles($event)"
-                                    :disabled="formForSend.documents.length >= documentsMax || (userCanReply && !replyTo)"
+                                    :disabled="formForSend.documents.length >= documentsMax || formDisabled"
                             />
                             <svg class="sprite-browse"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#browse"></use></svg>
                         </label>
                         <TextareaInput
                                 v-model="formForSend.message"
-                                placeholder="Введите вопрос"
-                                validationName="вопрос"
+                                :placeholder="userCanReply ? 'Введите ответ на вопрос' : 'Введите вопрос'"
+                                :validationName="userCanReply ? 'ответ' : 'вопрос'"
                                 rules="required"
                                 counter="1000"
                                 :autoheight="true"
-                                :disabled="userCanReply && !replyTo"
+                                :disabled="formDisabled"
                                 ref="textarea"
                         />
-                        <button class="btn" type="submit" :disabled="userCanReply && !replyTo">Оправить</button>
+                        <button class="btn" type="submit" :disabled="formDisabled">Оправить</button>
                     </div>
                 </form>
             </ValidationObserver>
@@ -99,7 +99,7 @@
                     <a href="javascript:{}" @click="removeFile(index)">&times;</a>
                 </li>
             </ul>
-            <div class="qa__form-count" v-if="!userCanReply">{{ count }}</div>
+            <div class="qa__form-count" v-if="$store.getters.userRole === 'contractor'">{{ countText }}</div>
         </div>
     </div>
 </template>
@@ -134,10 +134,14 @@ export default {
     },
     computed: {
         count() {
-            const count = this.tenderItemData.qa.length; // todo должно быть не общее количество, а количество вопросов от компании пользователя!
+            let inn = this.$store.getters.companyContractor[0].inn || '';
+            if (!inn) return 0;
+            return this.tenderItemData.q_counts.filter((item)=>{return item.inn === inn;})[0].count || 0;
+        },
+        countText() {
             return [
-                count,
-                this.declOfNum(count, ['вопрос','вопроса','вопросов']),
+                this.count,
+                this.declOfNum(this.count, ['вопрос','вопроса','вопросов']),
                 'из',
                 this.maxQuestions
             ].join(' ');
@@ -155,9 +159,22 @@ export default {
             }
             return companies;
         },
+        companyAvatar() {
+            return this.company ? this.getAvatar(this.company.directorFio) : {name:'',color:''};
+        },
         userCanReply() {
-            // return this.$store.getters.userRole === 'buyer' && this.companies.filter((item) => {return item.inn === this.company.inn}).length;
-            return this.$store.getters.userRole === 'buyer' && this.companies.filter((item) => {return item.inn === '3456778887'}).length;
+            return this.$store.getters.userRole === 'buyer' && this.companies.filter((item) => {return item.inn === this.company.inn}).length;
+            // return this.$store.getters.userRole === 'buyer' && this.companies.filter((item) => {return item.inn === '3456778887'}).length;
+        },
+        userCanAsk() {
+            return this.$store.getters.userRole === 'contractor' && this.count < this.maxQuestions;
+        },
+        formDisabled() {
+            if (this.$store.getters.userRole === 'buyer') {
+                return this.userCanReply && !this.replyTo;
+            } else {
+                return !this.userCanAsk;
+            }
         },
     },
     data: function () {
@@ -173,42 +190,7 @@ export default {
             replyTo: null,
         }
     },
-    created() {
-        this.tenderItemData.qa = [
-            {
-                "id": 9,
-                "procedure_id": 18,
-                "message": "Zagadka ot Zhaka Fresko: Scolko?",
-                "documents": [
-                    {
-                        url: '#',
-                        name: "string",
-                    }
-                ],
-                "answers": [
-                    {
-                        "id": 9,
-                        "procedure_id": 18,
-                        "parent_id": 30,
-                        "user_id": 18,
-                        "inn": 1646733660,
-                        "message": "Zagadka ot Zhaka Fresko: Scolko?",
-                        "documents": [
-                            {
-                                url: '#',
-                                name: "string",
-                            },
-                            {
-                                url: '#',
-                                name: "string",
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-    },
-
+    created() {},
     methods: {
         openCompanyContact() {
             this.$refs['contact'].open();
@@ -227,26 +209,22 @@ export default {
             this.formForSend.documents.splice(index, 1);
         },
         reply(index) {
-            this.replyTo = cloneDeep(this.tenderItemData.qa[index]);
+            this.replyTo = this.tenderItemData.qa[index];
             this.replyTo.index = index+1;
             let textarea = this.$refs['textarea'].$el.querySelector('textarea');
-            textarea.focus();
             this.scrollTo(textarea);
+            //this.$nextTick(() => textarea.focus()); // если раскоментировать то нет плавной прокрутки...
         },
         replyCancel() {
             this.replyTo = null;
         },
         sendForm(evt) {
             evt.preventDefault();
-            console.log('!1');
             this.$refs.form.validate().then((res) => {
-                console.log('!2');
                 if (res) {
-                    console.log('!3');
                     window.openLoader();
                     let fData = cloneDeep(this.formForSend);
                     if( this.$store.getters.userRole === 'contractor' ) {
-                        console.log('!4');
                         // если поставщик - добавляем компанию
                         let userCompanies = this.$store.getters.companyContractor; // todo выбор компании?
                         if (userCompanies.length) {
@@ -254,9 +232,25 @@ export default {
                         }
                         const formDataObj = this.objectToFormData(fData);
                         this.sendMarketplaceQuestion(this.tenderItemData.id, formDataObj)
-                            .then(() => {
+                            .then((response) => {
                                 window.closeLoader();
                                 window.notificationSuccess('Ваш вопрос отправлен');
+                                if (!this.tenderItemData.qa) {
+                                    this.tenderItemData.qa = [];
+                                }
+                                this.tenderItemData.qa.push(response.data.data);
+                                // увеличиваем счётчик вопросов на единицу (чтобы не дёргать базу)
+                                let tmpCount = this.tenderItemData.q_counts.filter((item)=>{return item.inn === fData.inn;});
+                                if (tmpCount.length) {
+                                    tmpCount.count++;
+                                } else {
+                                    this.tenderItemData.q_counts.push({
+                                        inn: fData.inn,
+                                        count: 1
+                                    });
+                                }
+                                this.clearForm();
+                                this.$nextTick(() => this.scrollTo(this.$refs['question-'+response.data.data.id].$el));
                             })
                             .catch((response) => {
                                 console.log(response.message);
@@ -266,10 +260,16 @@ export default {
                     } else if( this.$store.getters.userRole === 'buyer' ) {
                         // если заказчик:
                         const formDataObj = this.objectToFormData(fData);
-                        this.sendMarketplaceAnswer(this.tenderItemData.id, 0, formDataObj)
-                            .then(() => {
+                        this.sendMarketplaceAnswer(this.tenderItemData.id, this.replyTo.id, formDataObj)
+                            .then((response) => {
                                 window.closeLoader();
                                 window.notificationSuccess('Ваш ответ отправлен');
+                                if (!this.replyTo.answers) {
+                                    this.replyTo.answers = [];
+                                }
+                                this.replyTo.answers.push(response.data.data);
+                                this.clearForm();
+                                this.$nextTick(() => this.scrollTo(this.$refs['answer-'+response.data.data.id].$el));
                             })
                             .catch((response) => {
                                 console.log(response.message);
@@ -285,6 +285,12 @@ export default {
                     }, 500);
                 }
             });
+        },
+        clearForm() {
+            this.replyCancel();
+            this.formForSend.message = '';
+            this.formForSend.documents = [];
+            this.$nextTick(() => this.$refs.form.reset());
         },
     },
 }
@@ -336,18 +342,7 @@ export default {
 
         &__avatar {
             flex-shrink: 0;
-            display: block;
-            border-radius: 50%;
             margin-right: rem(16px);
-            width: rem(60px);
-            height: rem(60px);
-            text-transform: uppercase;
-            font-weight: normal;
-            font-size: rem(30px);
-            line-height: (60/30);
-            text-align: center;
-            color: $colorGray3;
-            background: $colorLight;
 
             .qa__item-question & {
                 &::before {
@@ -362,6 +357,10 @@ export default {
 
         &__item {
             counter-increment: question;
+
+            & + & {
+                margin-top: rem(40px);
+            }
 
             &--reply {
                 display: flex;
@@ -390,6 +389,8 @@ export default {
 
                 svg {
                     fill: $colorTurquoise;
+                    width: 100%;
+                    height: 100%;
                     transition: fill $animation;
                 }
             }
@@ -439,17 +440,6 @@ export default {
             }
 
             &-avatar {
-                display: block;
-                border-radius: 50%;
-                width: rem(60px);
-                height: rem(60px);
-                text-transform: uppercase;
-                font-weight: normal;
-                font-size: rem(30px);
-                line-height: (60/30);
-                text-align: center;
-                color: $colorGray3;
-                background: $colorLight;
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -476,7 +466,7 @@ export default {
             }
 
             &-answer {
-                margin: rem(16px) 0 0 rem(86px);
+                margin: rem(24px) 0 0 rem(86px);
 
                 &::before {
                     content: '';
@@ -484,9 +474,11 @@ export default {
                     border-left: 3px solid $colorTurquoise;
                     width: 0;
                     position: absolute;
-                    top: rem(-4px);
+                    //top: rem(-4px);
+                    top: 0;
                     left: rem(-10px);
-                    bottom: rem(-4px);
+                    //bottom: rem(-4px);
+                    bottom: 0;
                 }
             }
 
@@ -513,17 +505,9 @@ export default {
             border-top: 1px solid #d3d3d3;
 
             &-field {
-                display: flex;
-                justify-content: space-between;
                 position: relative;
 
-                ::v-deep .field__container {
-                    margin-bottom: 0 !important;
-                    width: calc(100% - 200px);
-                }
-
                 ::v-deep textarea.field {
-                    border-radius: rem(6px) 0 0 rem(6px);
                     padding: rem(15px) rem(70px) rem(15px) rem(64px);
                     line-height: 20px;
                     min-height: rem(52px);
@@ -535,9 +519,27 @@ export default {
                 }
 
                 ::v-deep .btn {
-                    align-self: flex-start;
-                    border-radius: 0 rem(6px) rem(6px) 0;
-                    width: 200px;
+                    width: 100%;
+                }
+
+                @include mq($from: tablet) {
+                    display: flex;
+                    justify-content: space-between;
+
+                    ::v-deep .field__container {
+                        margin-bottom: 0 !important;
+                        width: calc(100% - 200px);
+                    }
+
+                    ::v-deep textarea.field {
+                        border-radius: rem(6px) 0 0 rem(6px);
+                    }
+
+                    ::v-deep .btn {
+                        align-self: flex-start;
+                        border-radius: 0 rem(6px) rem(6px) 0;
+                        width: 200px;
+                    }
                 }
             }
 
@@ -557,24 +559,24 @@ export default {
                 &.disabled {
                     pointer-events: none;
 
-                    ::v-deep svg {
+                    svg {
                         fill: $colorGray3;
                     }
                 }
 
                 &:hover {
-                    ::v-deep svg {
+                    svg {
                         fill: $colorTurquoiseHover;
                     }
                 }
 
-                ::v-deep input {
+                input {
                     position: absolute;
                     top: 0;
                     left: -9999px;
                 }
 
-                ::v-deep svg {
+                svg {
                     display: block;
                     width: rem(24px);
                     height: rem(24px);
@@ -592,13 +594,13 @@ export default {
                 font-weight: 500;
                 color: $colorTurquoise;
 
-                ::v-deep li {
+                li {
                     + li {
                         margin-top: rem(6px);
                     }
                 }
 
-                ::v-deep span {
+                span {
                     display: inline-block;
                     vertical-align: top;
                     max-width: calc(100% - 2em);
@@ -607,7 +609,7 @@ export default {
                     overflow: hidden;
                 }
 
-                ::v-deep a {
+                a {
                     display: inline-block;
                     vertical-align: top;
                     margin-left: rem(8px);
