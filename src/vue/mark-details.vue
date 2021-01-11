@@ -1,45 +1,57 @@
 <template>
   <div>
-    <mark-info :root="rootData"></mark-info>
-    <div class="tabs tabs--line js-tabs js-more" ref="tabs" v-if="tabs">
-      <ul class="js-more__items">
-        <li
-          v-for="item in tabs"
-          :key="item.url"
-          class="js-more__item"
-        >
-          <a :href="item.url">{{ item.name }}</a>
-        </li>
-        <li class="js-more__btn hidden">
-          <button type="button" aria-haspopup="true" aria-expanded="false">
-            <svg class="sprite-dropdown">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#dropdown"></use>
-            </svg>
-          </button>
-        </li>
-      </ul>
+    <breadCrumbs
+      :crumbs="breadCrumbs"
+    />
+    <pageTitle
+      :title="title"
+    />
+    <div class="section section--green section--mark">
+      <div class="container catalog-mark">
+        <div>
+          <mark-info :root="rootData"></mark-info>
+          <div class="tabs tabs--line js-tabs js-more" ref="tabs" v-if="tabs">
+            <ul class="js-more__items">
+              <li
+                  v-for="item in tabs"
+                  :key="item.url"
+                  class="js-more__item"
+              >
+                <a :href="item.url">{{ item.name }}</a>
+              </li>
+              <li class="js-more__btn hidden">
+                <button type="button" aria-haspopup="true" aria-expanded="false">
+                  <svg class="sprite-dropdown">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#dropdown"></use>
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="tabs__content" id="marksizes" v-if="rootData.marksizes.length">
+            <mark-mark-size :root="rootData"></mark-mark-size>
+          </div>
+          <div class="tabs__content" id="characters" v-if="rootData.characters.length">
+            <mark-characters :root="rootData.characters"></mark-characters>
+          </div>
+          <div class="tabs__content" id="appointment">
+            <mark-appointment :root="rootData"></mark-appointment>
+          </div>
+          <div class="tabs__content" id="documents" v-if="rootData.documents.length">
+            <mark-documents :root="rootData.documents"></mark-documents>
+          </div>
+          <div class="tabs__content" id="analogs" v-if="rootData.analogs.length">
+            <mark-analog :root="rootData.analogs"></mark-analog>
+          </div>
+          <div class="tabs__content" id="manufacturers" v-if="rootData.manufacturers.length">
+            <mark-manufacturer :root="rootData.manufacturers"></mark-manufacturer>
+          </div>
+          <!--    <div class="tabs__content" id="additional" v-if="rootData.companies.length">-->
+          <!--      <mark-additional :root="rootData.companies"></mark-additional>-->
+          <!--    </div>-->
+        </div>
+      </div>
     </div>
-    <div class="tabs__content" id="marksizes" v-if="rootData.marksizes.length">
-      <mark-mark-size :root="rootData"></mark-mark-size>
-    </div>
-    <div class="tabs__content" id="characters" v-if="rootData.characters.length">
-      <mark-characters :root="rootData.characters"></mark-characters>
-    </div>
-    <div class="tabs__content" id="appointment">
-      <mark-appointment :root="rootData"></mark-appointment>
-    </div>
-    <div class="tabs__content" id="documents" v-if="rootData.documents.length">
-      <mark-documents :root="rootData.documents"></mark-documents>
-    </div>
-    <div class="tabs__content" id="analogs" v-if="rootData.analogs.length">
-      <mark-analog :root="rootData.analogs"></mark-analog>
-    </div>
-    <div class="tabs__content" id="manufacturers" v-if="rootData.manufacturers.length">
-      <mark-manufacturer :root="rootData.manufacturers"></mark-manufacturer>
-    </div>
-<!--    <div class="tabs__content" id="additional" v-if="rootData.companies.length">-->
-<!--      <mark-additional :root="rootData.companies"></mark-additional>-->
-<!--    </div>-->
   </div>
 </template>
 
@@ -52,6 +64,8 @@ import MarkDocuments from './components/blocks/catalog-details/mark-documents.vu
 import MarkAnalog from './components/blocks/catalog-details/mark-analogs.vue'
 import MarkManufacturer from './components/blocks/catalog-details/mark-manufacturer.vue'
 import MarkAdditional from './components/blocks/catalog-details/mark-additional.vue'
+import breadCrumbs from "@/components/blocks/breadCrumbs";
+import pageTitle from "@/components/blocks/pageTitle";
 import { initMore } from '../assets/js/main/modules/more.js'
 import api from './helpers/api';
 
@@ -66,11 +80,15 @@ export default {
     MarkAppointment,
     MarkManufacturer,
     MarkAdditional,
+    breadCrumbs,
+    pageTitle
   },
   mixins: [api],
   data() {
     return {
       markId: null,
+      title: '',
+      breadCrumbs: [],
       rootData: {
         description: '',
         images: [],
@@ -223,6 +241,25 @@ export default {
     this.getMarkData(this.markId);
   },
   methods: {
+    setBeadCrumbs(name) {
+      this.breadCrumbs = [
+        {
+          name: 'Главная',
+          link: '/'
+        },
+        {
+          name: 'Каталог',
+          link: '/catalog'
+        },
+        {
+          name: name,
+          link: '/'
+        }
+      ]
+    },
+    setTitle(name) {
+      this.title = name
+    },
     prepareMarkData(data) {
       this.rootData = {
         description: '',
@@ -236,6 +273,10 @@ export default {
         manufacturers: [],
         companies: [],
       };
+
+      this.setTitle(data.name)
+      this.setBeadCrumbs(data.name)
+
       this.setCharacters(data);
       this.setDocuments(data);
       this.setAnalogs(data);
