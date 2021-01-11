@@ -237,6 +237,10 @@ export default {
                 title: 'Добавление продукции',
                 to: '/personal/catalog/new'
               },
+              {
+                title: 'Заявки на добавление продукции',
+                to: '/personal/catalog/positions'
+              },
             ]
           },
           {

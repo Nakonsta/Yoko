@@ -1,51 +1,63 @@
 <template>
   <div>
-    <mark-info :root="rootData"></mark-info>
-    <div class="tabs tabs--line js-tabs js-more" ref="tabs" v-if="tabs">
-      <ul class="js-more__items">
-        <li
-          v-for="item in tabs"
-          :key="item.url"
-          class="js-more__item"
-        >
-          <a :href="item.url">{{ item.name }}</a>
-        </li>
-        <li class="js-more__btn hidden">
-          <button type="button" aria-haspopup="true" aria-expanded="false">
-            <svg class="sprite-dropdown">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#dropdown"></use>
-            </svg>
-          </button>
-        </li>
-      </ul>
+    <breadCrumbs
+      :crumbs="breadCrumbs"
+    />
+    <pageTitle
+      :title="title"
+    />
+    <div class="section section--green section--mark">
+      <div class="container catalog-mark">
+        <div>
+          <mark-info :root="rootData"></mark-info>
+          <div class="tabs tabs--line js-tabs js-more" ref="tabs" v-if="tabs">
+            <ul class="js-more__items">
+              <li
+                  v-for="item in tabs"
+                  :key="item.url"
+                  class="js-more__item"
+              >
+                <a :href="item.url">{{ item.name }}</a>
+              </li>
+              <li class="js-more__btn hidden">
+                <button type="button" aria-haspopup="true" aria-expanded="false">
+                  <svg class="sprite-dropdown">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#dropdown"></use>
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="tabs__content" id="description" v-if="rootData.description.length">
+            <mark-description :root="rootData"></mark-description>
+          </div>
+          <div class="tabs__content" id="availability" v-if="marksizeId && rootData.companies.length">
+            <mark-marksize-list :marksize-id="marksizeId" :companies="rootData.companies" />
+          </div>
+          <div class="tabs__content" id="containers" v-if="rootData.containers.length">
+            Тара
+          </div>
+          <div class="tabs__content" id="characters" v-if="rootData.characters.length">
+            <mark-characters :root="rootData.characters"></mark-characters>
+          </div>
+          <div class="tabs__content" id="boxing" v-if="rootData.boxing.length">
+            Упаковка
+          </div>
+          <div class="tabs__content" id="appointment" v-if="rootData.appointment.length">
+            <mark-appointment :root="rootData"></mark-appointment>
+          </div>
+          <div class="tabs__content" id="documents" v-if="rootData.documents.length">
+            <mark-documents :root="rootData.documents"></mark-documents>
+          </div>
+          <div class="tabs__content" id="manufacturers" v-if="rootData.manufacturers.length">
+            <mark-manufacturer :root="rootData.manufacturers"></mark-manufacturer>
+          </div>
+          <!--    <div class="tabs__content" id="additional" v-if="rootData.companies.length">-->
+          <!--      <mark-additional :root="rootData.companies"></mark-additional>-->
+          <!--    </div>-->
+        </div>
+      </div>
     </div>
-    <div class="tabs__content" id="description" v-if="rootData.description.length">
-      <mark-description :root="rootData"></mark-description>
-    </div>
-    <div class="tabs__content" id="availability" v-if="marksizeId && rootData.companies.length">
-      <mark-marksize-list :marksize-id="marksizeId" :companies="rootData.companies" />
-    </div>
-    <div class="tabs__content" id="containers" v-if="rootData.containers.length">
-      Тара
-    </div>
-    <div class="tabs__content" id="characters" v-if="rootData.characters.length">
-      <mark-characters :root="rootData.characters"></mark-characters>
-    </div>
-    <div class="tabs__content" id="boxing" v-if="rootData.boxing.length">
-      Упаковка
-    </div>
-    <div class="tabs__content" id="appointment" v-if="rootData.appointment.length">
-      <mark-appointment :root="rootData"></mark-appointment>
-    </div>
-    <div class="tabs__content" id="documents" v-if="rootData.documents.length">
-      <mark-documents :root="rootData.documents"></mark-documents>
-    </div>
-    <div class="tabs__content" id="manufacturers" v-if="rootData.manufacturers.length">
-      <mark-manufacturer :root="rootData.manufacturers"></mark-manufacturer>
-    </div>
-<!--    <div class="tabs__content" id="additional" v-if="rootData.companies.length">-->
-<!--      <mark-additional :root="rootData.companies"></mark-additional>-->
-<!--    </div>-->
   </div>
 </template>
 
@@ -59,6 +71,8 @@ import MarkDocuments from './components/blocks/catalog-details/mark-documents.vu
 import MarkManufacturer from './components/blocks/catalog-details/mark-manufacturer.vue'
 import MarkAdditional from './components/blocks/catalog-details/mark-additional.vue'
 import MarkMarksizeList from './components/blocks/catalog-details/mark-marksize-list'
+import breadCrumbs from "@/components/blocks/breadCrumbs";
+import pageTitle from "@/components/blocks/pageTitle";
 import {initMore} from '../assets/js/main/modules/more.js'
 
 export default {
@@ -71,12 +85,16 @@ export default {
     MarkAppointment,
     MarkManufacturer,
     MarkAdditional,
-    MarkMarksizeList
+    MarkMarksizeList,
+    breadCrumbs,
+    pageTitle
   },
   mixins: [api],
   data() {
     return {
       marksizeId: null,
+      title: '',
+      breadCrumbs: [],
       rootData: {
         description: '',
         appointment: '',
@@ -222,6 +240,25 @@ export default {
     initMore();
   },
   methods: {
+    setBeadCrumbs(name) {
+      this.breadCrumbs = [
+        {
+          name: 'Главная',
+          link: '/'
+        },
+        {
+          name: 'Каталог',
+          link: '/catalog'
+        },
+        {
+          name: name,
+          link: '/'
+        }
+      ]
+    },
+    setTitle(name) {
+      this.title = name
+    },
     prepareMarksizeDetailData(data) {
       this.rootData = {
         description: '',
@@ -237,6 +274,9 @@ export default {
         manufacturers: [],
         companies: [],
       };
+
+      this.setTitle(data.name)
+      this.setBeadCrumbs(data.name)
 
       this.setContainers(data);
       this.setCharacters(data);
