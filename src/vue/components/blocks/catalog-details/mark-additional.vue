@@ -8,14 +8,14 @@
             v-model="dataForm.company"
             label="Выберите компанию из списка"
             placeholder="Выберите компанию из списка"
-            :options="lists"
+            :options="root"
         ></select-input>
       </div>
     </div>
-    <div class="row" v-if="root[dataForm.company && dataForm.company.id]">
+    <div class="row" v-if="dataForm.company">
       <div class="col col-md-6 col-xs-12">
         <h4>Дополнительная информация</h4>
-        <p>{{ root[dataForm.company && dataForm.company.id].desc }}</p>
+        <p>{{ dataForm.company.desc }}</p>
       </div>
       <div class="col col-xs-12">
         <div class="images">
@@ -41,15 +41,12 @@ export default {
       default: null,
       type: Array
     },
+  },
+  data: () => ({
     dataForm: {
-      default: null,
-      type: Object
+      company: null,
     },
-    lists: {
-      default: null,
-      type: Array
-    }
-  }
+  }),
 }
 </script>
 
