@@ -1,0 +1,20 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
+.avatar
+  display: block
+  border-radius: 50%
+  width: rem(60px)
+  height: rem(60px)
+  text-transform: uppercase
+  font-weight: normal
+  font-size: rem(30px)
+  line-height: (60/30)
+  text-align: center
+  color: $colorGray3
+  background: $colorLight
+
+  &--alt
+    color: $colorWhite
+    background: $colorTurquoise

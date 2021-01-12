@@ -180,6 +180,9 @@ export default {
         sendCatalogMarksize(data) {
             return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/marksize/`, data);
         },
+        fetchCatalogMarksizeProperties() {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/service/property_cable_type/`)
+        },
         fetchQuotes(quote, date_start, date_end, mode) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/quotes`, {
                 params: {
