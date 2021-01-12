@@ -131,7 +131,7 @@ export default {
             });
         },
         scrollToError() {
-            const slide = document.querySelector('.error');
+            const el = document.querySelector('.error');
             this.scrollTo(el, 60);
         },
         setWindowHash(hash) {
