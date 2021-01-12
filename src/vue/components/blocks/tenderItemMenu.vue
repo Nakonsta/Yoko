@@ -77,9 +77,19 @@ export default {
         flex-shrink: 0;
         padding: rem(20px) rem(32px);
         background-color: #fff;
+        @include mq($until: widescreen) {
+            width: 296px;
+        }
+        @include mq($until: desktop) {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        @media print {
+            display: none !important;
+        }
         &-item {
             padding: rem(12px) 0;
-            border-bottom: 1px solid $borderColor;
+            border-bottom: 1px solid $colorBdr;
             &:last-child {
                 border-bottom: none;
             }
@@ -90,25 +100,12 @@ export default {
         &-link {
             font-size: rem(14px);
             line-height: 160%;
-            color: $lightcolorText;
+            color: $colorTextLight;
             cursor: pointer;
             &:hover,
             &:focus {
                 color: $colorTurquoise;
             }
-        }
-    }
-
-    @include mq($until: widescreen) {
-        .tender-item__menu {
-            width: 296px;
-        }
-    }
-
-    @include mq($until: desktop) {
-        .tender-item__menu {
-            width: 100%;
-            margin-bottom: 2rem;
         }
     }
 </style>

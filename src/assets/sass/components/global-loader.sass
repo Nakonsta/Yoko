@@ -9,6 +9,8 @@
   background-color: rgba(255, 255, 255, 0.5)
   opacity: 0
   backdrop-filter: blur(0)
+  @media print
+    display: none !important
   &--show
     transition: .5s opacity, 0s 0s width, 0s 0s height, .5s backdrop-filter
     opacity: 1

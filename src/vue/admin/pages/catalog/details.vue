@@ -519,7 +519,7 @@ export default {
     font-family: Roboto;
     font-weight: 500;
     font-size: rem(16px);
-    color: $lightcolorText;
+    color: $colorTextLight;
     margin-right: rem(30px);
     &:hover {
       color: $colorTurquoise;
@@ -540,7 +540,7 @@ export default {
       color: $colorTurquoise;      
     }
     &--approved{
-      color: $lightcolorText;
+      color: $colorTextLight;
     }
     &--rejected{
       color: $colorCrimson;

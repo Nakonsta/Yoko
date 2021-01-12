@@ -1,12 +1,28 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
 .footer
   background-color: $colorTurquoiseLight
   padding: rem(64px) 0
   @media(max-width: 745px)
     padding: rem(32px) 0
+  @media print
+    display: none
+    border-top: 1px solid $colorBdr
+    padding: rem(10px) 0
+    line-height: 1
+    background: $colorWhite
+    position: fixed
+    left: 0
+    right: 0
+    bottom: 0
   &__menu
     margin: 0 rem(-10px)
     @media(max-width: 745px)
       display: none
+    @media print
+      display: none !important
   &__nav
     list-style: none
     display: flex
@@ -27,12 +43,18 @@
           color: $colorTurquoise
 
   &__middle
-    margin: 0 rem(-10px)
-    margin-top: rem(55px)
+    margin: rem(55px) rem(-10px) 0
     display: flex
     @media(max-width: 745px)
       flex-direction: column
       margin-top: 0
+    @media print
+      margin: 0
+      display: block
+      &::after
+        content: ''
+        display: table
+        clear: both
   &__middle-left
     width: 25%
     padding: 0 rem(10px)
@@ -45,6 +67,12 @@
       text-align: center
       .footer__socials
         display: flex
+    @media print
+      float: left
+      padding: 0
+      width: auto
+      .footer__socials
+        display: none !important
   &__middle-center
     display: flex
     width: 50%
@@ -56,22 +84,37 @@
       width: 100%
       text-align: center
       order: -2
+    @media print
+      float: right
+      margin: 0
+      width: auto
     .header__phones
       flex-direction: column
+      @media print
+        flex-direction: row
     .header__phone
       margin-bottom: rem(15px)
       @media(max-width: 745px)
         margin-right: 0
+      @media print
+        margin-bottom: 0
     .header__phone-sity
       color: $colorTurquoise
       opacity: .5
       @media(max-width: 1200px)
         display: block
         margin-left: 0
+      @media print
+        display: inline
+        margin-left: rem(12px)
+        color: $colorGray
+        opacity: 1
     .header__phone-number
       white-space: nowrap
       @media(max-width: 1200px)
         display: block
+      @media print
+        display: inline
   &__middle-center-item
     width: 50%
     padding: 0 rem(10px)
@@ -79,9 +122,17 @@
       width: 100%
     @media(max-width: 745px)
       text-align: center
+    @media print
+      float: right
+      padding: 0
+      width: auto !important
+      & ~ &
+        display: none !important
 
   &__stores
     margin-top: rem(22px)
+    @media print
+      display: none !important
     a
       &:first-child
         margin-right: rem(16px)
@@ -97,6 +148,8 @@
       text-align: center
       order: -1
       margin-top: 0
+    @media print
+      display: none !important
 
   &__bottom
     display: flex
@@ -105,6 +158,8 @@
     @media(max-width: 745px)
       flex-direction: column
       margin-top: rem(24px)
+    @media print
+      display: none !important
     //align-items: center
   &__bottom-left
     width: 25%
@@ -150,6 +205,8 @@
     margin-top: rem(10px)
     @media(max-width: 745px)
       display: none
+    @media print
+      display: none !important
     a
       font-size: rem(16px)
       color: $colorTurquoise
@@ -157,15 +214,21 @@
         font-size: rem(14px)
 
   &__logo
-    svg
-      height: rem(63px)
-      width: rem(210px)
     @include mq($until: widescreen)
       svg
         height: rem(48px)
         width: rem(160px)
     @media(max-width: 745px)
       display: none
+    @media print
+      display: block !important
+    svg
+      height: rem(63px)
+      width: rem(210px)
+      @media print
+        margin: rem(-5px) 0
+        width: rem(100px)
+        height: rem(30px)
 
   &__socials
     display: flex

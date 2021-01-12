@@ -1,6 +1,14 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
 .mobile-header
   height: rem(64px)
   background-color: $colorTurquoise
+  @media print
+    display: none !important
+  @include mq($from: tablet)
+    display: none
   svg
     display: block
   .container
@@ -8,8 +16,6 @@
     display: flex
     align-items: center
     justify-content: space-between
-  @include mq($from: tablet)
-    display: none
 
   &__search
     cursor: pointer
