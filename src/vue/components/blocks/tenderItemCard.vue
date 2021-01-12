@@ -63,7 +63,7 @@
                         {{ getTenderStatusName(tenderItemData) }}
                     </div>
                     <div v-if="tenderItemData" class="tender-item__actions-block">
-                        <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
+                        <a href="javascript:{}" title="Распечатать" @click="print"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                         <a href="javascript:{}" title="Приложенные файлы" @click="changeActiveTab($event, '#documents')">
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
                         </a>
@@ -132,15 +132,8 @@
                         Аналог
                     </div>
                 </div>
-                <div v-if="isProductsShown">
-                    <div v-for="(item, key) in tenderItemData.purchase_subject.products" :key="key">
-                        <TenderItemProductCard :item="item" />
-                    </div>
-                </div>
-                <div v-else>
-                    <div v-for="(item, key) in tenderItemData.purchase_subject.products.slice(0,3)" :key="key">
-                        <TenderItemProductCard :item="item" />
-                    </div>
+                <div v-for="(item, key) in tenderItemData.purchase_subject.products" :key="key">
+                    <TenderItemProductCard :item="item" :hide="!isProductsShown ? key >= 3 : false" />
                 </div>
             </div>
         </div>
@@ -198,6 +191,9 @@ export default {
     },
 
     methods: {
+        print() {
+            window.print();
+        },
         getTenderStatusName(item) {
             const status = this.itemsStatuses.find(
                 (status) => status.id === item.status,
@@ -257,6 +253,9 @@ export default {
             align-items: flex-start;
             padding-bottom: rem(32px);
             border-bottom: 1px solid $colorGray3;
+            @media print {
+                border: 0 !important;
+            }
         }
         &__info {
             background-color: #fff;
@@ -264,6 +263,12 @@ export default {
             padding: rem(24px) rem(32px);
             width: calc(100% - 315px);
             margin-right: 32px;
+            @media print {
+                margin: 0;
+                border-radius: 0;
+                padding: 0;
+                width: 100%;
+            }
         }
         &__requsites {
             display: flex;
@@ -274,7 +279,7 @@ export default {
         }
         &__number {
             padding-right: rem(24px);
-            color: $lightcolorText;
+            color: $colorTextLight;
         }
         &__type {
             color: $colorGray;
@@ -295,13 +300,17 @@ export default {
             &-value {
                 color: $colorTurquoise;
                 text-decoration: underline;
+                @media print {
+                    text-decoration: none;
+                    color: $colorText;
+                }
             }
         }
         &__status {
             font-weight: 700;
             font-size: rem(14px);
             line-height: rem(16px);
-            color: $lightcolorText;
+            color: $colorTextLight;
         }
         &__dates {
             display: flex;
@@ -329,7 +338,7 @@ export default {
             font-weight: 500;
             font-size: rem(14px);
             line-height: rem(20px);
-            color: $lightcolorText;
+            color: $colorTextLight;
         }
         &__actions {
             padding-bottom: rem(38px);
@@ -339,6 +348,9 @@ export default {
                 display: flex;
                 align-items: center;
                 margin-left: 1rem;
+                @media print {
+                    display: none;
+                }
                 svg {
                     display: block;
                     width: 20px;
@@ -353,6 +365,9 @@ export default {
                 justify-content: space-between;
                 align-items: center;
                 padding-top: rem(29px);
+                @media print {
+                    display: none;
+                }
             }
             &-show {
                 font-weight: 500;
@@ -367,7 +382,7 @@ export default {
                     content: '';
                     position: absolute;
                     display: inline-block;
-                    background: url('../src/assets/img/content/down.png') no-repeat;
+                    background: url('/assets/img/content/down.png') no-repeat;
                     background-size: contain;
                     width: 8px;
                     height: 5px;
@@ -382,13 +397,15 @@ export default {
             }
             &-table {
                 padding: rem(77px) 0 rem(31px);
+                @media print {
+                    padding: 0;
+                }
             }
             &-thead {
                 font-weight: 500;
                 font-size: rem(14px);
                 line-height: 160%;
                 color: $colorGray;
-
             }
         }
     }

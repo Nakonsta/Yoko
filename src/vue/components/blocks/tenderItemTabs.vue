@@ -18,25 +18,25 @@
                 </li>
             </ul>
         </div>
-        <div class="tabs__content" id="info">
+        <div class="tabs__content" id="info" data-print-title="Общая информация">
             <TenderItemMainTab :tenderItemData="tenderItemData" :company="company" />
         </div>
-        <div class="tabs__content" id="client">
+        <div class="tabs__content no-print" id="client" data-print-title="Заказчик">
             <TenderItemClientTab :company="company" />
         </div>
-        <div class="tabs__content" id="lots" v-if="tenderItemData.tender_trading_format === 'trading_223'">
+        <div class="tabs__content no-print" id="lots" data-print-title="Список лотов" v-if="tenderItemData.tender_trading_format === 'trading_223'">
             <TenderItemLotsTab :tenderItemData="tenderItemData" />
         </div>
-        <div class="tabs__content" id="documents">
+        <div class="tabs__content no-print" id="documents" data-print-title="Документы">
             <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
         </div>
-        <div id="chat" v-if="tenderItemData.tender_trading_format === 'trading_223'">
+        <div class="tabs__content tabs__content--plane no-print" id="chat" data-print-title="Разъяснения" v-if="tenderItemData.tender_trading_format === 'trading_223'">
             <TenderItemChatTab :tenderItemData="tenderItemData" :company="company" />
         </div>
-        <div class="tabs__content" id="protocols" v-if="tenderItemData.tender_trading_format === 'trading_223'">
+        <div class="tabs__content no-print" id="protocols" data-print-title="Протоколы" v-if="tenderItemData.tender_trading_format === 'trading_223'">
             <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
         </div>
-        <div class="tabs__content" id="logs">
+        <div class="tabs__content no-print" id="logs" data-print-title="Журнал событий">
             <TenderItemLogsTab :tenderItemData="tenderItemData" />
         </div>
     </div>
@@ -138,7 +138,7 @@ export default {
             }
             &-link {
                 text-transform: uppercase;
-                font-family: "Gilroy-SemiBold", sans-serif;
+                font-family: $fontGilroy;
                 font-size: rem(14px);
                 line-height: 160%;
                 letter-spacing: 0.05em;
@@ -173,8 +173,11 @@ export default {
 
     .tender-item__tab {
         &-block {
-            border-bottom: 1px solid $borderColor;
+            border-bottom: 1px solid $colorBdr;
             margin-bottom: rem(40px);
+            @media print {
+                border-bottom: 0;
+            }
         }
         &-title {
             color: $colorTurquoise;
@@ -182,25 +185,42 @@ export default {
             font-size: rem(18px);
             line-height: rem(24px);
             padding-bottom: rem(12px);
-            border-bottom: 1px solid $borderColor;
+            border-bottom: 1px solid $colorBdr;
             margin-bottom: rem(8px);
+            @media print {
+                color: $colorGray;
+            }
         }
         &-row {
             display: flex;
             padding: rem(14px) 0;
             font-size: rem(14px);
             line-height: rem(20px);
-            color: $lightcolorText;
+            color: $colorTextLight;
+            @media print {
+                padding: rem(5px) 0;
+            }
             &-name {
                 width: 420px;
                 flex-shrink: 0;
                 padding-right: 68px;
-                font-weight: 500;                
+                font-weight: 500;
+                @media print {
+                    width: 40%;
+                    padding-right: rem(24px);
+                }
             }
             &-link {
                 display: flex;
                 align-items: center;
                 color: $colorTurquoise;
+                @media print {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                svg {
+                    fill: $colorTurquoise;
+                }
             }
             &-svg {
                 margin-right: rem(7px);
@@ -219,7 +239,7 @@ export default {
 
     .tender-item__lot {
         padding-bottom: rem(24px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         &-title {
             display: flex;
             font-weight: 700;
@@ -247,7 +267,10 @@ export default {
                 font-weight: 500;
                 font-size: rem(14px);
                 line-height: 160%;
-                border-bottom: 1px solid $borderColor;
+                border-bottom: 1px solid $colorBdr;
+                @media print {
+                    padding: rem(5px) 0;
+                }
                 &:last-child {
                     border: none;
                 }
@@ -264,37 +287,58 @@ export default {
         }
         &-header {
             width: 33%;
+            @media print {
+                width: 40%;
+            }
             &-row {
                 display: flex;
                 font-weight: 500;
                 font-size: rem(14px);
                 line-height: 160%;
                 color: $colorGray;
-                border-bottom: 1px solid $borderColor;
+                /*border-bottom: 1px solid $colorBdr;*/
                 padding-bottom: rem(12px);
             }
         }
         &-item {
             width: 33%;
+            @media print {
+                width: 40%;
+            }
             &-row {
                 display: flex;
                 padding: rem(24px) 0;
+                border-bottom: 1px solid $colorBdr;
                 font-weight: 500;
                 font-size: rem(14px);
                 line-height: 160%;
+                @media print {
+                    padding: rem(5px) 0;
+                }
+                &:last-child {
+                    border: none;
+                }
             }
         }
         &-link {
             color: $colorTurquoise;
             text-decoration: underline;
+            @media print {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
 
     .tender-item__file {
         padding-bottom: rem(24px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         &-header {
             width: 33%;
+            @media print {
+                width: 40%;
+            }
             &-row {
                 display: flex;
                 font-weight: 500;
@@ -302,28 +346,43 @@ export default {
                 line-height: 160%;
                 color: $colorGray;
                 padding-bottom: rem(12px);
-                border-bottom: 1px solid $borderColor;
+                /*border-bottom: 1px solid $colorBdr;*/
             }
         }
         &-item {
             width: 33%;
+            @media print {
+                width: 40%;
+            }
             &-row {
                 display: flex;
+                border-bottom: 1px solid $colorBdr;
                 padding: rem(16px) 0;
                 font-weight: 500;
                 font-size: rem(14px);
                 line-height: 160%;
+                @media print {
+                    padding: rem(5px) 0;
+                }
+                &:last-child {
+                    border: none;
+                }
             }
         }
         &-link {
             color: $colorTurquoise;
             text-decoration: underline;
+            @media print {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
 
     .tender-item__log {
         padding-bottom: rem(24px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         &-header {
             &-row {
                 display: flex;
@@ -332,23 +391,36 @@ export default {
                 line-height: 160%;
                 color: $colorGray;
                 padding-bottom: rem(12px);
-                border-bottom: 1px solid $borderColor;
+                /*border-bottom: 1px solid $colorBdr;*/
             }
         }
         &-item {
             &-row {
                 display: flex;
+                border-bottom: 1px solid $colorBdr;
                 padding: rem(16px) 0;
                 font-weight: 500;
                 font-size: rem(14px);
                 line-height: 160%;
+                @media print {
+                    padding: rem(5px) 0;
+                }
+                &:last-child {
+                    border: none;
+                }
             }
         }
         &-date {
             width: 33%;
+            @media print {
+                width: 40%;
+            }
         }
         &-name {
             width: 67%;
+            @media print {
+                width: 60%;
+            }
         }
     }
 

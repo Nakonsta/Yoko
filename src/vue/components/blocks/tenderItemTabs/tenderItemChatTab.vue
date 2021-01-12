@@ -1,6 +1,6 @@
 <template>
     <div class="qa">
-        <div class="qa__person" v-if="company">
+        <div class="qa__person no-print" v-if="company">
             <div class="qa__avatar avatar avatar--alt" :style="{backgroundColor: companyAvatar.color}">{{ companyAvatar.name }}</div>
             <div class="qa__person-wrap">
                 <div><a href="#">{{ company.shortName ? company.shortName : company.name }}</a></div>
@@ -49,7 +49,7 @@
                 </template>
             </div>
         </div>
-        <div class="qa__form" v-if="$store.getters.userRole === 'contractor' || userCanReply">
+        <div class="qa__form no-print" v-if="$store.getters.userRole === 'contractor' || userCanReply">
             <ValidationObserver ref="form" tag="div" mode="eager">
                 <form @submit.prevent="sendForm" slot-scope="{ valid }">
                     <div class="qa__item qa__item--reply" v-if="replyTo">
@@ -318,6 +318,10 @@ export default {
             @include mq($until: tablet) {
                 padding: rem(32px) rem(20px);
             }
+
+            @media print {
+                padding: 0;
+            }
         }
 
         &__person {
@@ -453,6 +457,7 @@ export default {
 
             &-author {
                 margin: 0 0 rem(6px);
+                font-weight: 500;
                 a {
                     color: $colorTurquoise;
                     &:hover {
@@ -479,6 +484,9 @@ export default {
                     left: rem(-10px);
                     //bottom: rem(-4px);
                     bottom: 0;
+                    @media print {
+                        border-color: $colorGray;
+                    }
                 }
             }
 
@@ -580,7 +588,7 @@ export default {
                     display: block;
                     width: rem(24px);
                     height: rem(24px);
-                    fill: $lightcolorText;
+                    fill: $colorTextLight;
                     transition: fill $animation;
                 }
             }

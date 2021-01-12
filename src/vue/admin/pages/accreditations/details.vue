@@ -383,7 +383,7 @@ export default {
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(16px);
-        color: $lightcolorText;
+        color: $colorTextLight;
     }
 
     &__content {
@@ -425,7 +425,7 @@ export default {
             font-family: Roboto;
             font-weight: 500;
             font-size: rem(12px);
-            color: $lightcolorText;
+            color: $colorTextLight;
         }
     }
 

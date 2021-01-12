@@ -452,7 +452,7 @@ export default {
 h2 {
   font-weight: 500;
   font-size: rem(18px);
-  border-bottom: 1px solid $borderColor;
+  border-bottom: 1px solid $colorBdr;
   padding-bottom: rem(25px);
   margin-bottom: rem(40px);
 }
@@ -480,14 +480,14 @@ h3 {
   }
   tr:not(:last-child) {
     td {
-      border-bottom: 1px solid $borderColor;
+      border-bottom: 1px solid $colorBdr;
     }
   }
 }
 
 .preview-block {
-  border-bottom: 1px solid $borderColor;
-  border-top: 1px solid $borderColor;
+  border-bottom: 1px solid $colorBdr;
+  border-top: 1px solid $colorBdr;
   margin-bottom: rem(40px);
 
   &__item {

@@ -183,7 +183,7 @@ export default {
     
     .products-filters {
         padding-bottom: rem(36px);
-        border-bottom: 1px solid $borderColor;
+        border-bottom: 1px solid $colorBdr;
         margin-bottom: rem(32px);
         &__filters {
             display: flex;
@@ -211,7 +211,7 @@ export default {
             padding-bottom: rem(4px);
             font-weight: 500;
             font-size: rem(14px);
-            color: $lightcolorText;
+            color: $colorTextLight;
         }
         &__buttons {
             font-weight: 500;
@@ -239,7 +239,7 @@ export default {
         box-shadow: none;
     }
     .multiselect {
-        border: 1px solid $borderColor;
+        border: 1px solid $colorBdr;
         border-radius: 4px;
     }
     ::v-deep .search__input .multiselect__tags {

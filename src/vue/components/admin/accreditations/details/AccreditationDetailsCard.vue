@@ -128,7 +128,7 @@ export default {
     padding: rem(24px) rem(32px);
     background-color: #fff;
     border-radius: 6px;
-    border: 1px solid $borderColor;
+    border: 1px solid $colorBdr;
     box-shadow: 5px 10px 15px rgba(55, 55, 53, 0.1);
     cursor: default;
 
@@ -214,7 +214,7 @@ export default {
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(16px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         transition: 0.2s;
     }
 
@@ -297,7 +297,7 @@ export default {
         font-family: Roboto;
         font-size: rem(14px);
         text-decoration-line: underline;
-        color: $lightcolorText;
+        color: $colorTextLight;
         white-space: nowrap;
 
         @include mq($until: tablet) {

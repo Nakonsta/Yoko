@@ -20,11 +20,11 @@
     &__phone
         width: 100%
     &__title
-        font-family: "Gilroy-SemiBold", sans-serif
+        font-family: $fontGilroy
         font-size: rem(32px)
         line-height: 120%
         padding-bottom: rem(24px)
-        color: $lightcolorText
+        color: $colorTextLight
         @include mq($until: tablet)
             font-size: rem(28px)
     &__label
@@ -93,7 +93,7 @@
 
 .support-info
     width: 52%
-    color: $lightcolorText
+    color: $colorTextLight
     @include mq($until: widescreen)
         width: 45%
     @include mq($until: desktop)
@@ -111,7 +111,7 @@
         &-text
             padding-left: rem(14px)
     &__link
-        color: $lightcolorText
+        color: $colorTextLight
 
 .file-listing
     display: flex

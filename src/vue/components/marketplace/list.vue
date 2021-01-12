@@ -93,7 +93,7 @@
                     <div class="procedures__item-flex">
                         <div class="procedures__item-status">{{ getTenderStatusName(item) }}</div>
                         <div class="procedures__item-btns">
-                            <a href="javascript:{}" title="Распечатать"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
+                            <a href="javascript:{}" title="Распечатать" @click="printPage('/marketplace-detail.html?id='+item.id)"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                             <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
                             <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
                             <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden', itemMarkExist(item, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
@@ -190,13 +190,14 @@
 
 <script>
     import api from '../../helpers/api';
+    import functions from "@/helpers/functions";
     import formatDate from '../../helpers/formatDate'
     import popupCompanyContact from "@/components/blocks/popupCompanyContact";
     import popupTenderDelivery from "@/components/blocks/popupTenderDelivery";
 
     export default {
         name: 'marketplaceItems',
-        mixins: [api, formatDate],
+        mixins: [api, functions, formatDate],
         components: {
             popupCompanyContact,
             popupTenderDelivery,

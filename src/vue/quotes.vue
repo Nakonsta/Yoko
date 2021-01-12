@@ -269,7 +269,7 @@
   .btn {
     background: transparent;
     border-color: $colorGray;
-    color: $lightcolorText !important;
+    color: $colorTextLight !important;
     font-size: rem(24px);
     font-weight: 600;
     margin-bottom: 1rem;
