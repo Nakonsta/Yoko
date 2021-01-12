@@ -49,9 +49,15 @@
         background: $colorWhite
         transition: color $animation, background $animation
 
+        .list--bullet li::before
+          transition: color $animation
+
       &:hover
         color: $colorWhite
         background: $colorTurquoise
+
+        .list--bullet li::before
+          color: $colorWhite
 
     .typography--accent
       margin-bottom: rem(24px)
