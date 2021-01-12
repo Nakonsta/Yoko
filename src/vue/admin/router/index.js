@@ -1,7 +1,7 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import store from "@/store";
-Vue.use(VueRouter);
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import store from '@/store'
+Vue.use(VueRouter)
 
 import AccreditationsDetail from '../pages/accreditations/details.vue'
 import Catalog from '../pages/catalog/items.vue'
@@ -10,27 +10,26 @@ import CatalogList from '../pages/catalog/positions.vue'
 import CatalogDetail from '../pages/catalog/details.vue'
 import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
-import ProcedureApplicationDetails from "../pages/procedures/application/index.vue";
+import ProcedureApplicationDetails from '../pages/procedures/application/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
-import ProcedureApplicationDetails from "../pages/procedures/application/index.vue";
 import User from '../pages/user/user.vue'
 import page404 from '../pages/page404.vue'
 
 const routes = [
   {
-    path: "/personal",
-    component: { template: "<div>Главная</div>" },
+    path: '/personal',
+    component: { template: '<div>Главная</div>' },
   },
   {
-    path: "/personal/accreditations",
+    path: '/personal/accreditations',
     component: Accreditations,
   },
   {
-    path: "/personal/accreditations/:id",
+    path: '/personal/accreditations/:id',
     component: AccreditationsDetail,
   },
   {
-    path: "/personal/procedures",
+    path: '/personal/procedures',
     component: Procedures,
   },
   {
@@ -46,88 +45,88 @@ const routes = [
     props: { type: 'applications' },
   },
   {
-    path: "/personal/procedures/:id",
+    path: '/personal/procedures/:id',
     component: Procedure,
-    meta: { role: "buyer" },
+    meta: { role: 'buyer' },
   },
   {
-    path: "/personal/catalog",
+    path: '/personal/catalog',
     component:  Catalog,
     meta: { role: 'contractor' },
   },
   {
-    path: "/personal/catalog/new",
+    path: '/personal/catalog/new',
     component: CatalogNew,
-    meta: { role: "contractor" },
+    meta: { role: 'contractor' },
   },
   {
-    path: "/personal/procedures/:id/applications/:appid",
+    path: '/personal/procedures/:id/applications/:appid',
     component: ProcedureApplicationDetails,
   },
   {
-    path: "/personal/user",
+    path: '/personal/user',
     component:  User,
   },
   {
-    path: "/personal/catalog/positions",
+    path: '/personal/catalog/positions',
     component:  CatalogList,
   },
   {
-    path: "/personal/catalog/positions/:id",
+    path: '/personal/catalog/positions/:id',
     component: CatalogDetail,
   },
   {
-    path: "*",
+    path: '*',
     component: page404,
   },
-];
+]
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   routes,
-});
+})
 
 router.beforeEach((to, from, next) => {
-  const userRole = store.getters.userRole;
-  const { role } = to.meta;
-  const companyBuyer = store.getters.companyBuyer;
-  const companyContractor = store.getters.companyContractor;
+  const userRole = store.getters.userRole
+  const { role } = to.meta
+  const companyBuyer = store.getters.companyBuyer
+  const companyContractor = store.getters.companyContractor
 
-  console.log(to);
+  console.log(to)
 
-  if (userRole !== "guest") {
+  if (userRole !== 'guest') {
     if (role) {
       if (userRole === role) {
         switch (userRole) {
-          case "buyer":
+          case 'buyer':
             if (companyBuyer.length) {
-              next();
+              next()
             } else {
-              next("/personal/accreditations/new");
+              next('/personal/accreditations/new')
             }
-            break;
-          case "contractor":
+            break
+          case 'contractor':
             if (companyContractor.length) {
-              next();
+              next()
             } else {
-              next("/personal/accreditations/new");
+              next('/personal/accreditations/new')
             }
-            break;
+            break
         }
       } else {
-        next("/personal");
+        next('/personal')
       }
     } else {
-      next();
+      next()
     }
   } else {
-    openPopupById("#singin");
-    if (to.path === "/personal") {
-      next();
+    openPopupById('#singin')
+    if (to.path === '/personal') {
+      next()
     } else {
-      next("/personal");
+      next('/personal')
     }
   }
-});
+})
 
-export default router;
+export default router
