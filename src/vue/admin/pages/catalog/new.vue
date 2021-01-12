@@ -2015,10 +2015,9 @@
             },
             sendForm(evt) {
                 evt.preventDefault();
-                //this.$refs.form.validate().then((res) => {
-                //    if (res) {
+                this.$refs.form.validate().then((res) => {
+                    if (res) {
                         window.openLoader();
-                        // let fData = this.type.id === 'mark' ? this.markForSend : this.marksizeForSend;
                         let fData = cloneDeep(this.type.id === 'mark' ? this.markForSend : this.marksizeForSend);
                         for (let i=0; i< fData.documents.technical_conditions.length; i++) {
                             if (fData.documents.technical_conditions[i].file === null) {
@@ -2066,13 +2065,13 @@
                                     window.notificationError('Ошибка сервера');
                                 });
                         }
-                    // } else {
-                    //     clearInterval(this.scrollToErrorInstance)
-                    //     this.scrollToErrorInstance = setTimeout(() => {
-                    //         this.scrollToError()
-                    //     }, 500)
-                    // }
-                //});
+                    } else {
+                        clearInterval(this.scrollToErrorInstance)
+                        this.scrollToErrorInstance = setTimeout(() => {
+                            this.scrollToError()
+                        }, 500)
+                    }
+                });
             },
             validateFile() {
                 return { on: ['blur', 'input', 'change'] };
