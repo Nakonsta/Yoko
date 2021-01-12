@@ -757,10 +757,10 @@
                                 v-model="marksizeForSend.description_additional"
                                 counter="1000"
                         />
-                        <fieldset>
+                        <fieldset v-if="marksizeForSend.mark">
                             <div class="legend">Характеристики:</div>
                             <div class="form__grid">
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_active_resistance_zero') !== -1">
                                     <span class="field__label">Активное сопротивление жил (нулевой)</span>
                                     <Multiple
                                             :max="5"
@@ -778,7 +778,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_active_resistance_main') !== -1">
                                     <span class="field__label">Активное сопротивление жил (основных)</span>
                                     <Multiple
                                             :max="5"
@@ -796,7 +796,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_active_resistance') !== -1">
                                     <span class="field__label">Активное сопротивление</span>
                                     <Multiple
                                             :max="5"
@@ -814,7 +814,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_active_resistance_plane') !== -1">
                                     <span class="field__label">Активное сопротивление при прокладке в плоскости</span>
                                     <Multiple
                                             :max="5"
@@ -832,7 +832,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_active_resistance_triangle') !== -1">
                                     <span class="field__label">Активное сопротивление при прокладке треугольником</span>
                                     <Multiple
                                             :max="5"
@@ -850,7 +850,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_voltage_versions') !== -1">
                                     <span class="field__label">Варианты исполнения вольтажа</span>
                                     <Multiple
                                             :max="5"
@@ -868,7 +868,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_outer_diameter') !== -1">
                                     <span class="field__label">Внешний диаметр</span>
                                     <Multiple
                                             :max="5"
@@ -886,7 +886,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_resistance_wave') !== -1">
                                     <span class="field__label">Волновое сопротивление</span>
                                     <Multiple
                                             :max="5"
@@ -904,7 +904,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_diameter_cabel') !== -1">
                                     <span class="field__label">Диаметр кабеля</span>
                                     <Multiple
                                             :max="5"
@@ -922,7 +922,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_diameter') !== -1">
                                     <span class="field__label">Диаметр</span>
                                     <Multiple
                                             :max="5"
@@ -940,7 +940,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_voltage_allowable') !== -1">
                                     <span class="field__label">Допустимое напряжение</span>
                                     <Multiple
                                             :max="5"
@@ -958,7 +958,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_capacitive_conductivity') !== -1">
                                     <span class="field__label">Емкостная проводимость</span>
                                     <Multiple
                                             :max="5"
@@ -976,7 +976,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_capacity') !== -1">
                                     <span class="field__label">Емкость</span>
                                     <Multiple
                                             :max="5"
@@ -994,7 +994,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_inductive_resistance_cores_zero') !== -1">
                                     <span class="field__label">Индуктивное сопротивление жил (нулевой)</span>
                                     <Multiple
                                             :max="5"
@@ -1012,7 +1012,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_inductive_resistance_cores_main') !== -1">
                                     <span class="field__label">Индуктивное сопротивление жил (основных)</span>
                                     <Multiple
                                             :max="5"
@@ -1030,7 +1030,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_inductive_resistance_zero_sequence') !== -1">
                                     <span class="field__label">Индуктивное сопротивление нулевой последовательности</span>
                                     <Multiple
                                             :max="5"
@@ -1048,7 +1048,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_inductive_resistance') !== -1">
                                     <span class="field__label">Индуктивное сопротивление</span>
                                     <Multiple
                                             :max="5"
@@ -1066,7 +1066,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_inductive_resistance_plane') !== -1">
                                     <span class="field__label">Индуктивное сопротивление при прокладке в плоскости</span>
                                     <Multiple
                                             :max="5"
@@ -1084,7 +1084,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_inductive_resistance_triangle') !== -1">
                                     <span class="field__label">Индуктивное сопротивление при прокладке треугольником</span>
                                     <Multiple
                                             :max="5"
@@ -1102,7 +1102,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_inductive_resistance_direct_sequence') !== -1">
                                     <span class="field__label">Индуктивное сопротивление прямой последовательности</span>
                                     <Multiple
                                             :max="5"
@@ -1120,7 +1120,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_class_flexibility_vein') !== -1">
                                     <span class="field__label">Класс гибкости жилы</span>
                                     <Multiple
                                             :max="5"
@@ -1141,7 +1141,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_fiber_count') !== -1">
                                     <span class="field__label">Количество волокон</span>
                                     <Multiple
                                             :max="5"
@@ -1161,7 +1161,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_veins_count') !== -1">
                                     <span class="field__label">Количество жил</span>
                                     <Multiple
                                             :max="5"
@@ -1181,7 +1181,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_number_pairs') !== -1">
                                     <span class="field__label">Количество пар</span>
                                     <Multiple
                                             :max="5"
@@ -1201,7 +1201,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_number_triples') !== -1">
                                     <span class="field__label">Количество троек</span>
                                     <Multiple
                                             :max="5"
@@ -1221,7 +1221,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_number_fours') !== -1">
                                     <span class="field__label">Количество четверок</span>
                                     <Multiple
                                             :max="5"
@@ -1241,7 +1241,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_number_elements') !== -1">
                                     <span class="field__label">Количество элементов</span>
                                     <Multiple
                                             :max="5"
@@ -1261,7 +1261,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_material_vein') !== -1">
                                     <span class="field__label">Материал жилы</span>
                                     <Multiple
                                             :max="5"
@@ -1282,7 +1282,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_minimum_bending_radius') !== -1">
                                     <span class="field__label">Минимальный радиус изгиба</span>
                                     <Multiple
                                             :max="5"
@@ -1300,7 +1300,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_voltage') !== -1">
                                     <span class="field__label">Напряжение</span>
                                     <Multiple
                                             :max="5"
@@ -1318,7 +1318,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_optical_module') !== -1">
                                     <span class="field__label">Оптические модули</span>
                                     <Multiple
                                             :max="5"
@@ -1336,7 +1336,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_crushing_force') !== -1">
                                     <span class="field__label">Раздавливающее усилие</span>
                                     <Multiple
                                             :max="5"
@@ -1354,7 +1354,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_fiber_size') !== -1">
                                     <span class="field__label">Размер волокна</span>
                                     <Multiple
                                             :max="5"
@@ -1372,7 +1372,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_fibers_size') !== -1">
                                     <span class="field__label">Размер волокон</span>
                                     <Multiple
                                             :max="5"
@@ -1390,7 +1390,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_tensile_force') !== -1">
                                     <span class="field__label">Растягивающее усилие</span>
                                     <Multiple
                                             :max="5"
@@ -1408,7 +1408,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_section') !== -1">
                                     <span class="field__label">Сечение</span>
                                     <Multiple
                                             :max="5"
@@ -1426,7 +1426,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_cable_cross_section') !== -1">
                                     <span class="field__label">Сечение кабеля</span>
                                     <Multiple
                                             :max="5"
@@ -1444,7 +1444,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_lifetime') !== -1">
                                     <span class="field__label">Срок службы</span>
                                     <Multiple
                                             :max="5"
@@ -1462,7 +1462,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_construction_length') !== -1">
                                     <span class="field__label">Строительная длина</span>
                                     <Multiple
                                             :max="5"
@@ -1480,7 +1480,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_application_type') !== -1">
                                     <span class="field__label">Тип применения</span>
                                     <Multiple
                                             :max="5"
@@ -1498,7 +1498,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_electrical_resistance') !== -1">
                                     <span class="field__label">Электрическое сопротивление</span>
                                     <Multiple
                                             :max="5"
@@ -1724,6 +1724,8 @@
                     disabledFrom: null,
                     disabledTo: null,
                 },
+                allProperties: {},
+                properties: [],
                 markImport: null,
                 markForSend: {
                     company_id: null,
@@ -1891,6 +1893,7 @@
         },
         created() {
             this.$emit('fullMode');
+            this.loadProperties();
         },
         watch: {
             markImport: function (file) {
@@ -1913,12 +1916,36 @@
                 this.view = 'form'; // по умолчанию - вид для заполнения формы
                 this.type = selectedType.id;
             },
+            getProperties: function(mark) {
+                let properties = [];
+                for (let i=0; i<mark.property_cable_type.length; i++ ) {
+                    properties = properties.concat(this.allProperties.required[mark.property_cable_type[i]]);
+                    properties = properties.filter((item, pos) => properties.indexOf(item) === pos);
+                }
+                this.properties = properties;
+            },
+            loadProperties: function() {
+                if (this.allProperties.length) return;
+                this.allProperties = [];
+                window.openLoader();
+                this.fetchCatalogMarksizeProperties()
+                    .then((response) => {
+                        this.allProperties = response.data.data;
+                        window.closeLoader();
+                    })
+                    .catch((response) => {
+                        this.marks = [];
+                        window.closeLoader();
+                        window.notificationError('Ошибка сервера');
+                    });
+            },
             markChange: function() {
                 this.markSearch(this.markForSend.mark);
             },
             markSelect: function(selectedMark, id) {
                 this.marksizeForSend.mark = selectedMark.name;
                 this.marksizeForSend.type = selectedMark.property_cable_type && selectedMark.property_cable_type.length ? selectedMark.property_cable_type.join(', ') : '';
+                this.getProperties(selectedMark);
             },
             markSearch: function(q) {
                 clearInterval(this.loadingMarksCounter);
@@ -1986,45 +2013,11 @@
             fileRemove: function (field, layer, index) {
                 field.splice(index, 1);
             },
-            // objectToFormData(data) {
-            //     const fData = new FormData();
-            //     function appendFormData(data, root, formDataObj) {
-            //         root = root || '';
-            //         if (data instanceof File) {
-            //             formDataObj.append(root, data);
-            //         } else if (data instanceof Date) {
-            //             formDataObj.append(root, moment(data).format('DD.MM.YYYY'));
-            //             formDataObj.append(root, moment(data).format('DD.MM.YYYY'));
-            //         } else if (Array.isArray(data)) {
-            //             for (let i = 0; i < data.length; i++) {
-            //                 if (data[i]) {
-            //                     appendFormData(data[i], root + '[' + i + ']', formDataObj);
-            //                 }
-            //             }
-            //         } else if (typeof data === 'object' && data) {
-            //             for (const key in data) {
-            //                 // eslint-disable-next-line
-            //                 if (data.hasOwnProperty(key)) {
-            //                     if (root === '') {
-            //                         appendFormData(data[key], key, formDataObj);
-            //                     } else {
-            //                         appendFormData(data[key], root + '[' + key + ']', formDataObj);
-            //                     }
-            //                 }
-            //             }
-            //         } else if (data !== null && typeof data !== 'undefined') {
-            //             formDataObj.append(root, data);
-            //         }
-            //     }
-            //     appendFormData(data, '', fData);
-            //     return fData;
-            // },
             sendForm(evt) {
                 evt.preventDefault();
                 this.$refs.form.validate().then((res) => {
                     if (res) {
                         window.openLoader();
-                        // let fData = this.type.id === 'mark' ? this.markForSend : this.marksizeForSend;
                         let fData = cloneDeep(this.type.id === 'mark' ? this.markForSend : this.marksizeForSend);
                         for (let i=0; i< fData.documents.technical_conditions.length; i++) {
                             if (fData.documents.technical_conditions[i].file === null) {
@@ -2041,8 +2034,8 @@
                                 fData.documents.guarantee_letters.splice(i, 1);
                             }
                         }
-                        const formDataObj = this.objectToFormData(fData);
                         if( this.type.id === 'mark' ) {
+                            const formDataObj = this.objectToFormData(fData);
                             this.sendCatalogMark(formDataObj)
                                 .then(() => {
                                     window.closeLoader();
@@ -2054,6 +2047,13 @@
                                     window.notificationError('Ошибка сервера');
                                 });
                         } else {
+                            for (const key in fData) {
+                                // удаляем ненужные характеристики
+                                if (fData.hasOwnProperty(key) && key.indexOf('property_') === 0 && this.properties.indexOf(key) === -1) {
+                                    delete fData[key];
+                                }
+                            }
+                            const formDataObj = this.objectToFormData(fData);
                             this.sendCatalogMarksize(formDataObj)
                                 .then(() => {
                                     window.closeLoader();
