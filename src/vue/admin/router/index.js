@@ -11,24 +11,25 @@ import CatalogDetail from '../pages/catalog/details.vue'
 import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
+import ProcedureApplicationDetails from "../pages/procedures/application/index.vue";
 import User from '../pages/user/user.vue'
 import page404 from '../pages/page404.vue'
 
 const routes = [
   {
     path: "/personal",
-    component: { template: '<div>Главная</div>' },
+    component: { template: "<div>Главная</div>" },
   },
   {
     path: "/personal/accreditations",
-    component:  Accreditations,
+    component: Accreditations,
   },
   {
     path: "/personal/accreditations/:id",
-    component: AccreditationsDetail
+    component: AccreditationsDetail,
   },
   {
-    path: '/personal/procedures',
+    path: "/personal/procedures",
     component: Procedures,
   },
   {
@@ -44,9 +45,9 @@ const routes = [
     props: { type: 'applications' },
   },
   {
-    path: '/personal/procedures/:id',
+    path: "/personal/procedures/:id",
     component: Procedure,
-    meta: { role: 'buyer' },
+    meta: { role: "buyer" },
   },
   {
     path: "/personal/catalog",
@@ -55,8 +56,13 @@ const routes = [
   },
   {
     path: "/personal/catalog/new",
-    component:  CatalogNew,
-    meta: { role: 'contractor' },
+    component: CatalogNew,
+    meta: { role: "contractor" },
+  },
+  {
+    path: "/personal/procedures/:id/applications/:appid",
+    component: ProcedureApplicationDetails,
+    meta: { role: "contractor" },
   },
   {
     path: "/personal/user",
@@ -72,7 +78,7 @@ const routes = [
   },
   {
     path: "*",
-    component:  page404
+    component: page404,
   },
 ];
 
@@ -82,47 +88,46 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const userRole = store.getters.userRole
-  const { role } = to.meta
-  const companyBuyer = store.getters.companyBuyer
-  const companyContractor = store.getters.companyContractor
+  const userRole = store.getters.userRole;
+  const { role } = to.meta;
+  const companyBuyer = store.getters.companyBuyer;
+  const companyContractor = store.getters.companyContractor;
 
-  console.log(to)
+  console.log(to);
 
-  if (userRole !== 'guest') {
+  if (userRole !== "guest") {
     if (role) {
       if (userRole === role) {
         switch (userRole) {
-          case 'buyer':
+          case "buyer":
             if (companyBuyer.length) {
-              next()
+              next();
             } else {
-              next('/personal/accreditations/new')
+              next("/personal/accreditations/new");
             }
-            break
-          case 'contractor':
+            break;
+          case "contractor":
             if (companyContractor.length) {
-              next()
+              next();
             } else {
-              next('/personal/accreditations/new')
+              next("/personal/accreditations/new");
             }
-            break
+            break;
         }
-
       } else {
-        next('/personal')
+        next("/personal");
       }
     } else {
-      next()
+      next();
     }
   } else {
-    openPopupById('#singin')
-    if (to.path === '/personal') {
-      next()
+    openPopupById("#singin");
+    if (to.path === "/personal") {
+      next();
     } else {
-      next('/personal')
+      next("/personal");
     }
   }
-})
+});
 
 export default router;
