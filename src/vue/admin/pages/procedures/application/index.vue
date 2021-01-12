@@ -191,8 +191,7 @@ export default {
             return this.fetchTenderItem(this.id).then(({ data }) => {
                 this.procedure = Object.assign(this.procedure, data.data)
                 this.createLots()
-                console.log(this.procedure)
-                return this.fetchCompanyById([this.procedure.inn]).then(({ data }) => {
+                return this.fetchCompanyByInn([this.procedure.inn]).then(({ data }) => {
                     this.procedure.company = data.data
                 })
             })
@@ -335,7 +334,8 @@ export default {
             this.getProcedureDetails().finally(() => (this.loading = false))
         } else {
             this.loading = true
-            Promise.all([this.getApplication(), this.getProcedureDetails()]).finally(() => (this.loading = false))
+            this.getApplication();
+            this.getProcedureDetails().finally(() => (this.loading = false));
         }
     }
 }
