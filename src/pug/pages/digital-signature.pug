@@ -1,0 +1,66 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-banner
+
+block default
+    - let title = 'Электронная подпись';
+    - locals.currentPage = 'Электронная подпись';
+
+block content
+
+    +breadCrumbs([
+        'Главная',
+        'Электронная подпись'
+    ])
+
+    +pageBanner('Электронная подпись', '/content/digital-signature.jpg')
+
+    .section.section--green
+        .container
+            .contragents-about__description
+                p.typography.typography--accent Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
+
+    .section.section--steps.steps.steps--small-padding
+        .container
+            .section__head
+                .section__title Как получить электронную подпись
+            .steps__items.js-slider
+                .steps__item.steps__item--shadow
+                    img(src="./content/steps-5.jpg")
+                    .steps__item-title Подайте заявку
+                .steps__item.steps__item--shadow
+                    img(src="./content/steps-6.jpg")
+                    .steps__item-title Оплатите счет
+                .steps__item.steps__item--shadow
+                    img(src="./content/steps-2.jpg")
+                    .steps__item-title Получите годовую подпись
+
+    #signature-providers
+
+    .section.section--accordeon.accordeon
+        .container
+            .section__head
+                .section__title Часто-задаваемые вопросы
+            .accordeon__inner
+                .accordeon__item
+                    a.accordeon__title(href="#")
+                        span.accordeon__title-text Какой стандартный пароль для ЭП?
+                        svg.icon-more: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#select")
+                    p.accordeon__answer Срок получения электронной подписи зависит от сроков оплаты и Вашего региона и обычно составляют от одного до трех дней. Если сроки «поджимают», рекомендуем заказать ускоренный выпуск сертификата.
+                .accordeon__item
+                    a.accordeon__title(href="#")
+                        span.accordeon__title-text Сколько времени займет процедура оформления ЭП?
+                        svg.icon-more: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#select")
+                    p.accordeon__answer Срок получения электронной подписи зависит от сроков оплаты и Вашего региона и обычно составляют от одного до трех дней. Если сроки «поджимают», рекомендуем заказать ускоренный выпуск сертификата.
+                .accordeon__item
+                    a.accordeon__title(href="#")
+                        span.accordeon__title-text Сколько времени займет процедура оформления ЭП?
+                        svg.icon-more: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#select")
+                    p.accordeon__answer Срок получения электронной подписи зависит от сроков оплаты и Вашего региона и обычно составляют от одного до трех дней. Если сроки «поджимают», рекомендуем заказать ускоренный выпуск сертификата.
+                .accordeon__item
+                    a.accordeon__title(href="#")
+                        span.accordeon__title-text Какой стандартный пароль для ЭП?
+                        svg.icon-more: use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="./img/sprite.svg#select")
+                    p.accordeon__answer Срок получения электронной подписи зависит от сроков оплаты и Вашего региона и обычно составляют от одного до трех дней. Если сроки «поджимают», рекомендуем заказать ускоренный выпуск сертификата.
+
+
