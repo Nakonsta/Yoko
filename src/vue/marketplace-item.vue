@@ -173,9 +173,9 @@ export default {
             },
             itemsStatuses: [],
             buyerMenu: [
-                'Редактировать',
-                'Прикрепить протоколы',
-                'Выбор победителя'
+                {action: 'edit', name: 'Редактировать'},
+                {action: 'protocols', name: 'Прикрепить протоколы'},
+                {action: 'winner', name: 'Выбор победителя'}
             ]
         }
     },

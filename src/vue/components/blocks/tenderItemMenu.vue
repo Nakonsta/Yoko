@@ -6,7 +6,7 @@
                     :key="key"
                     class="tender-item__menu-item"
             >
-                <span class="tender-item__menu-link">{{ item }}</span>
+                <span @click="applyBuyerMenuAction(item.action)" class="tender-item__menu-link">{{ item.name }}</span>
             </div>
         </div>
         <div v-else class="tender-item__menu-inner">
@@ -55,6 +55,12 @@ export default {
         changeActiveTab(evt, hash) {
             evt.preventDefault();
             this.$emit('changeTab', evt, hash, true);
+        },
+        applyBuyerMenuAction(action) {
+            if (action === 'edit') {
+                const href = '/personal/procedures/' + this.tenderItemData.id
+                document.location.href = href
+            }
         }
     }
 }
