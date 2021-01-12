@@ -54,7 +54,7 @@ export default {
     methods: {
         handleSelect(value) {
             window.openLoader()
-            this.fetchCompanyById(value.inn)
+            this.fetchCompanyByInn(value.inn)
                 .then(({ data }) => {
                     this.$emit('on-select', data.data)
                 })

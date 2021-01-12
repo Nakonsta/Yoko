@@ -12,6 +12,7 @@ import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
 import ProcedureApplicationDetails from "../pages/procedures/application/index.vue";
 import Accreditations from '../pages/accreditations/accreditations.vue'
+import ProcedureApplicationDetails from "../pages/procedures/application/index.vue";
 import User from '../pages/user/user.vue'
 import page404 from '../pages/page404.vue'
 
@@ -43,7 +44,6 @@ const routes = [
     component: Procedures,
     meta: { role: 'contractor' },
     props: { type: 'applications' },
-    meta: { role: "buyer" },
   },
   {
     path: "/personal/procedures/:id",
