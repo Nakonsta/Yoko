@@ -253,3 +253,14 @@ if (personalItem) {
         render: function(h) { return h(Personal); }
     })
 }
+
+// Выбор удостоверяющего центра на странице Электронная подпись
+import DigitalSignatureProviders from './digital-signature-providers.vue'
+const signatureProviders = document.querySelector('#signature-providers');
+if (signatureProviders) {
+    let appSignatureProviders = new Vue({
+        el: signatureProviders,
+        store: store,
+        render: function(h) { return h(DigitalSignatureProviders); }
+    })
+}
