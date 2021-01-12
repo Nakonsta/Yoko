@@ -13,6 +13,7 @@ import Procedure from '../pages/procedures/form/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
 import User from '../pages/user/user.vue'
 import page404 from '../pages/page404.vue'
+import CompanyInfo from '../pages/company/info.vue';
 
 const routes = [
   {
@@ -26,6 +27,14 @@ const routes = [
   {
     path: "/personal/accreditations/:id",
     component: AccreditationsDetail
+  },
+  {
+    path: '/personal/company',
+    component: CompanyInfo,
+  },
+  {
+    path: '/personal/company/info',
+    component: CompanyInfo,
   },
   {
     path: '/personal/procedures',
