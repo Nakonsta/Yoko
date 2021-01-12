@@ -452,5 +452,8 @@ export default {
         sendMarketplaceAnswer(id, question_id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q/${question_id}/a`, data)
         },
+        sendProcedureProtocols(id, data) {
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data)
+        },
     }
 }

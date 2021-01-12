@@ -1,12 +1,13 @@
 <template>
     <div class="tender-item__menu">
-        <div v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)" class="tender-item__menu-inner">
+        <!-- <div v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)" class="tender-item__menu-inner"> -->
+        <div v-if="true" class="tender-item__menu-inner">    
             <div
                     v-for="(item, key) in buyerMenu"
                     :key="key"
                     class="tender-item__menu-item"
             >
-                <span @click="applyBuyerMenuAction(item.action)" class="tender-item__menu-link">{{ item.name }}</span>
+                <span @click="applyBuyerMenuAction($event, item.action)" class="tender-item__menu-link">{{ item.name }}</span>
             </div>
         </div>
         <div v-else class="tender-item__menu-inner">
@@ -56,10 +57,13 @@ export default {
             evt.preventDefault();
             this.$emit('changeTab', evt, hash, true);
         },
-        applyBuyerMenuAction(action) {
+        applyBuyerMenuAction(evt, action) {
             if (action === 'edit') {
                 const href = '/personal/procedures/' + this.tenderItemData.id
                 document.location.href = href
+            }
+            if (action === 'attach-protocols') {
+                this.changeActiveTab(evt, '#protocols')
             }
         }
     }

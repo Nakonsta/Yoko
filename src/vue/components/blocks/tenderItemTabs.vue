@@ -329,6 +329,9 @@ export default {
                 text-overflow: ellipsis;
             }
         }
+        &-attach-block {
+            padding-bottom: 2rem;
+        }
     }
 
     .tender-item__file {
