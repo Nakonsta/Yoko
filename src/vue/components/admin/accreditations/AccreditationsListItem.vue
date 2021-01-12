@@ -64,7 +64,7 @@ export default {
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
 
         &:hover {
             color: $colorTurquoise;
@@ -75,7 +75,7 @@ export default {
         margin-top: rem(4px);
         font-family: Roboto;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
     }
 }
 </style>

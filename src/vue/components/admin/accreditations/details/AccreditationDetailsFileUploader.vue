@@ -224,7 +224,7 @@ export default {
         color: $colorGray;
 
         &--uploaded {
-            color: $lightcolorText;
+            color: $colorTextLight;
             text-decoration: none;
         }
     }
@@ -256,7 +256,7 @@ export default {
             z-index: 3;
 
             visibility: hidden;
-            background-color: $lightcolorText;
+            background-color: $colorTextLight;
             padding: rem(8px) rem(20px);
             border-radius: 4px;
             opacity: 0;

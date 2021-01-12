@@ -162,8 +162,8 @@ export default {
         display: flex;
         align-items: center;
         padding: rem(27px) 0;
-        border-bottom: 1px solid $borderColor;
-        color: $lightcolorText;
+        border-bottom: 1px solid $colorBdr;
+        color: $colorTextLight;
         font-weight: 500;
         &__title-text {
             display: inline-block;
@@ -227,7 +227,7 @@ export default {
             &-link {
                 display: inline-block;
                 position: relative;
-                color: $lightcolorText;
+                color: $colorTextLight;
                 font-size: rem(14px);
                 font-weight: 500;
                 &:hover .cable-info__certificate-tooltip,

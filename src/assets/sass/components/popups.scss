@@ -32,6 +32,9 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 	transition: .8s opacity, .8s visibility, 0s .8s height, 0s .8s width;
+	@media print {
+		display: none !important;
+	}
 	&--fix-ie {
 		.popup__body {
 			align-items: flex-start;

@@ -15,6 +15,13 @@
   color: $colorGray3
   background: $colorLight
 
+  @media print
+    color: $colorWhite !important
+    background: $colorLight !important
+
   &--alt
     color: $colorWhite
     background: $colorTurquoise
+
+    @media print
+      background: $colorGray !important

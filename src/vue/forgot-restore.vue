@@ -124,11 +124,11 @@
     }
 
     &__title {
-        font-family: "Gilroy-SemiBold", sans-serif;
+        font-family: $fontGilroy;
         font-size: rem(32px);
         line-height: 120%;
         padding-bottom: rem(24px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         @include mq($until: tablet) {
             font-size: rem(28px);
         }

@@ -1,5 +1,5 @@
 <template>
-    <div class="cable-info">
+    <div class="cable-info" :style="{display: hide ? 'none' : null}">
         <div class="table-cell__title cable-info__title" data-name="Наименование">
             <span class="cable-info__title-text">
                 {{ item.marksize_id }}
@@ -36,6 +36,10 @@ export default {
     name: 'TenderItemProductCard',
 
     props: {
+        hide: {
+            default: false,
+            type: Boolean,
+        },
         item: {
             type: Object,
             required: true,
@@ -64,9 +68,13 @@ export default {
         font-weight: 500;
         font-size: 14px;
         line-height: 160%;
-        color: $lightcolorText;
+        color: $colorTextLight;
         padding: rem(24px) 0;
-        border-bottom: 1px solid $borderColor;
+        border-bottom: 1px solid $colorBdr;
+        @media print {
+            display: flex !important;
+            padding: rem(5px) 0;
+        }
     }
     .table-cell {
         &__title {

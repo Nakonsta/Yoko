@@ -180,17 +180,40 @@ export default {
             };
         },
         getAvatarBackground(str, brightness) {
-            function randomChannel(code, brightness){
+            function getChannel(code, brightness){
                 code = (code % 255) / 255;
                 let r = 255-brightness,
                     n = 0|((code * r) + brightness),
                     s = n.toString(16);
                 return s.length===1 ? '0'+s : s;
             }
-            return '#' + randomChannel(str.charCodeAt(0)||120, brightness) + randomChannel(str.charCodeAt(1)||120, brightness) + randomChannel(120, brightness);
+            return '#' + getChannel(str.charCodeAt(0)||120, brightness) + getChannel(str.charCodeAt(1)||120, brightness) + getChannel(120, brightness);
         },
         nl2br(str) {
             return str.replace(/([^>])\n+/g, '$1<br/>');
         },
+        printPage(url) {
+            if (!url.length) return;
+            window.openLoader();
+            let frame = document.getElementById('print');
+            if (!frame) {
+                frame = document.createElement('frame');
+                frame.setAttribute('name', 'print');
+                frame.setAttribute('id', 'print');
+                document.body.appendChild(frame);
+                frame.onload = function(){
+                    setTimeout(function(){
+                        // todo печать страницы по url
+                        // задержка нужна для того чтобы отработал vue.js
+                        // решение так себе
+                        // по хорошему надо передавать параметр печати и вызывать саму печать ВНУТРИ app
+                        window.closeLoader();
+                        frame.focus();
+                        frame.contentWindow.print();
+                    }, 5000);
+                };
+            }
+            frame.setAttribute('src', url);
+        }
     }
 }
