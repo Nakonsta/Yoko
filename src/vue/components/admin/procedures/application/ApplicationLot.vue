@@ -164,7 +164,7 @@ export default {
             font-family: Roboto;
             font-weight: 700;
             font-size: rem(20px);
-            color: $lightcolorText;
+            color: $colorTextLight;
         }
 
         svg {

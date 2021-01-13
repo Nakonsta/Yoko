@@ -229,11 +229,11 @@ export default {
             })
         },
         createApplicationDraft() {
-            // this.createApplicationObject()
             window.openLoader()
             this.sendProcedureApplicationDraft(this.id, this.createApplicationObject())
                 .then(({ data }) => {
                     this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
+                    window.location.reload()
                 })
                 .finally(() => window.closeLoader())
         },
@@ -244,6 +244,7 @@ export default {
                     this.sendProcedureApplication(this.appId)
                         .then(({ data }) => {
                             this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
+                            window.location.reload()
                         })
                         .finally(() => window.closeLoader())
                 })
@@ -251,6 +252,7 @@ export default {
                 this.sendProcedureApplication(this.appId)
                     .then(({ data }) => {
                         this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
+                        window.location.reload()
                     })
                     .finally(() => window.closeLoader())
             }
@@ -291,7 +293,7 @@ export default {
 
             applicationCopy.inn = this.procedure.selectedCompany.inn
             applicationCopy.tender_trading_type = this.procedure.tender_trading_type
-            // console.log(applicationCopy)
+
             return this.objectToFormData(applicationCopy)
         },
         createLots() {
@@ -441,7 +443,7 @@ export default {
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         white-space: nowrap;
 
         @include mq($until: tablet) {
@@ -454,7 +456,7 @@ export default {
 
         font-family: Roboto;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
     }
 
     &__section-link {
@@ -535,7 +537,7 @@ export default {
 .divider {
     width: 100%;
     height: 1px;
-    background-color: $borderColor;
+    background-color: $colorBdr;
     margin: rem(12px) 0 rem(20px);
 
     &--no-margin {

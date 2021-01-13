@@ -48,7 +48,7 @@ export default {
                 name: 'Россия',
                 name_en: 'Russia',
                 phone_code: 7
-            },
+            }
         }
     },
     computed: {
@@ -103,7 +103,7 @@ export default {
 
         &__option {
             background-color: #fff !important;
-            color: $lightcolorText !important;
+            color: $colorTextLight !important;
         }
     }
 }

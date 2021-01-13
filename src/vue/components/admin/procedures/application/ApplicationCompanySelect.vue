@@ -107,7 +107,7 @@ export default {
 
         &__option {
             background-color: #fff;
-            color: $lightcolorText;
+            color: $colorTextLight;
         }
     }
 }

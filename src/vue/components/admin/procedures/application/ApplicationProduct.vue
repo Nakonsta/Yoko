@@ -157,7 +157,7 @@ export default {
     &__field {
         display: table-cell;
         padding: rem(25px) 0;
-        border-bottom: 1px solid $borderColor;
+        border-bottom: 1px solid $colorBdr;
     }
 
     &__text {
@@ -171,7 +171,7 @@ export default {
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         white-space: nowrap;
 
         .application-tooltip {
@@ -199,7 +199,7 @@ export default {
             width: auto;
             padding: 0;
             margin: 0;
-            border: 1px solid $borderColor;
+            border: 1px solid $colorBdr;
             border-radius: 4px;
             outline: none;
         }

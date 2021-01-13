@@ -67,7 +67,7 @@ export default {
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         user-select: none;
     }
 
