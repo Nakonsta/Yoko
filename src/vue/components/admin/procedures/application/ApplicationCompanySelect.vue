@@ -46,9 +46,7 @@ export default {
             return ['application-company-select', { 'application-company-select--error': this.hasError }]
         },
         companies() {
-            return this.$store.getters.userRole.toLowerCase() === 'buyer'
-                ? this.$store.getters.companyBuyer
-                : this.$store.getters.companyContractor
+            return this.$store.getters.companyContractor
         }
     },
     methods: {
@@ -82,7 +80,7 @@ export default {
 
     &--error {
         ::v-deep .multiselect__tags {
-            border: 1px solid rgba($color: $colorRed, $alpha: 0.8) !important;
+            border: 1px solid rgba($color: $colorRed, $alpha: 0.8);
         }
 
         .application-company-select-label {
@@ -96,14 +94,20 @@ export default {
         cursor: pointer;
 
         &__tags {
-            height: 32px !important;
-            min-height: 0 !important;
-            padding: 10px 40px 0 10px !important;
+            height: 32px;
+            min-height: 0;
+            padding: 6px 40px 0 10px;
+        }
+
+        &__placeholder {
+            padding: 0;
+            margin-top: -6px;
+            margin-bottom: 0;
         }
 
         &__option {
-            background-color: #fff !important;
-            color: $lightcolorText !important;
+            background-color: #fff;
+            color: $lightcolorText;
         }
     }
 }

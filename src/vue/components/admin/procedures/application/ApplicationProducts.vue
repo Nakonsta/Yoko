@@ -12,6 +12,7 @@
             :product="product"
             :headers="headers"
             :can-replace="canReplace"
+            :countries="countries"
             @on-price-change="changePrice($event, product)"
             @on-country-change="product.country = $event"
             @on-select-replace="onSelectReplace(product, index)"
@@ -39,6 +40,10 @@ export default {
     props: {
         products: {
             type: [Object, Array],
+            required: true
+        },
+        countries: {
+            type: Array,
             required: true
         },
         isAuction: {

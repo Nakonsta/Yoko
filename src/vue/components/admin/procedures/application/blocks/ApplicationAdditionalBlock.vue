@@ -7,7 +7,7 @@
         </div>
         <div class="application__textarea">
             <textarea placeholder="Введите текст" :value="application.description" @input="$emit('on-input', $event.target.value)"></textarea>
-            <application-tooltip></application-tooltip>
+            <!-- <application-tooltip></application-tooltip> -->
         </div>
         <div class="divider divider--no-margin"></div>
     </div>

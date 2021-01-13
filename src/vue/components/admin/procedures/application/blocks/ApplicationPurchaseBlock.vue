@@ -10,7 +10,7 @@
         </div>
         <div class="application__section-row">
             <div class="application__section-title">Номер в ЕИС:</div>
-            <a class="application__section-link">46251781948</a>
+            <a class="application__section-link">46251781948 (данных пока нет на беке)</a>
         </div>
         <div class="application__section-row">
             <div class="application__section-title">

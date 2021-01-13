@@ -8,7 +8,7 @@
             >
                 <span>{{ lot.name }}</span>
                 <span class="application-lot__amount"
-                    >{{ lot.amount.replace('.00', '') | numberWithSpaces }} {{ lot.currency.symbol }}</span
+                    >{{ lot.amountWithVat.replace('.00', '') | numberWithSpaces }} {{ lot.currency.symbol }}</span
                 >
                 <svg>
                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#arrow-bottom"></use>
@@ -19,6 +19,7 @@
             <div class="application-lot__country">
                 <span>Страна происхождения Лота</span>
                 <application-country-select
+                    :countries="countries"
                     @on-select="$emit('on-country-change', $event)"
                 ></application-country-select>
             </div>
@@ -26,6 +27,7 @@
                 :products="lot.products"
                 :is-auction="isAuction"
                 :can-replace="canReplace"
+                :countries="countries"
                 @on-replace="replaceProduct"
             ></application-products>
         </div>
@@ -54,6 +56,10 @@ export default {
         },
         isAuction: {
             type: Boolean,
+            required: true
+        },
+        countries: {
+            type: Array,
             required: true
         },
         canReplace: {
@@ -91,12 +97,14 @@ export default {
         },
         replaceProduct(value, products) {
             this.lot.products = this.lot.products.map(product => {
-				if (product.id === value.id) {
-					product = value
-				}
+                if (product.id === value.id) {
+                    product = value
+                }
 
-				return product;
-			})
+                return product
+            })
+
+            // this.lot
         }
     }
 }

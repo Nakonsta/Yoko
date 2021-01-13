@@ -24,6 +24,7 @@
                 :application="application"
                 :is-auction="viewType.isAuction"
                 :lots="lots"
+                :currency-type="currencyType"
                 @on-upload="application.documents.lots = [$event]"
                 @on-check="application.agreement = $event"
             ></application-lots-block>
@@ -45,11 +46,11 @@
                 @on-input="application.description = $event"
             ></application-additional-block>
 
-            <application-checkbox
+            <!-- <application-checkbox
                 :value="viewType.isAuction ? application.autoBot : application.agreement"
                 :label="tradingType.checkboxLabel"
                 @click="viewType.isAuction ? (application.autoBot = $event) : (application.agreement = $event)"
-            ></application-checkbox>
+            ></application-checkbox> -->
             <div v-if="viewType.isCreate || viewType.isDraft" class="application__buttons">
                 <button class="application__button" @click="createApplication">
                     Подписать и отправить
@@ -94,7 +95,7 @@ export default {
     data() {
         return {
             procedure: {
-                application: {},
+                company: {},
                 selectedCompany: {}
             },
             application: {
@@ -123,10 +124,9 @@ export default {
             return this.$route.params.appid
         },
         viewType() {
-            console.log(this.application.status)
             return {
                 isCreate: this.appId === 'new',
-                isAuction: this.procedure.tender_trading_type == 'auction',
+                isAuction: false,
                 isDraft: false
             }
         },
@@ -191,33 +191,49 @@ export default {
             return this.fetchTenderItem(this.id).then(({ data }) => {
                 this.procedure = Object.assign(this.procedure, data.data)
                 this.createLots()
-                return this.fetchCompanyByInn([this.procedure.inn]).then(({ data }) => {
+
+                this.viewType.isAuction = this.procedure.tender_trading_type == 'auction'
+
+                return this.fetchCompanyByInn(this.procedure.inn).then(({ data }) => {
                     this.procedure.company = data.data
                 })
             })
         },
         getApplication() {
             return this.fetchProcedureApplication(this.appId).then(({ data }) => {
-                this.application = Object.assign(this.application, data.data)
+                this.procedure = Object.assign(this.procedure, data.data.procedure)
 
+                this.application = Object.assign(this.application, data.data)
+                delete this.application.procedure
+
+                this.createLots()
+
+                this.viewType.isAuction = this.procedure.tender_trading_type == 'auction'
                 this.viewType.isDraft = this.application.status === 'draft'
 
-                this.application.documents.forEach((document, i) => {
-                    if (this.application.documents[document.properties.group]) {
-                        this.application.documents[document.properties.group].push(document)
-                    } else {
-                        this.application.documents[document.properties.group] = [document]
-                    }
+                if (data?.data?.documents?.length ?? false) {
+                    this.application.documents.forEach((document, i) => {
+                        if (this.application.documents[document.properties.group]) {
+                            this.application.documents[document.properties.group].push(document)
+                        } else {
+                            this.application.documents[document.properties.group] = [document]
+                        }
 
-                    delete this.application.documents[i]
+                        delete this.application.documents[i]
+                    })
+                }
+
+                return this.fetchCompanyByInn(this.procedure.inn).then(({ data }) => {
+                    this.procedure.company = data.data
                 })
             })
         },
         createApplicationDraft() {
+            // this.createApplicationObject()
             window.openLoader()
             this.sendProcedureApplicationDraft(this.id, this.createApplicationObject())
                 .then(({ data }) => {
-                    window.location.reload()
+                    this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
                 })
                 .finally(() => window.closeLoader())
         },
@@ -225,38 +241,58 @@ export default {
             window.openLoader()
             if (this.viewType.isCreate) {
                 this.sendProcedureApplicationDraft(this.id, this.createApplicationObject()).then(({ data }) => {
-                    this.sendProcedureApplication(this.id, this.appId)
-                        .then(() => {
-                            window.location.reload()
+                    this.sendProcedureApplication(this.appId)
+                        .then(({ data }) => {
+                            this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
                         })
                         .finally(() => window.closeLoader())
                 })
             } else {
-                this.sendProcedureApplication(this.id, this.appId)
-                    .then(() => {
-                        window.location.reload()
+                this.sendProcedureApplication(this.appId)
+                    .then(({ data }) => {
+                        this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
                     })
                     .finally(() => window.closeLoader())
             }
         },
         createApplicationObject() {
-            this.application.products = []
+            const applicationCopy = Object.assign({}, this.application)
+
+            applicationCopy.products = []
             this.lots.forEach(lot => {
                 if (lot.checked) {
                     lot.products.forEach(product => {
                         product.product_id = product.id
-                        product.country = product.country.code
-                        product.currency = this.currencyType.type
+                        product.country = product?.country?.code ?? 'RU'
+                        product.currency = this.procedure.purchase_currency
 
-                        this.application.products.push(product)
+                        applicationCopy.products.push(product)
                     })
                 }
             })
 
-            this.application.inn = this.procedure.selectedCompany.inn
-            this.application.tender_trading_type = this.procedure.tender_trading_type
+            Object.entries(applicationCopy.documents).forEach(value => {
+                if (value[1].length) {
+                    value[1].forEach((document, i) => {
+                        if (document.id) {
+                            if (applicationCopy.documents[`${value[0]}_old`]) {
+                                applicationCopy.documents[`${value[0]}_old`].push(document.id)
+                            } else {
+                                applicationCopy.documents[`${value[0]}_old`] = [document.id]
+                            }
 
-            return this.objectToFormData(this.application)
+                            applicationCopy.documents[value[0]] = applicationCopy.documents[value[0]].filter(
+                                element => element.id !== document.id
+                            )
+                        }
+                    })
+                }
+            })
+
+            applicationCopy.inn = this.procedure.selectedCompany.inn
+            applicationCopy.tender_trading_type = this.procedure.tender_trading_type
+            // console.log(applicationCopy)
+            return this.objectToFormData(applicationCopy)
         },
         createLots() {
             let lots = []
@@ -266,6 +302,7 @@ export default {
                     id: i + 1,
                     checked: false,
                     amount: Number(amount).toFixed(2),
+                    amountWithVat: 0,
                     currency: this.currencyType,
                     country: {
                         code: 'RU',
@@ -280,42 +317,48 @@ export default {
                 }
 
                 if (!this.viewType.isCreate) {
-                    const accepetedProducts = []
-                    this.procedure.purchase_subject.products.forEach(product => {
-                        this.application.subject.products.forEach(applicationProduct => {
-                            if (product.id === applicationProduct.purchase_subject_products_id) {
-                                if (product.lot == i + 1) {
-                                    product.product_id = product.id
-                                    product.country = lot.country
+                    this.application.subject.products.forEach(product => {
+                        if (
+                            product.purchase_product.lot == i + 1 ||
+                            (this.procedure.purchase_subject.lot_amounts.length === 1 &&
+                                product.purchase_product.lot === null)
+                        ) {
+                            product.product_id = product.id
+                            product.amount_per_position = parseFloat(
+                                parseInt(product.quantity ?? 1, 10) *
+                                    parseFloat(product.price_for_one ?? 1, 10) *
+                                    (1 + parseInt(product.vat ?? 1, 10) / 100)
+                            ).toFixed(2)
 
-                                    product.amount_per_position = parseFloat(
-                                        parseInt(product.quantity, 10) *
-                                            parseFloat(product.price_for_one, 10) *
-                                            (1 + parseInt(product.vat, 10) / 100)
-                                    ).toFixed(2)
-
-                                    lot.products.push(product)
-                                    lot.checked = true
-                                }
-                            }
-                        })
+                            lot.products.push(product)
+                            lot.checked = true
+                        }
                     })
                 } else {
                     this.procedure.purchase_subject.products.forEach(product => {
-                        if (product.lot == i + 1) {
+                        if (
+                            product.lot == i + 1 ||
+                            (this.procedure.purchase_subject.lot_amounts.length === 1 && product.lot === null)
+                        ) {
                             product.product_id = product.id
                             product.country = lot.country
 
                             product.amount_per_position = parseFloat(
-                                parseInt(product.quantity, 10) *
-                                    parseFloat(product.price_for_one, 10) *
-                                    (1 + parseInt(product.vat, 10) / 100)
+                                parseInt(product.quantity ?? 1, 10) *
+                                    parseFloat(product.price_for_one ?? 1, 10) *
+                                    (1 + parseInt(product.vat ?? 1, 10) / 100)
                             ).toFixed(2)
 
                             lot.products.push(product)
                         }
                     })
                 }
+
+                lot.amountWithVat = parseFloat(
+                    lot.products.reduce((price, product) => {
+                        return price + parseFloat(product.amount_per_position)
+                    }, 0)
+                ).toFixed(2)
 
                 if (lot.products.length) {
                     lots.push(lot)
@@ -334,8 +377,7 @@ export default {
             this.getProcedureDetails().finally(() => (this.loading = false))
         } else {
             this.loading = true
-            this.getApplication();
-            this.getProcedureDetails().finally(() => (this.loading = false));
+            this.getApplication().finally(() => (this.loading = false))
         }
     }
 }
@@ -436,6 +478,10 @@ export default {
 
         width: 100%;
         margin-top: rem(56px);
+
+        @include mq($until: mobileLandscape) {
+            justify-content: center;
+        }
     }
 
     &__button {
@@ -453,6 +499,10 @@ export default {
         font-weight: 500;
         font-size: rem(14px);
         color: #ffffff;
+
+        @include mq($until: mobileLandscape) {
+            margin-right: 0;
+        }
 
         &:active,
         &:hover {

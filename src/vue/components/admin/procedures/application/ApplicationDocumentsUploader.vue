@@ -107,12 +107,19 @@ export default {
                         localFile.file = file
 
                         this.localFiles.push(localFile)
-                        filesAsArray.push(file)
                     } else {
                         window.notificationError(
                             'Вы пытаетесь загрузить файл неверного формата. Разрешенные форматы .pdf, .jpeg, .png, .doc, .docx, .xls, .xlsx'
                         )
                         hasErrors = true
+                    }
+                })
+
+                this.localFiles.forEach(file => {
+                    if (file.id) {
+                        filesAsArray.push(file)
+                    } else {
+                        filesAsArray.push(file.file)
                     }
                 })
 
@@ -130,14 +137,15 @@ export default {
 
             const files = []
             this.localFiles.forEach(file => {
-                files.push(file.file)
+                if (file.id) {
+                    files.push(file)
+                } else {
+                    files.push(file.file)
+                }
             })
 
             this.$emit('remove', files)
         }
-    },
-    created() {
-        console.log(this.documents)
     }
 }
 </script>

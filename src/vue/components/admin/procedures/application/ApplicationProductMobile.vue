@@ -12,7 +12,11 @@
                         min="1"
                     />
                 </div>
-                <span v-else @click="header.value === 'price_for_one' ? startEdit() : null">
+                <span
+                    v-else
+                    :class="{ 'price-span': header.value === 'price_for_one' }"
+                    @click="header.value === 'price_for_one' ? startEdit() : null"
+                >
                     {{ showField(header.value) }}
                 </span>
                 <div
@@ -24,9 +28,9 @@
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#replace"></use>
                     </svg>
                 </div>
-                <application-tooltip
+                <!-- <application-tooltip
                     v-if="header.value === 'price_for_one' || header.value === 'amount_per_position'"
-                ></application-tooltip>
+                ></application-tooltip> -->
             </div>
             <application-country-select
                 v-else
@@ -57,6 +61,10 @@ export default {
         },
         canReplace: {
             type: Boolean
+        },
+        countries: {
+            type: Array,
+            required: true
         }
     },
     computed: {
@@ -185,6 +193,32 @@ export default {
 
         .application-tooltip {
             margin-left: auto;
+        }
+
+        .price-span {
+            padding: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 8px;
+
+            &:hover {
+                background-color: lighten($colorGray, 30%);
+            }
+        }
+    }
+
+    &__input {
+        width: auto;
+
+        input {
+            display: block;
+            padding: 6px;
+            width: auto;
+            padding: 0;
+            margin: 0;
+            border: 1px solid $borderColor;
+            border-radius: 4px;
+            outline: none;
         }
     }
 

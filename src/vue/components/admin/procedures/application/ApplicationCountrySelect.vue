@@ -20,19 +20,22 @@
     </div>
 </template>
 <script>
-import api from '../../../../helpers/api'
 export default {
     name: 'application-country-select',
-    mixins: [api],
+
     props: {
         defaultValue: {
-            type: Object
+            type: [Object, String]
         },
         disabled: {
             type: Boolean
         },
         hasError: {
             type: Boolean
+        },
+        countries: {
+            type: Array,
+            required: true
         }
     },
     data() {
@@ -46,7 +49,6 @@ export default {
                 name_en: 'Russia',
                 phone_code: 7
             },
-            countries: []
         }
     },
     computed: {
@@ -57,18 +59,15 @@ export default {
     methods: {
         handleSelect(value) {
             this.$emit('on-select', value)
-        },
-        getCountries() {
-            this.fetchCountries().then(({ data }) => {
-                this.countries = data.data
-            })
         }
     },
-    created() {
-        this.getCountries()
+    mounted() {
         if (this.defaultValue) {
-            console.log(123321)
-            this.value = this.defaultValue
+            if (this.defaultValue instanceof Object) {
+                this.value = this.defaultValue
+            } else {
+                this.value = this.countries.filter(country => country.code === this.defaultValue)[0]
+            }
         }
     }
 }

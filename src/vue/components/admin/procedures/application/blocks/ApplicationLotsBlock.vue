@@ -6,13 +6,13 @@
             font-size="20px"
             margin="0 0 16px"
         ></application-title>
-        <application-checkbox
+        <!-- <application-checkbox
             v-if="isAuction"
             style="margin-bottom: 24px;"
             :value="application.agreement"
             label='Согласие участника закупки на "поставку товара"'
             @click="$emit('on-check', $event)"
-        ></application-checkbox>
+        ></application-checkbox> -->
         <application-title title="Сведения о лоте" subtitle></application-title>
         <div class="divider"></div>
         <div class="application-lots__text">Конкретные показатели товара:</div>
@@ -21,6 +21,16 @@
             :is-auction="isAuction"
             :can-replace="procedure.purchase_subject.products_analogues"
         ></application-lots>
+        <div class="application-lots__amounts">
+            <div class="application-lots__amount">
+                Общая стоимость без НДС:
+                <span>{{ amount | numberWithSpaces }} {{ currencyType.symbol }}</span>
+            </div>
+            <div class="application-lots__amount">
+                Общая стоимость с НДС:
+                <span>{{ amountWithVat | numberWithSpaces }} {{ currencyType.symbol }}</span>
+            </div>
+        </div>
 
         <div class="application__section-row">
             <div class="application__section-title">
@@ -60,6 +70,10 @@ export default {
             type: Object,
             required: true
         },
+        currencyType: {
+            type: Object,
+            required: true
+        },
         lots: {
             type: Array,
             required: true
@@ -68,7 +82,30 @@ export default {
             type: Boolean
         }
     },
+    filters: {
+        numberWithSpaces(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+        }
+    },
     computed: {
+        amount() {
+            return parseFloat(
+                this.lots.reduce((amount, lot) => {
+                    return amount + parseFloat(lot.amount)
+                }, 0)
+            )
+                .toFixed(2)
+                .replace('.00', '')
+        },
+        amountWithVat() {
+            return parseFloat(
+                this.lots.reduce((amountWithVat, lot) => {
+                    return amountWithVat + parseFloat(lot.amountWithVat)
+                }, 0)
+            )
+                .toFixed(2)
+                .replace('.00', '')
+        },
         lotsFile() {
             return this.application.documents.lots?.[0] ?? {}
         }
@@ -76,15 +113,49 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '../../../../../../assets/sass/variables/variables';
+@import '../../../../../../assets/sass/variables/fluid-variables';
+@import '../../../../../../assets/sass/mixins/fluid-mixin';
+@import '../../../../../../assets/sass/mixins/mq';
+
 .application__section-row {
     margin-top: 32px;
 }
 
-.application-lots__text {
-    margin-bottom: 20px;
-    font-family: Roboto;
-    font-size: 14px;
-    line-height: 20px;
-    color: #000000;
+.application-lots {
+    &__text {
+        margin-bottom: 20px;
+        font-family: Roboto;
+        font-size: 14px;
+        line-height: 20px;
+        color: #000000;
+    }
+
+    &__amounts {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        width: 100%;
+        margin-top: rem(32px);
+    }
+
+    &__amount {
+        font-family: Roboto;
+        font-size: rem(14px);
+        color: $lightcolorText;
+
+        margin-bottom: rem(16px);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        span {
+            font-weight: bold;
+            font-size: rem(20px);
+        }
+    }
 }
 </style>
