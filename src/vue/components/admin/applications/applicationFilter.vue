@@ -50,7 +50,7 @@
       color: $colorGray;
       margin:  rem(5px) 0;     
       @media(min-width: 550px){
-        margin-right: rem(56px);
+        margin-left: rem(56px);      
         width: auto;
       } 
     }     

@@ -41,7 +41,7 @@
     </div>
     <div class="mark-catalog__item-body filter-body">
       <div v-for="item in items" :key="item.id" class="mark-catalog__product">
-        {{ item.name }}
+        <a class="marksize-link" :href="item.url">{{ item.name }}</a>
       </div>
     </div>
   </div>
@@ -67,12 +67,8 @@ export default {
     voltageList: []
   }),
   props: {
-    lists: {
-      default: null,
-      type: Object,
-    },
     root: {
-      default: null,
+      default: {},
       type: Object,
     }
   },
@@ -88,15 +84,15 @@ export default {
     changeFilter(evt) {
       evt.preventDefault();
       if (this.dataForm.quantity) {
-        this.items = this.root.markoSize.filter((item) => item.property_veins_count &&
+        this.items = this.root.marksizes.filter((item) => item.property_veins_count &&
           item.property_veins_count.includes(this.dataForm.quantity.name));
       }
       if (this.dataForm.section) {
-        this.items = this.root.markoSize.filter((item) => item.property_section &&
+        this.items = this.root.marksizes.filter((item) => item.property_section &&
           item.property_section.includes(this.dataForm.section.name));
       }
       if (this.dataForm.voltage) {
-        this.items = this.root.markoSize.filter((item) => item.property_voltage &&
+        this.items = this.root.marksizes.filter((item) => item.property_voltage &&
           item.property_voltage.includes(this.dataForm.voltage.name));
       }
     },
@@ -107,15 +103,15 @@ export default {
         section: null,
         voltage: null,
       }
-      this.items = this.root.markoSize;
+      this.items = this.root.marksizes;
     },
     initSelectorsValues() {
-      if (!this.root || !this.root.markoSize) return;
-      this.items = this.root.markoSize;
+      if (!this.root || !this.root.marksizes) return;
+      this.items = this.root.marksizes;
       let veinsCounts = [];
       let sections = [];
       let voltages = [];
-      this.root.markoSize.map((item, idx) => {
+      this.root.marksizes.map((item, idx) => {
         if (item.property_veins_count) {
           veinsCounts = item.property_veins_count.map((item) => {
             return {
@@ -151,4 +147,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+  .marksize-link {
+    color: inherit;
+  }
+</style>

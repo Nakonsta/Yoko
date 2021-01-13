@@ -1,15 +1,11 @@
 <template>
-  <div id="documents-mark">
-    <div class="row">
-      <div class="col col-lg-3 col-md-4 col-xs-12 mb2" v-for="(item, index) in root" :key="index">
-        <a class="btn btn--white btn--with-icon" :href="item.link" target="_blank">
-          <svg class="sprite-download">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#download"></use>
-          </svg>
-          {{ item.name }}
-        </a>
-      </div>
-    </div>
+  <div class="documents">
+    <a class="btn btn--white btn--with-icon" :href="item.link" target="_blank" v-for="(item, index) in root" :key="index">
+      <svg class="sprite-download">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#download"></use>
+      </svg>
+      {{ item.name }}
+    </a>
   </div>
 </template>
 
@@ -18,7 +14,7 @@ export default {
   name: "MarkDocuments",
   props: {
     root: {
-      default: null,
+      default: [],
       type: Array,
     }
   }
@@ -26,21 +22,41 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  @import "../../../../assets/sass/variables/variables";
   @import "../../../../assets/sass/variables/fluid-variables";
+  @import "../../../../assets/sass/mixins/mq";
   @import "../../../../assets/sass/mixins/fluid-mixin";
-  .btn {
-    min-height: rem(72px);
-    min-width: inherit;
-    padding-right: 1rem;
-    padding-left: 3rem;
-    width: 100%;
-    svg {
-      @media(max-width: 1199px) {
-        left: 1rem;
+  .documents {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -32px 0 0 -32px;
+
+    ::v-deep a {
+      display: block;
+      margin: 32px 0 0 32px;
+      min-height: rem(72px);
+      width: calc(25% - 32px);
+      min-width: 0;
+      padding: rem(24px) rem(26px) rem(24px) rem(72px);
+      text-align: left;
+
+      @include mq($until: widescreen) {
+        width: calc(33.33% - 32px);
+      }
+
+      @include mq($until: desktop) {
+        width: calc(50% - 32px);
+      }
+
+      @include mq($until: tablet) {
+        width: calc(100% - 32px);
+      }
+
+      svg {
+        @media(max-width: 1199px) {
+          left: rem(26px)
+        }
       }
     }
-  }
-  .mb2 {
-    margin-bottom: 2rem;
   }
 </style>

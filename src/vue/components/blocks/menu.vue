@@ -202,6 +202,14 @@ export default {
                 to: '/personal/accreditations/new'
               },
             ]
+          },
+          {
+            icon: 'mdi-home',
+            title: 'Мои данные',
+            to: '/personal/user',
+            order: 2,
+            isActive: true,
+            subItems: [],
           }
         ],
         contractor: [
@@ -228,6 +236,10 @@ export default {
               {
                 title: 'Добавление продукции',
                 to: '/personal/catalog/new'
+              },
+              {
+                title: 'Заявки на добавление продукции',
+                to: '/personal/catalog/positions'
               },
             ]
           },
@@ -266,6 +278,14 @@ export default {
               },
             ]
           },
+          {
+            icon: 'mdi-home',
+            title: 'Мои данные',
+            to: '/personal/user',
+            order: 2,
+            isActive: true,
+            subItems: [],
+          }
         ],
         guest: [],
       },

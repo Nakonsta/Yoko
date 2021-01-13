@@ -443,30 +443,24 @@ export default {
                 {cancelToken: this.CancelTokens.companyCancelToken.token}
             );
         },
-        fetchApplicationsList(inn) {
-          /*const defaultProps = {
+
+        sendMarketplaceQuestion(id, data) {
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q`, data)
+        },
+        sendMarketplaceAnswer(id, question_id, data) {
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q/${question_id}/a`, data)
+        },
+        fetchApplicationsList(props) {
+          const defaultProps = {
             draft: 0,
-            orderBy: 'id',
-            orderDir: 'DESC',
-            page: 1,
-            search: '',
+            applicationStatus: 'submitted',
+            inn: [0],
+            procedureIds: 0,
+            publicationDate: "asc"
         }
-
-        const requestProps = Object.assign(defaultProps, props ?? {})
-
         const fData = new FormData()
-
-        fData.append('page', requestProps.page)
-        fData.append('order[by]', requestProps.orderBy)
-        fData.append('order[direction]', requestProps.orderDir)
-
-        if (requestProps.search !== '') {
-            fData.append('q', requestProps.search)
-        }*/
-        const fData = new FormData()
-        fData.append('inn', inn)
+        console.log(props)
           return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
-            fData
           )
         }        
     }

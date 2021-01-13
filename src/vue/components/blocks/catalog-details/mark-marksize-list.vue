@@ -1,7 +1,7 @@
 <template>
   <div class="company-products">
     <div class="company-products__filters">
-      <mark-marksize-filter @changeFilter="changeFilter" @resetFilter="resetFilter" :option-list="companyList" />
+      <mark-marksize-filter @changeFilter="changeFilter" @resetFilter="resetFilter" :companies="companies" />
     </div>
     <div class="company-products__table">
       <div v-if="items.length && !isLoading" class="company-products__thead">
@@ -11,7 +11,7 @@
         <div class="table-cell__quantity">
           Наличие, м
         </div>
-        <div class="table-cell__quantity">
+        <div class="table-cell__company">
           Компания
         </div>
         <div class="table-cell__price">
@@ -82,9 +82,9 @@ export default {
       type: String,
       default: null
     },
-    companyList: {
+    companies: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -112,7 +112,6 @@ export default {
   created() {
     this.getMarksizesData()
   },
-
   methods: {
     pagination(page) {
       this.isLoading = true
@@ -135,9 +134,8 @@ export default {
       }
       const fData = this.objectToFormData(marksizeInfo)
       this.filterMarksizeQuantity(this.marksizeId, fData).then((response) => {
-        const { items = [] } = response.data.data;
-        if (items.length && this.companyList.length) {
-          this.items = this.prepareItems(items);
+        if (response.data.data.items && response.data.data.items.length && this.companies.length) {
+          this.items = this.prepareItems(response.data.data.items);
         } else {
           this.items = [];
         }
@@ -150,7 +148,7 @@ export default {
     },
     prepareItems(dataItems) {
       const result = dataItems.map((item) => {
-        const company = this.companyList.find((company) => company.id === item.company_id);
+        const company = this.companies.find((company) => company.id === item.company_id);
         item.company = company;
         return item;
       });
@@ -255,21 +253,6 @@ export default {
   }
 }
 
-.table-cell {
-  &__title {
-    width: 25%;
-  }
-  &__quantity {
-    width: 20%;
-  }
-  &__price {
-    width: 20%;
-  }
-  &__certificates{
-    width: 35%;
-  }
-}
-
 .card {
   &__loader {
     position: relative;
@@ -308,19 +291,19 @@ export default {
   }
 }
 
-@include mq($until: desktop) {
-  .table-cell {
-    &__title {
-      width: 35%;
-    }
-    &__quantity {
-      width: 20%;
-    }
-    &__price {
-      width: 20%;
-    }
-    &__certificates {
-      width: 25%;
+@include mq($from: tablet) {
+  ::v-deep .cable-info,
+  ::v-deep .company-products__thead {
+    .table-cell {
+      &__title,
+      &__company,
+      &__certificates {
+        width: 25%;
+      }
+      &__quantity,
+      &__price {
+        width: 12.5%;
+      }
     }
   }
 }

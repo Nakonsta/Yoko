@@ -5,7 +5,7 @@
                 {{ item.title }}
             </span>
         </div>
-        <div class="table-cell__quantity cable-info__quantity" :data-name="item.quantity ? 'Остаток, м' : ''">
+        <div class="table-cell__quantity cable-info__quantity" :data-name="item.quantity ? 'Остаток, м' : 'Наличие'">
             <span v-if="item.quantity">
                 {{ item.quantity }} м
             </span>
@@ -15,7 +15,9 @@
         </div>
         <div v-if="item.company_id" class="table-cell__company cable-info__company" data-name="Компания">
           <span>
-            {{ item.company.name }}
+            <a :href="`/compregister/${item.company.id}`">
+              {{ item.company.name }}
+            </a>
           </span>
           <span class="cable-info__company-desc">
             Рейтинг компании:
@@ -24,7 +26,7 @@
             {{ item.company.rating }}
           </span>
         </div>
-        <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : ''">
+        <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : 'Цена, руб'">
             <template v-if=" $store.state.auth.loggedIn">
                 <span v-if="item.price">
                     {{ item.price }} &#8381;
@@ -180,9 +182,16 @@ export default {
               &:first-child {
                 display: block;
               }
-            }
-            &-desc {
-              font-weight: 400;
+              > a {
+                transition: .3s color;
+                color: #31ACB8;
+                &:hover {
+                  color: #4cb9c3;
+                }
+              }
+              &-desc {
+                font-weight: 400;
+              }
             }
         }
         &__price {

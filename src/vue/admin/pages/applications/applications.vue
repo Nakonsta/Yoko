@@ -1,7 +1,11 @@
 <template>
   <div class="applications">
      <accreditations-title title="Заявки на участие в процедурах"></accreditations-title>
-     {{companies}}
+     <div class="tabs tabs--line" v-if="companies.length">
+        <ul>
+          <li v-for="company in companies" :key="company.id" :class="{active: company.inn === currentCompany.inn}"><a href="javascript:{}" @click="changeCompany($event, company)">{{ company.name }}</a></li>
+        </ul>
+    </div>
     <div class="applications__filters">
       <application-sort @on-sort="onSort"></application-sort>
       <application-filter @on-filter="onFilter"></application-filter>
@@ -56,6 +60,8 @@ export default {
       currentPage: 1,
       productSort: 'desc',
       productFilter: 'all',
+      currentCompany: null,
+      currentFilter: {},
       applications:[
         {
           id: 1,
@@ -105,21 +111,47 @@ export default {
     }
   },
   computed: {
-    companies(){
-      return this.$store.getters.companyContractor;
-    }
+    companies() {
+      // список компаний пользователя
+      let companies = [];
+      switch( this.$store.getters.userRole ) {
+        case 'buyer':
+          companies = this.$store.getters.companyBuyer;
+          break;
+        case 'contractor':
+          if (this.type === 'applications') {
+              companies = this.$store.getters.companyContractor;
+          }
+          break;
+      }
+      // обновляем фильтр - ставим нужную компанию
+      if( companies.length ) {
+        this.currentCompany = companies[0];
+      }
+      return companies;
+    },
   },
   methods:{
     getApplications(){
-      const inn = this.companies[0].inn
-      this.fetchApplicationsList(inn)
+      if( this.companies.length && this.currentCompany) {
+        this.currentFilter.inn = [this.currentCompany.inn];
+      }
+      this.currentFilter.inn = [this.companies[0].inn];
+      this.fetchApplicationsList()
     },
     onSort(){
 
     },
     onFilter(){
 
-    }
+    },
+    changeCompany(evt, company) {
+      evt.preventDefault();
+      this.page = 1;
+      this.currentFilter = {};
+      this.currentCompany = company;
+      this.getApplications();
+    },
   },
   created(){
     this.getApplications()
@@ -158,7 +190,8 @@ export default {
     @media(min-width: 1024px){
       display: flex;
       align-items: center;   
-      margin-right: 20px;
+      margin-left: 20px;
+      justify-content: flex-end;
     }
   }
   &-filter{
@@ -168,8 +201,13 @@ export default {
     } 
   }     
   &-flexwrap{
-     margin-top: 20px;
+    margin-top: 20px;
   }   
 }
-
+@media(min-width: 774px){
+  .tabs.tabs--line{
+    display: inline-block;
+    margin-bottom: -30px;
+  }
+}
 </style>
