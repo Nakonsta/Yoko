@@ -111,7 +111,7 @@ export default {
         width: 40px;
         height: 40px;
         background-color: $colorTurquoise !important;
-		border-radius: 0px 6px 0px 0px;
+        border-radius: 0px 6px 0px 0px;
 
         svg {
             width: 20px;
@@ -152,7 +152,7 @@ export default {
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
         white-space: nowrap;
 
         @include mq($until: tablet) {
@@ -165,7 +165,7 @@ export default {
 
         font-family: Roboto;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
     }
 }
 </style>

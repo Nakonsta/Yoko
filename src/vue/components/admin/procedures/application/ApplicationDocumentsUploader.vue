@@ -238,7 +238,7 @@ export default {
 
         width: 100%;
         height: 278px;
-        border: 1px dashed $borderColor;
+        border: 1px dashed $colorBdr;
         border-radius: 8px;
 
         span {
@@ -247,7 +247,7 @@ export default {
             font-family: Roboto;
             font-weight: 500;
             font-size: rem(14px);
-            color: $lightcolorText;
+            color: $colorTextLight;
 
             @include mq($until: tablet) {
                 display: none;
@@ -292,7 +292,7 @@ export default {
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(24px);
-        color: $lightcolorText;
+        color: $colorTextLight;
 
         @include mq($until: tablet) {
             display: none;

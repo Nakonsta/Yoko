@@ -1,12 +1,20 @@
 <template>
     <div class="application__section">
         <application-title title="Дополнительные документы" subtitle margin="0 0 11px 0"></application-title>
-		<application-documents-uploader :documents="application.documents.additional_documents" @uploaded="$emit('on-upload', $event)" @remove="$emit('on-upload', $event)"></application-documents-uploader>
+        <application-documents-uploader
+            :documents="application.documents.additional_documents"
+            @uploaded="$emit('on-upload', $event)"
+            @remove="$emit('on-upload', $event)"
+        ></application-documents-uploader>
         <div class="application__section-title">
             Дополнительная информация
         </div>
         <div class="application__textarea">
-            <textarea placeholder="Введите текст" :value="application.description" @input="$emit('on-input', $event.target.value)"></textarea>
+            <textarea
+                placeholder="Введите текст"
+                :value="application.description"
+                @input="$emit('on-input', $event.target.value)"
+            ></textarea>
             <!-- <application-tooltip></application-tooltip> -->
         </div>
         <div class="divider divider--no-margin"></div>
@@ -32,7 +40,7 @@ export default {
             type: Object,
             required: true
         }
-    },
+    }
 }
 </script>
 <style lang="scss">
@@ -52,7 +60,7 @@ export default {
             height: 72px;
             margin-top: 4px;
             padding: rem(14px) rem(40px) rem(14px) rem(20px);
-            border-color: $borderColor;
+            border-color: $colorBdr;
             border-radius: 4px;
             resize: none;
         }

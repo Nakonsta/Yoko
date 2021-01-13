@@ -111,7 +111,7 @@ export default {
         span {
             font-family: Helvetica Neue;
             font-size: rem(14px);
-            color: $lightcolorText;
+            color: $colorTextLight;
         }
 
         @media screen and (max-width: 510px) {

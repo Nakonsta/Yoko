@@ -144,7 +144,7 @@ export default {
     &__amount {
         font-family: Roboto;
         font-size: rem(14px);
-        color: $lightcolorText;
+        color: $colorTextLight;
 
         margin-bottom: rem(16px);
 

@@ -35,7 +35,7 @@ export default {
 
     width: 20px;
     height: 20px;
-    border: 1px solid $borderColor;
+    border: 1px solid $colorBdr;
     border-radius: 100%;
     cursor: pointer;
 
@@ -55,7 +55,7 @@ export default {
         z-index: 3;
 
         visibility: hidden;
-        background-color: $lightcolorText;
+        background-color: $colorTextLight;
         padding: rem(8px) rem(20px);
         border-radius: 4px;
         opacity: 0;

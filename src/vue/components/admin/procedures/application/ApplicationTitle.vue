@@ -47,7 +47,7 @@ export default {
     font-family: Roboto;
     font-weight: bold;
     font-size: rem(24px);
-    color: $lightcolorText;
+    color: $colorTextLight;
 
     &--subtitle {
         font-family: Roboto;
