@@ -329,6 +329,19 @@ export default {
                 text-overflow: ellipsis;
             }
         }
+        &-attach-block {
+            padding-bottom: 2rem;
+        }
+    }
+
+    .tender-item__protocols {
+        .file-listing {
+            padding-top: 0.8rem;
+            margin-left: 0;
+            &__group {
+                margin-top: 1.5rem;
+            }
+        }
     }
 
     .tender-item__file {
