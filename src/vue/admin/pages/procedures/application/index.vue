@@ -186,6 +186,11 @@ export default {
             }
         }
     },
+    watch: {
+        $route(to, from) {
+            this.init()
+        }
+    },
     methods: {
         getProcedureDetails() {
             return this.fetchTenderItem(this.id).then(({ data }) => {
@@ -233,7 +238,6 @@ export default {
             this.sendProcedureApplicationDraft(this.id, this.createApplicationObject())
                 .then(({ data }) => {
                     this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
-                    window.location.reload()
                 })
                 .finally(() => window.closeLoader())
         },
@@ -244,7 +248,6 @@ export default {
                     this.sendProcedureApplication(this.appId)
                         .then(({ data }) => {
                             this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
-                            window.location.reload()
                         })
                         .finally(() => window.closeLoader())
                 })
@@ -252,7 +255,6 @@ export default {
                 this.sendProcedureApplication(this.appId)
                     .then(({ data }) => {
                         this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
-                        window.location.reload()
                     })
                     .finally(() => window.closeLoader())
             }
@@ -371,16 +373,19 @@ export default {
         },
         onCompanySelect(value) {
             this.procedure.selectedCompany = value
+        },
+        init() {
+            if (this.viewType.isCreate) {
+                this.loading = true
+                this.getProcedureDetails().finally(() => (this.loading = false))
+            } else {
+                this.loading = true
+                this.getApplication().finally(() => (this.loading = false))
+            }
         }
     },
     created() {
-        if (this.viewType.isCreate) {
-            this.loading = true
-            this.getProcedureDetails().finally(() => (this.loading = false))
-        } else {
-            this.loading = true
-            this.getApplication().finally(() => (this.loading = false))
-        }
+        this.init()
     }
 }
 </script>
