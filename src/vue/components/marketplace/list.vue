@@ -133,7 +133,7 @@
                             </svg>
                         </a>
                         <div class="procedures__item-buttons">
-                            <a href="javascript:{}" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'">Отправить заявку</a>
+                            <router-link :to="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'">Отправить заявку</router-link>
                             <a :href="`/platform/${item.id}`" class="btn btn--bdr procedures__item-request">Подробнее</a>
                         </div>
                     </div>

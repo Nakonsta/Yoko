@@ -260,6 +260,28 @@ export default {
                 { cancelToken: this.CancelTokens.proceduresCancelToken.token },
             );
         },
+        fetchProcedureApplications(id, page = 1) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/applications/list`,
+                {page},
+                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+            );
+        },
+        sendProcedureApplicationDraft(id, data) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/participation-applications`,
+                data
+            )
+        },
+        sendProcedureApplication(id) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}/status`,
+                { status: 'submitted' }
+            )
+        },
+        fetchProcedureApplication(id) {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}`)
+        },
         addMarketplaceProcedureMark(id, mark) {
             const fData = new FormData();
             fData.append('mark_code', mark);

@@ -1,7 +1,7 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import store from "@/store";
-Vue.use(VueRouter);
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import store from '@/store'
+Vue.use(VueRouter)
 
 import AccreditationsDetail from '../pages/accreditations/details.vue'
 import Catalog from '../pages/catalog/items.vue'
@@ -10,6 +10,7 @@ import CatalogList from '../pages/catalog/positions.vue'
 import CatalogDetail from '../pages/catalog/details.vue'
 import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
+import ProcedureApplicationDetails from '../pages/procedures/application/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
 import User from '../pages/user/user.vue'
 import page404 from '../pages/page404.vue'
@@ -17,16 +18,16 @@ import CompanyInfo from '../pages/company/info.vue';
 
 const routes = [
   {
-    path: "/personal",
+    path: '/personal',
     component: { template: '<div>Главная</div>' },
   },
   {
-    path: "/personal/accreditations",
-    component:  Accreditations,
+    path: '/personal/accreditations',
+    component: Accreditations,
   },
   {
-    path: "/personal/accreditations/:id",
-    component: AccreditationsDetail
+    path: '/personal/accreditations/:id',
+    component: AccreditationsDetail,
   },
   {
     path: '/personal/company',
@@ -58,37 +59,41 @@ const routes = [
     meta: { role: 'buyer' },
   },
   {
-    path: "/personal/catalog",
+    path: '/personal/catalog',
     component:  Catalog,
     meta: { role: 'contractor' },
   },
   {
-    path: "/personal/catalog/new",
-    component:  CatalogNew,
+    path: '/personal/catalog/new',
+    component: CatalogNew,
     meta: { role: 'contractor' },
   },
   {
-    path: "/personal/user",
+    path: '/personal/procedures/:id/applications/:appid',
+    component: ProcedureApplicationDetails,
+  },
+  {
+    path: '/personal/user',
     component:  User,
   },
   {
-    path: "/personal/catalog/positions",
+    path: '/personal/catalog/positions',
     component:  CatalogList,
   },
   {
-    path: "/personal/catalog/positions/:id",
+    path: '/personal/catalog/positions/:id',
     component: CatalogDetail,
   },
   {
-    path: "*",
-    component:  page404
+    path: '*',
+    component: page404,
   },
-];
+]
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   routes,
-});
+})
 
 router.beforeEach((to, from, next) => {
   const userRole = store.getters.userRole
@@ -117,7 +122,6 @@ router.beforeEach((to, from, next) => {
             }
             break
         }
-
       } else {
         next('/personal')
       }
@@ -134,4 +138,4 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-export default router;
+export default router
