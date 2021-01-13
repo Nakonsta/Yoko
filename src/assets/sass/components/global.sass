@@ -1,4 +1,5 @@
 @import "../variables/variables"
+@import "../mixins/fluid-mixin"
 @import "../mixins/mq"
 
 @font-face
@@ -14,6 +15,10 @@ body
     line-height: 1.6
     &.lock-popup
         overflow: hidden
+
+    @media print
+        overflow: initial !important
+        font-size: 14px
 
     //@include mq($until: widescreen)
     //    font-size: 17px
@@ -31,9 +36,18 @@ body
 a
     text-decoration: none
     transition: color $animation
+    @media print
+        text-decoration: none !important
+        color: $colorText !important
+        svg
+            fill: $colorText !important
 
 .container
     padding: 0 8%
+
+    @media print
+        //padding: 0 rem(10px) !important
+        padding: 0 !important
 
     @include mq($until: large)
         padding: 0 4%

@@ -180,6 +180,9 @@ export default {
         sendCatalogMarksize(data) {
             return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/marksize/`, data);
         },
+        fetchCatalogMarksizeProperties() {
+            return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/service/property_cable_type/`)
+        },
         fetchQuotes(quote, date_start, date_end, mode) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/quotes`, {
                 params: {
@@ -256,6 +259,28 @@ export default {
                 },
                 { cancelToken: this.CancelTokens.proceduresCancelToken.token },
             );
+        },
+        fetchProcedureApplications(id, page = 1) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/applications/list`,
+                {page},
+                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+            );
+        },
+        sendProcedureApplicationDraft(id, data) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/participation-applications`,
+                data
+            )
+        },
+        sendProcedureApplication(id) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}/status`,
+                { status: 'submitted' }
+            )
+        },
+        fetchProcedureApplication(id) {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}`)
         },
         addMarketplaceProcedureMark(id, mark) {
             const fData = new FormData();
@@ -449,6 +474,10 @@ export default {
         },
         sendMarketplaceAnswer(id, question_id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q/${question_id}/a`, data)
+        },
+
+        sendProcedureProtocols(id, data) {
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data)
         },
         fetchApplicationsList(props) {
           const defaultProps = {

@@ -1,6 +1,16 @@
 <template>
     <div class="tender-item__menu">
-        <div class="tender-item__menu-inner">
+        <!-- <div v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)" class="tender-item__menu-inner"> -->
+        <div v-if="true" class="tender-item__menu-inner">    
+            <div
+                    v-for="(item, key) in buyerMenu"
+                    :key="key"
+                    class="tender-item__menu-item"
+            >
+                <span @click="applyBuyerMenuAction($event, item.action)" class="tender-item__menu-link">{{ item.name }}</span>
+            </div>
+        </div>
+        <div v-else class="tender-item__menu-inner">
             <div
                     v-for="item in tabs"
                     :key="item.url"
@@ -27,7 +37,16 @@ export default {
             default: () => [],
             required: true,
         },
+        buyerMenu: {
+            type: Array,
+            default: () => [],
+            required: true,
+        },
         tenderItemData: {
+            type: Object,
+            required: true,
+        },
+        company: {
             type: Object,
             required: true,
         },
@@ -37,6 +56,15 @@ export default {
         changeActiveTab(evt, hash) {
             evt.preventDefault();
             this.$emit('changeTab', evt, hash, true);
+        },
+        applyBuyerMenuAction(evt, action) {
+            if (action === 'edit') {
+                const href = '/personal/procedures/' + this.tenderItemData.id
+                document.location.href = href
+            }
+            if (action === 'attach-protocols') {
+                this.changeActiveTab(evt, '#protocols')
+            }
         }
     }
 }
@@ -53,9 +81,19 @@ export default {
         flex-shrink: 0;
         padding: rem(20px) rem(32px);
         background-color: #fff;
+        @include mq($until: widescreen) {
+            width: 296px;
+        }
+        @include mq($until: desktop) {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        @media print {
+            display: none !important;
+        }
         &-item {
             padding: rem(12px) 0;
-            border-bottom: 1px solid $borderColor;
+            border-bottom: 1px solid $colorBdr;
             &:last-child {
                 border-bottom: none;
             }
@@ -66,25 +104,12 @@ export default {
         &-link {
             font-size: rem(14px);
             line-height: 160%;
-            color: $lightcolorText;
+            color: $colorTextLight;
             cursor: pointer;
             &:hover,
             &:focus {
                 color: $colorTurquoise;
             }
-        }
-    }
-
-    @include mq($until: widescreen) {
-        .tender-item__menu {
-            width: 296px;
-        }
-    }
-
-    @include mq($until: desktop) {
-        .tender-item__menu {
-            width: 100%;
-            margin-bottom: 2rem;
         }
     }
 </style>

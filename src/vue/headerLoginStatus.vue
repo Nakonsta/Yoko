@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="no-print">
         <div v-if="$store.state.auth.loggedIn" class="switch-box-container switch-box-container--mobile">
             <span class="switch-box-false-name">
                 Заказчик
@@ -150,7 +150,7 @@
 
     .user-info {
         display: flex;
-        font-family: "Gilroy-SemiBold", sans-serif;
+        font-family: $fontGilroy;
         align-items: center;
         @media(max-width: 1588px) {
             display: block;

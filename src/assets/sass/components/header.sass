@@ -1,3 +1,7 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
 body:not(.page-main)
   .header__top
     @include mq($until: tablet)
@@ -6,6 +10,16 @@ body:not(.page-main)
 .header
   position: relative
   z-index: 4
+  @media print
+    display: none
+    border-bottom: 1px solid $colorBdr
+    padding: rem(10px) 0
+    line-height: 1
+    background: $colorWhite
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
   .container
     display: flex
   &__nav
@@ -53,6 +67,8 @@ body:not(.page-main)
     font-size: rem(12px)
     border-bottom: 1px solid #F4F4F4
     padding: rem(6px) 0
+    @media print
+      display: none !important
     @media(max-width: 1220px)
       padding: rem(8px) 0
     @include mq($until: desktop)
@@ -62,20 +78,36 @@ body:not(.page-main)
   &__middle
     padding-bottom: rem(24px)
     padding-top: rem(30px)
+    @media print
+      padding: 0
     .container
       justify-content: space-between
       align-items: center
+      @media print
+        display: block
+        &::after
+          content: ''
+          display: table
+          clear: both
     @include mq($until: tablet)
       display: none
+    @media print
+      display: block
   &__bottom
     @include mq($until: tablet)
       display: none
 
   &__logo
+    @media print
+      float: left
     svg
       display: block
       width: rem(201px)
       height: rem(60px)
+      @media print
+        margin: rem(-5px) 0
+        width: rem(100px)
+        height: rem(30px)
 
   &__rate
     display: flex
@@ -162,7 +194,9 @@ body:not(.page-main)
     display: flex
     @media(max-width: 1220px)
       flex-direction: column
-
+    @media print
+      float: right
+      flex-direction: row
 
   &__phone
     margin-right: rem(63px)
@@ -177,10 +211,14 @@ body:not(.page-main)
     font-size: rem(24px)
     color: $colorTurquoise
     font-family: $fontGilroy
+    @include mq($until: widescreen)
+      font-size: rem(21px)
+    @media print
+      color: $colorText !important
+      font-size: rem(20px)
+      line-height: 1
     &:hover
       color: $colorTurquoiseHover
-    @include mq($until: widescreen)
-     font-size: rem(21px)
 
   &__phone-sity
     font-size: rem(12px)
@@ -227,3 +265,6 @@ body:not(.page-main)
       height: rem(40px)
       min-width: rem(126px)
 
+  &__bottom
+    @media print
+      display: none !important

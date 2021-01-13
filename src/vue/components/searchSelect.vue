@@ -145,7 +145,7 @@
             width: rem(200px);
             height: rem(52px);
             cursor: pointer;
-            font-family: "Gilroy-SemiBold", sans-serif;
+            font-family: $fontGilroy;
             @media(max-width: 600px) {
                 width: rem(52px) !important;
             }

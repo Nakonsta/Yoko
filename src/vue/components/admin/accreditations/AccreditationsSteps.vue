@@ -151,7 +151,7 @@ export default {
         z-index: 3;
 
         visibility: hidden;
-        background-color: $lightcolorText;
+        background-color: $colorTextLight;
         padding: rem(5px) rem(20px);
         border-radius: 4px;
         opacity: 0;

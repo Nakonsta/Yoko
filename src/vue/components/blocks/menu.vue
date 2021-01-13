@@ -165,10 +165,24 @@ export default {
             subItems: [],
           },
           {
+            icon: 'mdi-home',
+            title: 'Профиль организации',
+            to: '/personal/company',
+            order: 1,
+            availableAll: true, // ключ для пунктов меню, которые доступны пользователю без аккредитации компаний
+            isActive: true,
+            subItems: [
+              {
+                title: 'Общая информация',
+                to: '/personal/company/info',
+              },
+            ],
+          },
+          {
             icon: 'mdi-buffer',
             title: 'Торговые процедуры',
             to: '/personal/procedures',
-            order: 1,
+            order: 2,
             isActive: true,
             subItems: [
               {
@@ -189,7 +203,7 @@ export default {
             icon: 'mdi-buffer',
             title: 'Заявки на аккредитацию',
             to: '/personal/accreditations',
-            order: 1,
+            order: 3,
             availableAll: true,
             isActive: true,
             subItems: [
@@ -207,7 +221,7 @@ export default {
             icon: 'mdi-home',
             title: 'Мои данные',
             to: '/personal/user',
-            order: 2,
+            order: 4,
             isActive: true,
             subItems: [],
           }
@@ -223,10 +237,24 @@ export default {
             subItems: [],
           },
           {
+            icon: 'mdi-home',
+            title: 'Профиль организации',
+            to: '/personal/company',
+            order: 1,
+            availableAll: true, // ключ для пунктов меню, которые доступны пользователю без аккредитации компаний
+            isActive: true,
+            subItems: [
+              {
+                title: 'Общая информация',
+                to: '/personal/company/info',
+              },
+            ],
+          },
+          {
             icon: 'mdi-buffer',
             title: 'Каталог',
             to: '/personal/catalog',
-            order: 1,
+            order: 2,
             isActive: true,
             subItems: [
               {
@@ -247,7 +275,7 @@ export default {
             icon: 'mdi-buffer',
             title: 'Торговые процедуры',
             to: '/personal/procedures',
-            order: 1,
+            order: 3,
             isActive: true,
             subItems: [
               {
@@ -264,7 +292,7 @@ export default {
             icon: 'mdi-buffer',
             title: 'Заявки на аккредитацию',
             to: '/personal/accreditations',
-            order: 1,
+            order: 4,
             availableAll: true,
             isActive: true,
             subItems: [
@@ -282,7 +310,7 @@ export default {
             icon: 'mdi-home',
             title: 'Мои данные',
             to: '/personal/user',
-            order: 2,
+            order: 5,
             isActive: true,
             subItems: [],
           }

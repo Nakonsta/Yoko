@@ -17,9 +17,10 @@
           :disabled="disabled"
           @input="input"
           :placeholder="placeholder"
-          @keydown="countSymbols($event); calcAutoheight;"
+          @keydown="countSymbols($event); calcAutoheight"
           @keyup="calcAutoheight"
           @change="calcAutoheight"
+          @paste="countPaste($event)"
           ref="field"
       ></textarea>
       <tooltip v-if="!!content" :content="content" />
@@ -125,12 +126,25 @@ export default {
   methods: {
     countSymbols: function(evt) {
       if( this.counter === false ) return;
+      console.log(evt.target.value.length);
       if ( evt.target.value.length >= this.counter ) {
-        evt.target.value = evt.target.value.substring(0,max);
-        if (evt.keyCode >= 48 && evt.keyCode <= 90) {
-          evt.preventDefault();
-        }
+        this.innerValue = evt.target.value.substring(0, this.counter);
+        let key = evt.charCode || evt.keyCode || 0;
+        return (
+                key === 8 ||
+                key === 9 ||
+                key === 13 ||
+                key === 46 ||
+                key === 110 ||
+                key === 190 ||
+                (key >= 35 && key <= 40));
       }
+    },
+    countPaste: function(evt) {
+      let clipboardData = evt.clipboardData || window.clipboardData,
+          pastedData = clipboardData.getData('Text');
+      this.$nextTick(() => this.innerValue = pastedData.substring(0, this.counter));
+      // this.innerValue = pastedData.substring(0, this.counter);
     },
     initAutoheight() {
       if (this.autoheight && !this.pseudo) {
