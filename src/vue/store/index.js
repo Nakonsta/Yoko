@@ -84,6 +84,13 @@ const store = new Vuex.Store({
                 }
                 api.methods.fetchUser()
                     .then((response) => {
+                        if (response.data.data.role === 'OPERATOR') {
+                            throw {
+                                response:{
+                                    status: 401,
+                                }
+                            }
+                        }
                         state.token = token
                         state.auth.user = response.data.data
                         state.auth.loggedIn = true

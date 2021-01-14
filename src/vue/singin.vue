@@ -59,19 +59,24 @@
                     }
                     window.openLoader()
                     this.authSignin(this.login, this.password)
-                        .then((data) => {
-                            const user = data.data.data.user;
-                            const token = data.data.data.token;
+                        .then((response) => {
+                            console.log(response)
+                            if (response.data.data.user.role === 'OPERATOR') {
+                                throw {
+                                    response: {
+                                      status: 401,
+                                    }
+                                }
+                            }
+                            const user = response.data.data.user;
+                            const token = response.data.data.token;
                             this.authorizationMethod(user, token, {
-                              rememberMe: this.rememberMe,
-                              role: this.type
+                                rememberMe: this.rememberMe,
+                                role: this.type
                             })
                         })
-                        .catch((response) => {
-                            if (
-                                response &&
-                                response.message === 'Request failed with status code 401'
-                            ) {
+                        .catch((e) => {
+                            if (e.response.status === 401 || e.response.data.data.role === 'OPERATOR') {
                                 this.error = 'Введен неверный логин или пароль';
                             }
                             window.closeLoader()
