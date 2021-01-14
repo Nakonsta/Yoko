@@ -17,7 +17,7 @@
                 Дата окончания подачи заявок:
             </div>
             <div class="application__section-text">
-                {{ procedure.purchase_term.application_end_date }}
+                {{ formatDate(procedure.purchase_term.application_end_date) }}
             </div>
         </div>
         <div class="application__section-row">
@@ -64,6 +64,7 @@
     </div>
 </template>
 <script>
+import formatDate from '../../../../../helpers/formatDate'
 import ApplicationCompanyPopup from '../ApplicationCompanyPopup'
 import ApplicationTitle from '../ApplicationTitle'
 export default {
@@ -72,6 +73,7 @@ export default {
         ApplicationTitle,
         ApplicationCompanyPopup
     },
+    mixins: [formatDate],
     props: {
         procedure: {
             type: Object,
