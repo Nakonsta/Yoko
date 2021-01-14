@@ -96,7 +96,8 @@ export default {
         return {
             procedure: {
                 company: {},
-                selectedCompany: {}
+                selectedCompany: {},
+                tender_trading_type: ''
             },
             application: {
                 accepted: 1,
@@ -108,6 +109,7 @@ export default {
                     additional_documents: [],
                     lots: []
                 },
+                status: '',
                 products: [],
                 autoBot: false,
                 agreement: false
@@ -126,8 +128,8 @@ export default {
         viewType() {
             return {
                 isCreate: this.appId === 'new',
-                isAuction: false,
-                isDraft: false
+                isAuction: this.procedure.tender_trading_type == 'auction',
+                isDraft: this.application.status === 'draft'
             }
         },
         tradingType() {
@@ -197,8 +199,6 @@ export default {
                 this.procedure = Object.assign(this.procedure, data.data)
                 this.createLots()
 
-                this.viewType.isAuction = this.procedure.tender_trading_type == 'auction'
-
                 return this.fetchCompanyByInn(this.procedure.inn).then(({ data }) => {
                     this.procedure.company = data.data
                 })
@@ -212,9 +212,6 @@ export default {
                 delete this.application.procedure
 
                 this.createLots()
-
-                this.viewType.isAuction = this.procedure.tender_trading_type == 'auction'
-                this.viewType.isDraft = this.application.status === 'draft'
 
                 if (data?.data?.documents?.length ?? false) {
                     this.application.documents.forEach((document, i) => {
@@ -329,9 +326,9 @@ export default {
                         ) {
                             product.product_id = product.id
                             product.amount_per_position = parseFloat(
-                                parseInt(product.quantity ?? 1, 10) *
-                                    parseFloat(product.price_for_one ?? 1, 10) *
-                                    (1 + parseInt(product.vat ?? 1, 10) / 100)
+                                parseInt(product.quantity ?? 0, 10) *
+                                    parseFloat(product.price_for_one ?? 0, 10) *
+                                    (1 + parseInt(product.vat ?? 0, 10) / 100)
                             ).toFixed(2)
 
                             lot.products.push(product)
@@ -348,9 +345,9 @@ export default {
                             product.country = lot.country
 
                             product.amount_per_position = parseFloat(
-                                parseInt(product.quantity ?? 1, 10) *
-                                    parseFloat(product.price_for_one ?? 1, 10) *
-                                    (1 + parseInt(product.vat ?? 1, 10) / 100)
+                                parseInt(product.quantity ?? 0, 10) *
+                                    parseFloat(product.price_for_one ?? 0, 10) *
+                                    (1 + parseInt(product.vat ?? 0, 10) / 100)
                             ).toFixed(2)
 
                             lot.products.push(product)
@@ -400,6 +397,20 @@ export default {
     background-color: #fff;
     border-radius: 6px;
     min-height: 300px;
+
+    *::-webkit-scrollbar {
+        background-color: transparent;
+        border-radius: 0;
+        height: 4px;
+        width: 4px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: $colorTurquoise;
+        width: 4px;
+        height: 4px;
+        border-radius: 4px;
+    }
 
     @include mq($until: desktop) {
         padding: rem(80px) rem(40px) rem(40px);

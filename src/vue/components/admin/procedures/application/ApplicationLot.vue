@@ -104,7 +104,29 @@ export default {
                 return product
             })
 
-            // this.lot
+            this.lot.amount = parseFloat(
+                this.lot.products.reduce((amount, product) => {
+                    return (
+                        amount +
+                        parseFloat(
+                            parseInt(product.quantity ?? 0, 10) * parseFloat(product.price_for_one ?? 0, 10),
+                            10
+                        )
+                    )
+                }, 0),
+                10
+            )
+                .toFixed(2)
+                .replace('.00', '')
+
+            this.lot.amountWithVat = parseFloat(
+                this.lot.products.reduce((amountWithVat, product) => {
+                    return amountWithVat + parseFloat(product.amount_per_position, 10)
+                }, 0),
+                10
+            )
+                .toFixed(2)
+                .replace('.00', '')
         }
     }
 }
@@ -123,7 +145,6 @@ export default {
 
     width: 100%;
     margin-bottom: rem(32px);
-    // overflow: hidden;
 
     &:last-child {
         margin-bottom: 0;
@@ -145,6 +166,7 @@ export default {
 
         width: 100%;
         max-width: 320px;
+        transition: 0.3s;
 
         .application-checkbox {
             margin: 0;
