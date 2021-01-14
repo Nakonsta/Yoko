@@ -90,16 +90,7 @@ export default {
   data: () => ({ currentCompany: {} }),
   computed: {
     companies() {
-      const { 
-        userRole,
-        companyBuyer,
-        companyContractor,
-      } = this.$store.getters;
-
-      switch (userRole) {
-        case 'buyer': return companyBuyer;
-        case 'contractor': return companyContractor;
-      }
+      return this.$store.state.auth.user.companies;
     },
     companyData() {
       const { currentCompany: company } = this;
