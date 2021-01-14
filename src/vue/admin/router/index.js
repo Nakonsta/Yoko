@@ -13,6 +13,8 @@ import Procedure from '../pages/procedures/form/index.vue'
 import ProcedureApplicationDetails from '../pages/procedures/application/index.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
 import User from '../pages/user/user.vue'
+import Applications from '../pages/applications/applications.vue'
+import ApplicationsDrafts from '../pages/applications/drafts.vue'
 import page404 from '../pages/page404.vue'
 import CompanyInfo from '../pages/company/info.vue';
 
@@ -85,8 +87,16 @@ const routes = [
     component: CatalogDetail,
   },
   {
-    path: '*',
-    component: page404,
+    path: "/personal/applications/list",
+    component: Applications,
+  },
+  {
+    path: "/personal/applications/drafts",
+    component: ApplicationsDrafts,
+  },
+  {
+    path: "*",
+    component:  page404,
   },
 ]
 

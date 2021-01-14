@@ -468,14 +468,29 @@ export default {
                 {cancelToken: this.CancelTokens.companyCancelToken.token}
             );
         },
+
         sendMarketplaceQuestion(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q`, data)
         },
         sendMarketplaceAnswer(id, question_id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q/${question_id}/a`, data)
         },
+
         sendProcedureProtocols(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data)
         },
+        fetchApplicationsList(props) {
+          const defaultProps = {
+            draft: 0,
+            applicationStatus: 'submitted',
+            inn: [0],
+            procedureIds: 0,
+            publicationDate: "asc"
+        }
+        const fData = new FormData()
+        console.log(props)
+          return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
+          )
+        }        
     }
 }
