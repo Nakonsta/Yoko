@@ -11,6 +11,8 @@
             :allow-empty="false"
             :show-labels="false"
             :disabled="disabled"
+            open-direction="bottom"
+            :option-height="250"
             @select="handleSelect"
         >
             <template v-if="countries.length === 0" slot="noOptions">

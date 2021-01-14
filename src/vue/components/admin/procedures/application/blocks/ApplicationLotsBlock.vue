@@ -91,7 +91,11 @@ export default {
         amount() {
             return parseFloat(
                 this.lots.reduce((amount, lot) => {
-                    return amount + parseFloat(lot.amount)
+                    if (lot.checked) {
+                        return amount + parseFloat(lot.amount)
+                    } else {
+                        return amount
+                    }
                 }, 0)
             )
                 .toFixed(2)
@@ -100,7 +104,11 @@ export default {
         amountWithVat() {
             return parseFloat(
                 this.lots.reduce((amountWithVat, lot) => {
-                    return amountWithVat + parseFloat(lot.amountWithVat)
+                    if (lot.checked) {
+                        return amountWithVat + parseFloat(lot.amountWithVat)
+                    } else {
+                        return amountWithVat
+                    }
                 }, 0)
             )
                 .toFixed(2)
