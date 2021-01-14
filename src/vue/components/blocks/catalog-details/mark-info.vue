@@ -246,9 +246,6 @@
         width: 96px;
         margin: 0 rem(26px) 0 0;
 
-        ::v-deep .slick-list {
-          height: rem(400px) !important; // (2px + 96px + 2px) * 4
-        }
         /*::v-deep .slick-track {*/
         /*  &::before,*/
         /*  &::after {*/
@@ -259,6 +256,13 @@
 
       @include mq($until: tablet) {
         display: none;
+      }
+
+      ::v-deep .slick-list {
+        flex-grow: 1;
+        @include mq($from: widescreen) {
+          height: rem(400px) !important; // (2px + 96px + 2px) * 4
+        }
       }
 
       ::v-deep .slick-slide {

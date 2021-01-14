@@ -60,6 +60,28 @@
                                     @input="markChange"
                                     :loading="loadingMarks"
                             />
+                            <!-- todo ПОКА убрали т.к. характеристики МАРКИ НЕ зависят от типа кабеля -->
+                            <!--<div class="field__container">
+                                <span class="field__label">Тип кабеля</span>
+                                <Multiple
+                                        :max="5"
+                                        v-model="markForSend.property_cable_type"
+                                >
+                                    <template v-slot:default="field">
+                                        <SelectInput
+                                                parentClass="field__container"
+                                                validationName="тип кабеля"
+                                                placeholder="Выберите из списка"
+                                                rules=""
+                                                :isSingle="true"
+                                                :isArray="true"
+                                                :close="true"
+                                                :options="property_cable_type"
+                                                v-model="markForSend.property_cable_type[field.index]"
+                                        />
+                                    </template>
+                                </Multiple>
+                            </div>-->
                         </div>
                         <fieldset>
                             <div class="legend">Слои:</div>
@@ -118,6 +140,27 @@
                             <div class="legend">Характеристики:</div>
                             <div class="form__grid">
                                 <div class="field__container field__container--w50">
+                                    <span class="field__label">Тип кабеля</span>
+                                    <Multiple
+                                            :max="5"
+                                            v-model="markForSend.property_cable_type"
+                                    >
+                                        <template v-slot:default="field">
+                                            <SelectInput
+                                                    parentClass="field__container"
+                                                    validationName="тип кабеля"
+                                                    placeholder="Выберите из списка"
+                                                    rules="required"
+                                                    :isSingle="true"
+                                                    :isArray="true"
+                                                    :close="true"
+                                                    :options="property_cable_type"
+                                                    v-model="markForSend.property_cable_type[field.index]"
+                                            />
+                                        </template>
+                                    </Multiple>
+                                </div>
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_armor_options') !== -1">
                                     <span class="field__label">Варианты брони</span>
                                     <Multiple
                                             :max="5"
@@ -128,7 +171,7 @@
                                                     parentClass="field__container"
                                                     placeholder="Выберите из списка"
                                                     validationName="варианты брони"
-                                                    rules=""
+                                                    rules="required"
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -138,7 +181,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_screen_view') !== -1">
                                     <span class="field__label">Вид экрана</span>
                                     <Multiple
                                             :max="5"
@@ -149,14 +192,14 @@
                                                     parentClass="field__container"
                                                     validationName="вид экрана"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_screen_view[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_gost') !== -1">
                                     <span class="field__label">ГОСТ</span>
                                     <Multiple
                                             :max="5"
@@ -167,14 +210,14 @@
                                                     parentClass="field__container"
                                                     validationName="ГОСТ"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_gost[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_voltage_allowable') !== -1">
                                     <span class="field__label">Допустимое напряжение</span>
                                     <Multiple
                                             :max="5"
@@ -185,14 +228,14 @@
                                                     parentClass="field__container"
                                                     validationName="допустимое напряжение"
                                                     placeholder="Введите значение"
-                                                    rules=""
+                                                    rules="required"
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="markForSend.property_voltage_allowable[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_filling') !== -1">
                                     <span class="field__label">Заполнение</span>
                                     <Multiple
                                             :max="5"
@@ -203,7 +246,7 @@
                                                     parentClass="field__container"
                                                     placeholder="Выберите из списка"
                                                     validationName="заполнение"
-                                                    rules=""
+                                                    rules="required"
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -213,7 +256,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_protective_cover') !== -1">
                                     <span class="field__label">Защитный покров</span>
                                     <Multiple
                                             :max="5"
@@ -224,14 +267,14 @@
                                                     parentClass="field__container"
                                                     validationName="защитный покров"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_protective_cover[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_isolation') !== -1">
                                     <span class="field__label">Изоляция</span>
                                     <Multiple
                                             :max="5"
@@ -242,14 +285,14 @@
                                                     parentClass="field__container"
                                                     validationName="изоляция"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_isolation[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_execution') !== -1">
                                     <span class="field__label">Исполнение</span>
                                     <Multiple
                                             :max="5"
@@ -260,14 +303,14 @@
                                                     parentClass="field__container"
                                                     validationName="исполнение"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_execution[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_caliber') !== -1">
                                     <span class="field__label">Калибр (для импортных производителей) </span>
                                     <Multiple
                                             :max="5"
@@ -285,7 +328,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_material') !== -1">
                                     <span class="field__label">Материал</span>
                                     <Multiple
                                             :max="5"
@@ -295,14 +338,14 @@
                                                     parentClass="field__container"
                                                     validationName="материал"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_material[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_material_fibers') !== -1">
                                     <span class="field__label">Материал волокон</span>
                                     <Multiple
                                             :max="5"
@@ -313,14 +356,14 @@
                                                     parentClass="field__container"
                                                     validationName="материал волокон"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_material_fibers[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_material_shell') !== -1">
                                     <span class="field__label">Материал оболочки</span>
                                     <Multiple
                                             :max="5"
@@ -331,14 +374,14 @@
                                                     parentClass="field__container"
                                                     validationName="материал оболочки"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_material_shell[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_armor_availability') !== -1">
                                     <span class="field__label">Наличие брони</span>
                                     <Multiple
                                             :max="5"
@@ -349,7 +392,7 @@
                                                     parentClass="field__container"
                                                     validationName="наличие брони"
                                                     placeholder="Выберите из списка"
-                                                    rules=""
+                                                    rules="required"
                                                     :isSingle="true"
                                                     :isArray="true"
                                                     :close="true"
@@ -359,7 +402,7 @@
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_rated_operating_voltage') !== -1">
                                     <span class="field__label">Номинальное рабочее напряжение</span>
                                     <Multiple
                                             :max="5"
@@ -370,14 +413,14 @@
                                                     parentClass="field__container"
                                                     validationName="номинальное рабочее напряжение"
                                                     placeholder="Введите значение"
-                                                    rules=""
+                                                    rules="required"
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="markForSend.property_rated_operating_voltage[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_normative_document') !== -1">
                                     <span class="field__label">Нормативный документ</span>
                                     <Multiple
                                             :max="5"
@@ -388,14 +431,14 @@
                                                     parentClass="field__container"
                                                     validationName="нормативный документ"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_normative_document[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_use') !== -1">
                                     <span class="field__label">Применение</span>
                                     <Multiple
                                             :max="5"
@@ -406,14 +449,14 @@
                                                     parentClass="field__container"
                                                     validationName="применение"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_use[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_insulation_resistance') !== -1">
                                     <span class="field__label">Сопротивление изоляции</span>
                                     <Multiple
                                             :max="5"
@@ -424,14 +467,14 @@
                                                     parentClass="field__container"
                                                     validationName="сопротивление изоляции"
                                                     placeholder="Введите значение"
-                                                    rules=""
+                                                    rules="required"
                                                     inputmask="(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])"
                                                     v-model="markForSend.property_insulation_resistance[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_fiber_type') !== -1">
                                     <span class="field__label">Тип волокна</span>
                                     <Multiple
                                             :max="5"
@@ -442,14 +485,14 @@
                                                     parentClass="field__container"
                                                     validationName="тип волокна"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_fiber_type[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_veins_type') !== -1">
                                     <span class="field__label">Тип жил</span>
                                     <Multiple
                                             :max="5"
@@ -460,35 +503,14 @@
                                                     parentClass="field__container"
                                                     validationName="тип жил"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_veins_type[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
-                                    <span class="field__label">Тип кабеля</span>
-                                    <Multiple
-                                            :max="5"
-                                            v-model="markForSend.property_cable_type"
-                                    >
-                                        <template v-slot:default="field">
-                                            <SelectInput
-                                                    parentClass="field__container"
-                                                    validationName="тип кабеля"
-                                                    placeholder="Выберите из списка"
-                                                    rules=""
-                                                    :isSingle="true"
-                                                    :isArray="true"
-                                                    :close="true"
-                                                    :options="property_cable_type"
-                                                    v-model="markForSend.property_cable_type[field.index]"
-                                            />
-                                        </template>
-                                    </Multiple>
-                                </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_laying_conditions') !== -1">
                                     <span class="field__label">Условия прокладки</span>
                                     <Multiple
                                             :max="5"
@@ -499,14 +521,14 @@
                                                     parentClass="field__container"
                                                     validationName="условия прокладки"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_laying_conditions[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_color_protective_hose_outer_sheath') !== -1">
                                     <span class="field__label">Цвет защитного шланга/наружной оболочки</span>
                                     <Multiple
                                             :max="5"
@@ -517,14 +539,14 @@
                                                     parentClass="field__container"
                                                     validationName="цвет защитного шланга/наружной оболочки"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_color_protective_hose_outer_sheath[field.index]"
                                             />
                                         </template>
                                     </Multiple>
                                 </div>
-                                <div class="field__container field__container--w50">
+                                <div class="field__container field__container--w50" v-if="!properties.length || properties.indexOf('property_central_element') !== -1">
                                     <span class="field__label">Центральный элемент</span>
                                     <Multiple
                                             :max="5"
@@ -535,7 +557,7 @@
                                                     parentClass="field__container"
                                                     validationName="центральный элемент"
                                                     placeholder="Введите текст"
-                                                    rules=""
+                                                    rules="required"
                                                     :maxlength="50"
                                                     v-model="markForSend.property_central_element[field.index]"
                                             />
@@ -1896,6 +1918,9 @@
             this.loadProperties();
         },
         watch: {
+            'markForSend.property_cable_type': function(cable_type) {
+                this.getProperties(cable_type);
+            },
             markImport: function (file) {
                 this.importFile(file);
             },
@@ -1916,11 +1941,15 @@
                 this.view = 'form'; // по умолчанию - вид для заполнения формы
                 this.type = selectedType.id;
             },
-            getProperties: function(mark) {
+            getProperties: function(cable_types) {
                 let properties = [];
-                for (let i=0; i<mark.property_cable_type.length; i++ ) {
-                    properties = properties.concat(this.allProperties.required[mark.property_cable_type[i]]);
-                    properties = properties.filter((item, pos) => properties.indexOf(item) === pos);
+                if (this.type.id === 'marksize') { // todo ПОКА добавили т.к. характеристики МАРКИ НЕ зависят от типа кабеля
+                    for (let i = 0; i < cable_types.length; i++) {
+                        if (cable_types[i].length) {
+                            properties = properties.concat(this.allProperties.required[cable_types[i]]);
+                            properties = properties.filter((item, pos) => properties.indexOf(item) === pos);
+                        }
+                    }
                 }
                 this.properties = properties;
             },
@@ -1945,7 +1974,7 @@
             markSelect: function(selectedMark, id) {
                 this.marksizeForSend.mark = selectedMark.name;
                 this.marksizeForSend.type = selectedMark.property_cable_type && selectedMark.property_cable_type.length ? selectedMark.property_cable_type.join(', ') : '';
-                this.getProperties(selectedMark);
+                this.getProperties(selectedMark.property_cable_type);
             },
             markSearch: function(q) {
                 clearInterval(this.loadingMarksCounter);
@@ -2034,8 +2063,16 @@
                                 fData.documents.guarantee_letters.splice(i, 1);
                             }
                         }
+                        for (const key in fData) {
+                            // удаляем ненужные для типа кабеля характеристики
+                            if (this.properties.length) {
+                                if (fData.hasOwnProperty(key) && key.indexOf('property_') === 0 && this.properties.indexOf(key) === -1) {
+                                    delete fData[key];
+                                }
+                            }
+                        }
+                        const formDataObj = this.objectToFormData(fData);
                         if( this.type.id === 'mark' ) {
-                            const formDataObj = this.objectToFormData(fData);
                             this.sendCatalogMark(formDataObj)
                                 .then(() => {
                                     window.closeLoader();
@@ -2047,13 +2084,6 @@
                                     window.notificationError('Ошибка сервера');
                                 });
                         } else {
-                            for (const key in fData) {
-                                // удаляем ненужные характеристики
-                                if (fData.hasOwnProperty(key) && key.indexOf('property_') === 0 && this.properties.indexOf(key) === -1) {
-                                    delete fData[key];
-                                }
-                            }
-                            const formDataObj = this.objectToFormData(fData);
                             this.sendCatalogMarksize(formDataObj)
                                 .then(() => {
                                     window.closeLoader();

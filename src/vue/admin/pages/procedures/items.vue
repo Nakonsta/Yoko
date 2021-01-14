@@ -89,8 +89,7 @@
                 loadingItems: true,
                 currentFilter: {},
                 currentOrder: {
-                    by: 'publication_date',
-                    direction: 'ASC',
+                    'publication_date': 'desc',
                 },
                 itemsTypes: [],
                 itemsFormats: [],
