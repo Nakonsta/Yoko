@@ -87,6 +87,7 @@ export default {
       width: rem(265px);
       margin-left: rem(20px);
       background: $colorWhite;
+      font-weight: 500;
       color: $colorText;
       padding-left: rem(5px);
       position: relative;

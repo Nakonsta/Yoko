@@ -94,7 +94,7 @@
                         <div class="procedures__item-status">{{ getTenderStatusName(item) }}</div>
                         <div class="procedures__item-btns">
                             <a href="javascript:{}" title="Распечатать" @click="printPage('/marketplace-detail.html?id='+item.id)"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                            <a href="javascript:{}" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
+                            <a href="/marketplace-detail.html#documents" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
                             <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
                             <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden', itemMarkExist(item, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
                                 <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
@@ -251,10 +251,10 @@
         data: function() {
             return {
                 expandAll: false,
-                sort: 'ASC',
+                sort: 'desc',
                 sortList: {
-                    'ASC': 'дате размещения (от новых к старым)',
-                    'DESC': 'дате размещения (от старых к новым)',
+                    'desc': 'дате размещения (от новых к старым)',
+                    'asc': 'дате размещения (от старых к новым)',
                 },
                 view: 'all',
                 viewList: {
@@ -304,8 +304,8 @@
                 this.items[index].isExpanded = !this.items[index].isExpanded;
             },
             sortItems(sortBy) {
-                this.currentOrder.by = 'publication_date';
-                this.currentOrder.direction = sortBy;
+                this.sort = sortBy;
+                this.currentOrder['publication_date'] = sortBy;
                 this.$emit('changeFilter');
             },
             viewItems(view) {
