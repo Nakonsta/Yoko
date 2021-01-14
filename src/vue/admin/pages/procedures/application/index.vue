@@ -366,6 +366,15 @@ export default {
                 }
             })
 
+            this.procedure.purchase_subject.start_price = parseFloat(
+                lots.reduce((amount, lot) => {
+                    return amount + parseFloat(lot.amountWithVat, 10)
+                }, 0),
+                10
+            )
+                .toFixed(2)
+                .replace('.00', '')
+
             this.lots = lots.slice()
         },
         onCompanySelect(value) {
