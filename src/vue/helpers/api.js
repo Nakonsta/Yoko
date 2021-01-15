@@ -479,18 +479,15 @@ export default {
         sendProcedureProtocols(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data)
         },
-        fetchApplicationsList(props) {
-          const defaultProps = {
-            draft: 0,
-            applicationStatus: 'submitted',
-            inn: [0],
-            procedureIds: 0,
-            publicationDate: "asc"
-        }
-        const fData = new FormData()
-        console.log(props)
-          return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
-          )
+        fetchApplicationsList(filter = null, page = 1) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
+                {
+                    ...filter,
+                    page,
+                },
+                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+            );
         }        
     }
 }

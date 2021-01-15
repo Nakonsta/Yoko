@@ -12,11 +12,11 @@
                 />
             </div>
             <div class="catalog__body">
-                <div class="tabs tabs--line" v-if="companies.length">
-                    <ul>
-                        <li v-for="company in companies" :key="company.id" :class="{active: company.inn === currentCompany.inn}"><a href="javascript:{}" @click="changeCompany($event, company)">{{ company.name }}</a></li>
-                    </ul>
-                </div>
+                <companiesTabs
+                        :companies="companies"
+                        :value="currentCompany"
+                        @change="changeCompany"
+                />
                 <div class="catalog__search">
                     <search
                             placeholder="Найти кабель"
@@ -55,6 +55,7 @@
 
 <script>
     import api from '../../../helpers/api'
+    import companiesTabs from "@/components/blocks/companiesTabs";
     import filterList from "../../../components/blocks/filter.vue";
     import catalogList from "../../../components/catalog/list.vue";
     import search from "../../../components/searchText.vue";
@@ -62,6 +63,7 @@
     export default {
         name: 'App',
         components: {
+            companiesTabs,
             filterList,
             catalogList,
             search,
@@ -74,7 +76,7 @@
                 loadingFilter: true,
                 loadingItems: true,
                 currentFilter: {},
-                currentCompany: null,
+                currentCompany: {},
                 filter: [],
                 filterKey: 0,
                 items: [],
@@ -121,8 +123,7 @@
                 this.cancelCatalogRequest()
                 this.getItems()
             },
-            changeCompany(evt, company) {
-                evt.preventDefault();
+            changeCompany(company) {
                 this.page = 1;
                 this.currentFilter = {};
                 this.currentCompany = company;

@@ -214,6 +214,43 @@ export default {
                 };
             }
             frame.setAttribute('src', url);
-        }
+        },
+        parseFilter(filter) {
+            const newFilter = {};
+            for (const keyC in filter) {
+                if (!Array.isArray(filter[keyC])) {
+                    newFilter[keyC] = filter[keyC];
+                } else {
+                    for (const key in filter[keyC]) {
+                        if (
+                            Array.isArray(filter[keyC][key])
+                                ? filter[keyC][key].length
+                                : filter[keyC][key]
+                        ) {
+                            if (newFilter[keyC]) {
+                                newFilter[keyC][key] = filter[keyC][key];
+                            } else {
+                                // newFilter[keyC] = {};
+                                // newFilter[keyC][key] = filter[keyC][key];
+                                newFilter[keyC] = [];
+                                newFilter[keyC].push(filter[keyC][key]);
+                            }
+                        }
+                    }
+                }
+            }
+            // Форматирование дат
+            if (newFilter.publication_date_from) {
+                newFilter.publication_date_from = this.formatDateForFilter(
+                    newFilter.publication_date_from,
+                );
+            }
+            if (newFilter.publication_date_to) {
+                newFilter.publication_date_to = this.formatDateForFilter(
+                    newFilter.publication_date_to,
+                );
+            }
+            return newFilter;
+        },
     }
 }
