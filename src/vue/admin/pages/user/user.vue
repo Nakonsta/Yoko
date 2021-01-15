@@ -97,7 +97,7 @@
                                     {{ userData.document.name }}
                                     </div>
                                 </div>
-                                <a class="file-listing__delete" fab dark x-small @click="removeFile(key)">
+                                <a class="file-listing__delete" fab dark x-small @click="removeFile()">
                                     <svg width="12" height="12" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2929 17.7071C16.6834 18.0976 17.3166 18.0976 17.7071 17.7071C18.0976 17.3166 18.0976 16.6834 17.7071 16.2929L12.4142 11L17.7071 5.70712C18.0976 5.31659 18.0976 4.68343 17.7071 4.2929C17.3166 3.90238 16.6834 3.90238 16.2929 4.2929L11 9.5858L5.70711 4.29289C5.31658 3.90237 4.68342 3.90237 4.29289 4.29289C3.90237 4.68342 3.90237 5.31658 4.29289 5.70711L9.5858 11L4.29289 16.2929C3.90237 16.6834 3.90237 17.3166 4.29289 17.7071C4.68342 18.0977 5.31658 18.0977 5.70711 17.7071L11 12.4142L16.2929 17.7071Z" fill="#31ACB8"/>
                                     </svg>
@@ -123,16 +123,12 @@
                             <span class="checkbox__body"></span>
                             <span class="checkbox__text">БН</span>
                         </label>
-                        <datepicker
-                            label="Срок действия"
-                            placeholder="Срок действия"
-                            :format="picker.format"
-                            :language="picker.locale"
-                            input-class="field"
-                            v-model="picker.start_date"
+                        <date-time
+                            v-model="userData.documentDate"
+                            label="Дата публикации"
+                            placeholder="Выберите дату"
                             class="user-data__file-term"
-                        >
-                        </datepicker>             
+                        ></date-time>           
                     </div>
                 </div>
                 <div class="form__grid">
@@ -203,6 +199,11 @@
                                     <input :class="{field: true, error: failed}" type="password" v-model="passwordChanging.newPassword">
                                     <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                                 </ValidationProvider>
+                                <ValidationProvider name="Новый пароль" v-slot="{ errors, failed }" :rules="{required: true, repeatPass: passwordChanging.newPassword}" tag="label" class="field__container">
+                                    <span class="field__label">Повторите пароль</span>
+                                    <input :class="{field: true, error: failed}" type="password" v-model="passwordChanging.newPasswordRepeate">
+                                    <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                                </ValidationProvider>
                                 <button type="submit" class="btn" :disabled="!valid">Отправить</button>
                             </form>
                         </ValidationObserver>
@@ -241,16 +242,17 @@
 <script>
 import InputInput from "../../../components/forms/Input";
 import PhoneCodeCountries from "../../../components/phoneCodeCountries.vue";
+import DateTime from '@/components/forms/DateTime.vue'
 import api from "../../../helpers/api";
 import functions from "@/helpers/functions";
-import {ru} from "vuejs-datepicker/src/locale";
 
 export default {
     name: 'User',
 
     components: {
         InputInput,
-        PhoneCodeCountries
+        PhoneCodeCountries,
+        DateTime
     },
 
     mixins: [api, functions],
@@ -269,6 +271,7 @@ export default {
                 document: null,
                 documentNumber: null,
                 documentWithoutNumber: false,
+                documentDate: null,
                 phone: null,
                 currentPhoneCode: {
                     id: 0,
@@ -286,19 +289,12 @@ export default {
             },
             passwordChanging: {
                 password: '',
-                newPassword: ''
+                newPassword: '',
+                newPasswordRepeate: ''
             },
             emailChanging: {
                 password: '',
                 newEmail: ''
-            },
-            picker: {
-                start_date: '',
-                end_date: '',
-                format: "yyyy-MM-dd",
-                locale: ru,
-                disabledFrom: null,
-                disabledTo: null,
             },
             lists: {
                 countries: [
@@ -346,28 +342,11 @@ export default {
             if (this.$store.state.auth.user.position) {
                 this.userData.position = this.$store.state.auth.user.position;
             }
-            // if (this.$store.state.auth.user.phone) {
-            //     const phone = this.$store.state.auth.user.phone;
-            //     const code = phone.slice(0, -10)
-            //     const number = phone.substr(phone.length - 10, 10)
-            //     this.userData.phone = number;
-            // }
-            // if (this.$store.state.auth.user.fax) {
-            //     const phone = this.$store.state.auth.user.fax;
-            //     const code = phone.slice(0, -10)
-            //     const number = phone.substr(phone.length - 10, 10)
-            //     this.userData.fax = number;
-            // }
         },
         getCountries() {
             this.fetchCountries()
                 .then((data) => {
                     this.lists.countries = data.data.data
-                    // this.setStartValueCountries(
-                    //     this.lists.countries.find((country) => {
-                    //         return country.phone_code === 7
-                    //     }),
-                    // )
                     this.fillUserPhone()
                     this.fillUserFax()
                 })
@@ -438,11 +417,12 @@ export default {
                 return;
             if (['application/pdf', 'image/jpeg', 'image/png'].includes(files[0].type)) {
               this.userData.document = files[0];
+              evt.target.value = '';
             } else {
               notificationError('Загружаемый файл должен быть форматов: pdf, jpeg, png')
             }
         },
-        removeFile(key) {
+        removeFile() {
             this.userData.document = null;
         },
         toggleDocumentNumeration() {
@@ -459,7 +439,7 @@ export default {
                 formData.position = this.userData.position
                 formData.doc = this.userData.document
                 formData.docNum = this.userData.documentNumber
-                formData.docDate = this.picker.start_date
+                formData.docDate = this.userData.documentDate
                 formData.phone = this.userData.phone
                 formData.fax = this.userData.fax
                 if (this.userData.newEmail) {
@@ -547,7 +527,6 @@ export default {
             }
             &-term {
                 width: 20%;
-                margin-top: 2.3rem;
             }
         }
         .field__label {
