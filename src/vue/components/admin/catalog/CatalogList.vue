@@ -38,7 +38,6 @@ export default {
 
         list-style: none;
         margin: 0;
-        margin-top: rem(20px);
         padding: 0;
     }
 }

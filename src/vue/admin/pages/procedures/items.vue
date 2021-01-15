@@ -17,11 +17,11 @@
             </div>
             <div class="marketplace__body">
                 <router-link to="/personal/procedures/new" class="btn" v-if="this.$store.getters.userRole === 'buyer'">Создать новую процедуру</router-link>
-                <div class="tabs tabs--line" v-if="companies.length">
-                    <ul>
-                        <li v-for="company in companies" :key="company.id" :class="{active: company.inn === currentCompany.inn}"><a href="javascript:{}" @click="changeCompany($event, company)">{{ company.name }}</a></li>
-                    </ul>
-                </div>
+                <companiesTabs
+                        :companies="companies"
+                        :value="currentCompany"
+                        @change="changeCompany"
+                />
                 <div class="marketplace__search">
                     <search
                             placeholder="Номер или название торговой процедуры"
@@ -62,19 +62,22 @@
 
 <script>
     import api from '../../../helpers/api';
+    import companiesTabs from "@/components/blocks/companiesTabs";
     import search from "../../../components/searchText.vue";
     import filterList from "../../../components/blocks/filter.vue";
     import marketplaceList from "../../../components/marketplace/list.vue";
     import formatDate from '../../../helpers/formatDate';
+    import functions from "@/helpers/functions";
 
     export default {
         name: 'Procedures',
         components: {
+            companiesTabs,
             search,
             filterList,
             marketplaceList,
         },
-        mixins: [api, formatDate],
+        mixins: [api, functions, formatDate],
         props: {
             type: {
                 default: 'list',
@@ -100,7 +103,7 @@
                 items: [],
                 totalItems: 0,
                 page: 1,
-                currentCompany: null,
+                currentCompany: {},
             }
         },
         computed: {
@@ -228,8 +231,7 @@
                 this.page = page;
                 this.getItems();
             },
-            changeCompany(evt, company) {
-                evt.preventDefault();
+            changeCompany(company) {
                 this.page = 1;
                 this.currentFilter = {};
                 this.currentCompany = company;
@@ -238,43 +240,6 @@
             changeFilter() {
                 this.page = 1;
                 this.getItems();
-            },
-            parseFilter() {
-                const newFilter = {};
-                for (const keyC in this.currentFilter) {
-                    if (!Array.isArray(this.currentFilter[keyC])) {
-                        newFilter[keyC] = this.currentFilter[keyC];
-                    } else {
-                        for (const key in this.currentFilter[keyC]) {
-                            if (
-                                Array.isArray(this.currentFilter[keyC][key])
-                                    ? this.currentFilter[keyC][key].length
-                                    : this.currentFilter[keyC][key]
-                            ) {
-                                if (newFilter[keyC]) {
-                                    newFilter[keyC][key] = this.currentFilter[keyC][key];
-                                } else {
-                                    // newFilter[keyC] = {};
-                                    // newFilter[keyC][key] = this.currentFilter[keyC][key];
-                                    newFilter[keyC] = [];
-                                    newFilter[keyC].push(this.currentFilter[keyC][key]);
-                                }
-                            }
-                        }
-                    }
-                }
-                // Форматирование дат
-                if (newFilter.publication_date_from) {
-                    newFilter.publication_date_from = this.formatDateForFilter(
-                        newFilter.publication_date_from,
-                    );
-                }
-                if (newFilter.publication_date_to) {
-                    newFilter.publication_date_to = this.formatDateForFilter(
-                        newFilter.publication_date_to,
-                    );
-                }
-                return newFilter;
             },
             getItems(search = null) {
                 this.cancelMarketplaceProceduresRequest();
@@ -307,7 +272,7 @@
                 let filter = {
                     draft: this.$store.getters.userRole === 'buyer' && this.type === 'drafts',
                     has_applications: this.$store.getters.userRole === 'contractor' && this.type === 'applications',
-                    filter: this.parseFilter(),
+                    filter: this.parseFilter(this.currentFilter),
                     order: this.currentOrder,
                 };
                 this.fetchMarketplaceProcedures(filter, this.page)

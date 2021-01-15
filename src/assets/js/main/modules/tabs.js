@@ -49,5 +49,5 @@ document.addEventListener('click', (e) => {
     if (!e.isTrusted || vw > 767 || el.tagName !== 'A' || !el.closest('li.active')) return;
     e.preventDefault();
     e.stopPropagation();
-    el.closest('.js-tabs').classList.toggle('hover');
+    el.closest('.tabs').classList.toggle('hover');
 });

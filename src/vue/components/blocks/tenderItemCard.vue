@@ -87,7 +87,7 @@
                         Начальная цена:
                     </div>
                     <div class="tender-item__start-price-num">
-                        {{ tenderItemData.purchase_subject.start_price }} &#8381;
+                        {{ formatPriceWithCurrency(tenderItemData.purchase_subject.start_price, tenderItemData.purchase_currency) }}
                     </div>
                 </div>
                 <div class="tender-item__dates">
@@ -149,6 +149,7 @@
 <script>
 import api from '../../helpers/api'
 import formatDate from "@/helpers/formatDate"
+import functions from "@/helpers/functions";
 import Actions from './actions.vue'
 import TenderItemProductCard from './tenderItemProductCard.vue'
 import popupCompanyContact from "@/components/blocks/popupCompanyContact"
@@ -179,8 +180,8 @@ export default {
         popupTenderDelivery,
     },
 
-    mixins: [api, formatDate],
-    
+    mixins: [api, formatDate, functions],
+
     data() {
         return {
             TENDER_TRADING_FORMATS_AND_TYPES: {

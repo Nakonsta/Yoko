@@ -290,6 +290,24 @@ export default {
           },
           {
             icon: 'mdi-buffer',
+            title: 'Заявки на участие в процедурах',
+            to: '/personal/applications',
+            order: 3,
+            availableAll: true,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Список заявок',
+                to: '/personal/applications'
+              },
+              {
+                title: 'Список заявок-черновиков',
+                to: '/personal/applications/drafts'
+              },
+            ]
+          },
+          {
+            icon: 'mdi-buffer',
             title: 'Заявки на аккредитацию',
             to: '/personal/accreditations',
             order: 4,

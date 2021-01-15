@@ -468,14 +468,26 @@ export default {
                 {cancelToken: this.CancelTokens.companyCancelToken.token}
             );
         },
+
         sendMarketplaceQuestion(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q`, data)
         },
         sendMarketplaceAnswer(id, question_id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q/${question_id}/a`, data)
         },
+
         sendProcedureProtocols(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data)
+        },
+        fetchApplicationsList(filter = null, page = 1) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
+                {
+                    ...filter,
+                    page,
+                },
+                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+            );
         },
         sendUserData(data) {
             return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data)

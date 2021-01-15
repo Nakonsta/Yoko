@@ -14,6 +14,7 @@ import ProcedureApplicationDetails from '../pages/procedures/applications/applic
 // import ProcedureApplications from '../pages/procedures/applications/applications.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
 import User from '../pages/user/user.vue'
+import Applications from '../pages/applications/items.vue'
 import page404 from '../pages/page404.vue'
 import CompanyInfo from '../pages/company/info.vue';
 
@@ -90,8 +91,19 @@ const routes = [
     component: CatalogDetail,
   },
   {
-    path: '*',
-    component: page404,
+    path: "/personal/applications",
+    component: Applications,
+    meta: { role: 'contractor' },
+  },
+  {
+    path: "/personal/applications/drafts",
+    component: Applications,
+    meta: { role: 'contractor' },
+    props: { type: 'drafts' },
+  },
+  {
+    path: "*",
+    component:  page404,
   },
 ]
 
