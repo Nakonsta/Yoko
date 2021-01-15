@@ -93,8 +93,8 @@
                     <div class="procedures__item-flex">
                         <div class="procedures__item-status">{{ getTenderStatusName(item) }}</div>
                         <div class="procedures__item-btns">
-                            <a href="javascript:{}" title="Распечатать" @click="printPage('/marketplace-detail.html?id='+item.id)"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                            <a href="/marketplace-detail.html#documents" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
+                            <a href="javascript:{}" title="Распечатать" @click="printPage(`/platform/${item.id}`)"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
+                            <a :href="`/platform/${item.id}#documents`" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
                             <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
                             <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden', itemMarkExist(item, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
                                 <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
@@ -133,7 +133,10 @@
                             </svg>
                         </a>
                         <div class="procedures__item-buttons">
-                            <router-link :to="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer'">Отправить заявку</router-link>
+                            <template>
+                              <router-link :to="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer' && $router">Отправить заявку</router-link>
+                              <a v-if="$store.getters.userRole !== 'buyer' && !$router":href="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request">Подробнее</a>
+                            </template>
                             <a :href="`/platform/${item.id}`" class="btn btn--bdr procedures__item-request">Подробнее</a>
                         </div>
                     </div>
