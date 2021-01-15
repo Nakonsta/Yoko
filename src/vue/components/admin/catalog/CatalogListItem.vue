@@ -1,5 +1,5 @@
 <template>
-  <li class="products__list-item product">
+  <li class="products__list-item product item">
     <div class="product__info">
       <div class="product__row">
         <router-link class="product__title" :to="`positions/${position.id}`">
@@ -47,14 +47,8 @@ export default {
 
   width: 100%;
   padding: rem(20px) rem(16px);
-  background-color: #fff;
-  border-radius: 4px;
-  margin-bottom: rem(12px);
   @media(min-width: 560px){
     padding: rem(20px) rem(32px);
-  }
-  &:last-child {
-    margin-bottom: 0;
   }
 
   &__info {
