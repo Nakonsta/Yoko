@@ -8,7 +8,7 @@
                     </svg>
                 </span>
                 <a class="application-documents-uploader__link" :href="file.url" target="_blank">{{ file.name }}</a>
-                <div class="application-documents-uploader__remove" @click="removeFile(i)">
+                <div v-if="!disabled" class="application-documents-uploader__remove" @click="removeFile(i)">
                     <svg>
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"></use>
                     </svg>
@@ -29,6 +29,7 @@
                 ref="input"
                 accept="image/.jpg,.png,.jpeg,.pdf,.doc,.docx,.xls,.xlsx"
                 multiple
+                :disabled="disabled"
                 @change="uploadFile"
             />
         </div>
@@ -59,8 +60,8 @@ export default {
         classes() {
             return [
                 'application-documents-uploader',
-                { 'application-documents-uploader-error': this.hasError },
-                { 'application-documents-uploader-disabled': this.disabled }
+                { 'application-documents-uploader--error': this.hasError },
+                { 'application-documents-uploader--disabled': this.disabled }
             ]
         },
         isUploaded() {
@@ -166,6 +167,19 @@ export default {
 
     &--error &__icon {
         fill: $colorRed;
+    }
+
+    &--disabled &__upload {
+        .application-documents-uploader__label,
+        span {
+            color: $colorGray;
+        }
+
+        button {
+            border-color: $colorBdr;
+            color: $colorGray;
+            cursor: default;
+        }
     }
 
     &__files {
