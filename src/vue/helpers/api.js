@@ -421,38 +421,38 @@ export default {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
         },
         fetchProductList(props) {
-          let body = {}
-         
-          if(props.page !== null){
-            body.page = props.page
-          }
-          if(props['order[created_at]'] !== null){
-            body['order[created_at]'] = props['order[created_at]']
-          }
-          if(props['filter[status]'] !== null){
-            body['filter[status]'] = props['filter[status]']
-          } 
-          if(props['filter[q]'] !== ''){
-            body['filter[q]'] = props['filter[q]']
-          }  
-          
-        return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, 
-          {
-            params: body
-          }            
-        )
-      },
-      fetchProductDetails(id) {
-        return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`);
-      },
-      setCatalogPositionStatus(id, status = null, text_rejection = null) {
-        return axios.patch(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`,
-          {
-            status,
-            text_rejection,
-          },
-        )
-      },
+            let body = {}
+            
+            if(props.page !== null){
+                body.page = props.page
+            }
+            if(props['order[created_at]'] !== null){
+                body['order[created_at]'] = props['order[created_at]']
+            }
+            if(props['filter[status]'] !== null){
+                body['filter[status]'] = props['filter[status]']
+            } 
+            if(props['filter[q]'] !== ''){
+                body['filter[q]'] = props['filter[q]']
+            }  
+            
+            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, 
+                {
+                    params: body
+                }            
+            )
+        },
+        fetchProductDetails(id) {
+            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`);
+        },
+        setCatalogPositionStatus(id, status = null, text_rejection = null) {
+            return axios.patch(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`,
+            {
+                status,
+                text_rejection,
+            },
+            )
+        },
         fetchMark(id) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/mark/${id}/`)
         },
@@ -477,5 +477,8 @@ export default {
         sendProcedureProtocols(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data)
         },
+        sendUserData(data) {
+            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data)
+        }
     }
 }
