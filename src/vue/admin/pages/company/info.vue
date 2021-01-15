@@ -64,9 +64,10 @@
           </label>
         </template>
       </CompanyInfoData>
-      <button 
+      <!-- TODO: включить, когда будет нужна  -->
+      <button
+        v-if="false"
         class="btn company-info__button"
-
         @click="openForm"
       >
         Создать заявку на изменение данных
