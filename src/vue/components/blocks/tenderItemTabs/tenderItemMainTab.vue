@@ -49,7 +49,7 @@
                         Начальная максимальная цена
                     </div>
                     <div class="tender-item__tab-row-value">
-                        {{ tenderItemData.purchase_subject.start_price }} &#8381;
+                        {{ formatPriceWithCurrency(tenderItemData.purchase_subject.start_price, tenderItemData.purchase_currency) }}
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                                 Лот {{ index + 1 }}
                             </div>
                             <div class="tender-item__lot-item tender-item__lot-price">
-                                {{ lot }} &#8381;
+                                {{ formatPriceWithCurrency(lot, tenderItemData.purchase_currency) }}
                             </div>
                         </div>
                         <div class="tender-item__lot-table">
@@ -90,16 +90,16 @@
                             <div class="tender-item__lot-products">
                                 <div v-for="(product, key) in filterProductsToLots(tenderItemData.purchase_subject.products, index + 1)" :key="key" class="tender-item__lot-product-row">
                                     <div class="tender-item__lot-product tender-item__lot-name" :data-name="product.marksize_id ? 'Наименование' : ''">
-                                        {{ product.marksize_id }}
+                                        {{ product.name }}
                                     </div>
                                     <div class="tender-item__lot-product tender-item__lot-length" :data-name="product.quantity ? 'Длина' : ''">
                                         {{ product.quantity }}
                                     </div>
                                     <div class="tender-item__lot-product tender-item__lot-measure" :data-name="product.measure ? 'Единица' : ''">
-                                        {{ measures[product.measure] }}
+                                        {{ getMeasure(product.measure) }}
                                     </div>
                                     <div class="tender-item__lot-product tender-item__lot-sum" :data-name="product.price_for_one ? 'Сумма за позицию' : ''">
-                                        {{ product.price_for_one }} &#8381;
+                                        {{ formatPriceWithCurrency(product.amount_per_position, product.currency) }}
                                     </div>
                                     <div class="tender-item__lot-product tender-item__lot-vat" :data-name="product.vat ? 'НДС' : ''">
                                         {{ product.vat }} %
@@ -313,8 +313,12 @@
 </template>
 
 <script>
+import functions from "@/helpers/functions";
+
 export default {
     name: 'TenderItemMainTab',
+
+    mixins: [functions],
 
     props: {
         tenderItemData: {
@@ -328,12 +332,7 @@ export default {
     },
 
     data() {
-        return {
-            measures: {
-                m: 'м',
-                item: 'шт.'
-            }
-        }
+        return {}
     },
 
     methods: {

@@ -42,6 +42,8 @@
                                         v-model="picker.start_date"
                                         :disabled-dates="{ to: picker.disabledTo }"
                                         @input="changePeriod(item.id)"
+                                        @cleared="changePeriod(item.id)"
+                                        :clear-button="true"
                                     >
                                         <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
                                     </datepicker>
@@ -56,6 +58,8 @@
                                         v-model="picker.end_date"
                                         :disabled-dates="{ from: picker.disabledFrom }"
                                         @input="changePeriod(item.id)"
+                                        @cleared="changePeriod(item.id)"
+                                        :clear-button="true"
                                     >
                                         <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
                                     </datepicker>
@@ -174,17 +178,13 @@
                 picker: {
                     start_date: '',
                     end_date: '',
-                    format: "yyyy-MM-dd",
+                    format: "dd.MM.yyyy",
                     locale: ru,
                     disabledFrom: null,
                     disabledTo: null,
                 },
                 val: null,
-                options: [
-                    { name: 'Vue.js', code: 'vu' },
-                    { name: 'Javascript', code: 'js' },
-                    { name: 'Open Source', code: 'os' }
-                ]
+                options: []
             }
         },
         mounted() {
@@ -214,13 +214,14 @@
                 return false;
             },
             changePeriod(group) {
+                delete this.currentFilter[group];
                 if( this.picker.start_date ) {
-                    // this.currentFilter[group + '_from'] = moment(this.picker.start_date).format('YYYY-MM-DD');
-                    this.currentFilter[group + '_from'] = this.picker.start_date;
+                    if (!this.currentFilter[group]) this.currentFilter[group] = {};
+                    this.currentFilter[group].from = moment(this.picker.start_date).format('YYYY-MM-DD 00:00:00');
                 }
                 if( this.picker.end_date ) {
-                    // this.currentFilter[group + '_to'] = moment(this.picker.end_date).format('YYYY-MM-DD');
-                    this.currentFilter[group + '_to'] = this.picker.end_date;
+                    if (!this.currentFilter[group]) this.currentFilter[group] = {};
+                    this.currentFilter[group].to = moment(this.picker.end_date).format('YYYY-MM-DD 23:59:59');
                 }
                 this.$emit('changeFilter');
             },
@@ -298,9 +299,30 @@
         }
         .vdp-datepicker {
             input.field {
-                padding: rem(15px) rem(20px) rem(15px) rem(50px) !important;
+                padding: rem(15px) rem(36px) rem(15px) rem(50px) !important;
                 height: auto;
                 background-color: transparent !important;
+            }
+            .vdp-datepicker__clear-button {
+                margin-top: rem(-8px);
+                width: rem(16px);
+                height: rem(16px);
+                font-style: normal;
+                font-weight: normal;
+                font-size: rem(20px);
+                line-height: rem(16px);
+                text-align: center;
+                position: absolute;
+                top: 50%;
+                right: rem(10px);
+                color: $colorTurquoise;
+                &:hover {
+                    color: $colorTurquoiseHover;
+                }
+                i,
+                span {
+                    font-style: normal;
+                }
             }
             .sprite-calendar {
                 margin-top: rem(-8px);

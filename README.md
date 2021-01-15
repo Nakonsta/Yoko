@@ -49,4 +49,5 @@ sudo vi /etc/hosts, далее I, далее вставить строчку и 
 **currenciesList()** - Список объектов с описанием всех возможных валют  
 **getCurrency(currency)** - Получение объекта с описанием валюты  
 **formatPrice(value)** - Форматирование суммы  
-**formatPriceWithCurrency(value, currency)** - Форматирование суммы + добавление символа валюты   
+**formatPriceWithCurrency(value, currency)** - Форматирование суммы + добавление символа валюты  
+**getMeasure(measure)** - получаем единицу измерения в нормальном виде   

@@ -265,7 +265,7 @@ export default {
             ];
         },
         getTradingFormat(format) {
-            return this.tradingFormatsList().find((item) => {return item.id === format});
+            return this.tradingFormatsList().find((item) => {return item.id === format}).name || format;
         },
         tradingTypesList() {
             return [
@@ -296,7 +296,7 @@ export default {
             ];
         },
         getTradingType(type) {
-            return this.tradingTypesList().find((item) => {return item.id === type});
+            return this.tradingTypesList().find((item) => {return item.id === type}).name || type;
         },
         currenciesList() {
             return [
@@ -335,6 +335,20 @@ export default {
         formatPriceWithCurrency(value = 0, currency = 'rub') {
             const c = this.getCurrency(currency).symbol || currency;
             return this.formatPrice(value)+' '+c;
+        },
+        getMeasure(measure = 'm') {
+            let result = '';
+            switch (measure) {
+                case 'unit':
+                case 'item':
+                    result ='шт';
+                    break;
+                default:
+                    result = 'м';
+                    break;
+
+            }
+            return result;
         },
     }
 }

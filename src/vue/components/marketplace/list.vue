@@ -53,7 +53,7 @@
                 <div class="procedures__item-head">
                     <div class="procedures__item-flex">
                         <div class="procedures__item-title">№{{ item.id }}</div>
-                        <div class="procedures__item-type">{{ getTenderTradingFormatName(item)}}: {{ getTenderTradingTypeName(item) }}</div>
+                        <div class="procedures__item-type">{{ getTradingFormat(item.tender_trading_format)}}: {{ getTradingType(item.tender_trading_type) }}</div>
                     </div>
                     <dl>
                         <dt>Компания</dt>
@@ -99,10 +99,10 @@
                     </div>
                     <div class="procedures__item-price">
                         <span>Начальная цена:</span>
-                        <template v-if="item.purchase_subject.start_price">
+                        <template v-if="item.purchase_subject && item.purchase_subject.start_price">
                             {{ formatPriceWithCurrency(item.purchase_subject.start_price, item.purchase_currency) }}
                         </template>
-                        <template v-if="!item.purchase_subject.start_price">
+                        <template v-if="!item.purchase_subject || !item.purchase_subject.start_price">
                             Без указания цены
                         </template>
                     </div>
@@ -159,11 +159,11 @@
                                     :key="product.id"
                                     class="procedures__item-product"
                                 >
-                                    <td data-title="Наименование">{{ product.id }}</td>
+                                    <td data-title="Наименование">{{ product.name }}</td>
                                     <td data-title="Длина">{{ product.quantity }}</td>
-                                    <td data-title="Единица">{{ product.measure }}</td>
-                                    <td data-title="Сумма">{{ formatPriceWithCurrency(product.price_for_one, product.currency) }}</td>
-                                    <td data-title="НДС">{{ product.quantity }}%</td>
+                                    <td data-title="Единица">{{ getMeasure(product.measure) }}</td>
+                                    <td data-title="Сумма">{{ formatPriceWithCurrency(product.amount_per_position, product.currency) }}</td>
+                                    <td data-title="НДС">{{ product.vat }}%</td>
                                     <td data-title="Аналог">{{ product.availability_of_analogues ? 'Да' : 'Нет' }}</td>
                                 </tr>
                             </tbody>
@@ -283,20 +283,6 @@
             }
         },
         methods: {
-            getTenderTradingTypeName(item) {
-                const type = this.getTradingType(item.tender_trading_type);
-                if (type) {
-                    return type.name;
-                }
-                return item.tender_trading_type;
-            },
-            getTenderTradingFormatName(item) {
-                const type = this.getTradingFormat(item.tender_trading_format);
-                if (type) {
-                    return type.name;
-                }
-                return item.tender_trading_format;
-            },
             getTenderStatusName(item) {
                 const status = this.itemsStatuses.find(
                     (status) => status.id === item.status,
@@ -380,12 +366,14 @@
         flex-direction: column;
         /*min-height: 100%;*/
         &__item-buttons {
+            margin-left: auto;
             a {
                 &:first-child {
                   margin-right: 1rem;
                 }
             }
             @media(max-width: 659px) {
+                margin-left: 0;
                 order: -1;
                 a {
                     &:first-child {

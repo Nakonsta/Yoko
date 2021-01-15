@@ -204,7 +204,7 @@
                         .then((response) => {
                             this.filter.push({
                                 type: 'select',
-                                id: 'region_id',
+                                id: 'regions',
                                 value: 'Регион',
                                 placeholder: 'Выбрать регион',
                                 values: response.data.data,
@@ -316,7 +316,11 @@
                         this.loadingItems = false;
                     })
                     .catch((e) => {
-                        console.log(e)
+                        if (!axios.isCancel(e)) {
+                            console.log(e);
+                            window.notificationError('Ошибка сервера');
+                            this.loadingItems = false;
+                        }
                     })
             },
             searchCompanies(index, q) {
@@ -331,9 +335,11 @@
                                 this.filter[index].values = response.data.data.elements;
                             })
                             .catch((e) => {
-                                console.log(e);
-                                this.filter[index].loading = false;
-                                this.filter[index].values = [];
+                                if (!axios.isCancel(e)) {
+                                    console.log(e);
+                                    this.filter[index].loading = false;
+                                    this.filter[index].values = [];
+                                }
                             });
                     }, 1000);
                 } else {
