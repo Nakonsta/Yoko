@@ -14,11 +14,10 @@
     </div>
     <h3 class="procedure__main-title">Дополнительная информация</h3>
     <textarea-input
-        :maxlength=null
         v-model="selectedData.addition_information"
         label="Дополнительная информация"
         placeholder="Введите текст"
-        :rules="{required: false}"
+        :rules="{required: false, max: 10000 }"
         :disabled="isCreatedProcedure"
     ></textarea-input>
   </div>
