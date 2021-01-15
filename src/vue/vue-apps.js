@@ -264,3 +264,25 @@ if (signatureProviders) {
         render: function(h) { return h(DigitalSignatureProviders); }
     })
 }
+
+// Кнопка создать процедуру в публичной части торговой площадки
+import ButtonCreateProcedure from './button-create-procedure.vue'
+const buttonCreateProcedureEl = document.querySelector('#button-create-procedure');
+if (buttonCreateProcedureEl) {
+    let appButtonCreateProcedure = new Vue({
+        el: buttonCreateProcedureEl,
+        store: store,
+        render: function(h) { return h(ButtonCreateProcedure); }
+    })
+}
+
+// Кнопка создать продукцию в публичной части каталога
+import ButtonCreateProduct from './button-create-product.vue'
+const buttonCreateProductEl = document.querySelector('#button-create-product');
+if (buttonCreateProductEl) {
+    let appButtonCreateProduct = new Vue({
+        el: buttonCreateProductEl,
+        store: store,
+        render: function(h) { return h(ButtonCreateProduct); }
+    })
+}

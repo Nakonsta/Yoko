@@ -68,11 +68,17 @@
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
                         </a>
                         <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
-                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" v-if="$store.getters.userRole === 'contractor'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
+                        <!-- <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" v-if="$store.getters.userRole === 'contractor'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
                             <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                         </a>
                         <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'" v-if="$store.state.auth.loggedIn" @click="updateItemMark(tenderItemData, 'hidden')" :class="{active: itemMarkExist(tenderItemData, 'hidden')}">
                             <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
+                        </a> -->
+                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(tenderItemData, 'hidden', itemMarkExist(tenderItemData, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="[{active: itemMarkExist(tenderItemData, 'hidden')}, 'tender-item__actions-link']">
+                            <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
+                        </a>
+                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(tenderItemData, 'favorite', itemMarkExist(tenderItemData, 'favorite') ? 'Процедура удалена из избранного' : 'Процедура добавлена в избранное')" v-if="$store.getters.userRole === 'contractor'" :class="[{active: itemMarkExist(tenderItemData, 'favorite')}, 'tender-item__actions-link']">
+                            <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                         </a>
                     </div>
                 </div>
@@ -205,10 +211,7 @@ export default {
             return item.status;
         },
         itemMarkExist(item, mark) {
-            if (item.marks) {
-                return item.marks.find((item) => item.mark_code === mark);
-            }
-            return false;
+            return item.marks.find((item) => item.mark_code === mark);
         },
         updateItemMark(item, mark) {
             if( !this.itemMarkExist(item, mark) ) {
@@ -230,6 +233,39 @@ export default {
                     })
                     .catch((e) => {
                         console.log(e);
+                    });
+            }
+        },
+        updateItemMark(item, mark, msg) {
+            if( this.itemMarkExist(item, mark) ) {
+                this.removeMarketplaceProcedureMark(item.id, mark)
+                    .then((response) => {
+                        // const newMark = response.data.data;
+                        item.marks.forEach((i, index) => {
+                            if (i.mark_code === mark) item.marks.splice(index, 1)
+                        });
+                        window.notificationSuccess(msg);
+                        if (this.$store.getters.userRole === 'contractor' && ((mark === 'hidden' && this.view !== 'favorite') || (mark === 'favorite' && this.view === 'favorite'))) {
+                            this.$emit('getItems');
+                        }
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        window.notificationError('Ошибка сервера');
+                    });
+            } else {
+                this.addMarketplaceProcedureMark(item.id, mark)
+                    .then((response) => {
+                        const newMark = response.data.data;
+                        item.marks.push(newMark);
+                        window.notificationSuccess(msg);
+                        if (this.$store.getters.userRole === 'contractor' && ((mark === 'hidden' && this.view !== 'favorite') || (mark === 'favorite' && this.view === 'favorite'))) {
+                            this.$emit('getItems');
+                        }
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        window.notificationError('Ошибка сервера');
                     });
             }
         },
@@ -357,6 +393,25 @@ export default {
                     width: 20px;
                     height: 20px;
                     margin-left: 1rem;
+                }
+            }
+            &-link {
+                svg.sprite-hide,
+                svg.sprite-favorite {
+                    fill: $colorGray;
+                }
+                &.active {
+                    svg.sprite-hide,
+                    svg.sprite-favorite {
+                        fill: $colorTurquoise;
+                    }
+
+                    &:hover {
+                        svg.sprite-hide,
+                        svg.sprite-favorite {
+                            fill: $colorTurquoiseHover;
+                        }
+                    }
                 }
             }
         }

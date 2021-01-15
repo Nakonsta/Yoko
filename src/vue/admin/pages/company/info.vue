@@ -64,9 +64,10 @@
           </label>
         </template>
       </CompanyInfoData>
-      <button 
+      <!-- TODO: включить, когда будет нужна  -->
+      <button
+        v-if="false"
         class="btn company-info__button"
-
         @click="openForm"
       >
         Создать заявку на изменение данных
@@ -90,16 +91,7 @@ export default {
   data: () => ({ currentCompany: {} }),
   computed: {
     companies() {
-      const { 
-        userRole,
-        companyBuyer,
-        companyContractor,
-      } = this.$store.getters;
-
-      switch (userRole) {
-        case 'buyer': return companyBuyer;
-        case 'contractor': return companyContractor;
-      }
+      return this.$store.state.auth.user.companies;
     },
     companyData() {
       const { currentCompany: company } = this;

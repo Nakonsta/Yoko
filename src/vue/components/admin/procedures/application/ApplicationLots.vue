@@ -7,7 +7,9 @@
             :is-auction="isAuction"
             :can-replace="canReplace"
             :countries="countries"
-            @on-change="lot.checked = $event"
+            :disabled="disabled"
+            :errors="errors"
+            @on-change="lot.checked = $event, $emit('on-check')"
             @on-country-change="changeCountry($event, lot)"
         ></application-lot>
     </div>
@@ -32,6 +34,13 @@ export default {
         },
         canReplace: {
             type: Boolean
+        },
+        disabled: {
+            type: Boolean
+        },
+        errors: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

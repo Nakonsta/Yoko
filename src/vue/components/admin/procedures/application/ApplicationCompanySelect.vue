@@ -30,7 +30,8 @@ export default {
             type: [Number, String]
         },
         disabled: {
-            type: Boolean
+            type: Boolean,
+            default: false
         },
         hasError: {
             type: Boolean

@@ -63,7 +63,7 @@ export default {
             this.$emit('on-select', value)
         }
     },
-    mounted() {
+    created() {
         if (this.defaultValue) {
             if (this.defaultValue instanceof Object) {
                 this.value = this.defaultValue

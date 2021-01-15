@@ -2,8 +2,8 @@
     <div class="form form--white user-data">
         <div class="form__title user-data__title">Личные данные пользователя</div>
         <ValidationObserver ref="form" tag="div" mode="eager">
-            <form class="support-form__form" slot-scope="{ valid }">
-                <div class="form__grid">
+            <form class="support-form__form" @submit.prevent="sendForm($event, 'common')" slot-scope="{ valid }">
+                <!-- <div class="form__grid">
                     <InputInput
                         parentClass="field__container"
                         label="Логин"
@@ -12,7 +12,7 @@
                         v-model="userData.email"
                         :maxlength="100"
                     />
-                </div>
+                </div> -->
                 <div class="form__grid">
                     <InputInput
                         type="password"
@@ -80,7 +80,7 @@
                 </div>
                 <div class="form__grid">
                     <div class="field__container user-data__attachment">
-                        <div class="support-form__item support-form__item--file">
+                        <div class="support-form__item support-form__item--file user-data__file">
                             <span class="field__label user-data__subtitle">Документ</span>
                             <input
                                 id="file-input"
@@ -91,13 +91,13 @@
                                 accept="application/pdf, image/jpeg, image/png"
                             >
                             <label for="file-input" class="support-form__label-file">Загрузите документ</label>
-                            <div v-for="(file, key) in userData.documents" :key="key" class="file-listing">
+                            <div v-if="userData.document" class="file-listing">
                                 <div class="file-listing__info">
                                     <div class="file-listing__file">
-                                    {{ file.name }}
+                                    {{ userData.document.name }}
                                     </div>
                                 </div>
-                                <a class="file-listing__delete" fab dark x-small @click="removeFile(key)">
+                                <a class="file-listing__delete" fab dark x-small @click="removeFile()">
                                     <svg width="12" height="12" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2929 17.7071C16.6834 18.0976 17.3166 18.0976 17.7071 17.7071C18.0976 17.3166 18.0976 16.6834 17.7071 16.2929L12.4142 11L17.7071 5.70712C18.0976 5.31659 18.0976 4.68343 17.7071 4.2929C17.3166 3.90238 16.6834 3.90238 16.2929 4.2929L11 9.5858L5.70711 4.29289C5.31658 3.90237 4.68342 3.90237 4.29289 4.29289C3.90237 4.68342 3.90237 5.31658 4.29289 5.70711L9.5858 11L4.29289 16.2929C3.90237 16.6834 3.90237 17.3166 4.29289 17.7071C4.68342 18.0977 5.31658 18.0977 5.70711 17.7071L11 12.4142L16.2929 17.7071Z" fill="#31ACB8"/>
                                     </svg>
@@ -105,6 +105,7 @@
                             </div>
                         </div>
                         <InputInput
+                            parentClass="user-data__file-number"
                             label="Номер"
                             placeholder=""
                             v-model="userData.documentNumber"
@@ -112,7 +113,7 @@
                             :rules="{required: !userData.documentWithoutNumber }"
                             :disabled="userData.documentWithoutNumber"
                         />                        
-                        <label class="checkbox">
+                        <label class="checkbox user-data__file-checkbox">
                             <input 
                                 class=""
                                 type="checkbox"
@@ -122,15 +123,12 @@
                             <span class="checkbox__body"></span>
                             <span class="checkbox__text">БН</span>
                         </label>
-                        <datepicker
-                            placeholder="Срок действия"
-                            :format="picker.format"
-                            :language="picker.locale"
-                            input-class="field"
-                            v-model="picker.start_date"
-                        >
-                            <svg class="sprite-calendar" slot="afterDateInput"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#calendar"></use></svg>
-                        </datepicker>             
+                        <date-time
+                            v-model="userData.documentDate"
+                            label="Дата публикации"
+                            placeholder="Выберите дату"
+                            class="user-data__file-term"
+                        ></date-time>           
                     </div>
                 </div>
                 <div class="form__grid">
@@ -162,7 +160,7 @@
                             <div class="support-form__item user-data__code">
                                 <PhoneCodeCountries
                                     :countries="lists.countries"
-                                    v-model="userData.currentPhoneCode"
+                                    v-model="userData.currentFaxCode"
                                 />
                             </div>
                             <div class="support-form__item support-form__phone user-data__phone">
@@ -171,11 +169,15 @@
                                 validation-name="факт"
                                 v-model="userData.fax"
                                 :rules="{ required: true, customPhone: true }"
-                                :mask="`+${codePhone.phone_code} (###) ###-####`"
+                                :mask="`+${codeFax.phone_code} (###) ###-####`"
                             />
                             </div>
                         </div>
                     </div>                    
+                </div>
+                <div class="user-data__buttons">
+                    <button type="button" class="btn btn--bdr">Отменить</button>
+                    <button type="submit" class="btn">Сохранить</button>
                 </div>
             </form>
         </ValidationObserver>
@@ -186,7 +188,7 @@
                     <div class="popup__title">Сменить пароль</div>
                     <div class="popup__content-container">
                          <ValidationObserver ref="form" tag="div" mode="eager">
-                            <form class="popup__form" slot-scope="{ valid }">
+                            <form class="popup__form" @submit.prevent="sendForm($event, 'password')" slot-scope="{ valid }">
                                 <ValidationProvider name="Старый пароль" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
                                     <span class="field__label">Старый пароль</span>
                                     <input :class="{field: true, error: failed}" type="password" v-model="passwordChanging.password">
@@ -195,6 +197,11 @@
                                 <ValidationProvider name="Новый пароль" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
                                     <span class="field__label">Новый пароль</span>
                                     <input :class="{field: true, error: failed}" type="password" v-model="passwordChanging.newPassword">
+                                    <span v-show="failed" class="field__error">{{ errors[0] }}</span>
+                                </ValidationProvider>
+                                <ValidationProvider name="Новый пароль" v-slot="{ errors, failed }" :rules="{required: true, repeatPass: passwordChanging.newPassword}" tag="label" class="field__container">
+                                    <span class="field__label">Повторите пароль</span>
+                                    <input :class="{field: true, error: failed}" type="password" v-model="passwordChanging.newPasswordRepeate">
                                     <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                                 </ValidationProvider>
                                 <button type="submit" class="btn" :disabled="!valid">Отправить</button>
@@ -211,7 +218,7 @@
                     <div class="popup__title">Сменить e-mail</div>
                     <div class="popup__content-container">
                          <ValidationObserver ref="form" tag="div" mode="eager">
-                            <form class="popup__form" slot-scope="{ valid }">
+                            <form class="popup__form" @submit.prevent="sendForm($event, 'email')" slot-scope="{ valid }">
                                 <ValidationProvider name="Старый пароль" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
                                     <span class="field__label">Пароль</span>
                                     <input :class="{field: true, error: failed}" type="password" v-model="emailChanging.password">
@@ -219,7 +226,7 @@
                                 </ValidationProvider>
                                 <ValidationProvider name="Новый пароль" v-slot="{ errors, failed }" rules="required" tag="label" class="field__container">
                                     <span class="field__label">Новый e-mail</span>
-                                    <input :class="{field: true, error: failed}" type="email" v-model="emailChanging.newPassword">
+                                    <input :class="{field: true, error: failed}" type="email" v-model="emailChanging.newEmail">
                                     <span v-show="failed" class="field__error">{{ errors[0] }}</span>
                                 </ValidationProvider>
                                 <button type="submit" class="btn" :disabled="!valid">Отправить</button>
@@ -235,18 +242,20 @@
 <script>
 import InputInput from "../../../components/forms/Input";
 import PhoneCodeCountries from "../../../components/phoneCodeCountries.vue";
+import DateTime from '@/components/forms/DateTime.vue'
 import api from "../../../helpers/api";
-import {ru} from "vuejs-datepicker/src/locale";
+import functions from "@/helpers/functions";
 
 export default {
     name: 'User',
 
     components: {
         InputInput,
-        PhoneCodeCountries
+        PhoneCodeCountries,
+        DateTime
     },
 
-    mixins: [api],
+    mixins: [api, functions],
 
     data() {
         return {
@@ -259,11 +268,18 @@ export default {
                 name: null,
                 secondName: null,
                 position: null,
-                documents: [],
+                document: null,
                 documentNumber: null,
                 documentWithoutNumber: false,
+                documentDate: null,
                 phone: null,
                 currentPhoneCode: {
+                    id: 0,
+                    name: '',
+                    phoneCode: 0,
+                    flag: '',
+                },
+                currentFaxCode: {
                     id: 0,
                     name: '',
                     phoneCode: 0,
@@ -273,19 +289,12 @@ export default {
             },
             passwordChanging: {
                 password: '',
-                newPassword: ''
+                newPassword: '',
+                newPasswordRepeate: ''
             },
             emailChanging: {
                 password: '',
                 newEmail: ''
-            },
-            picker: {
-                start_date: '',
-                end_date: '',
-                format: "yyyy-MM-dd",
-                locale: ru,
-                disabledFrom: null,
-                disabledTo: null,
             },
             lists: {
                 countries: [
@@ -305,6 +314,9 @@ export default {
     computed: {
         codePhone() {
             return this.userData.currentPhoneCode
+        },
+        codeFax() {
+            return this.userData.currentFaxCode
         },
     },
 
@@ -330,36 +342,68 @@ export default {
             if (this.$store.state.auth.user.position) {
                 this.userData.position = this.$store.state.auth.user.position;
             }
-            if (this.$store.state.auth.user.phone) {
-                const phone = this.$store.state.auth.user.phone;
-                const code = phone.slice(0, -10)
-                const number = phone.substr(phone.length - 10, 10)
-                this.userData.phone = number;
-            }
-            if (this.$store.state.auth.user.fax) {
-                const phone = this.$store.state.auth.user.fax;
-                const code = phone.slice(0, -10)
-                const number = phone.substr(phone.length - 10, 10)
-                this.userData.fax = number;
-            }
         },
         getCountries() {
             this.fetchCountries()
                 .then((data) => {
                     this.lists.countries = data.data.data
-                    this.setStartValueCountries(
-                        this.lists.countries.find((country) => {
-                            return country.phone_code === 7
-                        }),
-                    )
+                    this.fillUserPhone()
+                    this.fillUserFax()
                 })
                 .catch(() => {
                     window.closeLoader()
-                    window.notificationError('Ошибка сервера. Регистрация не доступна.')
+                    window.notificationError('Ошибка сервера')
                 })
         },
         setStartValueCountries(country) {
             this.userData.currentPhoneCode = country
+        },
+        setStartValueCountriesFax(country) {
+            this.userData.currentFaxCode = country
+        },
+        fillUserPhone() {
+            const phone = this.$store.state.auth.user.phone
+            const code = phone.slice(0, -10)
+            const number = phone.substr(phone.length - 10, 10)
+            this.setStartValueCountries(
+                this.lists.countries.find((country) => {
+                    return country.phone_code === parseInt(code)
+                }),
+            )
+            this.userData.phone = number
+            this.userData.phone = `+${code} (${number.substr(
+                0,
+                3,
+            )}) ${number.substr(3, 3)} ${number.substr(6, 2)}-${number.substr(
+                8,
+                2,
+            )}`
+        },
+        fillUserFax() {
+            if (this.$store.state.auth.user.fax) {
+                const phone = this.$store.state.auth.user.fax
+                const code = phone.slice(0, -10)
+                const number = phone.substr(phone.length - 10, 10)
+                this.setStartValueCountriesFax(
+                    this.lists.countries.find((country) => {
+                        return country.phone_code === parseInt(code)
+                    }),
+                )
+                this.userData.fax = number
+                this.userData.fax = `+${code} (${number.substr(
+                    0,
+                    3,
+                )}) ${number.substr(3, 3)} ${number.substr(6, 2)}-${number.substr(
+                    8,
+                    2,
+                )}`
+            } else {
+                this.setStartValueCountriesFax(
+                    this.lists.countries.find((country) => {
+                        return country.phone_code === 7
+                    }),
+                )
+            }
         },
         openModal(popupId) {
             openPopupById(popupId);
@@ -372,17 +416,65 @@ export default {
             if (!files.length)
                 return;
             if (['application/pdf', 'image/jpeg', 'image/png'].includes(files[0].type)) {
-              this.userData.documents.push(files[0]);
+              this.userData.document = files[0];
+              evt.target.value = '';
             } else {
               notificationError('Загружаемый файл должен быть форматов: pdf, jpeg, png')
             }
         },
-        removeFile(key) {
-            this.userData.documents.splice(key, 1)
+        removeFile() {
+            this.userData.document = null;
         },
         toggleDocumentNumeration() {
             this.userData.documentNumber = null;
             this.userData.documentWithoutNumber = !this.userData.documentWithoutNumber;
+        },
+        sendForm(evt, typeOfForm) {
+            evt.preventDefault();
+            let formData = {};
+            if (typeOfForm === 'common') {
+                formData.lastName = this.userData.lastName
+                formData.name = this.userData.name
+                formData.secondName = this.userData.secondName
+                formData.position = this.userData.position
+                formData.doc = this.userData.document
+                formData.docNum = this.userData.documentNumber
+                formData.docDate = this.userData.documentDate
+                formData.phone = this.userData.phone
+                formData.fax = this.userData.fax
+                if (this.userData.newEmail) {
+                    formData.newEmail = this.userData.newEmail
+                }
+                if (this.userData.newPassword) {
+                    formData.newPassword = this.userData.newPassword
+                }
+            }
+            if (typeOfForm === 'email') {
+                formData.password = this.emailChanging.password
+                formData.email = this.emailChanging.newEmail
+            }
+            if (typeOfForm === 'password') {
+                formData.password = this.passwordChanging.password
+                formData.newPassword = this.passwordChanging.newPassword
+            }
+            const formDataObj = this.objectToFormData(formData);
+            this.sendUserData(formDataObj)
+                .then((response) => {
+                    window.notificationSuccess('Данные успешно обновлены');
+                    if (typeOfForm === 'email') {
+                        closePopupById('user-data__modal-email');
+                        this.$store.commit('logout', {
+                            reload: true,
+                            mute: false,
+                        })
+                    }
+                    if (typeOfForm === 'password') {
+                        closePopupById('user-data__modal-password');
+                    }
+                })
+                .catch((response) => {
+                    window.notificationError('Ошибка сервера');
+            });
         }
     }
 }
@@ -420,11 +512,68 @@ export default {
             display: flex;
             align-items: flex-start;
         }
+        &__file {
+            width: 40%;
+            .user-data__subtitle {
+                margin-bottom: 1.44rem;
+            }
+            &-number {
+                width: 20%;
+            }
+            &-checkbox {
+                width: 20%;
+                margin-top: 3rem;
+                margin-left: 1rem;
+            }
+            &-term {
+                width: 20%;
+            }
+        }
         .field__label {
             font-size: 1.14286rem;
             line-height: 1.375;
         }
     }
+
+    @include mq($until: tablet) {
+        .user-data {
+            &__title {
+               font-size: 1.875rem;
+                line-height: 120%;
+            }
+            &__change {
+                margin-left: 0;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+            &__attachment {
+                flex-direction: column;
+            }
+            &__file {
+                width: 100%;
+                &-number {
+                    width: 100%;
+                }
+                &-checkbox {
+                    width: 100%;
+                    margin-left: 0;
+                    margin-top: 1rem;
+                }
+                &-term {
+                    width: 100%;
+                }
+            }
+            &__buttons {
+                display: flex;
+                flex-direction: column;
+                .btn {
+                    margin-bottom: 0.5rem;
+                    width: 100%;
+                }
+            }
+        }
+    }
+
 </style>
 
 <style lang="scss">
@@ -445,5 +594,13 @@ export default {
                 margin-bottom: 0;
             }
         }
+        .support-form__label-file {
+            padding: 1.07rem 2.28571rem;
+        }
+        .file-listing {
+            margin-left: 0;
+            margin-top: 1rem;
+        }
     }
+
 </style>
