@@ -1,9 +1,17 @@
 <template>
     <div :class="classes">
         <div class="application-lot__header">
-            <application-checkbox :value="lot.checked" @click="$emit('on-change', $event)"></application-checkbox>
+            <application-checkbox
+                :value="lot.checked"
+                @click="$emit('on-change', $event)"
+                :disabled="disabled"
+                :hasError="errors"
+            ></application-checkbox>
             <div
-                :class="['application-lot__title', { 'application-lot__title--disabled': !lot.checked }]"
+                :class="[
+                    'application-lot__title',
+                    { 'application-lot__title--error': errors, 'application-lot__title--disabled': !lot.checked }
+                ]"
                 @click="toggleOpened"
             >
                 <span>{{ lot.name }}</span>
@@ -20,6 +28,7 @@
                 <span>Страна происхождения Лота</span>
                 <application-country-select
                     :countries="countries"
+                    :disabled="disabled"
                     @on-select="$emit('on-country-change', $event)"
                 ></application-country-select>
             </div>
@@ -28,6 +37,7 @@
                 :is-auction="isAuction"
                 :can-replace="canReplace"
                 :countries="countries"
+                :disabled="disabled"
                 @on-replace="replaceProduct"
             ></application-products>
         </div>
@@ -64,6 +74,14 @@ export default {
         },
         canReplace: {
             type: Boolean
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        errors: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -108,10 +126,7 @@ export default {
                 this.lot.products.reduce((amount, product) => {
                     return (
                         amount +
-                        parseFloat(
-                            parseInt(product.quantity ?? 0, 10) * parseFloat(product.price_for_one ?? 0, 10),
-                            10
-                        )
+                        parseFloat(parseInt(product.quantity ?? 0, 10) * parseFloat(product.price_for_one ?? 0, 10), 10)
                     )
                 }, 0),
                 10
@@ -200,6 +215,12 @@ export default {
         &--disabled {
             span {
                 color: $colorGray;
+            }
+        }
+
+        &--error {
+            span {
+                color: $colorRed;
             }
         }
     }
