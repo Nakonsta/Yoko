@@ -34,6 +34,7 @@
             </div>
             <application-country-select
                 v-else
+                :countries="countries"
                 :defaultValue="product.country"
                 @on-select="$emit('on-country-change', $event)"
                 :key="product.country.name"
