@@ -13,10 +13,12 @@ block content
         'Каталог'
     ])
 
-    +pageBanner('Каталог', '/content/catalog.jpg')
+    //+pageBanner('Каталог', '/content/catalog.jpg')
+    .page-banner.page-banner--with-btn(style=`background-image:url(/content/catalog.jpg)`)
+        .container
+            .page-banner__title Каталог
+            #button-create-product
 
     .section.section--green.section--white-bottom
         .container
-            .add-product-section
-                #button-create-product
             #catalog

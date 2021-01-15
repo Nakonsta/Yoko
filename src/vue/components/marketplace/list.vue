@@ -128,7 +128,7 @@
                         <div class="procedures__item-buttons">
                             <template>
                               <router-link :to="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer' && $router">Отправить заявку</router-link>
-                              <a v-if="$store.getters.userRole !== 'buyer' && !$router":href="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request">Подробнее</a>
+                              <a v-if="$store.getters.userRole !== 'buyer' && !$router" :href="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request">Отправить заявку</a>
                             </template>
                             <a :href="`/platform/${item.id}`" class="btn btn--bdr procedures__item-request">Подробнее</a>
                         </div>
