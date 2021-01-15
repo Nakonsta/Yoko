@@ -86,8 +86,6 @@
                     <div class="procedures__item-flex">
                         <div class="procedures__item-status">{{ getTenderStatusName(item) }}</div>
                         <div class="procedures__item-btns">
-                            <a href="javascript:{}" title="Распечатать" @click="printPage('/platform/'+item.id)"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                            <a :href="'/platform/'+item.id+'#documents'" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
                             <a href="javascript:{}" title="Распечатать" @click="printPage(`/platform/${item.id}`)"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
                             <a :href="`/platform/${item.id}#documents`" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
                             <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
