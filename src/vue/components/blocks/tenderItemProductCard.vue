@@ -17,7 +17,7 @@
         </div>
         <div class="table-cell__sum cable-info__sum" :data-name="item.quantity ? 'Сумма за позицию' : ''">
             <span v-if="item.price_for_one">
-                {{ item.price_for_one }} &#8381;
+                {{ formatPriceWithCurrency(item.price_for_one, item.currency) }}
             </span>
         </div>
         <div class="table-cell__vat cable-info__vat" :data-name="item.measure ? 'НДС' : ''">
@@ -32,8 +32,12 @@
 </template>
 
 <script>
+import functions from "@/helpers/functions";
+
 export default {
     name: 'TenderItemProductCard',
+
+    mixins: [functions],
 
     props: {
         hide: {

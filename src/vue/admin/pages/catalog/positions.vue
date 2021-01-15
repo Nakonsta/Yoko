@@ -1,75 +1,133 @@
 <template>
-  <div class="products">        
-    <accreditations-title title="Заявки на добавление в каталог"></accreditations-title>
-    <div class="products__filters">
-      <catalog-sort @on-sort="onSort"></catalog-sort>
-      <catalog-filter @on-filter="onFilter"></catalog-filter>
-      <catalog-search @on-search="onSearch"></catalog-search>
-    </div>
-
-    <div v-if="loading" class="products__preloader">
-        <div class="preloader">
-            <div class="preloader__preloader">
-                <div class="preloader__loader"></div>
+    <div class="products">
+        <accreditations-title title="Заявки на добавление в каталог"></accreditations-title>
+        <div class="items__head">
+            <div class="items__head-counter">
+                <template v-if="!loading">
+                    Найдено&nbsp;<span>{{ totalItems }}</span>
+                </template>
+                <template v-else>
+                    <span>Загрузка...</span>
+                </template>
+            </div>
+            <dropdownList
+                    class="items__head-item"
+                    label="Сортировать по:"
+                    :options="sortList"
+                    :current="sort"
+                    @change="onSort"
+            />
+            <dropdownList
+                    class="items__head-item"
+                    label="Показывать:"
+                    :options="viewList"
+                    :current="view"
+                    @change="onFilter"
+            />
+            <shortSearch
+                    class="items__head-item products__search"
+                    @on-search="onSearch"
+            />
+        </div>
+        <div class="products__item products__item--empty item item--empty" v-if="!items.length && !loading">
+            Заявки не найдены
+        </div>
+        <div class="products__item products__item--loading item item--loading" v-if="!items.length && loading">
+            <div class="preloader">
+                <div class="preloader__preloader">
+                    <div class="preloader__loader"></div>
+                </div>
             </div>
         </div>
-    </div>       
-
-    <div v-if="!loading && items.length === 0" class="products__empty-search">
-        Заявки не найдены
-    </div>    
-    <catalog-list 
-      v-else
-      :items="items"      
-      >
-    </catalog-list>    
-    <paginate
-      v-if="totalPages"
-      class="products__pagination"
-      :page-count="totalPages"
-      :click-handler="changePage"
-      prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      :value="currentPage"
-    >
-    </paginate>
-  </div>
+        <catalog-list
+                v-else
+                :items="items"
+        />
+        <paginate
+                v-if="totalPages"
+                :page-count="totalPages"
+                :click-handler="changePage"
+                prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                :prev-class="'catalog-pagination__prev'"
+                :next-class="'catalog-pagination__next'"
+                :container-class="'catalog-pagination'"
+                :page-class="'catalog-pagination__item'"
+                :value="currentPage"
+        />
+    </div>
 </template>
 <script>
 import api from '../../../helpers/api'
 
 import AccreditationsTitle from '../../../components/admin/accreditations/AccreditationsTitle.vue'
-import CatalogSearch from '../../../components/admin/catalog/CatalogSearch.vue'
-import CatalogFilter from '../../../components/admin/catalog/CatalogFilter.vue'
-import CatalogSort from '../../../components/admin/catalog/CatalogSort.vue'
+import dropdownList from "@/components/blocks/dropdownList";
 import CatalogList from '../../../components/admin/catalog/CatalogList.vue'
+import shortSearch from "@/components/blocks/shortSearch";
 
 export default {
   name: 'positions',
   components: {
     AccreditationsTitle,
-    CatalogSearch,
-    CatalogFilter,
-    CatalogSort,
+    dropdownList,
+    shortSearch,
     CatalogList
   },
   mixins: [api],
+  computed: {
+    totalPages() {
+      return Math.ceil(this.totalItems / this.perPage)
+    },
+  },
   data() {
     return {
       items: [],
       loading: true,
+      totalItems: 0,
+      perPage: 20,
       search: '',
-      totalPages: null,
       currentPage: 1,
       productSort: null,
       productFilter: null,
       debounceTimer: null,
-      companies: {}
+      companies: {},
+      sort: 'desc',
+      sortList: [
+        {
+          id: 'desc',
+          name: 'дате размещения (от новых к старым)',
+        },
+        {
+          id: 'asc',
+          name: 'дате размещения (от старых к новым)',
+        },
+      ],
+      view: 'all',
+      viewList: [
+        {
+          id: 'all',
+          name: 'все',
+        },
+        {
+          id: 'new',
+          name: 'новые',
+        },
+        {
+          id: 'approved',
+          name: 'согласованны',
+        },
+        {
+          id: 'rejected',
+          name: 'отклонены',
+        },
+      ],
+
     }
   },
   methods: {
     getPositions() {
       this.loading = true
+      this.items = [];
       this.fetchProductList({
         page: this.currentPage,
         'order[created_at]': this.productSort,
@@ -77,8 +135,9 @@ export default {
         'filter[q]': this.search
       })
         .then((response) => {
-          const items = response.data.data.items 
-          this.totalPages = response.data.data.total       
+          const items = response.data.data.items
+          this.totalItems = response.data.data.total;
+
           const companiesIds = [];                 
           items.forEach((item, index) => {
             items[index].company = null;
@@ -157,112 +216,7 @@ export default {
 @import '../../../../assets/sass/mixins/fluid-mixin';
 @import '../../../../assets/sass/mixins/mq';
 
-.products {
-    width: 100%;
-    background-color: #e9f7f8;
-    padding: 0;
-
-    @include mq($until: desktop) {
-      padding-top: rem(87px);
-    }
-    &__preloader {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      position: relative;
-
-      width: 100%;
-      height: 100%;
-      min-height: 400px;
-    }
-
-    &__filters {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        position: relative;
-        width: 100%;
-    }
-
-    &__empty-search {
-      width: 100%;
-      padding: rem(40px) rem(20px);
-
-      text-align: center;
-      font-size: rem(16px);
-      color: $colorGray;
-    }
-
-    &__pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      width: 100%;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      margin-top: rem(20px);
-
-      ::v-deep li {
-        width: 30px;
-        height: 30px;
-        margin: 0 rem(5px);
-
-        &.disabled {
-            a {
-                cursor: default;
-
-                &:hover {
-                    background-color: #fff;
-                    color: currentColor;
-                }
-            }
-        }
-
-        &.active {
-          a {
-              background-color: $colorTurquoise;
-              color: #fff;
-
-              &:hover {
-                  background-color: $colorTurquoiseHover;
-              }
-          }
-        }
-
-        &:first-child {
-          margin-right: rem(15px);
-        }
-
-        &:last-child {
-          margin-left: rem(15px);
-          transform: rotate(-180deg);
-        }
-
-        a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-
-          width: 100%;
-          height: 100%;
-          background-color: #fff;
-          transition: 0.3s;
-          border-radius: 6px;
-
-          &:hover {
-            background-color: $colorTurquoise;
-            color: #fff;
-
-            svg path {
-              transition: 0.3s stroke;
-              stroke: #fff;
-            }
-          }
-        }
-      }
-  }
+.products__search {
+    /*margin-left: auto;*/
 }
 </style>

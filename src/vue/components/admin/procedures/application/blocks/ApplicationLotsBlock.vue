@@ -11,7 +11,7 @@
             style="margin-bottom: 24px;"
             :value="application.agreement"
             label='Согласие участника закупки на "поставку товара"'
-            @click="$emit('on-check', $event)"
+            @click="$emit('on-check-agreement', $event)"
         ></application-checkbox> -->
         <application-title title="Сведения о лоте" subtitle></application-title>
         <div class="divider"></div>
@@ -20,6 +20,9 @@
             :lots="lots"
             :is-auction="isAuction"
             :can-replace="procedure.purchase_subject.products_analogues"
+            :disabled="disabled"
+            :errors="errors"
+            @on-check="$emit('on-check-lot')"
         ></application-lots>
         <div class="application-lots__amounts">
             <div class="application-lots__amount">
@@ -42,6 +45,7 @@
                 :fileUrl="lotsFile.url"
                 @uploaded="$emit('on-upload', $event)"
                 @remove="$emit('on-upload', {})"
+                :disabled="disabled"
             ></application-file-uploader>
         </div>
         <div class="divider"></div>
@@ -80,6 +84,13 @@ export default {
         },
         isAuction: {
             type: Boolean
+        },
+        disabled: {
+            type: Boolean
+        },
+        errors: {
+            type: Boolean,
+            default: false
         }
     },
     filters: {

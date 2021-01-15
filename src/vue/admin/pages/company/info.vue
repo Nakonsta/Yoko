@@ -1,10 +1,10 @@
 <template>
   <div>
-    <CompanyInfoTabs 
+    <companiesTabs
       :value="currentCompany" 
       :companies="companies"
 
-      @input="changeCompany" 
+      @change="changeCompany"
     />
     <div class="company-info__panel">
       <CompanyInfoData
@@ -64,9 +64,10 @@
           </label>
         </template>
       </CompanyInfoData>
-      <button 
+      <!-- TODO: включить, когда будет нужна  -->
+      <button
+        v-if="false"
         class="btn company-info__button"
-
         @click="openForm"
       >
         Создать заявку на изменение данных
@@ -77,14 +78,14 @@
 
 <script>
 import api from '@/helpers/api'
-import CompanyInfoTabs from '@/components/admin/company/info/CompanyInfoTabs';
+import companiesTabs from "@/components/blocks/companiesTabs";
 import CompanyInfoData from '@/components/admin/company/info/CompanyInfoData';
 
 export default {
   name: 'CompanyInfo',
   mixins: [api],
   components: {
-    CompanyInfoTabs,
+    companiesTabs,
     CompanyInfoData,
   },
   data: () => ({ currentCompany: {} }),

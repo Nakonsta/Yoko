@@ -19,7 +19,7 @@
                     {{ showField(header.value) }}
                 </span>
                 <div
-                    v-if="header.value === 'name' && canReplace"
+                    v-if="!disabled && header.value === 'name' && canReplace"
                     class="application-product__replace"
                     @click="$emit('on-select-replace')"
                 >
@@ -33,6 +33,7 @@
             </div>
             <application-country-select
                 v-else
+                :disabled="disabled"
                 :countries="countries"
                 :defaultValue="product.country"
                 @on-select="$emit('on-country-change', $event)"
@@ -66,6 +67,10 @@ export default {
         },
         canReplace: {
             type: Boolean
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

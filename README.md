@@ -40,3 +40,13 @@ sudo vi /etc/hosts, далее I, далее вставить строчку и 
 Образец применения: `:rules="{ customPhone: true }"`
     
     <ValidationProvider name="Телефон" v-slot="{ errors, failed }" :rules="{ required: true, customPhone: true }" tag="label" class="field__container">
+
+## Вспомогательные функции в helpers/functions.js
+**tradingFormatsList()** - Список объектов с описанием всех возможных форматов процедур  
+**getTradingFormat(format)** - Получение объекта с описанием формата процедуры
+**tradingTypesList()** - Список объектов с описанием всех возможных типов процедур (если что - дополняйте)  
+**getTradingType(type)** - Получение объекта с описанием типа процедуры  
+**currenciesList()** - Список объектов с описанием всех возможных валют  
+**getCurrency(currency)** - Получение объекта с описанием валюты  
+**formatPrice(value)** - Форматирование суммы  
+**formatPriceWithCurrency(value, currency)** - Форматирование суммы + добавление символа валюты   

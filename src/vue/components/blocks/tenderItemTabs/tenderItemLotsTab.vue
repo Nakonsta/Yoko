@@ -8,7 +8,7 @@
                             Лот {{ index + 1 }}
                         </div>
                         <div class="tender-item__lot-item tender-item__lot-price">
-                            {{ lot }} &#8381;
+                            {{ formatPriceWithCurrency(lot, tenderItemData.purchase_currency) }}
                         </div>
                     </div>
                     <div class="tender-item__lot-table">
@@ -44,7 +44,7 @@
                                     {{ measures[product.measure] }}
                                 </div>
                                 <div class="tender-item__lot-product tender-item__lot-sum" :data-name="product.price_for_one ? 'Сумма за позицию' : ''">
-                                    {{ product.price_for_one }} &#8381;
+                                    {{ formatPriceWithCurrency(product.price_for_one, product.currency) }}
                                 </div>
                                 <div class="tender-item__lot-product tender-item__lot-vat" :data-name="product.vat ? 'НДС' : ''">
                                     {{ product.vat }} %
@@ -62,8 +62,12 @@
 </template>
 
 <script>
+import functions from "@/helpers/functions";
+
 export default {
     name: 'TenderItemLotsTab',
+
+    mixins: [functions],
 
     props: {
         tenderItemData: {
