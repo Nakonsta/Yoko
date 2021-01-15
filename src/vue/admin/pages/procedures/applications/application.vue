@@ -489,7 +489,7 @@ export default {
     }
 
     @include mq($until: desktop) {
-        padding: rem(80px) rem(40px) rem(40px);
+        padding: rem(80px) rem(16px) rem(40px);
     }
 
     * {

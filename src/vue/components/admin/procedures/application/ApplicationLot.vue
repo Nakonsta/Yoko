@@ -195,19 +195,19 @@ export default {
 
         cursor: pointer;
         span {
-            margin-right: rem(24px);
+            margin-right: auto;
             transition: 0.3s;
 
             font-family: Roboto;
             font-weight: 700;
-            font-size: rem(20px);
+            font-size: rem(18px);
             color: $colorTextLight;
+            white-space: nowrap;
         }
 
         svg {
             width: 20px;
             height: 20px;
-            margin-left: auto;
             transform: rotate(-90deg);
             transition: 0.3s;
         }
@@ -226,7 +226,8 @@ export default {
     }
 
     &__amount {
-        margin: 0 rem(20px);
+        flex: 1;
+        margin: 0 rem(24px);
     }
 
     &__content {
