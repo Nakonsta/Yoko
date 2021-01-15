@@ -15,7 +15,11 @@
                 <a class="application-file-uploader__link" :href="localFile.url" target="_blank">{{
                     localFile.name
                 }}</a>
-                <div v-if="localFile.name || fileName" class="application-file-uploader__remove" @click="removeFile">
+                <div
+                    v-if="!disabled && (localFile.name || fileName)"
+                    class="application-file-uploader__remove"
+                    @click="removeFile"
+                >
                     <svg>
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"></use>
                     </svg>
