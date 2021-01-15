@@ -20,7 +20,7 @@
           @input="input"
           :placeholder="placeholder"
           :maxlength="maxlength || false"
-          :max="max"
+          :max="type === 'number' && max ? max : false"
           :min="type === 'number' && min ? min : false"
           @paste="paste"
       >
