@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CompanyInfoTabs 
+    <CompanyTabs 
       :value="currentCompany" 
       :companies="companies"
 
@@ -77,14 +77,14 @@
 
 <script>
 import api from '@/helpers/api'
-import CompanyInfoTabs from '@/components/admin/company/info/CompanyInfoTabs';
+import CompanyTabs from '@/components/admin/company/common/CompanyTabs';
 import CompanyInfoData from '@/components/admin/company/info/CompanyInfoData';
 
 export default {
   name: 'CompanyInfo',
   mixins: [api],
   components: {
-    CompanyInfoTabs,
+    CompanyTabs,
     CompanyInfoData,
   },
   data: () => ({ currentCompany: {} }),
