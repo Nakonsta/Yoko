@@ -57,7 +57,7 @@
                     </div>
                     <dl>
                         <dt>Компания</dt>
-                        <dd><a href="#" v-if="item.company">{{ item.company.name }}</a></dd><!-- todo линк на компанию -->
+                        <dd><a :href="'/companies/'+item.company.inn" v-if="item.company">{{ item.company.name }}</a></dd><!-- todo линк на компанию -->
                     </dl>
                     <dl class="procedures__item-contact">
                         <dt>Контактное лицо</dt>
@@ -86,8 +86,8 @@
                     <div class="procedures__item-flex">
                         <div class="procedures__item-status">{{ getTenderStatusName(item) }}</div>
                         <div class="procedures__item-btns">
-                            <a href="javascript:{}" title="Распечатать" @click="printPage('/marketplace-detail.html?id='+item.id)"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
-                            <a href="/marketplace-detail.html#documents" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
+                            <a href="javascript:{}" title="Распечатать" @click="printPage('/platform/'+item.id)"><svg class="sprite-print"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use></svg></a>
+                            <a :href="'/platform/'+item.id+'#documents'" title="Приложенные файлы"><svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg></a>
                             <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
                             <a href="javascript:{}" :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(item, 'hidden', itemMarkExist(item, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="{active: itemMarkExist(item, 'hidden')}">
                                 <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
@@ -99,10 +99,10 @@
                     </div>
                     <div class="procedures__item-price">
                         <span>Начальная цена:</span>
-                        <template v-if="item.start_price">
-                            {{ item.start_price }}
+                        <template v-if="item.purchase_subject.start_price">
+                            {{ formatPriceWithCurrency(item.purchase_subject.start_price, item.purchase_currency) }}
                         </template>
-                        <template v-if="!item.start_price">
+                        <template v-if="!item.purchase_subject.start_price">
                             Без указания цены
                         </template>
                     </div>
@@ -159,7 +159,7 @@
                                     <td data-title="Наименование">{{ product.id }}</td>
                                     <td data-title="Длина">{{ product.quantity }}</td>
                                     <td data-title="Единица">{{ product.measure }}</td>
-                                    <td data-title="Сумма">{{ product.price_for_one }}</td>
+                                    <td data-title="Сумма">{{ formatPriceWithCurrency(product.price_for_one, product.currency) }}</td>
                                     <td data-title="НДС">{{ product.quantity }}%</td>
                                     <td data-title="Аналог">{{ product.availability_of_analogues ? 'Да' : 'Нет' }}</td>
                                 </tr>
@@ -281,18 +281,14 @@
         },
         methods: {
             getTenderTradingTypeName(item) {
-                const type = this.itemsTypes.find(
-                    (type) => type.id === item.tender_trading_type,
-                );
+                const type = this.getTradingType(item.tender_trading_type);
                 if (type) {
                     return type.name;
                 }
                 return item.tender_trading_type;
             },
             getTenderTradingFormatName(item) {
-                const type = this.itemsFormats.find(
-                    (type) => type.id === item.tender_trading_format,
-                );
+                const type = this.getTradingFormat(item.tender_trading_format);
                 if (type) {
                     return type.name;
                 }
@@ -724,6 +720,7 @@
                 margin: rem(32px) 0 0;
                 font-size: rem(20px);
                 line-height: (27/20);
+                white-space: nowrap;
             }
 
             &-date {

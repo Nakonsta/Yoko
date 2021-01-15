@@ -2,6 +2,14 @@
     <div class="products">
         <accreditations-title title="Заявки на добавление в каталог"></accreditations-title>
         <div class="items__head">
+            <div class="items__head-counter">
+                <template v-if="!loading">
+                    Найдено&nbsp;<span>{{ totalItems }}</span>
+                </template>
+                <template v-else>
+                    <span>Загрузка...</span>
+                </template>
+            </div>
             <dropdownList
                     class="items__head-item"
                     label="Сортировать по:"
@@ -66,12 +74,18 @@ export default {
     CatalogList
   },
   mixins: [api],
+  computed: {
+    totalPages() {
+      return Math.ceil(this.totalItems / this.perPage)
+    },
+  },
   data() {
     return {
       items: [],
       loading: true,
+      totalItems: 0,
+      perPage: 20,
       search: '',
-      totalPages: null,
       currentPage: 1,
       productSort: null,
       productFilter: null,
@@ -113,6 +127,7 @@ export default {
   methods: {
     getPositions() {
       this.loading = true
+      this.items = [];
       this.fetchProductList({
         page: this.currentPage,
         'order[created_at]': this.productSort,
@@ -120,8 +135,9 @@ export default {
         'filter[q]': this.search
       })
         .then((response) => {
-          const items = response.data.data.items 
-          this.totalPages = response.data.data.total       
+          const items = response.data.data.items
+          this.totalItems = response.data.data.total;
+
           const companiesIds = [];                 
           items.forEach((item, index) => {
             items[index].company = null;
@@ -201,6 +217,6 @@ export default {
 @import '../../../../assets/sass/mixins/mq';
 
 .products__search {
-    margin-left: auto;
+    /*margin-left: auto;*/
 }
 </style>
