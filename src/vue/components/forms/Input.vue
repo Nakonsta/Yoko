@@ -20,7 +20,7 @@
           @input="input"
           :placeholder="placeholder"
           :maxlength="maxlength || false"
-          :max="type === 'number' && max ? max : false"
+          :max="max"
           :min="type === 'number' && min ? min : false"
           @paste="paste"
       >
@@ -132,7 +132,7 @@ export default {
   },
   methods: {
     paste: function(evt) {
-      // fix Inputmask & vue past issuse
+      // fix Inputmask & vue past issue
       if( this.inputmask === false ) return;
       let clipboardData = evt.clipboardData || window.clipboardData,
         pastedData = clipboardData.getData('Text');

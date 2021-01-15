@@ -6,7 +6,7 @@
       class="new-positions-fields"
     >
       <div class="row">
-        <div class="col col-md-4 col-sm-6 col-xs-12">
+        <div class="col col-lg-4 col-sm-6 col-xs-12">
           <select-input
               :is-single="true"
               :close="true"
@@ -18,7 +18,7 @@
               :select="countTotalPrice(key)"
           ></select-input>
         </div>
-        <div v-if="position.type && position.type.id === 1" class="col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="position.type && position.type.id === 1" class="col col-lg-4 col-sm-6 col-xs-12">
           <select-input
               :is-single="true"
               :close="true"
@@ -33,7 +33,7 @@
               no-result="ОКПД-2 не найдены"
           ></select-input>
         </div>
-        <div v-if="selectedData.count_lots.id !== 0" class="col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="selectedData.count_lots.id !== 0" class="col col-lg-4 col-sm-6 col-xs-12">
           <select-input
               :is-single="true"
               :close="true"
@@ -52,9 +52,10 @@
               position.type.id === 0
             )
           "
-          class="col col-xl-3 col-md-4 col-sm-6 col-xs-12"
+          class="col col-xl-3 col-lg-4 col-sm-6 col-xs-12"
         >
           <select-input
+              parent-class="field__container field__container--search"
               :is-single="true"
               :close="true"
               placeholder="Поиск"
@@ -69,10 +70,20 @@
               no-result="Позиции не найдены"
           ></select-input>
         </div>
-        <div v-if="procedureIdData.positionType[key]" class=" col-xl-1 col-lg-2 col col-md-4 col-sm-6 col-xs-12">
+        <div v-if="procedureIdData.positionType[key]" class="col col-xl-1 col-lg-4 col-sm-6 col-xs-12">
           <text-input
+              :maxlength="
+                procedureIdData.positionType[key] &&
+                procedureIdData.positionType[key].name !== 'PositionCount'
+                  ? 12 : null
+              "
               v-model="position.quantity"
-              :rules="{ required: true, numeric: true }"
+              :rules="
+                procedureIdData.positionType[key] &&
+                procedureIdData.positionType[key].name !== 'PositionCount'
+                  ? { required: true, numeric: true, max: 12 }
+                  : { required: true, numeric: true }
+              "
               :label="
                 procedureIdData.positionType[key] &&
                 procedureIdData.positionType[key].name !== 'PositionCount'
@@ -87,7 +98,7 @@
             procedureIdData.positionType[key] &&
             procedureIdData.positionType[key].name !== 'PositionService'
           "
-          class="col col-xl-2 col-md-4 col-sm-6 col-xs-12"
+          class="col col-xl-2 col-lg-4 col-sm-6 col-xs-12"
         >
           <select-input
               :is-single="true"
@@ -104,7 +115,7 @@
               :disabled="isCreatedProcedure"
           ></select-input>
         </div>
-        <div v-if="procedureIdData.positionType[key]" class="col col-xl-1 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+        <div v-if="procedureIdData.positionType[key]" class="col col-xl-1 col-lg-4 col-sm-6 col-xs-12">
           <text-input
               :disabled="true"
               v-model="selectedData.currency.name"
@@ -113,6 +124,7 @@
         </div>
         <div v-if="procedureIdData.positionType[key]" class="col col-lg-3 col-md-4 col-sm-6 col-xs-12">
           <text-input
+              :maxlength=12
               v-model="position.price_for_one"
               :disabled="isCreatedProcedure"
               :rules="{ required: true, numeric: true, max: 12 }"

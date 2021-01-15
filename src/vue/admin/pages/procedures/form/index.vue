@@ -5,7 +5,7 @@
         <div class="procedure-new container-item">
           <router-link class="link link-icon" to="/personal/procedures/">
             <svg class="sprite-return"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#return"></use></svg>
-            <span>Вернуться в список процедур</span>
+            <b>Вернуться в список процедур</b>
           </router-link>
           <accreditations-title v-if="!isPreview" :title="title" />
           <accreditations-title v-if="isPreview" title="Предпросмотр" />
@@ -105,6 +105,17 @@
         ></app-preview>
       </form>
     </ValidationObserver>
+    <div id="send-procedure" class="popup popup--alt">
+      <div class="popup__body">
+        <div class="popup__content">
+          <a href="javascript:{}" class="popup__close" @click="closeModal('#send-procedure')"><svg class="sprite-close"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#close"></use></svg></a>
+          <div class="popup__title">Процедура направлена на согласование оператором</div>
+          <div class="popup__content-container">
+            <router-link to="/personal/procedures" class="btn">Перейти к процедуре</router-link>
+          </div>
+        </div>
+      </div>
+    </div>
     <transition name="fade-loader">
       <local-preloader v-if="isLoading"/>
     </transition>
@@ -312,7 +323,7 @@ export default {
         application_delivery_time_menu: null,
         application_delivery_time: null,
         addition_information: null,
-        contact_full_name: this.$store.state.auth.user,
+        contact_full_name: null,
         contact_phone: '',
         contact_email: null,
         count_lots: {id: 0, name: '0'},
@@ -489,6 +500,7 @@ export default {
           for (let i = 1; i <= this.selectedData.count_lots.id; i++) {
             if (item.addLot && item.addLot.id === i) {
               totalCount[count] += item.total_price && parseFloat(item.total_price)
+              totalCount[count] = totalCount[count].toFixed(2)
               // totalCount[count] = totalCount[count] && parseFloat(totalCount[count]).toFixed(2)
             }
             count++
@@ -497,8 +509,10 @@ export default {
       })
       baseCount = !isNaN(baseCount) ? baseCount.toFixed(2) : baseCount
 
-      for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
-        lotsCounter.push({id: i, name: i})
+      if (this.selectedData.count_lots) {
+        for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
+          lotsCounter.push({id: i, name: i})
+        }
       }
 
       const datesArray = [
@@ -583,6 +597,12 @@ export default {
     }
   },
   methods: {
+    openModal(popupId) {
+      openPopupById(popupId);
+    },
+    closeModal(popupId) {
+      closePopupById(popupId);
+    },
     removeBlock(key) {
       this.fieldsData.hideBlock[key] = !this.fieldsData.hideBlock[key]
     },
@@ -920,7 +940,6 @@ export default {
       this.fetchCompaniesByInn(this.$store.state.auth.user.companies[0].inn)
           .then((response) => {
             this.fieldsData.contacts_list = response.data.data
-            this.selectedData.contact_full_name = response.data.data[0]
           })
           .catch((e) => {
             console.log(e)
@@ -1067,7 +1086,7 @@ export default {
         tender_tolerance: this.selectedData.tender_tolerance,
         addition_information: this.selectedData.addition_information,
         contact_id: this.get(this.selectedData, 'contact_full_name.id'),
-        inn: this.selectedData.companyName.inn,
+        inn: this.get(this.selectedData, 'companyName.inn'),
         publication_date: this.parseDate(this.selectedData.publication_date),
         purchase_currency: this.get(this.selectedData, 'currency.id'),
         publication_allowed: Number(toPublish),
@@ -1111,7 +1130,9 @@ export default {
       }
       if (
           this.procedureIdData.procedureType === 'Query' ||
+          this.procedureIdData.procedureType === 'Offers' ||
           this.procedureIdData.procedureType === 'Commercial' ||
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Contest'
       ) {
         formData.prices_are_confidential = this.selectedData.confidential_price
@@ -1124,6 +1145,7 @@ export default {
       }
       if (
           this.procedureIdData.procedureType === 'Query' ||
+          this.procedureIdData.procedureType === 'Offers' ||
           this.procedureIdData.procedureType === 'Commercial'
       ) {
         formData.many_stages_of_procurement = this.get(this.selectedData, 'stages_of_the_procurement_procedure.id')
@@ -1149,6 +1171,7 @@ export default {
         }
       }
       if (
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Contest' ||
           this.procedureIdData.procedureType === 'Supplier'
       ) {
@@ -1190,6 +1213,7 @@ export default {
         })
       }
       if (
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Supplier' ||
           this.procedureIdData.procedureType === 'Contest'
       ) {
@@ -1285,7 +1309,7 @@ export default {
         formData.file = {}
       }
       if (this.fieldsData.hideBlock.additional_info) {
-        formData.addition_information = {}
+        formData.addition_information = ''
       }
       if (this.fieldsData.hideBlock.application_security) {
         formData.guarantee = {}
@@ -1296,11 +1320,10 @@ export default {
       this.sendProcedure(formDataObj, this.selectedData.id)
           .then(() => {
             if (toPublish) {
-              window.notificationSuccess('Создана новая процедура')
+              openPopupById('#send-procedure');
             } else {
               window.notificationSuccess('Новая процедура добавлена в черновик')
             }
-            this.$router.replace('/personal/procedures')
             window.closeLoader()
           })
           .catch((response) => {

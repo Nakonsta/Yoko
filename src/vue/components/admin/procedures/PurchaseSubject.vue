@@ -1,6 +1,6 @@
 <template>
   <div v-if="selectedData.tender_trading_type && selectedData.tender_trading_type.id" class="container-item">
-    <div class="hide-block" @click=""><tooltip content="Скрыть блок"></tooltip></div>
+    <div class="hide-block" @click=""><tooltip class-main="tooltip tooltip--right" content="Скрыть блок"></tooltip></div>
     <h3 class="procedure__main-title">Предмет закупки</h3>
     <div class="row field__container">
       <div class="col mb1">
@@ -17,8 +17,10 @@
     <div class="row">
       <div class="col col-xs-12">
         <textarea-input
+            :maxlength=1000
             v-model="selectedData.item_description"
             label="Описание предмета закупки"
+            :rules="{required: true, max: 1000 }"
             :disabled="isCreatedProcedure"
             placeholder="Введите информацию о предмете закупки"
         ></textarea-input>
@@ -35,7 +37,7 @@
             :select="changeLotsCount"
         ></select-input>
       </div>
-      <div v-if="selectedData.count_lots.id === 0" class="col col-md-4 col-sm-6 col-xs-12">
+      <div v-if="selectedData.count_lots && selectedData.count_lots.id === 0" class="col col-md-4 col-sm-6 col-xs-12">
         <checkbox-input
             class-name="mt3"
             name="purchase_positional"
@@ -68,7 +70,7 @@
       <svg class="sprite-field-add"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#field-add"></use></svg>
       Добавить позицию
     </a>
-    <div v-if="selectedData.count_lots.id !== 0" class="row">
+    <div v-if="selectedData.count_lots && selectedData.count_lots.id !== 0" class="row">
       <div v-for="index in selectedData.count_lots.id" :key="index" class="col col-md-4 col-sm-6 col-xs-12">
         <text-input
             :disabled="true"
@@ -167,6 +169,14 @@
         ],
       }
     },
+    methods: {
+      setMaxLength(value, model, e) {
+        console.log(value, model, e)
+        // if(model.length < value) {
+        //   model = e.target.value
+        // }
+      }
+    }
   }
 </script>
 

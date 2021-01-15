@@ -114,6 +114,7 @@ export default {
             });
         },
         authSignin(l, p) {
+            console.log(process.env)
             return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/signin`, {
                 login: l,
                 password: p,
@@ -422,7 +423,7 @@ export default {
         },
         fetchProductList(props) {
           let body = {}
-         
+
           if(props.page !== null){
             body.page = props.page
           }
@@ -431,15 +432,15 @@ export default {
           }
           if(props['filter[status]'] !== null){
             body['filter[status]'] = props['filter[status]']
-          } 
+          }
           if(props['filter[q]'] !== ''){
             body['filter[q]'] = props['filter[q]']
-          }  
-          
-        return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, 
+          }
+
+        return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`,
           {
             params: body
-          }            
+          }
         )
       },
       fetchProductDetails(id) {

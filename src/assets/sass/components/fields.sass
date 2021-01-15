@@ -83,6 +83,20 @@ input[type=number]
       top: rem(13px)
       right: rem(15px)
       color: $colorTurquoise
+    &--search
+      .multiselect__tags
+        color: #4E4F57
+        font-size: 13px
+        padding-left: rem(50px) !important
+        &:before
+          content: '\e80b'
+          font-family: "fontello"
+          position: absolute
+          left: 18px
+    &--ha
+      .field__label
+        @media(max-width: 958px)
+          height: rem(44px)
 
   &__counter
     white-space: nowrap
@@ -170,6 +184,20 @@ input[type=number]
   &-group
     display: flex
     align-items: flex-start
+    @media(max-width: 768px)
+      display: block
+      margin-bottom: rem(20px)
+      .field__container
+        margin: 0
+      .multiselect__tags
+        border-bottom-left-radius: 0
+        border-bottom-right-radius: 0
+      .btn
+        width: 100%
+        margin-left: 0 !important
+        border-top-left-radius: 0
+        border-top-right-radius: 0
+        max-width: inherit !important
     > :first-child
       flex-grow: 2
       .field

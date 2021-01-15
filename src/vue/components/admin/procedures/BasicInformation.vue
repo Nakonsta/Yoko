@@ -80,7 +80,7 @@
             :options="
               procedureIdData.procedureType === 'FromSupplier'
                 ? fieldsData.tenderAvailablePur
-                : procedureIdData.procedureType === 'Auction'
+                : procedureIdData.procedureType === 'Auction' || procedureIdData.procedureType === 'Contest'
                 ? fieldsData.tenderAvailableAuc
                 : fieldsData.tenderAvailable
             "
@@ -135,6 +135,7 @@
         <checkbox-input
             class-name="mt3"
             name="overbidding_is_possible"
+            content="Вы допускаете торги по конкурсу"
             :disabled="isCreatedProcedure"
             v-model="selectedData.overbidding_is_possible"
             :label="[{label: 'Возможна переторжка'}]"
