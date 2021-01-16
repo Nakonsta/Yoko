@@ -9,6 +9,7 @@ export default {
                 searchCompaniesCancelToken: axios.CancelToken.source(),
                 companyCancelToken: axios.CancelToken.source(),
                 proceduresCancelToken: axios.CancelToken.source(),
+                companiesCancelToken: axios.CancelToken.source(),
             },
         }
     },
@@ -18,6 +19,20 @@ export default {
                 'Предыдущий запрос отменен',
             )
             this.CancelTokens.catalogCancelToken = axios.CancelToken.source()
+        },
+        cancelCompaniesRequest() {
+            this.CancelTokens.companiesCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            );
+            this.CancelTokens.companiesCancelToken = axios.CancelToken.source()
+        },
+        fetchCompanies(filter = null, all = false) {
+            console.log(filter);
+            return axios.get(
+                all ? `${process.env.API_URL_AUTH_SERVICE}/companies/all` : `${process.env.API_URL_AUTH_SERVICE}/companies`,
+                {params: {...filter} },
+                { cancelToken: this.CancelTokens.companiesCancelToken.token },
+            );
         },
         fetchInn(filterRequest) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, {params: { inn: filterRequest }})
@@ -220,18 +235,12 @@ export default {
                 },
             });
         },
-        cancelCompaniesRequest() {
-            this.CancelTokens.searchCompaniesCancelToken.cancel(
-                'Предыдущий запрос отменен',
-            )
-            this.CancelTokens.searchCompaniesCancelToken = axios.CancelToken.source()
-        },
         fetchCompaniesByName(name) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`, {
                 params: {
                     name: name
                 },
-                cancelToken: this.CancelTokens.searchCompaniesCancelToken.token,
+                cancelToken: this.CancelTokens.companiesCancelToken.token,
             });
         },
         fetchCompaniesByIds(ids) {
@@ -421,38 +430,38 @@ export default {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
         },
         fetchProductList(props) {
-            let body = {}
-            
-            if(props.page !== null){
-                body.page = props.page
-            }
-            if(props['order[created_at]'] !== null){
-                body['order[created_at]'] = props['order[created_at]']
-            }
-            if(props['filter[status]'] !== null){
-                body['filter[status]'] = props['filter[status]']
-            } 
-            if(props['filter[q]'] !== ''){
-                body['filter[q]'] = props['filter[q]']
-            }  
-            
-            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, 
-                {
-                    params: body
-                }            
-            )
-        },
-        fetchProductDetails(id) {
-            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`);
-        },
-        setCatalogPositionStatus(id, status = null, text_rejection = null) {
-            return axios.patch(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`,
-            {
-                status,
-                text_rejection,
-            },
-            )
-        },
+          let body = {}
+
+          if(props.page !== null){
+            body.page = props.page
+          }
+          if(props['order[created_at]'] !== null){
+            body['order[created_at]'] = props['order[created_at]']
+          }
+          if(props['filter[status]'] !== null){
+            body['filter[status]'] = props['filter[status]']
+          }
+          if(props['filter[q]'] !== ''){
+            body['filter[q]'] = props['filter[q]']
+          }
+
+        return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`,
+          {
+            params: body
+          }
+        )
+      },
+      fetchProductDetails(id) {
+        return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`);
+      },
+      setCatalogPositionStatus(id, status = null, text_rejection = null) {
+        return axios.patch(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`,
+          {
+            status,
+            text_rejection,
+          },
+        )
+      },
         fetchMark(id) {
             return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/mark/${id}/`)
         },
@@ -488,9 +497,6 @@ export default {
                 },
                 { cancelToken: this.CancelTokens.proceduresCancelToken.token },
             );
-        },
-        sendUserData(data) {
-            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data)
         }
     }
 }

@@ -47,7 +47,8 @@ sudo vi /etc/hosts, далее I, далее вставить строчку и 
 **tradingTypesList()** - Список объектов с описанием всех возможных типов процедур (если что - дополняйте)  
 **getTradingType(type)** - Получение объекта с описанием типа процедуры  
 **currenciesList()** - Список объектов с описанием всех возможных валют  
-**getCurrency(currency)** - Получение объекта с описанием валюты  
+**getCurrency(currency)** - Получение объекта с описанием валюты
+**convertPrice(value, digits)** - Форматирование числа в текстовое млрд., млн, тыс.  
 **formatPrice(value)** - Форматирование суммы  
-**formatPriceWithCurrency(value, currency)** - Форматирование суммы + добавление символа валюты  
+**formatPriceWithCurrency(value, currency, convert = false)** - Форматирование суммы + добавление символа валюты  
 **getMeasure(measure)** - получаем единицу измерения в нормальном виде   

@@ -321,6 +321,22 @@ export default {
             currency = currency || 'rub';
             return this.currenciesList().find((item) => {return item.id === currency});
         },
+        convertPrice(value, digits = 0) {
+            let si = [
+                    { value: 1, symbol: "" },
+                    { value: 1E3, symbol: "тыс." },
+                    { value: 1E6, symbol: "млн" },
+                    { value: 1E9, symbol: "млрд." },
+                ],
+                rx = /\.0+$|(\.[0-9]*[1-9])0+$/,
+                i;
+            for (i = si.length - 1; i > 0; i--) {
+                if (value >= si[i].value) {
+                    break;
+                }
+            }
+            return (value / si[i].value).toFixed(digits).replace(rx, "$1") + ' ' + si[i].symbol;
+        },
         formatPrice(value = 0) {
             let decimalCount = 2,
                 decimal = ".",
@@ -332,9 +348,9 @@ export default {
             let j = (i.length > 3) ? i.length % 3 : 0;
             return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(value - i).toFixed(decimalCount).slice(2) : "");
         },
-        formatPriceWithCurrency(value = 0, currency = 'rub') {
+        formatPriceWithCurrency(value = 0, currency = 'rub', convert = false) {
             const c = this.getCurrency(currency).symbol || currency;
-            return this.formatPrice(value)+' '+c;
+            return (convert ? this.convertPrice(value) : this.formatPrice(value))+' '+c;
         },
         getMeasure(measure = 'm') {
             let result = '';
