@@ -136,9 +136,10 @@
                 if (this.showLarge) {
                     filter.businessSize.push('LARGE');
                 }
-                filter.businessSize = filter.businessSize.join(',');
                 if (!filter.businessSize.length || filter.businessSize.length === 3 ) {
                     delete filter.businessSize;
+                } else {
+                    filter.businessSize = filter.businessSize.join(',');
                 }
                 this.fetchCompanies(filter)
                     .then((response) => {
