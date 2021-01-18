@@ -65,8 +65,8 @@ export default {
       default: ''
     },
     maxlength: {
-      type: Number,
-      default: null
+      type: [Number, Boolean],
+      default: false
     },
     vid: {
       type: String,
@@ -88,6 +88,7 @@ export default {
       type: null
     },
     counter: {
+      type: [Number, Boolean],
       default: false
     },
     autoheight: {
@@ -131,7 +132,6 @@ export default {
   methods: {
     countSymbols: function(evt) {
       if( this.counter === false ) return;
-      console.log(evt.target.value.length);
       if ( evt.target.value.length >= this.counter ) {
         this.innerValue = evt.target.value.substring(0, this.counter);
         let key = evt.charCode || evt.keyCode || 0;
@@ -146,6 +146,7 @@ export default {
       }
     },
     countPaste: function(evt) {
+      if (this.counter === false ) return;
       let clipboardData = evt.clipboardData || window.clipboardData,
           pastedData = clipboardData.getData('Text');
       this.$nextTick(() => this.innerValue = pastedData.substring(0, this.counter));

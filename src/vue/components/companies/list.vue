@@ -1,7 +1,7 @@
 <template>
     <div class="companies__items">
         <template v-if="!items.length">
-            <div class="companies__item companies__item--empty" v-if="!loading">
+            <div class="companies__item companies__item--empty">
                 По вашему запросу ничего не найдено
             </div>
         </template>
@@ -27,11 +27,15 @@
                     </ul>
                 </div>
                 <div class="companies__item-title">
-                    <a :href="'/compregister/'+item.inn" :target="linkTarget || null">{{ item.name }}</a>
+                    <a :href="'/compregister/'+item.id" :target="linkTarget || null">{{ item.name }}</a>
                 </div>
                 <dl v-if="showCounters && item.buyer">
                     <dt>Сумма закупок:</dt>
-                    <dd>{{ formatPriceWithCurrency(item.amout || 0, 'rub', true) }}</dd>
+                    <dd>
+                        <template v-for="(amount, index) in item.amounts">
+                            <span class="nowrap">{{ formatPriceWithCurrency(amount.value || 0, amount.currency, true) }}</span>{{ index < item.amounts.length-1 ? ', ' : ''}}
+                        </template>
+                    </dd>
                 </dl>
                 <dl v-if="showCounters && item.buyer">
                     <dt>Процедур:</dt>
@@ -86,12 +90,6 @@
                         item.tags.push(item.businessSize.value);
                     }
                     item.logo = item.logo || '';  // todo логотип
-                    if (this.showCounters) {
-                        item.amout = 1299792458; // todo Поле «сумма закупок» - откуда брать?
-                        item.count_procedures = 300; // todo Поле «Количество завершённых процедур» - откуда брать?
-                        item.count_products = 6; // todo Поле «Продукция» - откуда брать количество?
-                        item.count_balances = 0; // todo Поле «Остатки» - откуда брать количество?
-                    }
                     return item;
                 });
             }

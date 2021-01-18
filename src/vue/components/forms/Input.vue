@@ -96,8 +96,8 @@ export default {
       type: null
     },
     maxlength: {
-      default: 0,
-      type: Number
+      default: false,
+      type: [Number, Boolean]
     },
     max: {
       default: 0,
