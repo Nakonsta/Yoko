@@ -4,6 +4,9 @@
       <slot>{{ title }}</slot>
     </div>
     <div class="company-users__block-content">
+      <div v-if="!users.length">
+        Нет данных о пользователях
+      </div>
       <CompanyUserInfo
         v-for="(user, index) in users"
         :key="index"
@@ -14,7 +17,9 @@
         @remove="removeUserPopup"
       />
     </div>
+    <!-- TODO: включить, когда нужно будет -->
     <button
+      v-if="false"
       class="btn company-users__block-action"
       @click="addUsers"
     >
@@ -46,7 +51,9 @@
       <span>Добавить пользователя</span>
     </button>
 
+    <!-- TODO: включить, когда нужно будет -->
     <div
+      v-if="false"
       id="company-users-remove"
       class="popup popup--alt"
     >

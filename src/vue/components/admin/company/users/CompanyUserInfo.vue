@@ -14,7 +14,9 @@
         {{ user.email }}
       </div>
     </div>
+    <!-- TODO: включить, когда нужно будет -->
     <div
+      v-if="false"
       :class="[
         'company-user-info__action',
         opened && 'company-user-info__action_opened',
