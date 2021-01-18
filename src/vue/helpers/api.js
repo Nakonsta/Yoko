@@ -9,6 +9,7 @@ export default {
                 searchCompaniesCancelToken: axios.CancelToken.source(),
                 companyCancelToken: axios.CancelToken.source(),
                 proceduresCancelToken: axios.CancelToken.source(),
+                companiesCancelToken: axios.CancelToken.source(),
             },
         }
     },
@@ -18,6 +19,20 @@ export default {
                 'Предыдущий запрос отменен',
             )
             this.CancelTokens.catalogCancelToken = axios.CancelToken.source()
+        },
+        cancelCompaniesRequest() {
+            this.CancelTokens.companiesCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            );
+            this.CancelTokens.companiesCancelToken = axios.CancelToken.source()
+        },
+        fetchCompanies(filter = null, all = false) {
+            console.log(filter);
+            return axios.get(
+                all ? `${process.env.API_URL_AUTH_SERVICE}/companies/all` : `${process.env.API_URL_AUTH_SERVICE}/companies`,
+                {params: {...filter} },
+                { cancelToken: this.CancelTokens.companiesCancelToken.token },
+            );
         },
         fetchInn(filterRequest) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, {params: { inn: filterRequest }})
@@ -220,18 +235,12 @@ export default {
                 },
             });
         },
-        cancelCompaniesRequest() {
-            this.CancelTokens.searchCompaniesCancelToken.cancel(
-                'Предыдущий запрос отменен',
-            )
-            this.CancelTokens.searchCompaniesCancelToken = axios.CancelToken.source()
-        },
         fetchCompaniesByName(name) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`, {
                 params: {
                     name: name
                 },
-                cancelToken: this.CancelTokens.searchCompaniesCancelToken.token,
+                cancelToken: this.CancelTokens.companiesCancelToken.token,
             });
         },
         fetchCompaniesByIds(ids) {
@@ -448,9 +457,9 @@ export default {
         setCatalogPositionStatus(id, status = null, text_rejection = null) {
             return axios.patch(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/${id}/`,
             {
-                status,
-                text_rejection,
-            },
+                    status,
+                    text_rejection,
+                },
             )
         },
         fetchMark(id) {
@@ -477,5 +486,15 @@ export default {
         sendProcedureProtocols(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data)
         },
+        fetchApplicationsList(filter = null, page = 1) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
+                {
+                    ...filter,
+                    page,
+                },
+                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+            );
+        }
     }
 }

@@ -286,3 +286,14 @@ if (buttonCreateProductEl) {
         render: function(h) { return h(ButtonCreateProduct); }
     })
 }
+
+// Реестр компаний
+import companies from './companies.vue'
+const companiesBlock = document.querySelector('#companies');
+if (companiesBlock) {
+    let appCompanies = new Vue({
+        el: companiesBlock,
+        store: store,
+        render: function(h) { return h(companies); }
+    })
+}

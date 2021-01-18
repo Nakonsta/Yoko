@@ -307,11 +307,11 @@ export default {
           const value = data[key];
 
           if (value) {
-            characters.push({name, desc: value[0]});
+            characters.push({name, desc: value.join('<br>')});
           }
 
           if (value && this.descriptionCharacters[key]) {
-            descriptionCharacters.push({title: this.descriptionCharacters[key], desc: value[0]});
+            descriptionCharacters.push({title: this.descriptionCharacters[key], desc: value.join(', ')});
           }
         }
       }

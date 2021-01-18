@@ -29,7 +29,7 @@
         <div class="table-cell__price cable-info__price" :data-name="item.price ? 'Цена, руб' : 'Цена, руб'">
             <template v-if=" $store.state.auth.loggedIn">
                 <span v-if="item.price">
-                    {{ item.price }} &#8381;
+                    {{ formatPriceWithCurrency(item.price, item.currency) }}
                 </span>
                 <span v-else>
                     не указана
@@ -72,8 +72,11 @@
 </template>
 
 <script>
+import functions from "@/helpers/functions";
 export default {
     name: 'MarkSizeCard',
+
+    mixins: [functions],
 
     props: {
         item: {
