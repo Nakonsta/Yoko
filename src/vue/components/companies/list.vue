@@ -27,7 +27,7 @@
                     </ul>
                 </div>
                 <div class="companies__item-title">
-                    <a :href="'/compregister/'+item.inn" :target="linkTarget || null">{{ item.name }}</a>
+                    <a :href="'/compregister/'+item.id" :target="linkTarget || null">{{ item.name }}</a>
                 </div>
                 <dl v-if="showCounters && item.buyer">
                     <dt>Сумма закупок:</dt>

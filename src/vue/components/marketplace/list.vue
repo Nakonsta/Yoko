@@ -57,7 +57,7 @@
                     </div>
                     <dl>
                         <dt>Компания</dt>
-                        <dd><a :href="'/compregister/'+item.company.inn" v-if="item.company">{{ item.company.name }}</a></dd><!-- todo линк на компанию -->
+                        <dd><a :href="'/compregister/'+item.company.id" v-if="item.company">{{ item.company.name }}</a></dd><!-- todo линк на компанию -->
                     </dl>
                     <dl class="procedures__item-contact">
                         <dt>Контактное лицо</dt>
