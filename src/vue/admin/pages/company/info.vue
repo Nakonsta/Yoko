@@ -251,16 +251,30 @@ export default {
   },
   created() {
     if (this.companies && this.companies.length) {
+      window.openLoader()
       this.fetchCompanyByInn(this.companies[0].inn)
-        .then(({ data }) => this.currentCompany = data.data)
-        .catch((error) => console.error(error));
+        .then(({ data }) => {
+          this.currentCompany = data.data
+          window.closeLoader()
+        })
+        .catch((error) => {
+          console.error(error)
+          window.closeLoader()
+        });
     }
   },
   methods: {
     changeCompany(company) {
+      window.openLoader()
       this.fetchCompanyByInn(company.inn)
-        .then(({ data }) => this.currentCompany = data.data)
-        .catch((error) => console.error(error));
+        .then(({ data }) => {
+          this.currentCompany = data.data
+          window.closeLoader()
+        })
+        .catch((error) => {
+          console.error(error)
+          window.closeLoader()
+        });
     },
     change(obj) {
       Object.assign(this.currentCompany, obj);
