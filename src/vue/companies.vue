@@ -24,7 +24,7 @@
                         <span class="checkbox__text">Малый бизнес</span>
                     </label>
                     <label class="items__head-checkbox checkbox">
-                        <input type="checkbox" v-model="showMiddle" @change="getItems">
+                        <input type="checkbox" v-model="showMedium" @change="getItems">
                         <span class="checkbox__body"></span>
                         <span class="checkbox__text">Средний бизнес</span>
                     </label>
@@ -78,7 +78,7 @@
                 searchQuery: '',
                 view: 'all',
                 showSmall: true,
-                showMiddle: true,
+                showMedium: true,
                 showLarge: true,
             }
         },
@@ -130,12 +130,13 @@
                 if (this.showSmall) {
                     filter.businessSize.push('SMALL');
                 }
-                if (this.showMiddle) {
-                    filter.businessSize.push('MIDDLE');
+                if (this.showMedium) {
+                    filter.businessSize.push('MEDIUM');
                 }
                 if (this.showLarge) {
                     filter.businessSize.push('LARGE');
                 }
+                filter.businessSize = filter.businessSize.join(',');
                 if (!filter.businessSize.length || filter.businessSize.length === 3 ) {
                     delete filter.businessSize;
                 }
