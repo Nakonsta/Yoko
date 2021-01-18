@@ -293,7 +293,6 @@ export default {
             title: 'Заявки на участие в процедурах',
             to: '/personal/applications',
             order: 3,
-            availableAll: true,
             isActive: true,
             subItems: [
               {
