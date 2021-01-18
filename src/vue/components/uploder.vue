@@ -271,6 +271,10 @@ export default {
       Array.prototype.forEach.call(evt.target.files, function (file) {
         if (!self.metatypes.length || self.metatypes.indexOf(file.type) !== -1) {
           self.addFile(file);
+        } else {
+          window.notificationError(
+              'Вы пытаетесь загрузить файл неверного формата. Разрешенные форматы ' + self.extensions
+          )
         }
       });
       this.files.splice(this.max);

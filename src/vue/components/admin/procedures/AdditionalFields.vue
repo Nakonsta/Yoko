@@ -27,8 +27,10 @@
       <div class="row">
         <div class="col col-md-4 col-sm-6 col-xs-12">
           <text-input
+              :maxlength=100
               v-model="field.name"
               label="Название поля"
+              :rules="{required: true, max: 100 }"
               placeholder="Введите название поля"
               :disabled="field.isSave"
           ></text-input>
@@ -42,7 +44,11 @@
             <text-input
                 v-model="field.value"
                 label="Содержание поля"
-                :rules="{required: true, numeric: field.types.id === 'text' ? false : true}"
+                :rules="{
+                  required: true,
+                  numeric: field.types.id === 'text' ? false : true,
+                  max: field.types.id === 'text' ? 100 : 10,
+                }"
                 :placeholder="field.types.id === 'text' ? 'Введите текст' : 'Введите число'"
                 :disabled="field.isSave"
             ></text-input>

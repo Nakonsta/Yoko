@@ -2,8 +2,11 @@
   <div
     v-if="
       selectedData.tender_trading_type &&
-      (procedureIdData.procedureType == 'Supplier' ||
-        procedureIdData.procedureType === 'Contest')
+      (
+        procedureIdData.procedureType == 'FromSupplier' ||
+        procedureIdData.procedureType == 'Supplier' ||
+        procedureIdData.procedureType === 'Contest'
+      )
     "
     class="container-item"
   >
@@ -16,12 +19,13 @@
             label="Дата и время окончания подачи заявки на конкурс"
             placeholder="Выберите крайнюю дату"
             :disabled="isCreatedProcedure"
-            :min-date="new Date(procedureIdData.setMin2WeeksDates.publication_date)"
+            :min-date="new Date(procedureIdData.setMin2WeeksDates.publication_date) || new Date()"
             :rules="{required: true, minMaxDateCheck: procedureIdData.setMin2WeeksDates.publication_date}"
         ></date-time>
       </div>
       <div class="col col-xl-8 col-sm-6 col-xs-12">
         <text-input
+            parent-class="field__container field__container--ha"
             v-model="selectedData.commission"
             label="Конкурсная комиссия"
             :disabled="isCreatedProcedure"

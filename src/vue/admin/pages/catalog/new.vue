@@ -2109,6 +2109,7 @@
             importFile(file) {
                 window.openLoader();
                 const reader = new FileReader();
+                console.log(file)
                 FileReader.onerror = (e) => {
                     window.notificationError('Ошибка импорта из файла');
                     window.closeLoader();

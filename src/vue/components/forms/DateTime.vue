@@ -15,7 +15,7 @@
         v-model="innerValue"
         class="date-picker"
         :disabled-dates='disableDates'
-        :min-date='minDate'
+        :min-date="minDate.toString() !== 'Invalid Date' ? minDate : null"
         :popover="{ visibility: 'click' }"
     >
       <template v-slot="{ inputValue, inputEvents }">

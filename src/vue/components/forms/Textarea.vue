@@ -17,6 +17,7 @@
           :disabled="disabled"
           @input="input"
           :placeholder="placeholder"
+          :maxlength="maxlength"
           @keydown="countSymbols($event); calcAutoheight"
           @keyup="calcAutoheight"
           @change="calcAutoheight"
@@ -62,6 +63,10 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    maxlength: {
+      type: Number,
+      default: null
     },
     vid: {
       type: String,

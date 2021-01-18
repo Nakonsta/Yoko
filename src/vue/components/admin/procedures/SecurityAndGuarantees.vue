@@ -75,11 +75,15 @@
           class="col col-md-4 col-sm-6 col-xs-12"
       >
         <text-input
+            :maxlength=12
             v-model="selectedData.security.collateral_amount"
             label="Сумма обеспечения"
             :disabled="isCreatedProcedure"
             placeholder="Введите число"
-            :rules="{ required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security), regex: /^\d{1,9}(\.\d{1,2})?$/ }"
+            :rules="{
+              required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security),
+              regex: /^\d{1,12}((\.|\,)\d{1,2})?$/,
+            }"
         ></text-input>
       </div>
       <div class="col col-md-4 col-sm-6 col-xs-12">
@@ -166,11 +170,15 @@
           class="col col-md-4 col-sm-6 col-xs-12"
       >
         <text-input
+            :maxlength=12
             v-model="selectedData.request.collateral_amount"
             label="Сумма обеспечения"
             :disabled="isCreatedProcedure"
             placeholder="Введите число"
-            :rules="{ required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security), regex: /^\d{1,9}(\.\d{1,2})?$/ }"
+            :rules="{
+              required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security),
+              regex: /^\d{1,12}((\.|\,)\d{1,2})?$/,
+            }"
         ></text-input>
       </div>
       <div class="col col-md-4 col-sm-6 col-xs-12">

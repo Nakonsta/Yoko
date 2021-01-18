@@ -5,7 +5,7 @@
         <div class="procedure-new container-item">
           <router-link class="link link-icon" to="/personal/procedures/">
             <svg class="sprite-return"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#return"></use></svg>
-            <span>Вернуться в список процедур</span>
+            <b>Вернуться в список процедур</b>
           </router-link>
           <accreditations-title v-if="!isPreview" :title="title" />
           <accreditations-title v-if="isPreview" title="Предпросмотр" />
@@ -21,11 +21,13 @@
           ></app-basic-information>
           <app-purchase-subject
               :selected-data="selectedData"
+              :mark-import="markImport"
               :fields-data="fieldsData"
               :procedure-id-data="procedureIdData"
               :is-created-procedure="isCreatedProcedure"
               :counter-to-ten-select="counterToTenSelect"
               :remove-position="removePosition"
+              :import-file="importFile"
               :count-total-price="countTotalPrice"
               :create-new-position-fieldset="createNewPositionFieldset"
               :change-lots-count="changeLotsCount"
@@ -105,6 +107,17 @@
         ></app-preview>
       </form>
     </ValidationObserver>
+    <div id="send-procedure" class="popup popup--alt">
+      <div class="popup__body">
+        <div class="popup__content">
+          <a href="javascript:{}" class="popup__close" @click="closeModal('#send-procedure')"><svg class="sprite-close"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#close"></use></svg></a>
+          <div class="popup__title">Процедура направлена на согласование оператором</div>
+          <div class="popup__content-container">
+            <router-link to="/personal/procedures" class="btn">Перейти к процедуре</router-link>
+          </div>
+        </div>
+      </div>
+    </div>
     <transition name="fade-loader">
       <local-preloader v-if="isLoading"/>
     </transition>
@@ -130,6 +143,7 @@ import InvitationToParticipate from '@/components/admin/procedures/InvitationToP
 import AdditionalFields from '@/components/admin/procedures/AdditionalFields'
 import AccreditationsTitle from '@/components/admin/accreditations/AccreditationsTitle'
 import Preview from '@/components/admin/procedures/Preview'
+import XLSX from 'xlsx/xlsx';
 
 export default {
   name: 'ProcedureId',
@@ -152,6 +166,7 @@ export default {
   mixins: [api, functions, parsers],
   data() {
     return {
+      markImport: null,
       fieldsData: {
         hideBlock: {
           payment_info: false,
@@ -312,7 +327,7 @@ export default {
         application_delivery_time_menu: null,
         application_delivery_time: null,
         addition_information: null,
-        contact_full_name: this.$store.state.auth.user,
+        contact_full_name: null,
         contact_phone: '',
         contact_email: null,
         count_lots: {id: 0, name: '0'},
@@ -489,6 +504,8 @@ export default {
           for (let i = 1; i <= this.selectedData.count_lots.id; i++) {
             if (item.addLot && item.addLot.id === i) {
               totalCount[count] += item.total_price && parseFloat(item.total_price)
+              totalCount[count] = Number(totalCount[count]).toFixed(2)
+              console.log(totalCount[count]);
               // totalCount[count] = totalCount[count] && parseFloat(totalCount[count]).toFixed(2)
             }
             count++
@@ -497,8 +514,10 @@ export default {
       })
       baseCount = !isNaN(baseCount) ? baseCount.toFixed(2) : baseCount
 
-      for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
-        lotsCounter.push({id: i, name: i})
+      if (this.selectedData.count_lots) {
+        for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
+          lotsCounter.push({id: i, name: i})
+        }
       }
 
       const datesArray = [
@@ -544,6 +563,11 @@ export default {
       }
     },
   },
+  watch: {
+    markImport: function (file) {
+      this.importFile(file);
+    },
+  },
   created() {
     this.$emit('fullMode')
     this.getFieldsData()
@@ -583,6 +607,263 @@ export default {
     }
   },
   methods: {
+    importFile(file) {
+      window.openLoader();
+      const reader = new FileReader();
+      console.log(file.target.files);
+      XLSX.onFileSelection(file)
+          .then((data) => {
+            vm.data = data;
+          });
+      reader.onload = (evt) => {
+        console.log(evt.target.result);
+      };
+      /*
+      FileReader.onerror = () => {
+        window.notificationError('Ошибка импорта из файла');
+        window.closeLoader();
+      };
+      reader.onload = (e) => {
+        console.log(e);
+        const bstr = e.target.result;
+        const wb = XLSX.read(bstr, {type:'binary'});
+        console.log(bstr);
+        console.log(wb);
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(ws, {header:1}); // get array
+        if (data.length<2) {
+          window.closeLoader();
+          this.view = 'form';
+          return;
+        }
+        const item = data[1]; // get item row
+        data.splice(0, 2); // delete head & item rows
+        data.splice(9); // delete all trash rows
+        let fields = [],
+            importedFields = {};
+        fields = ['mark', 'description', 'appointment', 'description_additional', 'layers|layer', 'layers|description', 'property_armor_options', 'property_screen_view', 'property_gost', 'property_voltage_allowable', 'property_filling', 'property_protective_cover', 'property_isolation', 'property_execution', 'property_caliber', 'property_material', 'property_material_fibers', 'property_material_shell', 'property_armor_availability', 'property_rated_operating_voltage', 'property_normative_document', 'property_use', 'property_insulation_resistance', 'property_fiber_type', 'property_veins_type', 'property_cable_type', 'property_laying_conditions', 'property_color_protective_hose_outer_sheath', 'property_central_element'];
+        importedFields = this.selectedData.positions;
+        // чистим все масивы с объектами
+        importedFields.layers = [{}];
+        console.log(fields)
+        /*
+        function getImportValue(field, value) {
+          if( !value || !value.length ) return value;
+          let v = '';
+          switch( field ) {
+            case 'property_voltage_allowable':
+            case 'property_caliber':
+            case 'property_rated_operating_voltage':
+            case 'property_insulation_resistance':
+            case 'property_active_resistance_zero':
+            case 'property_active_resistance_main':
+            case 'property_active_resistance':
+            case 'property_active_resistance_plane':
+            case 'property_active_resistance_triangle':
+            case 'property_voltage_versions':
+            case 'property_outer_diameter':
+            case 'property_resistance_wave':
+            case 'property_diameter_cabel':
+            case 'property_diameter':
+            case 'property_capacitive_conductivity':
+            case 'property_capacity':
+            case 'property_inductive_resistance_cores_zero':
+            case 'property_inductive_resistance_cores_main':
+            case 'property_inductive_resistance_zero_sequence':
+            case 'property_inductive_resistance':
+            case 'property_inductive_resistance_plane':
+            case 'property_inductive_resistance_triangle':
+            case 'property_inductive_resistance_direct_sequence':
+            case 'property_minimum_bending_radius':
+            case 'property_voltage':
+            case 'property_optical_module':
+            case 'property_crushing_force':
+            case 'property_fiber_size':
+            case 'property_fibers_size':
+            case 'property_tensile_force':
+            case 'property_section':
+            case 'property_cable_cross_section':
+            case 'property_lifetime':
+            case 'property_construction_length':
+            case 'property_electrical_resistance':
+              // цифровое значение с маской
+              v = Inputmask.format(value, {mask: '(x9{0,2}[,(9[x])|(x)])|(x9{3}[,x])|(x[9{4}])|(0[,9[x]])'});
+              v = value.replace(/[^,0-9]/g,'');
+              break;
+            case 'property_fiber_count':
+            case 'property_veins_count':
+            case 'property_number_pairs':
+            case 'property_number_triples':
+            case 'property_number_fours':
+            case 'property_number_elements':
+              // integer
+              v = value.replace(/[^0-9]/g,'');
+              break;
+            default:
+              // обычная строка
+              v = value;
+              break;
+          }
+          // console.log("getImportValue('"+field+"', '"+value+"') = '"+v+"';");
+          return v;
+        }
+        for (let i=0; i<fields.length; i++) {
+          let field = fields[i].indexOf('|') === -1 ? fields[i] : fields[i].substr(0, fields[i].indexOf('|'));
+          if (importedFields.hasOwnProperty(field)) {
+            if (Array.isArray(importedFields[field])) {
+              if (typeof importedFields[field][0] === 'object') {
+                // проставляем значения для объектов
+                let subfield = fields[i].substr(fields[i].indexOf('|')+1);
+                // console.log('Import field: '+field+', subfield: '+subfield+' = '+item[i]);
+                if (importedFields[field][0]) {
+                  // если элемент уже существует - ставим значение
+                  importedFields[field][0][subfield] = item[i];
+                  if (data.length) {
+                    // перебираем все дополнительные поля
+                    for (let r = 0; r < data.length; r++) {
+                      if( field !== 'layers' && r > 4 ) continue;
+                      if (data[r][i] && data[r][i].length) {
+                        if (typeof importedFields[field][r+1] === 'object') {
+                          // если элемент для дополнительного поля существует - ставим значение
+                          importedFields[field][r+1][subfield] = data[r][i];
+                        } else {
+                          // если элемент для дополнительного поля НЕ существует - создаем и добавляем
+                          let obj = {};
+                          obj[subfield] = data[r][i];
+                          importedFields[field].push(obj);
+                        }
+                      }
+                    }
+                  }
+                } else {
+                  // если элемент НЕ существует - создаём и добавляем
+                  let obj = {};
+                  obj[subfield] = item[i];
+                  importedFields[field].push(obj);
+                  if (data.length) {
+                    // перебираем все дополнительные поля
+                    for (let r = 0; r < data.length; r++) {
+                      if( field !== 'layers' && r > 4 ) continue;
+                      if (data[r][i] && data[r][i].length) {
+                        // т.к. элемент для дополнительного поля гарантированно НЕ существует - создаем и добавляем
+                        obj = {};
+                        obj[subfield] = data[r][i];
+                        importedFields[field].push(obj);
+                      }
+                    }
+                  }
+                }
+              } else {
+                // проставляем текстовые значения
+                importedFields[field] = [];
+                if (Array.isArray(this[field])) {
+                  // console.log(field+' is array: '+this[field].indexOf(item[i]));
+                  // если поле выпадающий список то проверяем значение
+                  if (this[field].indexOf(item[i]) !== -1) {
+                    importedFields[field].push(getImportValue(field, item[i]));
+                  } else {
+                    importedFields[field].push('');
+                  }
+                  if (data.length) {
+                    for (let r = 0; r < data.length; r++) {
+                      if (data[r][i] && data[r][i].length) {
+                        if (this[field].indexOf(data[r][i]) !== -1) {
+                          let v = getImportValue(field, data[r][i]);
+                          if (v || v.length) importedFields[field].push(v);
+                        }
+                      }
+                    }
+                  }
+                } else {
+                  // console.log('Import field: '+field+' = '+item[i]);
+                  importedFields[field].push(getImportValue(field, item[i]));
+                  if (data.length) {
+                    for (let r = 0; r < data.length; r++) {
+                      if (data[r][i] && data[r][i].length) {
+                        let v = getImportValue(field, data[r][i]);
+                        if (v || v.length) importedFields[field].push(v);
+                      }
+                    }
+                  }
+                }
+              }
+            } else {
+              importedFields[field] = getImportValue(field, item[i]);
+            }
+          } else {
+            // console.log('?field: '+field+' = '+item[i]);
+          }
+        }*/
+        // if( this.type.id === 'mark' ) {
+        //   this.markForSend = importedFields;
+        //   while (this.markForSend.layers.length < 3) {
+        //     this.markForSend.layers.push({
+        //       layer: '',
+        //       description: '',
+        //     });
+        //   }
+        //   window.closeLoader();
+        //   this.view = 'form';
+        // } else {
+        //   let newMark = item[1] || '';
+        //   if (this.marksizeForSend.mark !== newMark && newMark.length) {
+        //     // импортировали НОВОЕ markname
+        //     if (!newMark.length) {
+        //       // mark пустое
+        //       // this.marksizeForSend = importedFields;
+        //       this.marksizeForSend.mark === '';
+        //       this.marksizeForSend.type = '';
+        //       this.marks = [];
+        //       window.closeLoader();
+        //       this.view = 'form';
+        //     } else {
+        //       // mark НЕ пустое - проверяем
+        //       this.cancelCatalogMarkSearch();
+        //       this.marks = [];
+        //       this.loadingMarks = true;
+        //       this.fetchCatalogMark(newMark)
+        //           .then((response) => {
+        //             this.marks = response.data.data;
+        //             this.loadingMarks = false;
+        //             let importedMark = this.marks.filter((item)=>{return item.name === newMark})[0] || null;
+        //             // this.marksizeForSend = importedFields;
+        //             if (importedMark) {
+        //               this.mark = importedMark;
+        //               this.markSelect(importedMark);
+        //             } else {
+        //               this.mark = null;
+        //               this.marksizeForSend.mark = '';
+        //               this.marksizeForSend.type = '';
+        //             }
+        //             window.closeLoader();
+        //             this.view = 'form';
+        //           })
+        //           .catch((response) => {
+        //             console.log(response.message);
+        //             window.notificationError('Ошибка сервера');
+        //             this.marks = [];
+        //             this.mark = null;
+        //             this.marksizeForSend.mark = '';
+        //             this.marksizeForSend.type = '';
+        //             this.loadingMarks = false;
+        //             // this.marksizeForSend = importedFields;
+        //             window.closeLoader();
+        //             this.view = 'form';
+        //           });
+        //     }
+        //   } else {
+        //     // mark не менялось
+        //     this.loadingMarks = false;
+        //     window.closeLoader();
+        //     this.view = 'form';
+        //   }
+        // }
+      // };
+      // reader.readAsBinaryString(file);
+    },
+    closeModal(popupId) {
+      closePopupById(popupId);
+    },
     removeBlock(key) {
       this.fieldsData.hideBlock[key] = !this.fieldsData.hideBlock[key]
     },
@@ -920,7 +1201,6 @@ export default {
       this.fetchCompaniesByInn(this.$store.state.auth.user.companies[0].inn)
           .then((response) => {
             this.fieldsData.contacts_list = response.data.data
-            this.selectedData.contact_full_name = response.data.data[0]
           })
           .catch((e) => {
             console.log(e)
@@ -1067,7 +1347,7 @@ export default {
         tender_tolerance: this.selectedData.tender_tolerance,
         addition_information: this.selectedData.addition_information,
         contact_id: this.get(this.selectedData, 'contact_full_name.id'),
-        inn: this.selectedData.companyName.inn,
+        inn: this.get(this.selectedData, 'companyName.inn'),
         publication_date: this.parseDate(this.selectedData.publication_date),
         purchase_currency: this.get(this.selectedData, 'currency.id'),
         publication_allowed: Number(toPublish),
@@ -1111,7 +1391,9 @@ export default {
       }
       if (
           this.procedureIdData.procedureType === 'Query' ||
+          this.procedureIdData.procedureType === 'Offers' ||
           this.procedureIdData.procedureType === 'Commercial' ||
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Contest'
       ) {
         formData.prices_are_confidential = this.selectedData.confidential_price
@@ -1124,6 +1406,7 @@ export default {
       }
       if (
           this.procedureIdData.procedureType === 'Query' ||
+          this.procedureIdData.procedureType === 'Offers' ||
           this.procedureIdData.procedureType === 'Commercial'
       ) {
         formData.many_stages_of_procurement = this.get(this.selectedData, 'stages_of_the_procurement_procedure.id')
@@ -1149,6 +1432,7 @@ export default {
         }
       }
       if (
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Contest' ||
           this.procedureIdData.procedureType === 'Supplier'
       ) {
@@ -1190,6 +1474,7 @@ export default {
         })
       }
       if (
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Supplier' ||
           this.procedureIdData.procedureType === 'Contest'
       ) {
@@ -1285,7 +1570,7 @@ export default {
         formData.file = {}
       }
       if (this.fieldsData.hideBlock.additional_info) {
-        formData.addition_information = {}
+        formData.addition_information = ''
       }
       if (this.fieldsData.hideBlock.application_security) {
         formData.guarantee = {}
@@ -1296,11 +1581,10 @@ export default {
       this.sendProcedure(formDataObj, this.selectedData.id)
           .then(() => {
             if (toPublish) {
-              window.notificationSuccess('Создана новая процедура')
+              openPopupById('#send-procedure');
             } else {
               window.notificationSuccess('Новая процедура добавлена в черновик')
             }
-            this.$router.replace('/personal/procedures')
             window.closeLoader()
           })
           .catch((response) => {

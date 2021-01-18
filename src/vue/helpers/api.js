@@ -422,7 +422,7 @@ export default {
         },
         fetchProductList(props) {
             let body = {}
-            
+
             if(props.page !== null){
                 body.page = props.page
             }
@@ -431,15 +431,15 @@ export default {
             }
             if(props['filter[status]'] !== null){
                 body['filter[status]'] = props['filter[status]']
-            } 
+            }
             if(props['filter[q]'] !== ''){
                 body['filter[q]'] = props['filter[q]']
-            }  
-            
-            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`, 
+            }
+
+            return axios.get(`${process.env.API_URL_OPERATOR_SERVICE}/api/products/`,
                 {
                     params: body
-                }            
+                }
             )
         },
         fetchProductDetails(id) {
@@ -468,29 +468,14 @@ export default {
                 {cancelToken: this.CancelTokens.companyCancelToken.token}
             );
         },
-
         sendMarketplaceQuestion(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q`, data)
         },
         sendMarketplaceAnswer(id, question_id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/q/${question_id}/a`, data)
         },
-
         sendProcedureProtocols(id, data) {
             return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data)
         },
-        fetchApplicationsList(filter = null, page = 1) {
-            return axios.post(
-                `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
-                {
-                    ...filter,
-                    page,
-                },
-                { cancelToken: this.CancelTokens.proceduresCancelToken.token },
-            );
-        },
-        sendUserData(data) {
-            return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data)
-        }
     }
 }

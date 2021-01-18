@@ -10,17 +10,17 @@
   >
     <h3 class="procedure__main-title">Приглашение к участию</h3>
     <div class="row">
-      <div class="col col-md-6 col-xs-12">
+      <div class="col col-lg-6 col-xs-12">
         <h4>Зарегистрированные пользователи</h4>
         <div class="field-group field-group--null">
           <ValidationProvider
               v-slot="{ errors, failed }"
               tag="div"
-              class="field__container field__container--single"
+              class="field__container field__container--single field__container--search"
           >
             <multiselect
                 v-model="companyId"
-                class="form-select"
+                class="form-select form-select--stay"
                 :options="searchResultInn"
                 placeholder="Введите название компании или ИНН"
                 :class="{field: true, error: failed}"
@@ -79,7 +79,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col col-md-6 col-xs-12">
+      <div class="col col-lg-6 col-xs-12">
         <h4>Не зарегистрированные пользователи</h4>
         <div class="field-group field-group--null">
           <text-input
@@ -198,6 +198,7 @@
 <style scoped lang="scss">
 .invitation-list {
   width: 90%;
+  margin-bottom: 20px;
   thead {
     text-align: left;
     color: #9B9B9A;
