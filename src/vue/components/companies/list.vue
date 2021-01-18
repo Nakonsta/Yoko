@@ -1,48 +1,55 @@
 <template>
     <div class="companies__items">
-        <div class="companies__item" v-for="(item, index) in items" :key="item.inn">
-            <div class="companies__item-head">
-                <div class="companies__item-logo" :class="{'companies__item-logo--empty': !item.logo}">
-                    <img :src="item.logo" :alt="item.name" v-if="item.logo"/>
+        <template v-if="!items.length">
+            <div class="companies__item companies__item--empty" v-if="!loading">
+                По вашему запросу ничего не найдено
+            </div>
+        </template>
+        <template v-else>
+            <div class="companies__item" v-for="(item, index) in items" :key="item.inn">
+                <div class="companies__item-head">
+                    <div class="companies__item-logo" :class="{'companies__item-logo--empty': !item.logo}">
+                        <img :src="item.logo" :alt="item.name" v-if="item.logo"/>
+                    </div>
+                    <ul class="companies__item-rating">
+                        <li title="Индекс активности">
+                            <svg class="sprite-time"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#time"></use></svg>
+                            {{ item.activityIndex || 0 }}
+                        </li>
+                        <li title="Внутренний рейтинг">
+                            <svg class="sprite-time"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#time"></use></svg>
+                            {{ item.innerRating || 0 }}
+                        </li>
+                        <li title="Надежность компании">
+                            <svg class="sprite-fav"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#fav"></use></svg>
+                            {{ item.rating || 0 }}
+                        </li>
+                    </ul>
                 </div>
-                <ul class="companies__item-rating">
-                    <li title="Индекс активности">
-                        <svg class="sprite-time"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#time"></use></svg>
-                        {{ item.activityIndex || 0 }}
-                    </li>
-                    <li title="Внутренний рейтинг">
-                        <svg class="sprite-time"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#time"></use></svg>
-                        {{ item.innerRating || 0 }}
-                    </li>
-                    <li title="Надежность компании">
-                        <svg class="sprite-fav"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#fav"></use></svg>
-                        {{ item.rating || 0 }}
-                    </li>
+                <div class="companies__item-title">
+                    <a :href="'/compregister/'+item.inn" :target="linkTarget || null">{{ item.name }}</a>
+                </div>
+                <dl v-if="showCounters && item.buyer">
+                    <dt>Сумма закупок:</dt>
+                    <dd>{{ formatPriceWithCurrency(item.amout || 0, 'rub', true) }}</dd>
+                </dl>
+                <dl v-if="showCounters && item.buyer">
+                    <dt>Процедур:</dt>
+                    <dd>{{ item.count_procedures || 0 }}</dd>
+                </dl>
+                <dl v-if="showCounters && item.contractor">
+                    <dt>Продукция:</dt>
+                    <dd>{{ item.count_products || 0 }}</dd>
+                </dl>
+                <dl v-if="showCounters && item.contractor">
+                    <dt>Остатки:</dt>
+                    <dd>{{ item.count_balances || 0 }}</dd>
+                </dl>
+                <ul class="companies__item-tags" v-if="item.tags && item.tags.length">
+                    <li v-for="(tag, index) in item.tags" :key="index">{{ tag }}</li>
                 </ul>
             </div>
-            <div class="companies__item-title">
-                <a :href="'/compregister/'+item.inn" :target="linkTarget || null">{{ item.name }}</a>
-            </div>
-            <dl v-if="showCounters && item.buyer">
-                <dt>Сумма закупок:</dt>
-                <dd>{{ formatPriceWithCurrency(item.amout || 0, 'rub', true) }}</dd>
-            </dl>
-            <dl v-if="showCounters && item.buyer">
-                <dt>Процедур:</dt>
-                <dd>{{ item.count_procedures || 0 }}</dd>
-            </dl>
-            <dl v-if="showCounters && item.contractor">
-                <dt>Продукция:</dt>
-                <dd>{{ item.count_products || 0 }}</dd>
-            </dl>
-            <dl v-if="showCounters && item.contractor">
-                <dt>Остатки:</dt>
-                <dd>{{ item.count_balances || 0 }}</dd>
-            </dl>
-            <ul class="companies__item-tags" v-if="item.tags && item.tags.length">
-                <li v-for="(tag, index) in item.tags" :key="index">{{ tag }}</li>
-            </ul>
-        </div>
+        </template>
     </div>
 </template>
 
@@ -125,6 +132,10 @@
             }
             @include mq($until: 600px) {
                 width: calc(100% - 32px);
+            }
+            &--empty {
+                width: calc(100% - 32px);
+                font-weight: normal;
             }
             &-head {
                 display: flex;
