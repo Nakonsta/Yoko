@@ -34,6 +34,13 @@ export default {
                 { cancelToken: this.CancelTokens.companiesCancelToken.token },
             );
         },
+        fetchProceduresCountByCompanies(ids) {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/total/by_company/`,{
+                params: {
+                    customers: ids,
+                },
+            });
+        },
         fetchInn(filterRequest) {
             return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, {params: { inn: filterRequest }})
         },

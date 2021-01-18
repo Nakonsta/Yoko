@@ -113,7 +113,8 @@
                 // пришли от поиска и с запросом
                 if( search && search.length ) {
                     this.page = 1;
-                    // filter.q = search; // todo поиско по команиям нет?
+                    // filter.name = search;
+                    filter.shortName = search;
                 }
                 // чистим поиск
                 if( search === false ) {
@@ -151,9 +152,55 @@
                         }
                         this.totalItems = response.data.data.totalElements;
                         this.perPage = response.data.data.perPage;
-                        this.items = items;
-                        this.loadingItems = false;
-                        window.closeLoader();
+                        // получение статистики для полученых компаний
+                        const companiesINN = [];
+                        items.forEach((item, index) => {
+                            // todo пока не делаем т.к. получение статистики для компаний всё равно не работает
+                            // if (companiesINN.indexOf(items[index].inn) === -1) companiesINN.push(items[index].inn);
+                            // todo убрать тестовые данные
+                            item.amounts = [
+                                {
+                                    value: 1299792458,
+                                    currency: 'rub',
+                                },
+                                {
+                                    value: 92458,
+                                    currency: 'usd',
+                                },
+                            ];
+                            item.count_procedures = 300; // todo Поле «Количество завершённых процедур» - откуда брать?
+                            item.count_products = 6; // todo Поле «Продукция» - откуда брать количество?
+                            item.count_balances = 0; // todo Поле «Остатки» - откуда брать количество?
+                        });
+                        if (companiesINN.length) {
+                            this.fetchProceduresCountByCompanies(companiesINN)
+                                .then((response) => {
+                                    const companies = response.data.data.data;
+                                    companies.forEach((company) => {
+                                        items.forEach((item) => {
+                                            if (parseInt(company.inn) === parseInt(item.inn)) {
+                                                item.amouts = company.procedures_prices || [];
+                                                item.count_procedures = company.procedures_count || 0;
+                                                item.count_products = company.count_products || 0; // todo Поле «Продукция» - откуда брать количество?
+                                                item.count_balances = company.count_balances || 0; // todo Поле «Остатки» - откуда брать количество?
+                                            }
+                                        });
+                                    });
+                                    this.items = items;
+                                    this.loadingItems = false;
+                                    window.closeLoader();
+                                })
+                                .catch((e) => {
+                                    console.log(e);
+                                    this.items = items;
+                                    this.loadingItems = false;
+                                    window.closeLoader();
+                                });
+                        } else {
+                            this.items = items;
+                            this.loadingItems = false;
+                            window.closeLoader();
+                        }
                     })
                     .catch((e) => {
                         if (!axios.isCancel(e)) {
