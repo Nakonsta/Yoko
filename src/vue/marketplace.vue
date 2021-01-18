@@ -64,6 +64,7 @@
     import filterList from "./components/blocks/filter.vue";
     import marketplaceList from "./components/marketplace/list.vue";
     import formatDate from './helpers/formatDate';
+    import functions from "@/helpers/functions";
 
     export default {
         name: 'Marketplace',
@@ -72,7 +73,7 @@
             filterList,
             marketplaceList,
         },
-        mixins: [api, formatDate],
+        mixins: [api, functions, formatDate],
         data: function() {
             return {
                 searchQuery: '',
