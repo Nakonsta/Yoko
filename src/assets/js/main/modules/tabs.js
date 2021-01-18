@@ -9,7 +9,7 @@ document.addEventListener('click', (e) => {
         let tab = document.getElementById(link.getAttribute('href').substr(1));
         if( el.getAttribute('href') === link.getAttribute('href') ) {
             if (tab) {
-                if (tab.classList.contains('laws__folders')) {
+                if (tab.classList.contains('laws__folders') || tab.classList.contains('tariffs__items')) {
                     tab.style.display = 'flex';
                 } else {
                     tab.style.display = 'block';
