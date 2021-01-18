@@ -115,10 +115,24 @@
                     this.page = 1;
                     // filter.name = search;
                     filter.shortName = search;
+                    this.searchQuery = search;
+                    this.view = 'all';
+                    this.showSmall = true;
+                    this.showMedium = true;
+                    this.showLarge = true;
                 }
                 // чистим поиск
                 if( search === false ) {
                     this.page = 1;
+                    this.searchQuery = '';
+                    this.view = 'all';
+                    this.showSmall = true;
+                    this.showMedium = true;
+                    this.showLarge = true;
+                }
+                //
+                if( this.searchQuery.length ) {
+                    filter.shortName = this.searchQuery;
                 }
                 filter.page = this.page;
                 if (/*this.view === 'all' || */this.view === 'buyer') {
