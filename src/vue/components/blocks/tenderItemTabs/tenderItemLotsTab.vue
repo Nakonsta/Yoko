@@ -35,16 +35,16 @@
                         <div class="tender-item__lot-products">
                             <div v-for="(product, key) in filterProductsToLots(tenderItemData.purchase_subject.products, index + 1)" :key="key" class="tender-item__lot-product-row">
                                 <div class="tender-item__lot-product tender-item__lot-name" :data-name="product.marksize_id ? 'Наименование' : ''">
-                                    {{ product.marksize_id }}
+                                    {{ product.name }}
                                 </div>
                                 <div class="tender-item__lot-product tender-item__lot-length" :data-name="product.quantity ? 'Длина' : ''">
                                     {{ product.quantity }}
                                 </div>
                                 <div class="tender-item__lot-product tender-item__lot-measure" :data-name="product.measure ? 'Единица' : ''">
-                                    {{ measures[product.measure] }}
+                                    {{ getMeasure(product.measure) }}
                                 </div>
                                 <div class="tender-item__lot-product tender-item__lot-sum" :data-name="product.price_for_one ? 'Сумма за позицию' : ''">
-                                    {{ formatPriceWithCurrency(product.price_for_one, product.currency) }}
+                                    {{ formatPriceWithCurrency(product.amount_per_position, product.currency) }}
                                 </div>
                                 <div class="tender-item__lot-product tender-item__lot-vat" :data-name="product.vat ? 'НДС' : ''">
                                     {{ product.vat }} %
@@ -77,12 +77,7 @@ export default {
     },
 
     data() {
-        return {
-            measures: {
-                m: 'м',
-                item: 'шт.'
-            }
-        }
+        return {}
     },
 
     methods: {

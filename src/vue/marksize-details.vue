@@ -98,7 +98,7 @@ export default {
       rootData: {
         description: '',
         appointment: '',
-        price: '',
+        price: 0,
         images: [],
         items: [],
         containers: [],
@@ -263,7 +263,7 @@ export default {
       this.rootData = {
         description: '',
         appointment: '',
-        price: '',
+        price: 0,
         images: [],
         items: [],
         containers: [],
@@ -288,7 +288,7 @@ export default {
         this.rootData.images = data.images;
       }
 
-      this.rootData.price = data.price_average || 'Неизвестно';
+      this.rootData.price = data.price_average || 0;
 
       if (data.description) {
         this.rootData.description = data.description;
@@ -307,11 +307,11 @@ export default {
           const value = data[key];
 
           if (value) {
-            characters.push({name, desc: value[0]});
+            characters.push({name, desc: value.join('<br>')});
           }
 
           if (this.descriptionCharacters[key]) {
-            descriptionCharacters.push({title: this.descriptionCharacters[key], desc: value[0]});
+            descriptionCharacters.push({title: this.descriptionCharacters[key], desc: value.join(', ')});
           }
         }
       }

@@ -2,7 +2,7 @@
     <div class="cable-info" :style="{display: hide ? 'none' : null}">
         <div class="table-cell__title cable-info__title" data-name="Наименование">
             <span class="cable-info__title-text">
-                {{ item.marksize_id }}
+                {{ item.name }}
             </span>
         </div>
         <div class="table-cell__quantity cable-info__quantity" :data-name="item.quantity ? 'Длина' : ''">
@@ -12,12 +12,12 @@
         </div>
         <div class="table-cell__measure cable-info__measure" :data-name="item.measure ? 'Единица' : ''">
             <span v-if="item.measure">
-                {{ measures[item.measure] }}       
+                {{ getMeasure(item.measure) }}
             </span>
         </div>
         <div class="table-cell__sum cable-info__sum" :data-name="item.quantity ? 'Сумма за позицию' : ''">
             <span v-if="item.price_for_one">
-                {{ formatPriceWithCurrency(item.price_for_one, item.currency) }}
+                {{ formatPriceWithCurrency(item.amount_per_position, item.currency) }}
             </span>
         </div>
         <div class="table-cell__vat cable-info__vat" :data-name="item.measure ? 'НДС' : ''">
@@ -51,12 +51,7 @@ export default {
     },
 
     data() {
-        return {
-            measures: {
-                m: 'м',
-                item: 'шт.'
-            }
-        }
+        return {}
     }
 }
 </script>
