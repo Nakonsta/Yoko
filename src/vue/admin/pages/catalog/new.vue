@@ -120,18 +120,21 @@
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="markForSend.description"
+                                counter="10000"
                         />
                         <TextareaInput
                                 label="Назначение"
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="markForSend.appointment"
+                                counter="10000"
                         />
                         <TextareaInput
                                 label="Дополнительная информация"
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="markForSend.description_additional"
+                                counter="10000"
                         />
                         <fieldset>
                             <div class="legend">Характеристики:</div>
@@ -760,18 +763,21 @@
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="marksizeForSend.description"
+                                counter="10000"
                         />
                         <TextareaInput
                                 label="Назначение"
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="marksizeForSend.appointment"
+                                counter="10000"
                         />
                         <TextareaInput
                                 label="Дополнительная информация"
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="marksizeForSend.description_additional"
+                                counter="10000"
                         />
                         <fieldset v-if="marksizeForSend.mark">
                             <div class="legend">Характеристики:</div>
