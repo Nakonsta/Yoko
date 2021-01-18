@@ -259,7 +259,7 @@ export default {
         hide_member_names: 0,
         connect_an_autobot_for_trading: 0,
         application_documentation_checked: 0,
-        tender_eis_id: '31806043029',
+        tender_eis_id: null,
         tender_available: null,
         alternative_applications: null,
         stages_of_the_procurement_procedure: null,
