@@ -1,7 +1,8 @@
 <template>
-    <div class="application-product">
-        <div class="application-product__field" v-for="header in headers" :key="header.value">
-            <div v-if="header.value !== 'country'" class="application-product__text">
+    <div class="application-product-mobile">
+        <div class="application-product-mobile__row" v-for="header in headers" :key="header.text">
+            <div class="application-product-mobile__header">{{ header.text }}</div>
+            <div v-if="header.value !== 'country'" class="application-product-mobile__field">
                 <div v-if="isPriceEdit && header.value === 'price_for_one'" class="application-product__input">
                     <input
                         ref="input"
@@ -20,7 +21,7 @@
                 </span>
                 <div
                     v-if="!disabled && header.value === 'name' && canReplace"
-                    class="application-product__replace"
+                    class="application-product-mobile__replace"
                     @click="$emit('on-select-replace')"
                 >
                     <svg>
@@ -33,9 +34,9 @@
             </div>
             <application-country-select
                 v-else
-                :disabled="disabled"
                 :countries="countries"
                 :defaultValue="product.country"
+                :disabled="disabled"
                 @on-select="$emit('on-country-change', $event)"
                 :key="product.country.name"
             ></application-country-select>
@@ -44,10 +45,9 @@
 </template>
 <script>
 import ApplicationCountrySelect from './ApplicationCountrySelect.vue'
-import ApplicationTooltip from './ApplicationTooltip'
-
+import ApplicationTooltip from '../ApplicationTooltip'
 export default {
-    name: 'application-product',
+    name: 'application-product-mobile',
     components: {
         ApplicationTooltip,
         ApplicationCountrySelect
@@ -57,16 +57,16 @@ export default {
             type: Array,
             required: true
         },
-        countries: {
-            type: Array,
-            required: true
-        },
         product: {
             type: Object,
             required: true
         },
         canReplace: {
             type: Boolean
+        },
+        countries: {
+            type: Array,
+            required: true
         },
         disabled: {
             type: Boolean,
@@ -87,14 +87,10 @@ export default {
                         return `${this.product[value]}%`
                         break
                     case 'price_for_one':
-                        return `${this.numberWithSpaces(this.product[value].replace('.00', ''))} ${
-                            this.currencyType.symbol
-                        }`
+                        return `${this.numberWithSpaces(this.product[value])} ${this.currencyType.symbol}`
                         break
                     case 'amount_per_position':
-                        return `${this.numberWithSpaces(this.product[value].replace('.00', ''))} ${
-                            this.currencyType.symbol
-                        }`
+                        return `${this.numberWithSpaces(this.product[value])} ${this.currencyType.symbol}`
                         break
                     default:
                         return this.product[value]
@@ -151,28 +147,50 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../../../../assets/sass/variables/variables';
-@import '../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
-.application-product {
-    display: table-row-group;
+.application-product-mobile {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
 
-    &__field {
-        display: table-cell;
-        padding: rem(25px) 0;
-        border-bottom: 1px solid $colorBdr;
+    width: 100%;
+    padding: rem(25px) 0;
+    border-bottom: 1px solid $colorBdr;
+
+    &__row {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        width: 100%;
+        margin-bottom: 8px;
     }
 
-    &__text {
+    &__header {
+        width: 100%;
+        max-width: 160px;
+        margin-right: rem(32px);
+
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: rem(14px);
+        color: $colorGray;
+        white-space: nowrap;
+    }
+
+    &__field {
         display: flex;
         flex-flow: row nowrap;
         justify-content: flex-start;
         align-items: center;
 
-        padding-right: rem(12px);
-
+        flex: 1;
         font-family: Roboto;
         font-weight: 500;
         font-size: rem(14px);

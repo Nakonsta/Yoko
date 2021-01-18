@@ -44,7 +44,7 @@
     </div>
 </template>
 <script>
-import ApplicationCheckbox from './ApplicationCheckbox.vue'
+import ApplicationCheckbox from '../ApplicationCheckbox.vue'
 import ApplicationProducts from './ApplicationProducts.vue'
 import ApplicationCountrySelect from './ApplicationCountrySelect.vue'
 export default {
@@ -147,10 +147,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../../../../assets/sass/variables/variables';
-@import '../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .application-lot {
     display: flex;

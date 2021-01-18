@@ -122,10 +122,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../../../../assets/sass/variables/variables';
-@import '../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .application-products {
     display: table;

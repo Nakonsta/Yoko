@@ -43,7 +43,7 @@
     </div>
 </template>
 <script>
-import ApplicationCompanySelect from '../ApplicationCompanySelect'
+import ApplicationCompanySelect from '../details/ApplicationCompanySelect'
 import ApplicationTitle from '../ApplicationTitle'
 export default {
     name: 'application-purchase-block',

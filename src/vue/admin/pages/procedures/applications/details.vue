@@ -17,6 +17,7 @@
                 :application="application"
                 :currency-type="currencyType"
                 @on-upload="application.documents.security = [$event]"
+                :disabled="viewType.isView"
             ></application-security-block>
 
             <application-lots-block
@@ -26,7 +27,10 @@
                 :lots="lots"
                 :currency-type="currencyType"
                 @on-upload="application.documents.lots = [$event]"
-                @on-check="application.agreement = $event"
+                @on-check-agreement="application.agreement = $event"
+                @on-check-lot="errors.lots = false"
+                :disabled="viewType.isView"
+                :errors="errors.lots"
             ></application-lots-block>
             <application-title
                 v-if="viewType.isAuction"
@@ -38,12 +42,15 @@
                 :procedure="procedure"
                 :application="application"
                 @on-company-select="onCompanySelect"
+                :disabled="viewType.isView"
+                :errors="errors.company"
             ></application-company-block>
             <application-additional-block
                 :procedure="procedure"
                 :application="application"
                 @on-upload="application.documents.additional_documents = $event"
                 @on-input="application.description = $event"
+                :disabled="viewType.isView"
             ></application-additional-block>
 
             <!-- <application-checkbox
@@ -63,17 +70,17 @@
     </div>
 </template>
 <script>
-import api from '../../../../helpers/api'
-import functions from '../../../../helpers/functions'
+import api from '@/helpers/api'
+import functions from '@/helpers/functions'
 
-import ApplicationTitle from '../../../../components/admin/procedures/application/ApplicationTitle.vue'
-import ApplicationCheckbox from '../../../../components/admin/procedures/application/ApplicationCheckbox.vue'
-import ApplicationTooltip from '../../../../components/admin/procedures/application/ApplicationTooltip.vue'
-import ApplicationPurchaseBlock from '../../../../components/admin/procedures/application/blocks/ApplicationPurchaseBlock.vue'
-import ApplicationSecurityBlock from '../../../../components/admin/procedures/application/blocks/ApplicationSecurityBlock.vue'
-import ApplicationLotsBlock from '../../../../components/admin/procedures/application/blocks/ApplicationLotsBlock.vue'
-import ApplicationCompanyBlock from '../../../../components/admin/procedures/application/blocks/ApplicationCompanyBlock.vue'
-import ApplicationAdditionalBlock from '../../../../components/admin/procedures/application/blocks/ApplicationAdditionalBlock.vue'
+import ApplicationTitle from '../../../../components/admin/procedures/applications/ApplicationTitle.vue'
+import ApplicationCheckbox from '../../../../components/admin/procedures/applications/ApplicationCheckbox.vue'
+import ApplicationTooltip from '../../../../components/admin/procedures/applications/ApplicationTooltip.vue'
+import ApplicationPurchaseBlock from '../../../../components/admin/procedures/applications/blocks/ApplicationPurchaseBlock.vue'
+import ApplicationSecurityBlock from '../../../../components/admin/procedures/applications/blocks/ApplicationSecurityBlock.vue'
+import ApplicationLotsBlock from '../../../../components/admin/procedures/applications/blocks/ApplicationLotsBlock.vue'
+import ApplicationCompanyBlock from '../../../../components/admin/procedures/applications/blocks/ApplicationCompanyBlock.vue'
+import ApplicationAdditionalBlock from '../../../../components/admin/procedures/applications/blocks/ApplicationAdditionalBlock.vue'
 
 export default {
     components: {
@@ -115,7 +122,11 @@ export default {
                 agreement: false
             },
             loading: true,
-            lots: []
+            lots: [],
+            errors: {
+                company: false,
+                lots: false
+            }
         }
     },
     computed: {
@@ -129,7 +140,8 @@ export default {
             return {
                 isCreate: this.appId === 'new',
                 isAuction: this.procedure.tender_trading_type == 'auction',
-                isDraft: this.application.status === 'draft'
+                isDraft: this.application.status === 'draft',
+                isView: this.application.status !== 'draft' && this.appId !== 'new'
             }
         },
         tradingType() {
@@ -231,27 +243,42 @@ export default {
             })
         },
         createApplicationDraft() {
+            const data = this.createApplicationObject()
+
+            if (!data) {
+                return
+            }
+
             window.openLoader()
-            this.sendProcedureApplicationDraft(this.id, this.createApplicationObject())
+            this.sendProcedureApplicationDraft(this.id, data)
                 .then(({ data }) => {
+                    window.notificationSuccess('Черновик успешно сохранен')
                     this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
                 })
                 .finally(() => window.closeLoader())
         },
         createApplication() {
+            const data = this.createApplicationObject()
+
+            if (!data) {
+                return
+            }
+
             window.openLoader()
             if (this.viewType.isCreate) {
-                this.sendProcedureApplicationDraft(this.id, this.createApplicationObject()).then(({ data }) => {
-                    this.sendProcedureApplication(this.appId)
-                        .then(({ data }) => {
+                this.sendProcedureApplicationDraft(this.id, data).then(({ data }) => {
+                    this.sendProcedureApplication(data.data.id)
+                        .then(() => {
+                            window.notificationSuccess('Заявка успешно отправлена')
                             this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
                         })
                         .finally(() => window.closeLoader())
                 })
             } else {
                 this.sendProcedureApplication(this.appId)
-                    .then(({ data }) => {
-                        this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
+                    .then(() => {
+                        window.notificationSuccess('Заявка успешно отправлена')
+                        this.init()
                     })
                     .finally(() => window.closeLoader())
             }
@@ -293,7 +320,45 @@ export default {
             applicationCopy.inn = this.procedure.selectedCompany.inn
             applicationCopy.tender_trading_type = this.procedure.tender_trading_type
 
-            return this.objectToFormData(applicationCopy)
+            if (applicationCopy.description.trim() === '') {
+                delete applicationCopy.description
+            }
+
+            if (this.validateApplication(applicationCopy)) {
+                return this.objectToFormData(applicationCopy)
+            } else {
+                return null
+            }
+        },
+        validateApplication(app) {
+            let hasErrors = false
+
+            this.errors = {
+                company: false,
+                lots: false
+            }
+
+            if (!app.inn) {
+                hasErrors = true
+                this.errors.company = true
+            }
+
+            if (!app.products.length) {
+                hasErrors = true
+                this.errors.lots = true
+            }
+
+            if (hasErrors) {
+                const top = window.scrollY / 2
+                window.scrollTo({
+                    top,
+                    behavior: 'smooth'
+                })
+
+                return false
+            } else {
+                return true
+            }
         },
         createLots() {
             let lots = []
@@ -379,6 +444,7 @@ export default {
         },
         onCompanySelect(value) {
             this.procedure.selectedCompany = value
+            this.errors.company = false
         },
         init() {
             if (this.viewType.isCreate) {
@@ -422,7 +488,7 @@ export default {
     }
 
     @include mq($until: desktop) {
-        padding: rem(80px) rem(40px) rem(40px);
+        padding: rem(80px) rem(16px) rem(40px);
     }
 
     * {

@@ -64,8 +64,8 @@
     </div>
 </template>
 <script>
-import formatDate from '../../../../../helpers/formatDate'
-import ApplicationCompanyPopup from '../ApplicationCompanyPopup'
+import formatDate from '@/helpers/formatDate'
+import ApplicationCompanyPopup from '../details/ApplicationCompanyPopup'
 import ApplicationTitle from '../ApplicationTitle'
 export default {
     name: 'application-purchase-block',

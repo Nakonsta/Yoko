@@ -9,14 +9,15 @@
             :countries="countries"
             :disabled="disabled"
             :errors="errors"
-            @on-change="lot.checked = $event, $emit('on-check')"
+            @on-change=";(lot.checked = $event), $emit('on-check')"
             @on-country-change="changeCountry($event, lot)"
         ></application-lot>
     </div>
 </template>
 <script>
+import api from '@/helpers/api'
+
 import ApplicationLot from './ApplicationLot.vue'
-import api from '../../../../helpers/api'
 export default {
     name: 'application-lots',
     components: {

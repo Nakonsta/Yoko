@@ -53,9 +53,9 @@
 </template>
 <script>
 import ApplicationTitle from '../ApplicationTitle.vue'
-import ApplicationFileUploader from '../ApplicationFileUploader.vue'
+import ApplicationFileUploader from '../details/ApplicationFileUploader.vue'
 import ApplicationCheckbox from '../ApplicationCheckbox.vue'
-import ApplicationLots from '../ApplicationLots.vue'
+import ApplicationLots from '../details/ApplicationLots.vue'
 
 export default {
     name: 'application-lots-block',
@@ -132,10 +132,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../../../../../assets/sass/variables/variables';
-@import '../../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .application__section-row {
     margin-top: 32px;

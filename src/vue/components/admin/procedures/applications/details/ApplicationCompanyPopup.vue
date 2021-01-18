@@ -66,7 +66,7 @@
     </div>
 </template>
 <script>
-import ApplicationTitle from './ApplicationTitle'
+import ApplicationTitle from '../ApplicationTitle'
 export default {
     name: 'application-company-popup',
     components: {
@@ -86,10 +86,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../../../../assets/sass/variables/variables';
-@import '../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .company-info {
     position: relative;

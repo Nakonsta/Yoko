@@ -119,12 +119,12 @@
     </div>
 </template>
 <script>
-import api from '../../../../helpers/api'
-import parses from '../../../../helpers/parsers'
+import api from '@/helpers/api'
+import parses from '@/helpers/parsers'
 
-import ApplicationTitle from './ApplicationTitle'
-import SelectInput from '../../../forms/Select'
-import TextInput from '../../../forms/Input'
+import ApplicationTitle from '../ApplicationTitle'
+import SelectInput from '../../../../forms/Select'
+import TextInput from '../../../../forms/Input'
 export default {
     name: 'application-product-replace',
     components: {
@@ -253,10 +253,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../../../../assets/sass/variables/variables';
-@import '../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .product-replace {
     display: flex;

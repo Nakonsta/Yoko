@@ -25,7 +25,7 @@
 <script>
 import ApplicationTitle from '../ApplicationTitle'
 import ApplicationTooltip from '../ApplicationTooltip'
-import ApplicationDocumentsUploader from '../ApplicationDocumentsUploader'
+import ApplicationDocumentsUploader from '../details/ApplicationDocumentsUploader'
 export default {
     name: 'application-purchase-block',
     components: {
@@ -50,10 +50,10 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../../../../../../assets/sass/variables/variables';
-@import '../../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .application {
     &__textarea {

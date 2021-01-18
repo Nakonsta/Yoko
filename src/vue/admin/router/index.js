@@ -10,7 +10,7 @@ import CatalogList from '../pages/catalog/positions.vue'
 import CatalogDetail from '../pages/catalog/details.vue'
 import Procedures from '../pages/procedures/items.vue'
 import Procedure from '../pages/procedures/form/index.vue'
-import ProcedureApplicationDetails from '../pages/procedures/applications/application.vue'
+import ApplicationDetails from '../pages/procedures/applications/details.vue'
 // import ProcedureApplications from '../pages/procedures/applications/applications.vue'
 import Accreditations from '../pages/accreditations/accreditations.vue'
 import User from '../pages/user/user.vue'
@@ -75,7 +75,7 @@ const routes = [
   // },
   {
     path: '/personal/procedures/:id/applications/:appid',
-    component: ProcedureApplicationDetails,
+    component: ApplicationDetails,
   },
   {
     path: '/personal/user',

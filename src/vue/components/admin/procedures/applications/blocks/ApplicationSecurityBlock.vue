@@ -52,7 +52,7 @@
 </template>
 <script>
 import ApplicationTitle from '../ApplicationTitle'
-import ApplicationFileUploader from '../ApplicationFileUploader'
+import ApplicationFileUploader from '../details/ApplicationFileUploader'
 export default {
     name: 'application-security-block',
     components: {
@@ -90,10 +90,10 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../../../../../../assets/sass/variables/variables';
-@import '../../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .application {
     &__sber {

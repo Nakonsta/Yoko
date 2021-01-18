@@ -21,7 +21,7 @@
     </div>
 </template>
 <script>
-import api from '../../../../helpers/api'
+import api from '@/helpers/api'
 export default {
     name: 'application-company-select',
     mixins: [api],
@@ -69,10 +69,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../../../../assets/sass/variables/variables';
-@import '../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .application-company-select {
     width: 100%;

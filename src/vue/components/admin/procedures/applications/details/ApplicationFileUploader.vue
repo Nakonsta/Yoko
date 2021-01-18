@@ -36,7 +36,7 @@
     </div>
 </template>
 <script>
-import functions from '../../../../helpers/functions'
+import functions from '@/helpers/functions'
 export default {
     name: 'application-file-uploader',
     props: {
@@ -132,10 +132,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../../../../assets/sass/variables/variables';
-@import '../../../../../assets/sass/variables/fluid-variables';
-@import '../../../../../assets/sass/mixins/fluid-mixin';
-@import '../../../../../assets/sass/mixins/mq';
+@import '@/../assets/sass/variables/variables';
+@import '@/../assets/sass/variables/fluid-variables';
+@import '@/../assets/sass/mixins/fluid-mixin';
+@import '@/../assets/sass/mixins/mq';
 
 .application-file-uploader {
     display: flex;
