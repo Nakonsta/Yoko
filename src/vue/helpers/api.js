@@ -267,6 +267,15 @@ export default {
                 { cancelToken: this.CancelTokens.proceduresCancelToken.token },
             );
         },
+        fetchApplications(filter, order) {
+            return axios.post(
+                `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list`,
+                {
+                    filter,
+                    order
+                },
+            )
+        },
         sendProcedureApplicationDraft(id, data) {
             return axios.post(
                 `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/participation-applications`,
