@@ -56,7 +56,7 @@
                                     placeholder="Введите наименование марки"
                                     :rules="{required: true, excluded: marks.map((item)=>{return item.name}) }"
                                     v-model="markForSend.mark"
-                                    :maxlength="100"
+                                    :maxlength="4000"
                                     @input="markChange"
                                     :loading="loadingMarks"
                             />
@@ -99,7 +99,7 @@
                                             label="Описание"
                                             rules="required"
                                             v-model="item.description"
-                                            :maxlength="100"
+                                            :maxlength="4000"
                                     />
                                     <div class="field__remove" v-if="index > 2">
                                         <a href="javascript:{}" @click="layerRemove(item, index)">
@@ -120,21 +120,18 @@
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="markForSend.description"
-                                counter="1000"
                         />
                         <TextareaInput
                                 label="Назначение"
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="markForSend.appointment"
-                                counter="1000"
                         />
                         <TextareaInput
                                 label="Дополнительная информация"
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="markForSend.description_additional"
-                                counter="1000"
                         />
                         <fieldset>
                             <div class="legend">Характеристики:</div>
@@ -193,7 +190,7 @@
                                                     validationName="вид экрана"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_screen_view[field.index]"
                                             />
                                         </template>
@@ -211,7 +208,7 @@
                                                     validationName="ГОСТ"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_gost[field.index]"
                                             />
                                         </template>
@@ -268,7 +265,7 @@
                                                     validationName="защитный покров"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_protective_cover[field.index]"
                                             />
                                         </template>
@@ -286,7 +283,7 @@
                                                     validationName="изоляция"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_isolation[field.index]"
                                             />
                                         </template>
@@ -304,7 +301,7 @@
                                                     validationName="исполнение"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_execution[field.index]"
                                             />
                                         </template>
@@ -339,7 +336,7 @@
                                                     validationName="материал"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_material[field.index]"
                                             />
                                         </template>
@@ -357,7 +354,7 @@
                                                     validationName="материал волокон"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_material_fibers[field.index]"
                                             />
                                         </template>
@@ -375,7 +372,7 @@
                                                     validationName="материал оболочки"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_material_shell[field.index]"
                                             />
                                         </template>
@@ -432,7 +429,7 @@
                                                     validationName="нормативный документ"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_normative_document[field.index]"
                                             />
                                         </template>
@@ -450,7 +447,7 @@
                                                     validationName="применение"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_use[field.index]"
                                             />
                                         </template>
@@ -486,7 +483,7 @@
                                                     validationName="тип волокна"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_fiber_type[field.index]"
                                             />
                                         </template>
@@ -504,7 +501,7 @@
                                                     validationName="тип жил"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_veins_type[field.index]"
                                             />
                                         </template>
@@ -522,7 +519,7 @@
                                                     validationName="условия прокладки"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_laying_conditions[field.index]"
                                             />
                                         </template>
@@ -540,7 +537,7 @@
                                                     validationName="цвет защитного шланга/наружной оболочки"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_color_protective_hose_outer_sheath[field.index]"
                                             />
                                         </template>
@@ -558,7 +555,7 @@
                                                     validationName="центральный элемент"
                                                     placeholder="Введите текст"
                                                     rules="required"
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="markForSend.property_central_element[field.index]"
                                             />
                                         </template>
@@ -589,7 +586,7 @@
                                         label="Номер ТУ"
                                         placeholder="Введите номер"
                                         rules="required"
-                                        :maxlength="50"
+                                        :maxlength="4000"
                                         v-model="item.properties.number"
                                         :disabled="item.file === null"
                                 />
@@ -625,7 +622,7 @@
                                         label="Номер сертификата"
                                         placeholder="Введите номер"
                                         :rules="{ required: item.file !== null }"
-                                        :maxlength="50"
+                                        :maxlength="4000"
                                         v-model="item.properties.number"
                                         :disabled="item.file === null"
                                 />
@@ -731,7 +728,7 @@
                                     placeholder="Введите наименование маркоразмера"
                                     :rules="{required: true, excluded: marksizes.map((item)=>{return item.name}) }"
                                     v-model="marksizeForSend.size"
-                                    :maxlength="100"
+                                    :maxlength="4000"
                                     @input="marksizeChange"
                                     :loading="loadingMarksizes"
                             />
@@ -754,7 +751,7 @@
                                     label="Тип кабеля"
                                     rules="required"
                                     v-model="marksizeForSend.type"
-                                    :maxlength="100"
+                                    :maxlength="4000"
                                     :disabled="true"
                             />
                         </div>
@@ -763,21 +760,18 @@
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="marksizeForSend.description"
-                                counter="1000"
                         />
                         <TextareaInput
                                 label="Назначение"
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="marksizeForSend.appointment"
-                                counter="1000"
                         />
                         <TextareaInput
                                 label="Дополнительная информация"
                                 placeholder="Введите текст"
                                 rules="required"
                                 v-model="marksizeForSend.description_additional"
-                                counter="1000"
                         />
                         <fieldset v-if="marksizeForSend.mark">
                             <div class="legend">Характеристики:</div>
@@ -1514,7 +1508,7 @@
                                                     validationName="тип применения"
                                                     placeholder="Введите текст"
                                                     rules=""
-                                                    :maxlength="50"
+                                                    :maxlength="4000"
                                                     v-model="marksizeForSend.property_application_type[field.index]"
                                             />
                                         </template>
@@ -1563,7 +1557,7 @@
                                         label="Номер ТУ"
                                         placeholder="Введите номер"
                                         rules="required"
-                                        :maxlength="50"
+                                        :maxlength="4000"
                                         v-model="item.properties.number"
                                         :disabled="item.file === null"
                                 />
