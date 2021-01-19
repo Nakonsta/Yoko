@@ -77,6 +77,7 @@ export default {
     @import "../../../assets/sass/mixins/mq";
 
     .tender-item__menu {
+        margin-left: 32px;
         width: 315px;
         flex-shrink: 0;
         padding: rem(20px) rem(32px);

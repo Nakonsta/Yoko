@@ -73,7 +73,8 @@
                         <dd>
                             <template v-if="item.customer_delivery">
                                 <popupTenderDelivery
-                                        :delivery="item.company"
+                                        :company="item.company"
+                                        :tender="item.item"
                                 />
                             </template>
                             <template v-else>
@@ -111,9 +112,9 @@
                             <span>Дата размещения:</span>
                             {{ formatDateNoTime(item.publication_date) }}
                         </div>
-                        <div class="procedures__item-date" v-if="item.terms_tender_to">
+                        <div class="procedures__item-date" v-if="item.purchase_term && item.purchase_term.procedure_date_to">
                             <span>Дата окончания:</span>
-                            {{ formatDateNoTime(item.terms_tender_to) }}
+                            {{ formatDateNoTime(item.purchase_term.procedure_date_to) }}
                         </div>
                     </div>
                 </div>

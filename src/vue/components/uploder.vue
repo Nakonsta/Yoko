@@ -513,8 +513,8 @@ export default {
         }
 
         .uploader__process-title {
+          margin: 0 56px 0 56px;
           color: $colorWhite;
-          text-overflow: initial;
         }
       }
 
@@ -524,7 +524,7 @@ export default {
       }
 
       .uploader__process-title {
-        padding: 0 108px 0 56px;
+        margin: 0 108px 0 56px;
         font-weight: 500;
         line-height: 22px;
         color: $colorGray;

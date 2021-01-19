@@ -99,12 +99,12 @@
                             {{ formatDateNoTime(tenderItemData.publication_date) }}
                         </div>
                     </div>
-                    <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.application_end_date" class="tender-item__date">
+                    <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.procedure_date_to" class="tender-item__date">
                         <div class="tender-item__date-text">
                             Дата окончания:
                         </div>
                         <div class="tender-item__date-day">
-                            {{ formatDateNoTime(tenderItemData.purchase_term.application_end_date) }}
+                            {{ formatDateNoTime(tenderItemData.purchase_term.procedure_date_to) }}
                         </div>
                     </div>
                 </div>
@@ -289,8 +289,8 @@ export default {
             background-color: #fff;
             border-radius: 6px;
             padding: rem(24px) rem(32px);
-            width: calc(100% - 315px);
-            margin-right: 32px;
+            /*width: calc(100% - 315px);*/
+            flex-grow: 1;
             @media print {
                 margin: 0;
                 border-radius: 0;

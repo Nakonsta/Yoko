@@ -345,7 +345,7 @@ export default {
                     break;
                 }
             }
-            return (value / si[i].value).toFixed(digits).replace(rx, "$1") + ' ' + si[i].symbol;
+            return (value / si[i].value).toFixed(digits).replace(rx, "$1") + "\u00A0" + si[i].symbol;
         },
         formatPrice(value = 0) {
             let decimalCount = 2,
@@ -360,14 +360,17 @@ export default {
         },
         formatPriceWithCurrency(value = 0, currency = 'rub', convert = false) {
             const c = this.getCurrency(currency).symbol || currency;
-            return (convert ? this.convertPrice(value) : this.formatPrice(value))+' '+c;
+            return ((convert ? this.convertPrice(value) : this.formatPrice(value))+' '+c).replace(/\s/g, "\u00A0");
         },
         getMeasure(measure = 'm') {
             let result = '';
             switch (measure) {
                 case 'unit':
                 case 'item':
-                    result ='шт';
+                    result = 'шт';
+                    break;
+                case 'km':
+                    result = 'км';
                     break;
                 default:
                     result = 'м';

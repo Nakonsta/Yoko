@@ -269,6 +269,7 @@
                 if( this.companies.length && this.currentCompany) {
                     this.currentFilter.inn = [this.currentCompany.inn];
                 }
+                this.currentFilter.showing = this.currentFilter.showing || 'all';
                 let filter = {
                     draft: this.$store.getters.userRole === 'buyer' && this.type === 'drafts',
                     has_applications: this.$store.getters.userRole === 'contractor' && this.type === 'applications',

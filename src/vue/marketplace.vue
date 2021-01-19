@@ -120,7 +120,11 @@
             this.fetchMarketplaceProceduresFilter()
                 .then((response) => {
                     let filterData = response.data.data.procedures;
-                    this.filter.status = parseObjToArr(filterData.values.status);
+                    let statuses = {};
+                    for( let i=0; i<filterData.public_statuses.length; i++ ) {
+                        let status = filterData.public_statuses[i];
+                        statuses[status] = filterData.values.status[status];
+                    }
                     this.filter.push({
                         id: 'tender_trading_type',
                         value: 'Тип процедуры',
@@ -137,7 +141,7 @@
                         id: 'status',
                         value: 'Статус',
                         type: 'checkbox',
-                        values: parseObjToArr(filterData.values.status),
+                        values: parseObjToArr(statuses),
                     });
                     this.filter.push({
                         id: 'tender_trading_format',
@@ -147,7 +151,7 @@
                     });
                     this.itemsTypes = parseObjToArr(filterData.values.tender_trading_type);
                     this.itemsFormats = parseObjToArr(filterData.values.tender_trading_format);
-                    this.itemsStatuses = parseObjToArr(filterData.values.status);
+                    this.itemsStatuses = parseObjToArr(statuses);
                     this.loadingFilter = false;
                 })
                 .catch((e) => {
