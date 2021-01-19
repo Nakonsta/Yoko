@@ -16,7 +16,7 @@
                     @on-sort="changeSortStatus"
                 ></application-sort>
             </div>
-            <application-search></application-search>
+            <application-search @on-search="onSearch"></application-search>
         </div>
 
         <applications-list v-if="!loading && applications.length > 0" :applications="applications"></applications-list>
@@ -113,7 +113,8 @@ export default {
                 delete this.filter.ids
             }
 
-            this.getApplications()
+            clearTimeout(this.debounceTimer)
+            this.debounceTimer = setTimeout(() => this.getApplications(), 500)
         },
         changeSortStatus(value) {
             if (value === 'all') {
@@ -121,9 +122,6 @@ export default {
             } else {
                 this.filter.application_status = [value]
             }
-
-            clearTimeout(this.debounceTimer)
-            this.debounceTimer = setTimeout(() => this.getApplications(), 500)
         }
     },
     created() {
