@@ -45,7 +45,7 @@ module.exports = {
     'import/extensions': 'off',
     'prefer-destructuring': 'off',
     'no-return-assign': 'off',
-    'linebreak-style': 'windows',
+    'linebreak-style': ['error', 'unix'],
     camelcase: 'warn',
   },
 };
