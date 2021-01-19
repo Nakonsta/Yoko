@@ -43,6 +43,20 @@
                 border: 1px solid $colorTurquoise
                 border-radius: 4px
 
+    .multiselect__option
+        padding: 12px 25px
+        &--highlight
+            background: #F4F4F4
+            color: $colorTextLight
+        &--selected
+            font-weight: 400
+            color: $colorTextLight
+
+    &__input,
+    &__single
+        margin-top: 0 !important
+        margin-bottom: 0 !important
+
 .multiselect--active .multiselect
     &__select
         transform: translateY(-50%) rotate(180deg)

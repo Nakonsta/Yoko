@@ -16,7 +16,7 @@
                             Компания
                         </div>
                         <div class="tender-item__row-value">
-                            <a :href="'/compregister/'+company.inn">{{ company.name }}</a>
+                            <a :href="'/compregister/'+company.id">{{ company.name }}</a>
                         </div>
                     </div>
                     <div v-if="company.directorFio" class="tender-item__row">
