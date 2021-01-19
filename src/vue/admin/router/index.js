@@ -17,6 +17,7 @@ import User from '../pages/user/user.vue'
 import Applications from '../pages/applications/items.vue'
 import page404 from '../pages/page404.vue'
 import CompanyInfo from '../pages/company/info.vue';
+import CompanyUsers from '../pages/company/users.vue';
 
 const routes = [
   {
@@ -38,6 +39,10 @@ const routes = [
   {
     path: '/personal/company/info',
     component: CompanyInfo,
+  },
+  {
+    path: '/personal/company/users',
+    component: CompanyUsers,
   },
   {
     path: '/personal/procedures',
