@@ -3,7 +3,6 @@
     <CompanyTabs
       :value="currentCompany"
       :companies="companies"
-
       @change="changeCompany"
     />
     <div class="company-info__panel">
@@ -78,7 +77,7 @@
 
 <script>
 import api from '@/helpers/api';
-import CompanyTabs from '@/components/admin/company/common/CompanyTabs';
+import CompanyTabs from '@/components/blocks/companiesTabs';
 import CompanyInfoData from '@/components/admin/company/info/CompanyInfoData';
 
 export default {

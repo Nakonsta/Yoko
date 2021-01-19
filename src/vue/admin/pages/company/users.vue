@@ -3,7 +3,7 @@
     <CompanyTabs
       :value="currentCompany"
       :companies="companies"
-      @input="changeCompany"
+      @change="changeCompany"
     />
     <div class="company-users__panel">
       <CompanyUsersBlock
@@ -24,7 +24,7 @@
 
 <script>
 import api from '@/helpers/api';
-import CompanyTabs from '@/components/admin/company/common/CompanyTabs';
+import CompanyTabs from '@/components/blocks/companiesTabs';
 import CompanyUsersBlock from '@/components/admin/company/users/CompanyUsersBlock';
 
 export default {
