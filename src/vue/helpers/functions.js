@@ -214,6 +214,157 @@ export default {
                 };
             }
             frame.setAttribute('src', url);
-        }
+        },
+        parseFilter(filter) {
+            const newFilter = {};
+            for (const keyC in filter) {
+                if (!Array.isArray(filter[keyC])) {
+                    newFilter[keyC] = filter[keyC];
+                } else {
+                    for (const key in filter[keyC]) {
+                        if (
+                            Array.isArray(filter[keyC][key])
+                                ? filter[keyC][key].length
+                                : filter[keyC][key]
+                        ) {
+                            if (newFilter[keyC]) {
+                                newFilter[keyC][key] = filter[keyC][key];
+                            } else {
+                                // newFilter[keyC] = {};
+                                // newFilter[keyC][key] = filter[keyC][key];
+                                newFilter[keyC] = [];
+                                newFilter[keyC].push(filter[keyC][key]);
+                            }
+                        }
+                    }
+                }
+            }
+            // Форматирование дат
+            if (newFilter.publication_date_from) {
+                newFilter.publication_date_from = this.formatDateForFilter(
+                    newFilter.publication_date_from,
+                );
+            }
+            if (newFilter.publication_date_to) {
+                newFilter.publication_date_to = this.formatDateForFilter(
+                    newFilter.publication_date_to,
+                );
+            }
+            return newFilter;
+        },
+        tradingFormatsList() {
+            return [
+                {
+                    id: 'trading_223',
+                    name: 'Торги по 223-ФЗ'
+                },
+                {
+                    id: 'commercial_trading',
+                    name: 'Коммерческие торги',
+                },
+            ];
+        },
+        getTradingFormat(format) {
+            return this.tradingFormatsList().find((item) => {return item.id === format}).name || format;
+        },
+        tradingTypesList() {
+            return [
+                {
+                    id: 'request_prices',
+                    name: 'Запрос цен',
+                },
+                {
+                    id: 'auction',
+                    name: 'Аукцион',
+                },
+                {
+                    id: 'request_offers',
+                    name: 'Запрос предложений',
+                },
+                {
+                    id: 'contest',
+                    name: 'Конкурс',
+                },
+                {
+                    id: 'purchase_from_supplier',
+                    name: 'Закупка у единственного поставщика',
+                },
+                {
+                    id: '',
+                    name: 'Коммерческая закупка',
+                }
+            ];
+        },
+        getTradingType(type) {
+            return this.tradingTypesList().find((item) => {return item.id === type}).name || type;
+        },
+        currenciesList() {
+            return [
+                {
+                    id: 'rub',
+                    name: 'Рубль',
+                    symbol: '₽',
+                },
+                {
+                    id: 'eur',
+                    name: 'Евро',
+                    symbol: '€',
+                },
+                {
+                    id: 'usd',
+                    name: 'Доллар',
+                    symbol: '$',
+                },
+            ];
+        },
+        getCurrency(currency = 'rub') {
+            currency = currency || 'rub';
+            return this.currenciesList().find((item) => {return item.id === currency});
+        },
+        convertPrice(value, digits = 0) {
+            let si = [
+                    { value: 1, symbol: "" },
+                    { value: 1E3, symbol: "тыс." },
+                    { value: 1E6, symbol: "млн" },
+                    { value: 1E9, symbol: "млрд." },
+                ],
+                rx = /\.0+$|(\.[0-9]*[1-9])0+$/,
+                i;
+            for (i = si.length - 1; i > 0; i--) {
+                if (value >= si[i].value) {
+                    break;
+                }
+            }
+            return (value / si[i].value).toFixed(digits).replace(rx, "$1") + ' ' + si[i].symbol;
+        },
+        formatPrice(value = 0) {
+            let decimalCount = 2,
+                decimal = ".",
+                thousands = " ";
+            decimalCount = Math.abs(decimalCount);
+            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+            const negativeSign = value < 0 ? "-" : "";
+            let i = parseInt(value = Math.abs(Number(value) || 0).toFixed(decimalCount)).toString();
+            let j = (i.length > 3) ? i.length % 3 : 0;
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(value - i).toFixed(decimalCount).slice(2) : "");
+        },
+        formatPriceWithCurrency(value = 0, currency = 'rub', convert = false) {
+            const c = this.getCurrency(currency).symbol || currency;
+            return (convert ? this.convertPrice(value) : this.formatPrice(value))+' '+c;
+        },
+        getMeasure(measure = 'm') {
+            let result = '';
+            switch (measure) {
+                case 'unit':
+                case 'item':
+                    result ='шт';
+                    break;
+                default:
+                    result = 'м';
+                    break;
+
+            }
+            return result;
+        },
     }
 }

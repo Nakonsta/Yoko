@@ -1,0 +1,20 @@
+extends ../layouts/default
+include ../blocks/bread-crumbs
+include ../blocks/page-banner
+
+block default
+    - let title = 'Реестр компаний';
+    - locals.currentPage = 'Реестр компаний';
+
+block content
+
+    +breadCrumbs([
+        'Главная',
+        'Реестр компаний'
+    ])
+
+    .page-banner.page-banner--with-btn(style=`background-image:url(/content/companies.jpg)`)
+        .container
+            .page-banner__title Реестр компаний
+
+    #companies

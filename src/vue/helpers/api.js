@@ -9,6 +9,7 @@ export default {
         searchCompaniesCancelToken: axios.CancelToken.source(),
         companyCancelToken: axios.CancelToken.source(),
         proceduresCancelToken: axios.CancelToken.source(),
+        companiesCancelToken: axios.CancelToken.source(),
       },
     };
   },
@@ -16,6 +17,25 @@ export default {
     cancelCatalogRequest() {
       this.CancelTokens.catalogCancelToken.cancel('Предыдущий запрос отменен');
       this.CancelTokens.catalogCancelToken = axios.CancelToken.source();
+    },
+    cancelCompaniesRequest() {
+      this.CancelTokens.companiesCancelToken.cancel('Предыдущий запрос отменен');
+      this.CancelTokens.companiesCancelToken = axios.CancelToken.source();
+    },
+    fetchCompanies(filter = null, all = false) {
+      console.log(filter);
+      return axios.get(
+        all ? `${process.env.API_URL_AUTH_SERVICE}/companies/all` : `${process.env.API_URL_AUTH_SERVICE}/companies`,
+        { params: { ...filter } },
+        { cancelToken: this.CancelTokens.companiesCancelToken.token },
+      );
+    },
+    fetchProceduresCountByCompanies(ids) {
+      return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/total/by_company/`, {
+        params: {
+          customers: ids,
+        },
+      });
     },
     fetchInn(filterRequest) {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, { params: { inn: filterRequest } });
@@ -60,7 +80,7 @@ export default {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/user/settings/${string}`);
     },
     fetchTotalCatalog(group, filter) {
-      const body = {};
+      let body = {};
       body.group = group;
 
       if (filter) {
@@ -77,15 +97,15 @@ export default {
     searchProceduresOKVED(string) {
       return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/okved/search/`, { params: { q: string } });
     },
-    fetchListSearchCatalog(string, companyId = 0) {
-      const params = {
+    fetchListSearchCatalog(string, company_id = 0) {
+      let params = {
         q: string,
       };
-      if (companyId) {
-        params.company_id = companyId;
+      if (company_id) {
+        params.company_id = company_id;
       }
       return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/`, {
-        params,
+        params: params,
       });
     },
     fetchListSearchCompany(string) {
@@ -198,16 +218,12 @@ export default {
         },
       });
     },
-    cancelCompaniesRequest() {
-      this.CancelTokens.searchCompaniesCancelToken.cancel('Предыдущий запрос отменен');
-      this.CancelTokens.searchCompaniesCancelToken = axios.CancelToken.source();
-    },
     fetchCompaniesByName(name) {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`, {
         params: {
-          name,
+          name: name,
         },
-        cancelToken: this.CancelTokens.searchCompaniesCancelToken.token,
+        cancelToken: this.CancelTokens.companiesCancelToken.token,
       });
     },
     fetchCompaniesByIds(ids) {
@@ -242,6 +258,9 @@ export default {
         { page },
         { cancelToken: this.CancelTokens.proceduresCancelToken.token },
       );
+    },
+    fetchEISProcedure(eis) {
+      return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/eis/${eis}`);
     },
     sendProcedureApplicationDraft(id, data) {
       return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/participation-applications`, data);
@@ -320,7 +339,7 @@ export default {
         { query },
         {
           headers: {
-            Authorization: `Token ${process.env.DA_API_KEY}`,
+            Authorization: 'Token ' + process.env.DA_API_KEY,
           },
         },
       );
@@ -353,11 +372,9 @@ export default {
     updateAccreditation(id, data) {
       const fData = new FormData();
 
-      Object.entries(data)
-        .forEach(([key]) => fData.append(
-          `documents[${key}]`,
-          data[key],
-        ));
+      for (const key in data) {
+        fData.append(`documents[${key}]`, data[key]);
+      }
 
       return axios.post(`${process.env.API_URL_OPERATOR_SERVICE}/api/accreditation/${id}`, fData);
     },
@@ -371,7 +388,7 @@ export default {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
     },
     fetchProductList(props) {
-      const body = {};
+      let body = {};
 
       if (props.page !== null) {
         body.page = props.page;
@@ -421,6 +438,16 @@ export default {
     },
     sendProcedureProtocols(id, data) {
       return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/protocols`, data);
+    },
+    fetchApplicationsList(filter = null, page = 1) {
+      return axios.post(
+        `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list/`,
+        {
+          ...filter,
+          page,
+        },
+        { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+      );
     },
   },
 };

@@ -35,6 +35,7 @@
                 label="Прикрепить платежное поручение или банковскую гарантию"
                 :fileName="securityFile.name"
                 :fileUrl="securityFile.url"
+                :disabled="disabled"
                 @uploaded="$emit('on-upload', $event)"
                 @remove="$emit('on-upload', {})"
             ></application-file-uploader>
@@ -70,6 +71,9 @@ export default {
         currencyType: {
             type: Object,
             required: true
+        },
+        disabled: {
+            type: Boolean
         }
     },
     computed: {

@@ -24,7 +24,6 @@
 
 <script>
 import api from '@/helpers/api';
-
 import CompanyTabs from '@/components/admin/company/common/CompanyTabs';
 import CompanyUsersBlock from '@/components/admin/company/users/CompanyUsersBlock';
 

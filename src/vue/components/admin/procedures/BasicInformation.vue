@@ -56,6 +56,7 @@
           <button
               class="btn"
               :disabled="!selectedData.tender_eis_id"
+              @click="getEis"
           >
             Выгрузить
           </button>
@@ -80,7 +81,7 @@
             :options="
               procedureIdData.procedureType === 'FromSupplier'
                 ? fieldsData.tenderAvailablePur
-                : procedureIdData.procedureType === 'Auction'
+                : procedureIdData.procedureType === 'Auction' || procedureIdData.procedureType === 'Contest'
                 ? fieldsData.tenderAvailableAuc
                 : fieldsData.tenderAvailable
             "
@@ -135,6 +136,7 @@
         <checkbox-input
             class-name="mt3"
             name="overbidding_is_possible"
+            content="Вы допускаете торги по конкурсу"
             :disabled="isCreatedProcedure"
             v-model="selectedData.overbidding_is_possible"
             :label="[{label: 'Возможна переторжка'}]"
@@ -332,6 +334,10 @@ export default {
     isCreatedProcedure: {
       default: false,
       type: Boolean,
+    },
+    getEis: {
+      default: () => {},
+      type: Function,
     },
     clearTenderTradingType: {
       default: () => {},

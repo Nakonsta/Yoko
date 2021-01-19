@@ -5,7 +5,7 @@
         <div class="procedure-new container-item">
           <router-link class="link link-icon" to="/personal/procedures/">
             <svg class="sprite-return"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#return"></use></svg>
-            <span>Вернуться в список процедур</span>
+            <b>Вернуться в список процедур</b>
           </router-link>
           <accreditations-title v-if="!isPreview" :title="title" />
           <accreditations-title v-if="isPreview" title="Предпросмотр" />
@@ -17,10 +17,12 @@
             :procedure-id-data="procedureIdData"
             :true-false-select="trueFalseSelect"
             :is-created-procedure="isCreatedProcedure"
+            :get-eis="getEisInfo"
             :clear-tender-trading-type="clearTenderTradingType"
           ></app-basic-information>
           <app-purchase-subject
               :selected-data="selectedData"
+              :mark-import="markImport"
               :fields-data="fieldsData"
               :procedure-id-data="procedureIdData"
               :is-created-procedure="isCreatedProcedure"
@@ -105,6 +107,17 @@
         ></app-preview>
       </form>
     </ValidationObserver>
+    <div id="send-procedure" class="popup popup--alt">
+      <div class="popup__body">
+        <div class="popup__content">
+          <a href="javascript:{}" class="popup__close" @click="closeModal('#send-procedure')"><svg class="sprite-close"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#close"></use></svg></a>
+          <div class="popup__title">Процедура направлена на согласование оператором</div>
+          <div class="popup__content-container">
+            <router-link to="/personal/procedures" class="btn">Перейти к процедуре</router-link>
+          </div>
+        </div>
+      </div>
+    </div>
     <transition name="fade-loader">
       <local-preloader v-if="isLoading"/>
     </transition>
@@ -152,6 +165,7 @@ export default {
   mixins: [api, functions, parsers],
   data() {
     return {
+      markImport: null,
       fieldsData: {
         hideBlock: {
           payment_info: false,
@@ -312,7 +326,7 @@ export default {
         application_delivery_time_menu: null,
         application_delivery_time: null,
         addition_information: null,
-        contact_full_name: this.$store.state.auth.user,
+        contact_full_name: null,
         contact_phone: '',
         contact_email: null,
         count_lots: {id: 0, name: '0'},
@@ -489,6 +503,7 @@ export default {
           for (let i = 1; i <= this.selectedData.count_lots.id; i++) {
             if (item.addLot && item.addLot.id === i) {
               totalCount[count] += item.total_price && parseFloat(item.total_price)
+              totalCount[count] = Number(totalCount[count]).toFixed(2)
               // totalCount[count] = totalCount[count] && parseFloat(totalCount[count]).toFixed(2)
             }
             count++
@@ -497,8 +512,10 @@ export default {
       })
       baseCount = !isNaN(baseCount) ? baseCount.toFixed(2) : baseCount
 
-      for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
-        lotsCounter.push({id: i, name: i})
+      if (this.selectedData.count_lots) {
+        for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
+          lotsCounter.push({id: i, name: i})
+        }
       }
 
       const datesArray = [
@@ -544,6 +561,11 @@ export default {
       }
     },
   },
+  watch: {
+    markImport: function (file) {
+      this.importFile(file);
+    },
+  },
   created() {
     this.$emit('fullMode')
     this.getFieldsData()
@@ -583,6 +605,102 @@ export default {
     }
   },
   methods: {
+    getEisInfo() {
+      window.openLoader()
+      this.fetchEISProcedure(this.selectedData.tender_eis_id)
+        .then(({data}) => {
+          const result = data.data;
+          this.selectedData.tender_trading_format = { "id": "trading_223", "name": "Торги по 223-ФЗ" }
+          let setTradingType;
+          switch (result.placingWay) {
+            case 'Запрос предложений в электронной форме, участниками которого могут являться только субъекты малого и среднего предпринимательства':
+              setTradingType = {id: "request_offers", name: "Запрос предложений"}
+              break;
+            case 'Электронный аукцион':
+            case 'Аукцион в электронной форме, участниками которого могут являться только субъекты малого и среднего предпринимательства':
+            case 'Открытый аукцион':
+              setTradingType = {id: "auction", name: "Аукцион"}
+              break;
+            case 'Закупка у единственного поставщика (подрядчика, исполнителя)':
+              setTradingType = {id: "purchase_from_supplier", name: "Закупка у единственного поставщика"}
+              break;
+            case 'Конкурс в электронной форме, участниками которого могут являться только субъекты малого и среднего предпринимательства':
+            case 'Открытый конкурс':
+              setTradingType = {id: "contest", name: "Конкурс"}
+              break;
+            default:
+              setTradingType = {id: "request_prices", name: "Запрос цен"}
+          }
+          this.selectedData.tender_trading_type = setTradingType
+          this.selectedData.item_description = result.purchaseObjectInfo
+          // TODO: даты спарсить позже
+          // this.selectedData.publication_date = moment(result.docPublishDate, 'DD.MM.YYYY')._d
+          // this.selectedData.application_submit_date_time = moment(result.submissionCloseDateTime, 'DD.MM.YYYY')._d
+          // this.selectedData.application_date_time_summing_up = moment(result.summingupTime, 'DD.MM.YYYY')._d
+          // this.selectedData.application_date_time = moment(result.examinationDateTime, 'DD.MM.YYYY')._d
+          // this.selectedData.application_delivery_time = moment(result.envelopeOpeningTime, 'DD.MM.YYYY')._d
+
+          const positions = this.get(result, 'lots.lot.customers.customer.purchaseObjects.purchaseObject')
+          const lotNumber = this.get(result, 'lots.lot.lotNumber')
+          const lots = this.counterToTenSelect.find(x => x.id === parseInt(lotNumber));
+          this.selectedData.count_lots = lots;
+          for (let i = 1; i < this.selectedData.count_lots.id + 1; i++) {
+            this.procedureIdData.lotsCounter.push({id: i, name: i})
+          }
+          const lot = this.procedureIdData.lotsCounter.find(x => x.id === parseInt(lotNumber))
+          this.selectedData.positions = []
+          if(positions.OKPD2) {
+            this.searchProceduresOKPD2(positions.OKPD2)
+              .then((response) => {
+                const result = response.data.data;
+                this.fieldsData.OKPD2 = this.parseOKPD2(result)
+                const category_okpd = this.fieldsData.OKPD2.find(x => x.code === positions.OKPD2)
+                this.selectedData.positions.push({
+                  names: null,
+                  code: this.get(category_okpd, 'code'),
+                  type: {id: 1, name: 'Товар'},
+                  category_okpd: category_okpd,
+                  measures: null,
+                  marksize_id: null,
+                  addLot: lot,
+                  quantity: positions.quantity || 0,
+                  price_for_one: 0,
+                  vats: null,
+                  total_price: 0,
+                  loader: false,
+                  loaderName: false,
+                })
+                window.closeLoader();
+              })
+              .catch(() => {
+                window.closeLoader();
+              })
+          } else {
+            this.selectedData.positions.push({
+              names: null,
+              code: null,
+              type: {id: 1, name: 'Товар'},
+              category_okpd: null,
+              measures: null,
+              marksize_id: null,
+              addLot: lot,
+              quantity: positions.quantity || 0,
+              price_for_one: 0,
+              vats: null,
+              total_price: 0,
+              loader: false,
+              loaderName: false,
+            })
+            window.closeLoader();
+          }
+        })
+        .catch(() => {
+          window.closeLoader()
+        })
+    },
+    closeModal(popupId) {
+      closePopupById(popupId);
+    },
     removeBlock(key) {
       this.fieldsData.hideBlock[key] = !this.fieldsData.hideBlock[key]
     },
@@ -920,7 +1038,6 @@ export default {
       this.fetchCompaniesByInn(this.$store.state.auth.user.companies[0].inn)
           .then((response) => {
             this.fieldsData.contacts_list = response.data.data
-            this.selectedData.contact_full_name = response.data.data[0]
           })
           .catch((e) => {
             console.log(e)
@@ -1067,7 +1184,7 @@ export default {
         tender_tolerance: this.selectedData.tender_tolerance,
         addition_information: this.selectedData.addition_information,
         contact_id: this.get(this.selectedData, 'contact_full_name.id'),
-        inn: this.selectedData.companyName.inn,
+        inn: this.get(this.selectedData, 'companyName.inn'),
         publication_date: this.parseDate(this.selectedData.publication_date),
         purchase_currency: this.get(this.selectedData, 'currency.id'),
         publication_allowed: Number(toPublish),
@@ -1111,7 +1228,9 @@ export default {
       }
       if (
           this.procedureIdData.procedureType === 'Query' ||
+          this.procedureIdData.procedureType === 'Offers' ||
           this.procedureIdData.procedureType === 'Commercial' ||
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Contest'
       ) {
         formData.prices_are_confidential = this.selectedData.confidential_price
@@ -1124,6 +1243,7 @@ export default {
       }
       if (
           this.procedureIdData.procedureType === 'Query' ||
+          this.procedureIdData.procedureType === 'Offers' ||
           this.procedureIdData.procedureType === 'Commercial'
       ) {
         formData.many_stages_of_procurement = this.get(this.selectedData, 'stages_of_the_procurement_procedure.id')
@@ -1149,6 +1269,7 @@ export default {
         }
       }
       if (
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Contest' ||
           this.procedureIdData.procedureType === 'Supplier'
       ) {
@@ -1190,6 +1311,7 @@ export default {
         })
       }
       if (
+          this.procedureIdData.procedureType === 'FromSupplier' ||
           this.procedureIdData.procedureType === 'Supplier' ||
           this.procedureIdData.procedureType === 'Contest'
       ) {
@@ -1285,7 +1407,7 @@ export default {
         formData.file = {}
       }
       if (this.fieldsData.hideBlock.additional_info) {
-        formData.addition_information = {}
+        formData.addition_information = ''
       }
       if (this.fieldsData.hideBlock.application_security) {
         formData.guarantee = {}
@@ -1296,11 +1418,10 @@ export default {
       this.sendProcedure(formDataObj, this.selectedData.id)
           .then(() => {
             if (toPublish) {
-              window.notificationSuccess('Создана новая процедура')
+              openPopupById('#send-procedure');
             } else {
               window.notificationSuccess('Новая процедура добавлена в черновик')
             }
-            this.$router.replace('/personal/procedures')
             window.closeLoader()
           })
           .catch((response) => {

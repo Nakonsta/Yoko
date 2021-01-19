@@ -106,6 +106,8 @@
                     this.searchCounter = setTimeout(() => {
                         this.$emit('search', this.innerValue);
                     }, 1000);
+                } else {
+                    this.searchReset();
                 }
             },
             searchSelect(evt) {

@@ -5,6 +5,7 @@
             :documents="application.documents.additional_documents"
             @uploaded="$emit('on-upload', $event)"
             @remove="$emit('on-upload', $event)"
+            :disabled="disabled"
         ></application-documents-uploader>
         <div class="application__section-title">
             Дополнительная информация
@@ -14,6 +15,7 @@
                 placeholder="Введите текст"
                 :value="application.description"
                 @input="$emit('on-input', $event.target.value)"
+                :disabled="disabled"
             ></textarea>
             <!-- <application-tooltip></application-tooltip> -->
         </div>
@@ -39,6 +41,10 @@ export default {
         application: {
             type: Object,
             required: true
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     }
 }

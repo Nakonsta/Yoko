@@ -28,11 +28,18 @@
       <div class="catalog-mark__inner">
         <div v-for="item in root.items" class="catalog-mark__el">
           <div class="catalog-mark__title">{{ item.title }}</div>
-          <div class="catalog-mark__text">{{ item.desc }}</div>
+          <div class="catalog-mark__text" v-html="item.desc"></div>
         </div>
       </div>
-      <div class="catalog-mark__price" v-if="root.price">
-        <p>Средняя цена <span>{{ root.price }}</span></p>
+      <div class="catalog-mark__price" v-if="root.price !== undefined">
+        <p>Средняя цена <span>
+          <tempate v-if="root.price === 0">
+            Неизвестно
+          </tempate>
+          <tempate v-else>
+            {{ formatPriceWithCurrency(root.price) }}
+          </tempate>
+        </span></p>
         <a href="#availability" class="btn" @click="openTab($event, 'availability')">Наличие</a>
       </div>
     </div>
@@ -41,9 +48,11 @@
 
 <script>
   import VueSlickCarousel from 'vue-slick-carousel'
+  import functions from "@/helpers/functions";
 
   export default {
     name: "mark-info",
+    mixins: [functions],
     components: {
       VueSlickCarousel
     },

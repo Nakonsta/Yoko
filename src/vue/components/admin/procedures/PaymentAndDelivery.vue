@@ -41,10 +41,11 @@
       </div>
       <div class="col col-xs-12">
         <textarea-input
+            :maxlength=1000
             v-model="selectedData.application_delivery_conditions"
             label="Условия поставки"
             :disabled="isCreatedProcedure"
-            :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.payment_info)}"
+            :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.payment_info), max: 1000}"
             placeholder="Введите  дополнительную информацио об исполнительном договоре"
         ></textarea-input>
       </div>

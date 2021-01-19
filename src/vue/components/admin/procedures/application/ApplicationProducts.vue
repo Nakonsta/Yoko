@@ -13,6 +13,7 @@
             :headers="headers"
             :can-replace="canReplace"
             :countries="countries"
+            :disabled="disabled"
             @on-price-change="changePrice($event, product)"
             @on-country-change="product.country = $event"
             @on-select-replace="onSelectReplace(product, index)"
@@ -52,6 +53,10 @@ export default {
         },
         canReplace: {
             type: Boolean
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

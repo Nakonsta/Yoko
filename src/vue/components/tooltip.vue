@@ -1,5 +1,5 @@
 <template>
-  <div class="tooltip">
+  <div :class=classMain>
     <div class="tooltip-body" @mouseover="isHide = false" @mouseleave="isHide = true" >
       <svg class="sprite-question">
         <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="icon"></use>
@@ -19,6 +19,10 @@ export default {
   props: {
     icon: {
       default: '\\./img/sprite.svg#question',
+      type: String,
+    },
+    classMain: {
+      default: 'tooltip',
       type: String,
     },
     content: {
@@ -55,11 +59,19 @@ export default {
     background: #373735;
     border-radius: 4px;
     font-size: 12px;
-    max-width: 220px;
+    width: 220px;
     display: inline-block;
+    z-index: 9;
 
     &.hide {
       display: none;
+    }
+  }
+
+  &--right {
+    .tooltip-content {
+      left: auto;
+      right: 10px;
     }
   }
 }

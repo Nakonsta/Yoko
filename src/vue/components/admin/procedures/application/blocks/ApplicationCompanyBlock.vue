@@ -4,7 +4,12 @@
         <div class="divider"></div>
         <div class="application__section-row">
             <div class="application__section-title">Название:</div>
-            <application-company-select :defaultINN="application.inn" @on-select="$emit('on-company-select', $event)"></application-company-select>
+            <application-company-select
+                :defaultINN="application.inn"
+                @on-select="$emit('on-company-select', $event)"
+                :disabled="disabled"
+                :has-error="errors"
+            ></application-company-select>
         </div>
         <div class="application__section-row">
             <div class="application__section-title">
@@ -55,6 +60,14 @@ export default {
             type: Object,
             required: true
         },
-    },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        errors: {
+            type: Boolean,
+            default: false
+        }
+    }
 }
 </script>

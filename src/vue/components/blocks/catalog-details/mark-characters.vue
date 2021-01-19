@@ -4,7 +4,7 @@
       <li v-for="(item, index) in this.root" :key="index">
         <dl>
           <dt><span>{{ item.name }}</span></dt>
-          <dd>{{ item.desc }}</dd>
+          <dd v-html="item.desc"></dd>
         </dl>
       </li>
     </ul>

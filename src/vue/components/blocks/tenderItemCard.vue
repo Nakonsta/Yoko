@@ -7,16 +7,16 @@
                         № {{ tenderItemData.id }}
                     </div>
                     <div class="tender-item__type">
-                       {{ TENDER_TRADING_FORMATS_AND_TYPES[tenderItemData.tender_trading_format] }} {{ TENDER_TRADING_FORMATS_AND_TYPES[tenderItemData.tender_trading_type] }}
+                       {{ getTradingFormat(tenderItemData.tender_trading_format) }}: {{ getTradingType(tenderItemData.tender_trading_type) }}
                     </div>
                 </div>
                 <div class="tender-item__common">
-                    <div v-if="company.name" class="tender-item__row">
+                    <div v-if="company" class="tender-item__row">
                         <div class="tender-item__row-name">
                             Компания
                         </div>
                         <div class="tender-item__row-value">
-                            {{ company.name }}
+                            <a :href="'/compregister/'+company.inn">{{ company.name }}</a>
                         </div>
                     </div>
                     <div v-if="company.directorFio" class="tender-item__row">
@@ -87,7 +87,7 @@
                         Начальная цена:
                     </div>
                     <div class="tender-item__start-price-num">
-                        {{ tenderItemData.purchase_subject.start_price }} &#8381;
+                        {{ formatPriceWithCurrency(tenderItemData.purchase_subject.start_price, tenderItemData.purchase_currency) }}
                     </div>
                 </div>
                 <div class="tender-item__dates">
@@ -149,6 +149,7 @@
 <script>
 import api from '../../helpers/api'
 import formatDate from "@/helpers/formatDate"
+import functions from "@/helpers/functions";
 import Actions from './actions.vue'
 import TenderItemProductCard from './tenderItemProductCard.vue'
 import popupCompanyContact from "@/components/blocks/popupCompanyContact"
@@ -179,19 +180,10 @@ export default {
         popupTenderDelivery,
     },
 
-    mixins: [api, formatDate],
-    
+    mixins: [api, formatDate, functions],
+
     data() {
         return {
-            TENDER_TRADING_FORMATS_AND_TYPES: {
-                trading_223: 'Торги по 223-ФЗ',
-                commercial_trading: 'Коммерческие торги',
-                contest: 'Конкурс',
-                request_prices_or_offers: 'Запрос цен / запрос предложений',
-                auction: 'Аукцион',
-                request_prices: 'Запрос цен',
-                purchase_from_supplier: 'Закупка у единственного поставщика',
-            },
             isProductsShown: false,
         }
     },
@@ -335,10 +327,20 @@ export default {
             }
             &-value {
                 color: $colorTurquoise;
-                text-decoration: underline;
+                /*text-decoration: underline;*/
                 @media print {
                     text-decoration: none;
                     color: $colorText;
+                }
+                a {
+                    color: $colorTurquoise;
+                    @media print {
+                        text-decoration: none;
+                        color: $colorText;
+                    }
+                    &:hover {
+                        color: $colorTurquoiseHover;
+                    }
                 }
             }
         }

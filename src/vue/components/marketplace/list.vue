@@ -1,7 +1,7 @@
 <template>
-    <div class="procedures">
-        <div class="procedures__head">
-            <div class="procedures__counter">
+    <div class="procedures items">
+        <div class="items__head">
+            <div class="items__head-counter">
                 <template v-if="!loading">
                     Найдено&nbsp;<span>{{ totalItems }}</span>
                 </template>
@@ -9,7 +9,7 @@
                     <span>Загрузка...</span>
                 </template>
             </div>
-            <span class="procedures__filter popup-link" @click="openPopupById('filter-modal')">
+            <span class="items__head-filter popup-link" @click="openPopupById('filter-modal')">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0.701172 13.0771C0.701172 13.3531 0.908173 13.6291 1.25317 13.6291H8.84317C9.05017 14.4571 9.80917 15.0091 10.7062 15.0091C11.6032 15.0091 12.2932 14.3881 12.5692 13.6291H14.9152C15.1912 13.6291 15.4672 13.4221 15.4672 13.1461C15.4672 12.8701 15.2602 12.5941 14.9842 12.5941H12.5002C12.2932 11.7661 11.5342 11.2141 10.6372 11.2141C9.74017 11.2141 9.05017 11.8351 8.77417 12.5941H1.18417C0.977172 12.5251 0.701172 12.8011 0.701172 13.0771ZM0.701172 7.48812C0.701172 7.76412 0.908173 8.04012 1.25317 8.04012H3.59917C3.80617 8.86812 4.56517 9.42012 5.46217 9.42012C6.35917 9.42012 7.04917 8.79912 7.32517 8.04012H14.9152C15.1912 8.04012 15.4672 7.83311 15.4672 7.55711C15.4672 7.28111 15.2602 7.00512 14.9842 7.00512H7.39417C7.18717 6.17712 6.42817 5.62512 5.53117 5.62512C4.63417 5.62512 3.94417 6.24612 3.66817 7.00512H1.32217C0.977172 7.00512 0.701172 7.21212 0.701172 7.48812ZM0.701172 1.8991C0.701172 2.1751 0.908173 2.45113 1.25317 2.45113H8.84317C9.05017 3.27913 9.80917 3.83113 10.7062 3.83113C11.6032 3.83113 12.2932 3.21013 12.5692 2.45113H14.9152C15.1912 2.45113 15.4672 2.24412 15.4672 1.96812C15.4672 1.69212 15.2602 1.41613 14.9842 1.41613H12.5002C12.2932 0.588133 11.5342 0.0361328 10.6372 0.0361328C9.74017 0.0361328 9.05017 0.657133 8.77417 1.41613H1.18417C0.977172 1.41613 0.701172 1.6231 0.701172 1.8991ZM4.56517 7.48812C4.56517 7.00512 4.97917 6.59113 5.46217 6.59113C5.94517 6.59113 6.35917 7.00512 6.35917 7.48812C6.35917 7.97112 5.94517 8.38512 5.46217 8.38512C4.97917 8.38512 4.56517 7.97112 4.56517 7.48812ZM9.80917 13.0771C9.80917 12.5941 10.2232 12.1801 10.7062 12.1801C11.1892 12.1801 11.6032 12.5941 11.6032 13.0771C11.6032 13.5601 11.1892 13.9741 10.7062 13.9741C10.1542 13.9741 9.80917 13.5601 9.80917 13.0771ZM9.80917 1.8991C9.80917 1.4161 10.2232 1.00211 10.7062 1.00211C11.1892 1.00211 11.6032 1.4161 11.6032 1.8991C11.6032 2.3821 11.1892 2.79613 10.7062 2.79613C10.1542 2.79613 9.80917 2.3821 9.80917 1.8991Z" fill="#31ACB8"/>
                 </svg>
@@ -17,54 +17,47 @@
                     Все фильтры
                 </span>
             </span>
-            <label class="procedures__expand checkbox">
+            <label class="items__head-checkbox checkbox">
                 <input type="checkbox" v-model="expandAll">
                 <span class="checkbox__body"></span>
                 <span class="checkbox__text">Показывать лоты/позиции</span>
             </label>
-            <div class="procedures__sort">
-                <span>Сортировать по:</span>
-                <div class="dropdown">
-                    <div class="dropdown__value">{{ sortList[sort] }}</div>
-                    <div class="dropdown__list">
-                        <ul>
-                            <li v-for="(item, index) in sortList">
-                                <a href="javascript:{}" @click="sortItems(index)" class="{active: index === sort}">{{ item }}</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="procedures__view" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'">
-                <span>Показывать:</span>
-                <div class="dropdown">
-                    <div class="dropdown__value">{{ viewList[view] }}</div>
-                    <div class="dropdown__list">
-                        <ul>
-                            <li v-for="(item, index) in viewList">
-                                <a href="javascript:{}" @click="viewItems(index)" class="{active: index === view}">{{ item }}</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <dropdownList
+                    class="items__head-item"
+                    label="Сортировать по:"
+                    :options="sortList"
+                    :current="sort"
+                    @change="sortItems"
+            />
+            <dropdownList
+                    class="items__head-item"
+                    label="Показывать:"
+                    :options="viewList"
+                    :current="view"
+                    @change="viewItems"
+                    v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'"
+            />
         </div>
-        <div class="procedures__items">
-            <div class="procedures__item procedures__item--empty" v-if="isFirstLoad && !items.length && !loading">
+        <div class="procedures__items items">
+            <div class="procedures__item procedures__item--empty item item--empty" v-if="isFirstLoad && !items.length && !loading">
                 По вашему запросу ничего не найдено
             </div>
-            <div class="procedures__item procedures__item--loading" v-if="!items.length && loading">
-
+            <div class="procedures__item procedures__item--loading item item--loading" v-if="!items.length && loading">
+                <div class="preloader">
+                    <div class="preloader__preloader">
+                        <div class="preloader__loader"></div>
+                    </div>
+                </div>
             </div>
-            <div v-for="(item, index) in items" :key="item.id" class="procedures__item" v-if="isFirstLoad && items.length">
+            <div v-for="(item, index) in items" :key="item.id" class="procedures__item item" v-if="isFirstLoad && items.length">
                 <div class="procedures__item-head">
                     <div class="procedures__item-flex">
                         <div class="procedures__item-title">№{{ item.id }}</div>
-                        <div class="procedures__item-type">{{ getTenderTradingFormatName(item)}}: {{ getTenderTradingTypeName(item) }}</div>
+                        <div class="procedures__item-type">{{ getTradingFormat(item.tender_trading_format)}}: {{ getTradingType(item.tender_trading_type) }}</div>
                     </div>
                     <dl>
                         <dt>Компания</dt>
-                        <dd><a href="#" v-if="item.company">{{ item.company.name }}</a></dd><!-- todo линк на компанию -->
+                        <dd><a :href="'/compregister/'+item.company.id" v-if="item.company">{{ item.company.name }}</a></dd><!-- todo линк на компанию -->
                     </dl>
                     <dl class="procedures__item-contact">
                         <dt>Контактное лицо</dt>
@@ -106,10 +99,10 @@
                     </div>
                     <div class="procedures__item-price">
                         <span>Начальная цена:</span>
-                        <template v-if="item.start_price">
-                            {{ item.start_price }}
+                        <template v-if="item.purchase_subject && item.purchase_subject.start_price">
+                            {{ formatPriceWithCurrency(item.purchase_subject.start_price, item.purchase_currency) }}
                         </template>
-                        <template v-if="!item.start_price">
+                        <template v-if="!item.purchase_subject || !item.purchase_subject.start_price">
                             Без указания цены
                         </template>
                     </div>
@@ -135,7 +128,7 @@
                         <div class="procedures__item-buttons">
                             <template>
                               <router-link :to="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request" v-if="$store.getters.userRole !== 'buyer' && $router">Отправить заявку</router-link>
-                              <a v-if="$store.getters.userRole !== 'buyer' && !$router":href="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request">Подробнее</a>
+                              <a v-if="$store.getters.userRole !== 'buyer' && !$router" :href="`/personal/procedures/${item.id}/applications/new`" class="btn btn--bdr procedures__item-request">Отправить заявку</a>
                             </template>
                             <a :href="`/platform/${item.id}`" class="btn btn--bdr procedures__item-request">Подробнее</a>
                         </div>
@@ -166,11 +159,11 @@
                                     :key="product.id"
                                     class="procedures__item-product"
                                 >
-                                    <td data-title="Наименование">{{ product.id }}</td>
+                                    <td data-title="Наименование">{{ product.name }}</td>
                                     <td data-title="Длина">{{ product.quantity }}</td>
-                                    <td data-title="Единица">{{ product.measure }}</td>
-                                    <td data-title="Сумма">{{ product.price_for_one }}</td>
-                                    <td data-title="НДС">{{ product.quantity }}%</td>
+                                    <td data-title="Единица">{{ getMeasure(product.measure) }}</td>
+                                    <td data-title="Сумма">{{ formatPriceWithCurrency(product.amount_per_position, product.currency) }}</td>
+                                    <td data-title="НДС">{{ product.vat }}%</td>
                                     <td data-title="Аналог">{{ product.availability_of_analogues ? 'Да' : 'Нет' }}</td>
                                 </tr>
                             </tbody>
@@ -178,15 +171,6 @@
                     </div>
                 </div>
             </div>
-            <transition name="fade-loader">
-                <div class="{procedures__loader, 'procedures__loader--absolute': isFirstLoad}" v-if="loading">
-                    <div class="preloader">
-                        <div class="preloader__preloader">
-                            <div class="preloader__loader"></div>
-                        </div>
-                    </div>
-                </div>
-            </transition>
         </div>
     </div>
 </template>
@@ -197,6 +181,7 @@
     import formatDate from '../../helpers/formatDate'
     import popupCompanyContact from "@/components/blocks/popupCompanyContact";
     import popupTenderDelivery from "@/components/blocks/popupTenderDelivery";
+    import dropdownList from "@/components/blocks/dropdownList";
 
     export default {
         name: 'marketplaceItems',
@@ -204,6 +189,7 @@
         components: {
             popupCompanyContact,
             popupTenderDelivery,
+            dropdownList,
         },
         props: {
             filter: {
@@ -255,45 +241,48 @@
             return {
                 expandAll: false,
                 sort: 'desc',
-                sortList: {
-                    'desc': 'дате размещения (от новых к старым)',
-                    'asc': 'дате размещения (от старых к новым)',
-                },
+                sortList: [
+                    {
+                        id: 'desc',
+                        name: 'дате размещения (от новых к старым)',
+                    },
+                    {
+                        id: 'asc',
+                        name: 'дате размещения (от старых к новым)',
+                    }
+                ],
                 view: 'all',
-                viewList: {
-                    'all': 'все',
-                    'hidden': 'скрытые',
-                },
+                viewList: [
+                    {
+                        id: 'all',
+                        name: 'все',
+                    },
+                    {
+                        id: 'hidden',
+                        name: 'скрытые',
+                    }
+                ],
             }
         },
         created() {
             if (this.$store.getters.userRole === 'contractor') {
-                this.viewList = {
-                    'all': 'все',
-                    'favorite': 'избранные',
-                    'hidden': 'скрытые',
-                };
+                this.viewList = [
+                    {
+                        id: 'all',
+                        name: 'все',
+                    },
+                    {
+                        id: 'favorite',
+                        name: 'избранные',
+                    },
+                    {
+                        id: 'hidden',
+                        name: 'скрытые',
+                    },
+                ];
             }
         },
         methods: {
-            getTenderTradingTypeName(item) {
-                const type = this.itemsTypes.find(
-                    (type) => type.id === item.tender_trading_type,
-                );
-                if (type) {
-                    return type.name;
-                }
-                return item.tender_trading_type;
-            },
-            getTenderTradingFormatName(item) {
-                const type = this.itemsFormats.find(
-                    (type) => type.id === item.tender_trading_format,
-                );
-                if (type) {
-                    return type.name;
-                }
-                return item.tender_trading_format;
-            },
             getTenderStatusName(item) {
                 const status = this.itemsStatuses.find(
                     (status) => status.id === item.status,
@@ -377,12 +366,14 @@
         flex-direction: column;
         /*min-height: 100%;*/
         &__item-buttons {
+            margin-left: auto;
             a {
                 &:first-child {
                   margin-right: 1rem;
                 }
             }
             @media(max-width: 659px) {
+                margin-left: 0;
                 order: -1;
                 a {
                     &:first-child {
@@ -720,6 +711,7 @@
                 margin: rem(32px) 0 0;
                 font-size: rem(20px);
                 line-height: (27/20);
+                white-space: nowrap;
             }
 
             &-date {

@@ -102,30 +102,30 @@
               :file="file"/>
           </div>    
         </div>
-      <template v-if="product.status.id === 'new'">
-        <div class="product__actions">
-              <button
-                class="product__approve"                
-                @click="setApprove"
-              >
-                Согласовать
-              </button>              
-              <form ref="form">
-                <button
-                  class="product__reject"
-                 @click="setError">
-                  Отклонить
-                </button>
-                <textarea
-                  v-model="textRejection"
-                  class="product__textarea"
-                  outlined
-                  placeholder="Причина отклонения"
-                  required                 
-                ></textarea>
-              </form>              
-            </div>
-      </template>
+<!--      <template v-if="product.status.id === 'new'">-->
+<!--        <div class="product__actions">-->
+<!--              <button-->
+<!--                class="product__approve"                -->
+<!--                @click="setApprove"-->
+<!--              >-->
+<!--                Согласовать-->
+<!--              </button>              -->
+<!--              <form ref="form">-->
+<!--                <button-->
+<!--                  class="product__reject"-->
+<!--                 @click="setError">-->
+<!--                  Отклонить-->
+<!--                </button>-->
+<!--                <textarea-->
+<!--                  v-model="textRejection"-->
+<!--                  class="product__textarea"-->
+<!--                  outlined-->
+<!--                  placeholder="Причина отклонения"-->
+<!--                  required                 -->
+<!--                ></textarea>-->
+<!--              </form>              -->
+<!--            </div>-->
+<!--      </template>-->
     </div>    
     <div v-else class="products__empty-search">
       Заявка не найдена

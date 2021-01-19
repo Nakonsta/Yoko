@@ -64,6 +64,7 @@
     import filterList from "./components/blocks/filter.vue";
     import marketplaceList from "./components/marketplace/list.vue";
     import formatDate from './helpers/formatDate';
+    import functions from "@/helpers/functions";
 
     export default {
         name: 'Marketplace',
@@ -72,7 +73,7 @@
             filterList,
             marketplaceList,
         },
-        mixins: [api, formatDate],
+        mixins: [api, functions, formatDate],
         data: function() {
             return {
                 searchQuery: '',
@@ -157,7 +158,7 @@
                 .then((response) => {
                     this.filter.push({
                         type: 'select',
-                        id: 'region_id',
+                        id: 'regions',
                         value: 'Регион',
                         placeholder: 'Выбрать регион',
                         values: response.data.data,
@@ -188,41 +189,6 @@
                 this.page = 1;
                 this.getItems();
             },
-            parseFilter() {
-                const newFilter = {};
-                for (const keyC in this.currentFilter) {
-                    if (!Array.isArray(this.currentFilter[keyC])) {
-                        newFilter[keyC] = this.currentFilter[keyC];
-                    } else {
-                        for (const key in this.currentFilter[keyC]) {
-                            if (
-                                Array.isArray(this.currentFilter[keyC][key])
-                                    ? this.currentFilter[keyC][key].length
-                                    : this.currentFilter[keyC][key]
-                            ) {
-                                if (newFilter[keyC]) {
-                                    newFilter[keyC][key] = this.currentFilter[keyC][key];
-                                } else {
-                                    newFilter[keyC] = {};
-                                    newFilter[keyC][key] = this.currentFilter[keyC][key];
-                                }
-                            }
-                        }
-                    }
-                }
-                // Форматирование дат
-                if (newFilter.publication_date_from) {
-                    newFilter.publication_date_from = this.formatDateForFilter(
-                        newFilter.publication_date_from,
-                    );
-                }
-                if (newFilter.publication_date_to) {
-                    newFilter.publication_date_to = this.formatDateForFilter(
-                        newFilter.publication_date_to,
-                    );
-                }
-                return newFilter;
-            },
             getItems(search = null) {
                 this.cancelMarketplaceProceduresRequest();
                 this.loadingItems = true;
@@ -249,7 +215,7 @@
                     this.filterKey++;
                 }
                 let filter = {
-                    filter: this.parseFilter(),
+                    filter: this.parseFilter(this.currentFilter),
                     order: this.currentOrder,
                 };
                 this.fetchMarketplaceProcedures(filter, this.page)
@@ -293,7 +259,11 @@
                         this.loadingItems = false;
                     })
                     .catch((e) => {
-                        console.log(e)
+                        if (!axios.isCancel(e)) {
+                            console.log(e);
+                            window.notificationError('Ошибка сервера');
+                            this.loadingItems = false;
+                        }
                     })
             },
             searchCompanies(index, q) {
@@ -308,9 +278,11 @@
                                 this.filter[index].values = response.data.data.elements;
                             })
                             .catch((e) => {
-                                console.log(e);
-                                this.filter[index].loading = false;
-                                this.filter[index].values = [];
+                                if (!axios.isCancel(e)) {
+                                    console.log(e);
+                                    this.filter[index].loading = false;
+                                    this.filter[index].values = [];
+                                }
                             });
                     }, 1000);
                 } else {
