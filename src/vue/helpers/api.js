@@ -327,6 +327,11 @@ export default {
                 `${process.env.API_URL_AUTH_SERVICE}/companies/${id}/users`,
             )
         },
+        fetchUserById(id) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/user/${id}`,
+            )
+        },
         cancelCatalogSearch() {
             this.CancelTokens.searchCancelToken.cancel(
                 'Предыдущий запрос отменен',

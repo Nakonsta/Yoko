@@ -1,6 +1,8 @@
 import moment from 'moment';
+import api from "@/helpers/api";
 
 export default {
+    mixins: [api],
     methods: {
         declOfNum(num, expressions) {
             let result,
@@ -155,6 +157,14 @@ export default {
                 if (user === parseInt(user, 10)) {
                     // user is userID
                     // todo получение пользователя
+                    // this.fetchUserById(user)
+                    //     .then((response) => {
+                    //         console.log(response);
+                    //         return response.data.data;
+                    //     })
+                    //     .catch((e) => {
+                    //         console.log(e)
+                    //     });
                 }
                 if (typeof user === 'string' && user.length) {
                     // если user строка - парсим её
