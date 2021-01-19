@@ -10,7 +10,7 @@
               <app-menu :window-width="windowWidth" :full-mode="fullMode"></app-menu>
 
               <div class="test-container" :class="{fullMode: windowWidth < 1025 || fullMode}">
-                <router-view @fullMode="getModeFromPage" />
+                <router-view :key="$route.fullPath" @fullMode="getModeFromPage" />
               </div>
             </template>
             <noAuthBlock v-else />
