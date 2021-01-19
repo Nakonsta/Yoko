@@ -267,10 +267,11 @@ export default {
                 { cancelToken: this.CancelTokens.proceduresCancelToken.token },
             );
         },
-        fetchApplications(filter, order) {
+        fetchApplications(page, filter, order) {
             return axios.post(
                 `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list`,
                 {
+                    page,
                     filter,
                     order
                 },

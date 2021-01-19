@@ -18,10 +18,23 @@
             </div>
             <application-search></application-search>
         </div>
+
         <applications-list v-if="!loading && applications.length > 0" :applications="applications"></applications-list>
+
         <div v-if="!loading && applications.length === 0" class="applications__empty">
             Заявления не найдены
         </div>
+
+        <paginate
+            v-if="totalPages"
+            class="applications__pagination"
+            :page-count="totalPages"
+            :click-handler="changePage"
+            prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            :value="currentPage"
+        >
+        </paginate>
     </div>
 </template>
 <script>
@@ -31,6 +44,7 @@ import AccreditationsTitle from '../../../../components/admin/accreditations/Acc
 import ApplicationSort from '../../../../components/admin/procedures/applications/ApplicationSort.vue'
 import ApplicationsList from '../../../../components/admin/procedures/applications/list/ApplicationsList'
 import ApplicationSearch from '../../../../components/admin/procedures/applications/ApplicationSearch'
+
 export default {
     name: 'applications',
     mixins: [api],
@@ -63,24 +77,42 @@ export default {
                 winner_chosen: 'Одобренные',
                 canceled: 'Отмененные',
                 draft: 'Черновики'
-            }
+            },
+            totalPages: null,
+            currentPage: 1,
+            debounceTimer: null
         }
     },
     methods: {
         getApplications() {
             window.openLoader()
             this.loading = true
-            this.fetchApplications(this.filter, this.order)
+            this.fetchApplications(this.currentPage, this.filter, this.order)
                 .then(({ data }) => {
                     this.applications = data.data.items
+                    this.totalPages = Math.ceil(data.data.total / 20)
                 })
                 .finally(() => {
                     this.loading = false
                     window.closeLoader()
                 })
         },
+        changePage(page) {
+            this.currentPage = page
+            this.getAccreditations()
+        },
         changeSortDate(value) {
             this.order.publication_date = value
+            this.getApplications()
+        },
+        onSearch(value) {
+            this.currentPage = 1
+            if (value) {
+                this.filter.ids = [value]
+            } else {
+                delete this.filter.ids
+            }
+
             this.getApplications()
         },
         changeSortStatus(value) {
@@ -89,7 +121,9 @@ export default {
             } else {
                 this.filter.application_status = [value]
             }
-            this.getApplications()
+
+            clearTimeout(this.debounceTimer)
+            this.debounceTimer = setTimeout(() => this.getApplications(), 500)
         }
     },
     created() {
@@ -105,7 +139,10 @@ export default {
 
 .applications {
     width: 100%;
-    padding: rem(80px) 0 rem(40px);
+
+    @include mq($until: desktop) {
+        padding: rem(80px) 0 rem(40px);
+    }
 
     &__header {
         display: flex;
@@ -115,11 +152,12 @@ export default {
     }
 
     &__sorts {
-        flex: 1;
         display: flex;
         flex-flow: row wrap;
         justify-content: flex-start;
         align-items: center;
+
+        margin-right: rem(56px);
     }
 
     &__empty {
@@ -129,6 +167,83 @@ export default {
         text-align: center;
         font-size: rem(16px);
         color: $colorGray;
+    }
+
+    &__pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-top: rem(20px);
+
+        ::v-deep li {
+            width: 30px;
+            height: 30px;
+            margin: 0 rem(5px);
+            outline: none;
+
+            &.disabled {
+                a {
+                    cursor: default;
+
+                    &:hover {
+                        background-color: #fff;
+                        color: currentColor;
+
+                        svg path {
+                            transition: 0.3s stroke;
+                            stroke: $colorGray;
+                        }
+                    }
+                }
+            }
+
+            &.active {
+                a {
+                    background-color: $colorTurquoise;
+                    color: #fff;
+
+                    &:hover {
+                        background-color: $colorTurquoiseHover;
+                    }
+                }
+            }
+
+            &:first-child {
+                margin-right: rem(15px);
+            }
+
+            &:last-child {
+                margin-left: rem(15px);
+                transform: rotate(-180deg);
+            }
+
+            a {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                width: 100%;
+                height: 100%;
+                background-color: #fff;
+                transition: 0.3s;
+                border-radius: 6px;
+
+                &:hover {
+                    background-color: $colorTurquoise;
+                    color: #fff;
+
+                    svg path {
+                        transition: 0.3s stroke;
+                        stroke: #fff;
+                    }
+                }
+            }
+        }
     }
 }
 </style>

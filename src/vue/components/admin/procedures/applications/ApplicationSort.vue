@@ -2,7 +2,7 @@
     <div class="application-sort">
         <span>{{ label }}</span>
         <div class="application-sort__dropdown">
-            <div class="application-sort__dropdown-value" @click="show = !show">
+            <div class="application-sort__dropdown-value" @click="show = true">
                 <span>
                     {{ sortList[sort] }}
                 </span>
@@ -52,6 +52,11 @@ export default {
             this.sort = key
             this.$emit('on-sort', this.sort)
             this.show = false
+        },
+        hideList(e) {
+            if (!this.$el.contains(e.target)) {
+                this.show = false
+            }
         }
     },
     created() {
@@ -65,6 +70,11 @@ export default {
                 }
             }
         }
+
+        document.addEventListener('click', this.hideList)
+    },
+    beforeDestroy() {
+        document.removeEventListener('click', this.hideList)
     }
 }
 </script>
@@ -107,14 +117,17 @@ export default {
         right: 0;
         z-index: 2;
 
+        visibility: hidden;
         list-style: none;
         margin: 0;
         padding: rem(8px) rem(12px);
         opacity: 0;
         background-color: #fff;
         border-radius: 6px;
+        transition: 0.3s;
 
         &--show {
+            visibility: visible;
             opacity: 1;
         }
 
