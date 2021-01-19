@@ -44,7 +44,7 @@
                 ></accreditation-details-card>
 
                 <accreditation-details-select
-                    :defaultCompanyId="accreditation.entity_id"
+                    :defaultCompanyId="accreditation.company_id"
                     @on-select="onSelect"
                     :disabled="!viewType.isCreate"
                     :hasError="errors.noCompany"
@@ -54,9 +54,9 @@
                 <div class="accreditation-details__checkboxes">
                     <accreditation-details-checkbox
                         label="Поставщик"
-                        :value="accreditation.provider_accreditation"
+                        :value="accreditation.contractor"
                         @click="
-                            accreditation.provider_accreditation = $event
+                            accreditation.contractor = $event
                             errors.noAccreditationType = false
                         "
                         :disabled="!viewType.isCreate"
@@ -64,9 +64,9 @@
                     ></accreditation-details-checkbox>
                     <accreditation-details-checkbox
                         label="Заказчик"
-                        :value="accreditation.customer_accreditation"
+                        :value="accreditation.buyer"
                         @click="
-                            accreditation.customer_accreditation = $event
+                            accreditation.buyer = $event
                             errors.noAccreditationType = false
                         "
                         :disabled="!viewType.isCreate"
@@ -136,9 +136,9 @@ export default {
         return {
             loading: false,
             accreditation: {
-                entity_id: null,
-                provider_accreditation: false,
-                customer_accreditation: false,
+                company_id: null,
+                contractor: false,
+                buyer: false,
                 documents: {},
                 status: null,
                 rnp: false,
@@ -198,7 +198,7 @@ export default {
             })
         },
         onSelect(value) {
-            this.accreditation.entity_id = value.id
+            this.accreditation.company_id = value.id
             this.errors.noCompany = false
         },
         onFileUpload(file, key) {
@@ -235,12 +235,12 @@ export default {
 
             let hasErrors = false
 
-            if (!this.accreditation.provider_accreditation && !this.accreditation.customer_accreditation) {
+            if (!this.accreditation.contractor && !this.accreditation.buyer) {
                 this.errors.noAccreditationType = true
                 hasErrors = true
             }
 
-            if (this.accreditation.entity_id === null) {
+            if (this.accreditation.company_id === null) {
                 this.errors.noCompany = true
                 hasErrors = true
             }
