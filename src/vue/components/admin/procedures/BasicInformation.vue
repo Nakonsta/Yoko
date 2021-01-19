@@ -56,6 +56,7 @@
           <button
               class="btn"
               :disabled="!selectedData.tender_eis_id"
+              @click="getEis"
           >
             Выгрузить
           </button>
@@ -333,6 +334,10 @@ export default {
     isCreatedProcedure: {
       default: false,
       type: Boolean,
+    },
+    getEis: {
+      default: () => {},
+      type: Function,
     },
     clearTenderTradingType: {
       default: () => {},

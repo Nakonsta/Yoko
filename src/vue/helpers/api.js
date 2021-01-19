@@ -283,6 +283,9 @@ export default {
                 { cancelToken: this.CancelTokens.proceduresCancelToken.token },
             );
         },
+        fetchEISProcedure(eis) {
+            return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/eis/${eis}`);
+        },
         sendProcedureApplicationDraft(id, data) {
             return axios.post(
                 `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/participation-applications`,
