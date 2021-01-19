@@ -27,14 +27,16 @@
 
         <paginate
             v-if="totalPages"
-            class="applications__pagination"
+            :prev-class="'catalog-pagination__prev'"
+            :next-class="'catalog-pagination__next'"
+            :container-class="'catalog-pagination'"
+            :page-class="'catalog-pagination__item'"
             :page-count="totalPages"
             :click-handler="changePage"
             prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             :value="currentPage"
-        >
-        </paginate>
+        ></paginate>
     </div>
 </template>
 <script>
@@ -89,8 +91,32 @@ export default {
             this.loading = true
             this.fetchApplications(this.currentPage, this.filter, this.order)
                 .then(({ data }) => {
-                    this.applications = data.data.items
+                    const applications = data.data.items
                     this.totalPages = Math.ceil(data.data.total / 20)
+
+                    if (applications.length) {
+                        const companies = []
+                        applications.map(application => {
+                            application.company = {}
+                            if (companies.indexOf(application.inn) === -1) {
+                                companies.push(application.inn)
+                            }
+                        })
+
+                        if (companies.length) {
+                            this.fetchCompaniesByINN(companies).then(({ data }) => {
+                                applications.map(application => {
+                                    data.data.elements.forEach(company => {
+                                        if (company.inn === application.inn) {
+                                            application.company = company
+                                        }
+                                    })
+                                })
+                            })
+                        }
+                    }
+
+                    this.applications = applications
                 })
                 .finally(() => {
                     this.loading = false
@@ -165,83 +191,6 @@ export default {
         text-align: center;
         font-size: rem(16px);
         color: $colorGray;
-    }
-
-    &__pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: 100%;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        margin-top: rem(20px);
-
-        ::v-deep li {
-            width: 30px;
-            height: 30px;
-            margin: 0 rem(5px);
-            outline: none;
-
-            &.disabled {
-                a {
-                    cursor: default;
-
-                    &:hover {
-                        background-color: #fff;
-                        color: currentColor;
-
-                        svg path {
-                            transition: 0.3s stroke;
-                            stroke: $colorGray;
-                        }
-                    }
-                }
-            }
-
-            &.active {
-                a {
-                    background-color: $colorTurquoise;
-                    color: #fff;
-
-                    &:hover {
-                        background-color: $colorTurquoiseHover;
-                    }
-                }
-            }
-
-            &:first-child {
-                margin-right: rem(15px);
-            }
-
-            &:last-child {
-                margin-left: rem(15px);
-                transform: rotate(-180deg);
-            }
-
-            a {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                width: 100%;
-                height: 100%;
-                background-color: #fff;
-                transition: 0.3s;
-                border-radius: 6px;
-
-                &:hover {
-                    background-color: $colorTurquoise;
-                    color: #fff;
-
-                    svg path {
-                        transition: 0.3s stroke;
-                        stroke: #fff;
-                    }
-                }
-            }
-        }
     }
 }
 </style>

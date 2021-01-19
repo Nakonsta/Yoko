@@ -16,7 +16,7 @@
             </div>
         </div>
         <time class="applications-list-item__date">от {{ formatDate(application.created_at) }}</time>
-        <router-link class="applications-list-item__company" to="#">{{ company.name }}</router-link>
+        <router-link class="applications-list-item__company" to="#">{{ application.company.name }}</router-link>
     </div>
 </template>
 <script>
@@ -30,11 +30,6 @@ export default {
         application: {
             type: Object,
             required: true
-        }
-    },
-    data() {
-        return {
-            company: {}
         }
     },
     computed: {
@@ -55,19 +50,6 @@ export default {
                 return statuses[status] ?? { text: 'Нет данных', type: 'default' }
             }
         }
-    },
-    methods: {
-        getCompanyByInn() {
-            window.openLoader()
-            this.fetchCompanyByInn(this.application.inn)
-                .then(({ data }) => {
-                    this.company = data.data
-                })
-                .finally(() => window.closeLoader())
-        }
-    },
-    created() {
-        this.getCompanyByInn()
     }
 }
 </script>
