@@ -4,7 +4,6 @@
       selectedData.tender_trading_type &&
       (
         procedureIdData.procedureType == 'FromSupplier' ||
-        procedureIdData.procedureType == 'Supplier' ||
         procedureIdData.procedureType === 'Contest'
       )
     "

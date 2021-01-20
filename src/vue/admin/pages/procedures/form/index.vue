@@ -926,6 +926,7 @@ export default {
           ...this.selectedData,
           reviewForm,
           commission: this.get(data, 'summarizings.competition_commission'),
+          application_submit_date_time_begin: this.get(data, 'summarizings.application_start_date'),
           application_opening_date_time: this.get(data, 'summarizings.documentation_receipt_date'),
           place_of_receipt: {
             id: this.get(data, 'summarizings.documentation_receipt_place'),
@@ -1313,7 +1314,6 @@ export default {
         formData.purchase_term = {
           ...formData.purchase_term,
           application_end_date: this.parseDate(this.selectedData.application_submit_date_time),
-          // application_end_date: this.parseDate(this.selectedData.application_submit_date_time_begin),
           contract_conclusion_from: this.parseDate(this.get(this.selectedData, 'application_terms_of_contract.start')),
           contract_conclusion_to: this.parseDate(this.get(this.selectedData, 'application_terms_of_contract.end')),
           delivery_from: this.parseDate(this.get(this.selectedData, 'application_delivery_time.start')),
@@ -1355,6 +1355,7 @@ export default {
       ) {
         formData.summarizing = {
           competition_commission: this.selectedData.commission,
+          application_start_date: this.parseDate(this.selectedData.application_submit_date_time_begin),
           documentation_receipt_date: this.parseDate(this.selectedData.application_opening_date_time),
           documentation_receipt_place: this.get(this.selectedData, 'place_of_receipt.id'),
           application_consideration_date: this.parseDate(this.selectedData.application_date_time),
