@@ -367,10 +367,16 @@ export default {
       // todo упаковка
     },
     getMarksizeDetailData(id) {
-      this.fetchMarksizeDetail(id).then((response) => {
-        const marksizeDetailData = response.data.data;
-        this.prepareMarksizeDetailData(marksizeDetailData);
-      })
+      this.fetchMarksizeDetail(id)
+        .then((response) => {
+          const marksizeDetailData = response.data.data;
+          this.prepareMarksizeDetailData(marksizeDetailData);
+        })
+        .catch((e) => {
+          if (e.response.status === 404) {
+            window.location.href = '/404';
+          }
+        });
     },
   }
 }

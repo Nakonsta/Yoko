@@ -366,10 +366,16 @@ export default {
       this.rootData.analogs = []; // todo аналоги
     },
     getMarkData(id) {
-      this.fetchMark(id).then((response) => {
-        const markData = response.data.data;
-        this.prepareMarkData(markData);
-      });
+      this.fetchMark(id)
+        .then((response) => {
+          const markData = response.data.data;
+          this.prepareMarkData(markData);
+        })
+        .catch((e) => {
+          if (e.response.status === 404) {
+            window.location.href = '/404';
+          }
+        });
     }
   }
 }
