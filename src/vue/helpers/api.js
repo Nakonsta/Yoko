@@ -40,6 +40,9 @@ export default {
     fetchInn(filterRequest) {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, { params: { inn: filterRequest } });
     },
+    fetchCompaniesByInnByName(filterRequest) {
+      return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, { params: { shortNameOrInn: filterRequest } });
+    },
     fetchCompaniesByInn(inn) {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/users`);
     },

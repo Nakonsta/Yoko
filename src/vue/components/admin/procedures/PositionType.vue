@@ -211,11 +211,7 @@
     },
     data() {
       return {
-        markSize: [{
-          id: 1,
-          name: 'ВВГ',
-          code: '123'
-        }],
+        markSize: [],
         numValidation: [
           (v) =>
             /^\d{1,12}$/.test(v) || 'Вводите максимум 12 цифровых значений',

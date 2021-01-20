@@ -78,13 +78,7 @@
             placeholder="Выберите из списка"
             v-model="selectedData.tender_available"
             label="Доступность"
-            :options="
-              procedureIdData.procedureType === 'FromSupplier'
-                ? fieldsData.tenderAvailablePur
-                : procedureIdData.procedureType === 'Auction' || procedureIdData.procedureType === 'Contest'
-                ? fieldsData.tenderAvailableAuc
-                : fieldsData.tenderAvailable
-            "
+            :options="procedureIdData.tenderArray"
             :disabled="isCreatedProcedure"
         ></select-input>
       </div>

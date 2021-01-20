@@ -27,7 +27,7 @@
                 ? new Date(procedureIdData.setMinFiveDates.publication_date)
                 : procedureIdData.procedureType === 'Offers'
                  ? new Date(procedureIdData.setMinSevenDates.publication_date)
-                 : new Date(procedureIdData.setMinDates.publication_date)
+                 : new Date(procedureIdData.setSameDates.publication_date)
             "
             :rules="{
                required: true,
@@ -36,7 +36,7 @@
                   ? procedureIdData.setMinFiveDates.publication_date
                   : procedureIdData.procedureType === 'Offers'
                     ? procedureIdData.setMinSevenDates.publication_date
-                    : procedureIdData.setMinDates.publication_date
+                    : procedureIdData.setSameDates.publication_date
             }"
         ></date-time>
       </div>
@@ -98,10 +98,10 @@
             label="Дата окончания процедуры"
             placeholder="Выберите крайнюю дату"
             :disabled="isCreatedProcedure"
-            :min-date="new Date(procedureIdData.setMin2WeeksDates.application_end_date)"
+            :min-date="new Date(procedureIdData.setMin2WeeksDates.publication_date)"
             :rules="{
               required: true,
-              minMaxDateCheck: procedureIdData.setMin2WeeksDates.application_end_date
+              minMaxDateCheck: procedureIdData.setMin2WeeksDates.publication_date
             }"
         ></date-time>
       </div>

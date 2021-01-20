@@ -129,6 +129,7 @@ import moment from 'moment'
 import api from '@/helpers/api'
 import parsers from '@/helpers/parsers'
 import functions from '@/helpers/functions'
+import formatDate from '@/helpers/formatDate'
 import localPreloader from '@/components/preloader'
 import BasicInformation from '@/components/admin/procedures/BasicInformation'
 import PurchaseSubject from '@/components/admin/procedures/PurchaseSubject'
@@ -162,7 +163,7 @@ export default {
     AccreditationsTitle: AccreditationsTitle,
     appPreview: Preview,
   },
-  mixins: [api, functions, parsers],
+  mixins: [api, functions, parsers, formatDate],
   data() {
     return {
       markImport: null,
@@ -183,6 +184,10 @@ export default {
         tenderAvailableAuc: [
           {id: 1, name: 'Открытый аукцион'},
           {id: 0, name: 'Закрытый аукцион'},
+        ],
+        tenderAvailableContest: [
+          {id: 1, name: 'Открытый конкурс'},
+          {id: 0, name: 'Закрытый конкурс'},
         ],
         tenderAvailablePur: [
           {id: 1, name: 'Открытая закупка'},
@@ -307,6 +312,7 @@ export default {
         currency: {id: 'rub', name: 'руб.'},
         application_submit_date_time_menu: null,
         application_submit_date_time: null,
+        application_submit_date_time_begin: null,
         application_submit_date: null,
         application_submit_time: '00:00:00',
         application_opening_menu: null,
@@ -378,12 +384,14 @@ export default {
       const totalCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       const biddingType = []
       const setMinDates = {}
+      const setSameDates = {}
       const setMinFiveDates = {}
       const setMinSevenDates = {}
       const setMin2WeeksDates = {}
       const lotsCounter = []
       const positionType = []
       let procedureType = ''
+      let tenderArray = this.fieldsData.tenderAvailable
       if (
           this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_format.id === 'trading_223'
@@ -433,6 +441,7 @@ export default {
           this.selectedData.tender_trading_type.id === 'contest'
       ) {
         procedureType = 'Contest'
+        tenderArray = this.fieldsData.tenderAvailableContest
       } else if (
           this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_type &&
@@ -454,6 +463,7 @@ export default {
           this.selectedData.tender_trading_type.id === 'auction'
       ) {
         procedureType = 'Auction'
+        tenderArray = this.fieldsData.tenderAvailableAuc
       } else if (
           this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_type &&
@@ -468,6 +478,7 @@ export default {
           this.selectedData.tender_trading_type.id === 'purchase_from_supplier'
       ) {
         procedureType = 'FromSupplier'
+        tenderArray = this.fieldsData.tenderAvailablePur
       } else if (
           this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_type &&
@@ -530,30 +541,52 @@ export default {
 
       datesArray.map((item) => {
         if (this.selectedData[item]) {
-          setMinDates[item] = moment(this.selectedData[item].end || this.selectedData[item])
-              .add(1, 'day')
-              .format('YYYY-MM-DD')
-          setMin2WeeksDates[item] = moment(this.selectedData[item].end || this.selectedData[item])
-              .add(16, 'days')
-              .format('YYYY-MM-DD')
-          setMinFiveDates[item] = moment(this.selectedData[item].end || this.selectedData[item])
-              .add(6, 'days')
-              .format('YYYY-MM-DD')
-          setMinSevenDates[item] = moment(this.selectedData[item].end || this.selectedData[item])
-              .add(8, 'days')
-              .format('YYYY-MM-DD')
+          const days15 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 15)
+          const days7 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 7)
+          const days5 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 5)
+          const days1 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 1)
+          setSameDates[item] = moment(this.selectedData[item].end || this.selectedData[item]).format('YYYY-MM-DD')
+          setMinDates[item] = days1.format('YYYY-MM-DD')
+          setMin2WeeksDates[item] = days15.format('YYYY-MM-DD')
+          setMinFiveDates[item] = days5.format('YYYY-MM-DD')
+          setMinSevenDates[item] = days7.format('YYYY-MM-DD')
         }
       })
+
+      if(this.selectedData.publication_date || procedureType) {
+        const days15 = this.addWeekdays(this.selectedData.publication_date, 15)
+        const days7 = this.addWeekdays(this.selectedData.publication_date, 7)
+        const days5 = this.addWeekdays(this.selectedData.publication_date, 5)
+        switch (procedureType) {
+          case "Auction":
+            this.selectedData.application_delivery_time = days15._d
+            break;
+          case "FromSupplier":
+          case "Contest":
+            this.selectedData.application_submit_date_time = days15._d
+            break;
+          case "Query":
+            this.selectedData.application_end_date = days5._d
+            break;
+          case "Offers":
+            this.selectedData.application_end_date = days7._d
+            break;
+          default:
+            this.selectedData.application_submit_date_time = days15._d
+        }
+      }
 
       return {
         update,
         totalCount,
         lotsCounter,
+        tenderArray,
         baseCount,
         biddingType,
         positionType,
         procedureType,
         setMinDates,
+        setSameDates,
         setMinFiveDates,
         setMinSevenDates,
         setMin2WeeksDates,
@@ -597,8 +630,6 @@ export default {
     const fromState = this.$store.state.auth.user
     if (fromState) {
       this.fieldsData.companies = this.$store.getters.companyBuyer
-      this.selectedData.contact_phone = fromState.phone
-      this.selectedData.contact_email = fromState.email
       if(this.fieldsData.companies.length === 1) {
         this.selectedData.companyName = this.fieldsData.companies[0]
       }
@@ -1037,7 +1068,13 @@ export default {
       //     })
       this.fetchCompaniesByInn(this.$store.state.auth.user.companies[0].inn)
           .then((response) => {
-            this.fieldsData.contacts_list = response.data.data
+            const result = response.data.data
+            this.fieldsData.contacts_list = result
+            if(result.length === 1) {
+              this.selectedData.contact_full_name = result[0]
+              this.selectedData.contact_phone = result[0].phone
+              this.selectedData.contact_email = result[0].email
+            }
           })
           .catch((e) => {
             console.log(e)
@@ -1276,6 +1313,7 @@ export default {
         formData.purchase_term = {
           ...formData.purchase_term,
           application_end_date: this.parseDate(this.selectedData.application_submit_date_time),
+          // application_end_date: this.parseDate(this.selectedData.application_submit_date_time_begin),
           contract_conclusion_from: this.parseDate(this.get(this.selectedData, 'application_terms_of_contract.start')),
           contract_conclusion_to: this.parseDate(this.get(this.selectedData, 'application_terms_of_contract.end')),
           delivery_from: this.parseDate(this.get(this.selectedData, 'application_delivery_time.start')),

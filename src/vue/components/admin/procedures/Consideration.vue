@@ -15,6 +15,17 @@
       <div class="col col-xl-4 col-sm-6 col-xs-12">
         <date-time
             mode="dateTime"
+            v-model="selectedData.application_submit_date_time_begin"
+            label="Дата и время начала подачи заявки на конкурс"
+            placeholder="Выберите крайнюю дату"
+            :disabled="isCreatedProcedure"
+            :min-date="new Date(procedureIdData.setSameDates.publication_date) || new Date()"
+            :rules="{required: true, minMaxDateCheck: procedureIdData.setSameDates.publication_date}"
+        ></date-time>
+      </div>
+      <div class="col col-xl-4 col-sm-6 col-xs-12">
+        <date-time
+            mode="dateTime"
             v-model="selectedData.application_submit_date_time"
             label="Дата и время окончания подачи заявки на конкурс"
             placeholder="Выберите крайнюю дату"
