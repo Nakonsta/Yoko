@@ -104,7 +104,8 @@
                 clearInterval(this.searchCounter);
                 if (this.innerValue.length) {
                     this.searchCounter = setTimeout(() => {
-                        this.$emit('search', this.innerValue);
+                        const trimValue = this.innerValue.trim();
+                        this.$emit('search', trimValue);
                     }, 1000);
                 } else {
                     this.searchReset();
