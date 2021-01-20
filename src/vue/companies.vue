@@ -4,7 +4,7 @@
             <div class="companies">
                 <div class="companies__search">
                     <search
-                            placeholder="Поиск по компаниям"
+                            placeholder="Поиск по названию и инн компании"
                             v-model="searchQuery"
                             :canClear="true"
                             @search="getItems"
@@ -114,7 +114,7 @@
                 if( search && search.length ) {
                     this.page = 1;
                     // filter.name = search;
-                    filter.shortName = search;
+                    filter.shortNameOrInn = search;
                     this.searchQuery = search;
                     this.view = 'all';
                     this.showSmall = true;
@@ -132,7 +132,7 @@
                 }
                 //
                 if( this.searchQuery.length ) {
-                    filter.shortName = this.searchQuery;
+                    filter.shortNameOrInn = this.searchQuery;
                 }
                 filter.page = this.page;
                 if (/*this.view === 'all' || */this.view === 'buyer') {
