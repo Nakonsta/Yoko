@@ -205,7 +205,11 @@
     <div v-if="procedureIdData.procedureType === 'Auction'">
       <radio-input
           :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security)}"
-          :disabled="isCreatedProcedure"
+          :disabled="
+            isCreatedProcedure ||
+            !selectedData.application_security_of_the_contract &&
+            !selectedData.application_security_required
+          "
           title="Обеспечение заявки, внесенное победителем аукциона"
           name="securing_the_application"
           v-model="selectedData.securing_the_application"

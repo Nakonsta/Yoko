@@ -10,5 +10,16 @@ export default {
     formatDateForFilter(string) {
       return moment(string).format('YYYY-MM-DD hh:mm:ss')
     },
+    addWeekdays(date, days) {
+      date = moment(date);
+      while (days > 0) {
+        date = date.add(1, 'days');
+        // decrease "days" only if it's a weekday.
+        if (date.isoWeekday() !== 6 && date.isoWeekday() !== 7) {
+          days -= 1;
+        }
+      }
+      return date;
+    },
   },
 }
