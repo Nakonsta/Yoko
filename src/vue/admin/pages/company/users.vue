@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="company-users">
     <CompanyTabs
       :value="currentCompany"
       :companies="companies"
@@ -86,6 +86,12 @@ export default {
 
 <style lang="scss" scoped>
 .company-users {
+  margin-top: 88px;
+
+  @media screen and (min-width: 1024px) {
+    margin-top: 0;
+  }
+
   &__panel {
     margin-top: 40px;
     padding: 24px;
