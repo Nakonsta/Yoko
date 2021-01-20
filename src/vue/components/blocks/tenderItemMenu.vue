@@ -65,6 +65,14 @@ export default {
             if (action === 'attach-protocols') {
                 this.changeActiveTab(evt, '#protocols')
             }
+            if (action === 'winner') {
+                evt.preventDefault();
+                this.$emit('chooseWinner', true);
+            }
+            if (action === 'return') {
+                evt.preventDefault();
+                this.$emit('chooseWinner', false);
+            }
         }
     }
 }

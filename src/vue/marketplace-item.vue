@@ -2,7 +2,14 @@
     <div class="tender-item">
         <div class="tender-item__top">
             <TenderItemCard 
-                v-if="!isLoading"
+                v-if="!isLoading && !winnerChoice"
+                :tenderItemData="tenderItemData"
+                :company="company"
+                :itemsStatuses="itemsStatuses"
+                @changeTab = "changeTab"
+            />
+            <TenderItemChoice
+                v-if="!isLoading && winnerChoice"
                 :tenderItemData="tenderItemData"
                 :company="company"
                 :itemsStatuses="itemsStatuses"
@@ -13,6 +20,7 @@
                 :tenderItemData="tenderItemData"
                 :activeTab="activeTab"
                 @changeTab = "changeTab"
+                @chooseWinner = "chooseWinner"
                 :tabs="tabs"
                 :company="company"
                 :buyerMenu="buyerMenu"
@@ -20,7 +28,7 @@
         </div>
         <div class="tender-item__tabs">
             <TenderItemTabs 
-                v-if="!isLoading"
+                v-if="!isLoading && !winnerChoice"
                 :tenderItemData="tenderItemData"
                 :company="company"
                 :activeTab="activeTab"
@@ -50,6 +58,7 @@ import functions from "@/helpers/functions";
 import TenderItemCard from './components/blocks/tenderItemCard.vue'
 import TenderItemMenu from './components/blocks/tenderItemMenu.vue'
 import TenderItemTabs from './components/blocks/tenderItemTabs.vue'
+import TenderItemChoice from './components/blocks/tenderItemChoice.vue'
 import { initMore } from '../assets/js/main/modules/more.js'
 
 export default {
@@ -59,6 +68,7 @@ export default {
         TenderItemCard,
         TenderItemMenu,
         TenderItemTabs,
+        TenderItemChoice
     },
 
     mixins: [api, functions],
@@ -68,6 +78,7 @@ export default {
             tenderItemId: '',
             isLoading: true,
             activeTab: 'info',
+            winnerChoice: false,
             tenderItemData: {
                 addition_information: null,
                 additional_fields: [],
@@ -175,8 +186,10 @@ export default {
             buyerMenu: [
                 {action: 'edit', name: 'Редактировать'},
                 {action: 'attach-protocols', name: 'Прикрепить протоколы'},
-                {action: 'winner', name: 'Выбор победителя'}
-            ]
+                {action: 'winner', name: 'Выбор победителя'},
+                {action: 'return', name: 'Вернуться к процедуре'}
+            ],
+            participants: []
         }
     },
 
@@ -185,6 +198,7 @@ export default {
         this.getTenderItemMainData(this.tenderItemId)
         this.checkUrlHash()
         this.getMarketplaceProceduresFilter()
+        this.getApplicationsList()
     },
 
     mounted() {
@@ -338,7 +352,19 @@ export default {
                 .catch((e) => {
                     console.log(e);
                 });
-        }
+        },
+        chooseWinner(choice) {
+            this.winnerChoice = choice
+        },
+        getApplicationsList(){
+            this.fetchApplicationsList()
+                .then((data) => {
+                    this.participants = data.data.data.items;
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
     }
 }
 </script>
