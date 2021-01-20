@@ -348,7 +348,14 @@ export default {
     },
     send() {
       window.openLoader();
-      this.sendAccreditationCompany(this.objectToFormData(this.accreditation))
+      const accreditationData = {};
+
+      Object.assign(accreditationData, this.accreditation);
+
+      accreditationData.buyer = accreditationData.buyer ? 1 : 0;
+      accreditationData.contractor = accreditationData.contractor ? 1 : 0;
+
+      this.sendAccreditationCompany(this.objectToFormData(accreditationData))
         .then(() => {
           window.notificationSuccess('Заявка на аккредитацию отправлена');
           this.$router.replace('/personal/accreditations');
