@@ -244,7 +244,7 @@ export default {
       type: String,
     },
     oldCompany: {
-      default: 0,
+      default: '0',
       type: String,
     },
     inn: {
