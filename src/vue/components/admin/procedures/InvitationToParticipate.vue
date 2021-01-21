@@ -1,12 +1,11 @@
 <template>
-<!--  v-if="-->
-<!--  selectedData.tender_available &&-->
-<!--  selectedData.tender_available.id === 0 &&-->
-<!--  (procedureIdData.procedureType == 'Auction' ||-->
-<!--  procedureIdData.procedureType == 'FromSupplier' ||-->
-<!--  procedureIdData.procedureType === 'Contest')-->
-<!--  "-->
-  <div
+  <div v-if="
+    selectedData.tender_available &&
+    selectedData.tender_available.id === 0 &&
+    (procedureIdData.procedureType == 'Auction' ||
+      procedureIdData.procedureType == 'FromSupplier' ||
+      procedureIdData.procedureType === 'Contest')
+    "
     class="container-item"
   >
     <h3 class="procedure__main-title">Приглашение к участию</h3>
