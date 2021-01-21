@@ -463,5 +463,8 @@ export default {
         { cancelToken: this.CancelTokens.proceduresCancelToken.token },
       );
     },
+    sendUserData(data) {
+      return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data)
+    },
   },
 };
