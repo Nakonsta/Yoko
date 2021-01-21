@@ -9,7 +9,6 @@
       mode="eager"
     >
       <form
-        slot-scope="{ valid }"
         class="support-form__form"
         @submit.prevent="sendForm($event, 'common')"
       >
@@ -227,7 +226,6 @@
           <button
             type="submit"
             class="btn"
-            :disabled="!valid"
           >
             Сохранить
           </button>
