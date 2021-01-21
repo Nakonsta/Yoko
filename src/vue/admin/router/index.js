@@ -123,7 +123,7 @@ router.beforeEach((to, from, next) => {
   const companyBuyer = store.getters.companyBuyer
   const companyContractor = store.getters.companyContractor
 
-  console.log(to)
+  // console.log(to)
 
   if (userRole !== 'guest') {
     if (role) {

@@ -23,11 +23,23 @@ Inputmask.extendDefinitions({
     },
 });
 Vue.directive('inputmask', {
-    bind: function(el, binding) {
-        if( !binding || binding.value === false ) return;
+    bind: function(el, binding, domEL) {
+        if (!binding || binding.value === false) return;
+        Inputmask(binding.value).mask(el);
+    },
+    update: function(el, binding, domEL) {
+        if (!binding || binding.value === false || binding.value !== binding.oldValue || el.inputmask) return;
         Inputmask(binding.value).mask(el);
     }
 });
+
+Vue.prototype.$priceInputmask = {
+    alias: 'currency',
+    groupSeparator: ' ',
+    radixPoint: '.',
+    allowMinus: false,
+    rightAlign: false,
+};
 
 import VCalendar from 'v-calendar'
 Vue.use(VCalendar)

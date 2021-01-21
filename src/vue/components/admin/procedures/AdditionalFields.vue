@@ -15,7 +15,7 @@
           <select-input
               :is-single="true"
               :close="true"
-              placeholder="Введите адрес"
+              placeholder="Выберите тип поля"
               v-model="field.types"
               :options="fieldsData.fieldType"
               label="Выберите тип поля"
@@ -95,11 +95,6 @@
         </div>
       </div>
     </div>
-    <app-control-elements
-        v-if="!isCreatedProcedure"
-        :selected-data="selectedData"
-        :validation="validation"
-    ></app-control-elements>
   </div>
 </template>
 
@@ -108,7 +103,6 @@
   import TextInput from "@/components/forms/Input";
   import SelectInput from "@/components/forms/Select";
   import DateTime from "@/components/forms/DateTime";
-  import ControlElements from "./ControlElements";
 
   export default {
     name: 'ContactInformation',
@@ -117,7 +111,6 @@
       TextInput,
       SelectInput,
       DateTime,
-      appControlElements: ControlElements,
     },
     props: {
       selectedData: {

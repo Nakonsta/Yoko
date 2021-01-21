@@ -49,13 +49,8 @@
               :procedure-id-data="procedureIdData"
               :is-created-procedure="isCreatedProcedure"
               :remove-block="removeBlock"
+              :count-percent="countCollateralAmount"
           ></app-security-and-guarantees>
-          <app-invitation-to-participate
-              :selected-data="selectedData"
-              :fields-data="fieldsData"
-              :procedure-id-data="procedureIdData"
-              :is-created-procedure="isCreatedProcedure"
-          ></app-invitation-to-participate>
           <app-payment-and-delivery
               :selected-data="selectedData"
               :fields-data="fieldsData"
@@ -94,6 +89,17 @@
               :save-field="saveField"
               :validation="validation"
           ></app-additional-fields>
+          <app-invitation-to-participate
+              :selected-data="selectedData"
+              :fields-data="fieldsData"
+              :procedure-id-data="procedureIdData"
+              :is-created-procedure="isCreatedProcedure"
+          ></app-invitation-to-participate>
+          <app-control-elements
+              v-if="!isCreatedProcedure"
+              :selected-data="selectedData"
+              :validation="validation"
+          ></app-control-elements>
         </div>
         <app-preview
             v-if="isPreview"
@@ -143,6 +149,7 @@ import ContactInformation from '@/components/admin/procedures/ContactInformation
 import InvitationToParticipate from '@/components/admin/procedures/InvitationToParticipate'
 import AdditionalFields from '@/components/admin/procedures/AdditionalFields'
 import AccreditationsTitle from '@/components/admin/accreditations/AccreditationsTitle'
+import ControlElements from "@/components/admin/procedures/ControlElements"
 import Preview from '@/components/admin/procedures/Preview'
 
 export default {
@@ -161,6 +168,7 @@ export default {
     appInvitationToParticipate: InvitationToParticipate,
     appAdditionalFields: AdditionalFields,
     AccreditationsTitle: AccreditationsTitle,
+    appControlElements: ControlElements,
     appPreview: Preview,
   },
   mixins: [api, functions, parsers, formatDate],
@@ -975,18 +983,28 @@ export default {
       ) {
         this.selectedData.positions[index].quantity = 1
       }
-      const getSum = this.selectedData.positions[index].quantity * this.selectedData.positions[index].price_for_one
-      this.selectedData.positions[index].total_price = !isNaN(getSum) ? getSum.toFixed(2) : '0.00'
-    },
-    scrollToError() {
-      const slide = document.querySelector('.error')
-      if(slide) {
-        const top = window.scrollY + slide.getBoundingClientRect().y
-        window.scrollTo({
-          top: top - 60,
-          behavior: "smooth"
-        });
+      // const price = this.selectedData.positions[index].price_for_one.replace(/\d+/g, '');
+      const price = this.selectedData.positions[index].price_for_one ? this.selectedData.positions[index].price_for_one.replace(/[^0-9.]/g, '') : 0
+      const getSum = this.selectedData.positions[index].quantity * price
+      this.selectedData.positions[index].total_price = !isNaN(getSum) ? getSum.toFixed(2) : 0
+      if (this.selectedData.application_security_of_the_contract &&
+          this.selectedData.security.calculate_the_amount_of_collateral &&
+          this.selectedData.security.calculate_the_amount_of_collateral.id === 'percent') {
+        this.countCollateralAmount('security');
       }
+      if (this.selectedData.application_security_required &&
+          this.selectedData.request.calculate_the_amount_of_collateral &&
+          this.selectedData.request.calculate_the_amount_of_collateral.id === 'percent') {
+        this.countCollateralAmount('request');
+      }
+    },
+    countCollateralAmount(type) {
+      this.$nextTick(() => {
+        this.selectedData[type].collateral_amount_percents =
+            this.selectedData[type].percentage_of_the_starting_price *
+            this.procedureIdData.baseCount /
+            100
+      });
     },
     getFieldsData() {
       const id = this.$route.params.id
@@ -1090,6 +1108,8 @@ export default {
       this.fetchProceduresPropertyList('procedure_guarantees', 'calc_amount')
           .then((response) => {
             this.fieldsData.amountOfCollateral = response.data.data
+            this.selectedData.security.calculate_the_amount_of_collateral = response.data.data[0]
+            this.selectedData.request.calculate_the_amount_of_collateral = response.data.data[0]
           })
           .catch((e) => {
             console.log(e)
@@ -1233,7 +1253,7 @@ export default {
           lots_number: this.get(this.selectedData, 'count_lots.id'),
           positional_purchase: this.selectedData.purchase_positional,
           products_analogues: this.get(this.selectedData, 'analog_products.id'),
-          start_price: this.procedureIdData.baseCount,
+          start_price: this.procedureIdData.baseCount.replace(/[^0-9.]/g, ''),
           products: [],
           lot_amounts: [],
         },
@@ -1342,6 +1362,7 @@ export default {
             item.name = item.names && item.names.name;
             item.is_product = item.type && item.type.id;
             item.category_okpd2 = item.category_okpd && item.category_okpd.code;
+            item.price_for_one = item.price_for_one.replace(/[^0-9.]/g, '');
           })
           if (item.total_price !== 0) {
             formData.purchase_subject.lot_amounts[index] = item.total_price
@@ -1381,14 +1402,14 @@ export default {
         if (this.selectedData.security.calculate_the_amount_of_collateral.id === 'percent') {
           formData.guarantee.contract_collateral = {
             ...formData.guarantee.contract_collateral,
-            amount: this.selectedData.security.collateral_amount_percents,
+            amount: this.selectedData.security.collateral_amount_percents.replace(/[^0-9.]/g, ''),
             percent_of_init_price: this.selectedData.security.percentage_of_the_starting_price,
           }
         }
         if (this.selectedData.security.calculate_the_amount_of_collateral.id === 'monetary_expression') {
           formData.guarantee.contract_collateral = {
             ...formData.guarantee.contract_collateral,
-            amount: this.selectedData.security.collateral_amount,
+            amount: this.selectedData.security.collateral_amount.replace(/[^0-9.]/g, ''),
           }
         }
       }
@@ -1403,14 +1424,14 @@ export default {
         if (this.selectedData.request.calculate_the_amount_of_collateral.id === 'percent') {
           formData.guarantee.application_collateral = {
             ...formData.guarantee.application_collateral,
-            amount: this.selectedData.request.collateral_amount_percents,
+            amount: this.selectedData.request.collateral_amount_percents.replace(/[^0-9.]/g, ''),
             percent_of_init_price: this.selectedData.request.percentage_of_the_starting_price,
           }
         }
         if (this.selectedData.request.calculate_the_amount_of_collateral.id === 'monetary_expression') {
           formData.guarantee.application_collateral = {
             ...formData.guarantee.application_collateral,
-            amount: this.selectedData.request.collateral_amount,
+            amount: this.selectedData.request.collateral_amount.replace(/[^0-9.]/g, ''),
           }
         }
       }

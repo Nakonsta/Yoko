@@ -127,8 +127,9 @@
               :maxlength=12
               v-model="position.price_for_one"
               :disabled="isCreatedProcedure"
-              :rules="{ required: true, numeric: true, max: 12 }"
+              :rules="{ required: true }"
               label="Стоимость за единицу"
+              :inputmask="$priceInputmask"
               :input="countTotalPrice(key)"
           ></text-input>
         </div>
@@ -147,6 +148,7 @@
           <text-input
               :disabled="true"
               v-model="position.total_price"
+              :inputmask="$priceInputmask"
               label="Сумма за позицию"
           ></text-input>
         </div>

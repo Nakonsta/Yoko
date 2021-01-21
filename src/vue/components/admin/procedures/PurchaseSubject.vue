@@ -80,6 +80,7 @@
         <text-input
             :disabled="true"
             v-model="procedureIdData.totalCount[index - 1]"
+            :inputmask="$priceInputmask"
             :label="'Сумма лота ' + index"
         ></text-input>
       </div>
@@ -89,6 +90,7 @@
         <text-input
             :disabled="true"
             v-model="procedureIdData.baseCount"
+            :inputmask="$priceInputmask"
             label="Начальная цена"
         ></text-input>
       </div>

@@ -38,4 +38,12 @@
   }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "../../../../assets/sass/variables/variables";
+@import "../../../../assets/sass/variables/fluid-variables";
+@import "../../../../assets/sass/mixins/fluid-mixin";
+
+.row {
+  margin-top: rem(24px);
+}
+</style>
