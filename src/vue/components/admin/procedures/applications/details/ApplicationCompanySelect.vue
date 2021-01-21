@@ -56,14 +56,17 @@ export default {
             this.fetchCompanyByInn(value.inn)
                 .then(({ data }) => {
                     this.$emit('on-select', data.data)
+
+                    if (!this.value) {
+                        this.value = data.data
+                    }
                 })
                 .finally(() => window.closeLoader())
         }
     },
     created() {
-        if (this.defaultINN && this.companies.length) {
-            this.value = this.companies.filter(company => company.inn == this.defaultINN)[0]
-            this.handleSelect(this.value)
+        if (this.defaultINN) {
+            this.handleSelect({ inn: this.defaultINN })
         }
     }
 }
