@@ -357,11 +357,7 @@ export default {
         },
         formatPriceWithCurrency(value = 0, currency = 'rub', convert = false) {
             const c = this.getCurrency(currency).symbol || currency;
-<<<<<<< HEAD
-            return (convert ? this.convertPrice(value) : this.formatPrice(value)) + ' ' + c;
-=======
-            return ((convert ? this.convertPrice(value) : this.formatPrice(value))+' '+c).replace(/\s/g, "\u00A0");
->>>>>>> e935567006122f3f50c09e017cefcca83c49db48
+            return ((convert ? this.convertPrice(value) : this.formatPrice(value)) + ' ' + c).replace(/\s/g, "\u00A0");
         },
         getMeasure(measure = 'm') {
             let result = '';
@@ -369,12 +365,9 @@ export default {
                 case 'unit':
                 case 'item':
                     result = 'шт';
-<<<<<<< HEAD
-=======
                     break;
                 case 'km':
                     result = 'км';
->>>>>>> e935567006122f3f50c09e017cefcca83c49db48
                     break;
                 default:
                     result = 'м';
