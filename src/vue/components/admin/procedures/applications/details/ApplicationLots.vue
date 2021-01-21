@@ -60,9 +60,9 @@ export default {
             this.fetchCountries().then(({ data }) => {
                 this.countries = data.data
 
-                if (this.lots?.[0]?.products?.[0]?.country instanceof String) {
+                if (typeof this.lots?.[0]?.products?.[0]?.country == 'string') {
                     this.lots.forEach(lot => {
-                        lot.products.forEach(product => {
+                        lot.products.map(product => {
                             product.country = this.countries.filter(
                                 country =>
                                     country.code === product.country ||
