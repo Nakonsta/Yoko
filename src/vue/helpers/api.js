@@ -126,6 +126,7 @@ export default {
                 'Предыдущий запрос отменен',
             )
             this.CancelTokens.searchCancelToken = axios.CancelToken.source()
+        }
       });
     },
     authSignin(l, p) {
