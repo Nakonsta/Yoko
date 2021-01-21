@@ -255,7 +255,7 @@ export default {
               loaderName: false,
             })
             if (item[1]) {
-              this.searchProceduresOKPD2(item[1].replace(/[0-9/.]/g, ''))
+              this.searchProceduresOKPD2(item[1].replace(/[^.0-9]/gim,''))
                   .then((response) => {
                     const result = response.data.data;
                     this.fieldsData.OKPD2 = this.parseOKPD2(result)

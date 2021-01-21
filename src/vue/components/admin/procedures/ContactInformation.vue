@@ -11,6 +11,7 @@
             :disabled="isCreatedProcedure"
             v-model="selectedData.contact_full_name"
             :options="fieldsData.contacts_list"
+            :select="setUserInfo"
         ></select-input>
       </div>
       <div class="col col-md-4 col-sm-6 col-xs-12">
@@ -71,6 +72,12 @@
       textValidation: {
         default: () => {},
         type: Function,
+      },
+    },
+    methods: {
+      setUserInfo(e) {
+        this.selectedData.contact_phone = e.phone
+        this.selectedData.contact_email = e.email
       },
     },
   }

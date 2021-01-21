@@ -179,14 +179,14 @@
         if (value && value.length > 2) {
           this.loadingSearch = true
           this.searchFlag = setTimeout(() => {
-            this.fetchInn(value)
+            this.fetchCompaniesByInnByName(value)
                 .then(({data}) => {
                   this.searchResultInn = data.data.elements
                   this.loadingSearch = false
                 })
                 .catch(() => {
                   this.loadingSearch = false
-                  window.notificationError('Ошибка сервера. Поиск по ИНН не доступен')
+                  window.notificationError('Ошибка сервера. Поиск компаний не доступен')
                 })
           }, 1000)
         }

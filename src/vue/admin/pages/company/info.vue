@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <companiesTabs
-      :value="currentCompany" 
+  <div class="company-info">
+    <CompanyTabs
+      :value="currentCompany"
       :companies="companies"
-
       @change="changeCompany"
     />
     <div class="company-info__panel">
@@ -32,7 +31,7 @@
       >
         <template v-slot:pre>
           <label class="checkbox company-info__checkbox">
-            <input 
+            <input
               type="checkbox"
               name="is_same_exact_address"
               :checked="exactAddress.isSameAddress"
@@ -52,7 +51,7 @@
       >
         <template v-slot:pre>
           <label class="checkbox company-info__checkbox">
-            <input 
+            <input
               type="checkbox"
               name="is_same_post_address"
               :checked="postAddress.isSameAddress"
@@ -77,17 +76,17 @@
 </template>
 
 <script>
-import api from '@/helpers/api'
-import companiesTabs from "@/components/blocks/companiesTabs";
+import api from '@/helpers/api';
+import CompanyTabs from '@/components/blocks/companiesTabs';
 import CompanyInfoData from '@/components/admin/company/info/CompanyInfoData';
 
 export default {
   name: 'CompanyInfo',
-  mixins: [api],
   components: {
-    companiesTabs,
+    CompanyTabs,
     CompanyInfoData,
   },
+  mixins: [api],
   data: () => ({ currentCompany: {} }),
   computed: {
     companies() {
@@ -97,8 +96,8 @@ export default {
       const { currentCompany: company } = this;
 
       return [
-        { 
-          key: 'name', 
+        {
+          key: 'name',
           title: 'Полное название организации',
           value: company.name,
         },
@@ -158,8 +157,8 @@ export default {
     lawAddress() {
       const {
         legalAddress,
-        legalCountry: { 
-          name: country, 
+        legalCountry: {
+          name: country,
         } = {},
         legalPostcode,
       } = this.currentCompany;
@@ -219,8 +218,8 @@ export default {
       const {
         legalAddress,
         mailingAddress,
-        mailingCountry: { 
-          name: country, 
+        mailingCountry: {
+          name: country,
         } = {},
         mailingPostcode,
       } = this.currentCompany;
@@ -251,29 +250,29 @@ export default {
   },
   created() {
     if (this.companies && this.companies.length) {
-      window.openLoader()
+      window.openLoader();
       this.fetchCompanyByInn(this.companies[0].inn)
         .then(({ data }) => {
-          this.currentCompany = data.data
-          window.closeLoader()
+          this.currentCompany = data.data;
+          window.closeLoader();
         })
         .catch((error) => {
-          console.error(error)
-          window.closeLoader()
+          console.error(error);
+          window.closeLoader();
         });
     }
   },
   methods: {
     changeCompany(company) {
-      window.openLoader()
+      window.openLoader();
       this.fetchCompanyByInn(company.inn)
         .then(({ data }) => {
-          this.currentCompany = data.data
-          window.closeLoader()
+          this.currentCompany = data.data;
+          window.closeLoader();
         })
         .catch((error) => {
-          console.error(error)
-          window.closeLoader()
+          console.error(error);
+          window.closeLoader();
         });
     },
     change(obj) {
@@ -286,6 +285,12 @@ export default {
 
 <style lang="scss" scoped>
 .company-info {
+  margin-top: 88px;
+
+  @media screen and (min-width: 1024px) {
+    margin-top: 0;
+  }
+
   &__panel {
     margin-top: 40px;
     padding: 24px;
