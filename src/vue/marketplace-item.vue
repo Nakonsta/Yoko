@@ -11,8 +11,7 @@
             <TenderItemChoice
                 v-if="!isLoading && winnerChoice"
                 :tenderItemData="tenderItemData"
-                :company="company"
-                :itemsStatuses="itemsStatuses"
+                :participants="participants"
                 @changeTab = "changeTab"
             />
             <TenderItemMenu
@@ -187,7 +186,7 @@ export default {
                 {action: 'edit', name: 'Редактировать'},
                 {action: 'attach-protocols', name: 'Прикрепить протоколы'},
                 {action: 'winner', name: 'Выбор победителя'},
-                {action: 'return', name: 'Вернуться к процедуре'}
+                // {action: 'return', name: 'Вернуться к процедуре'}
             ],
             participants: []
         }

@@ -20,6 +20,9 @@
                 <a :href="item.url" @click="changeActiveTab($event, item.url)" class="tender-item__menu-link">{{ item.name }}</a>
             </div>
         </div>
+        <div class="tender-item__menu-rebidding">
+            <a href="#" class="btn btn--bdr">Объявить переторжку</a>
+        </div>
     </div>
 </template>
 
@@ -69,10 +72,10 @@ export default {
                 evt.preventDefault();
                 this.$emit('chooseWinner', true);
             }
-            if (action === 'return') {
-                evt.preventDefault();
-                this.$emit('chooseWinner', false);
-            }
+            // if (action === 'return') {
+            //     evt.preventDefault();
+            //     this.$emit('chooseWinner', false);
+            // }
         }
     }
 }
@@ -87,8 +90,6 @@ export default {
     .tender-item__menu {
         width: 315px;
         flex-shrink: 0;
-        padding: rem(20px) rem(32px);
-        background-color: #fff;
         @include mq($until: widescreen) {
             width: 296px;
         }
@@ -98,6 +99,10 @@ export default {
         }
         @media print {
             display: none !important;
+        }
+        &-inner {
+            padding: rem(20px) rem(32px);
+            background-color: #fff;
         }
         &-item {
             padding: rem(12px) 0;
@@ -118,6 +123,12 @@ export default {
             &:focus {
                 color: $colorTurquoise;
             }
+        }
+        &-rebidding {
+            padding-top: 1rem;
+        }
+        .btn {
+            width: 100%;
         }
     }
 </style>

@@ -96,13 +96,13 @@ export default {
         get(obj, path, defaultValue = undefined) {
             const travel = regexp =>
                 String.prototype.split
-                    .call(path, regexp)
-                    .filter(Boolean)
-                    .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
+                .call(path, regexp)
+                .filter(Boolean)
+                .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
             const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
             return result === undefined || result === obj ? defaultValue : result;
         },
-        convertFileSize({bytes, convertTo = 'bytes', round = 4, withPreffix = false}) {
+        convertFileSize({ bytes, convertTo = 'bytes', round = 4, withPreffix = false }) {
             if (bytes === 0) {
                 return 0;
             }
@@ -114,13 +114,13 @@ export default {
             }
 
             round = round <= 0 ? 0 : round;
-            const convertTypes = {'kb': 1,'mb': 2,'gb': 3,'tb': 4,'pb': 5,'eb': 6,'zb': 7,'yb': 8};
-            const result = parseFloat((bytes / Math.pow(1024,convertTypes[convertTo])).toFixed(round))
+            const convertTypes = { 'kb': 1, 'mb': 2, 'gb': 3, 'tb': 4, 'pb': 5, 'eb': 6, 'zb': 7, 'yb': 8 };
+            const result = parseFloat((bytes / Math.pow(1024, convertTypes[convertTo])).toFixed(round))
 
             if (withPreffix) {
                 return `${result} ${convertTo.toUpperCase()}`;
             } else {
-                return result;   
+                return result;
             }
         },
         scrollTo(el, offset = 0) {
@@ -143,7 +143,7 @@ export default {
         },
         getStrRand(length = 32, characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890') {
             let result = '';
-            for ( let i=0; i<length; i++ ) {
+            for (let i = 0; i < length; i++) {
                 result += characters.charAt(Math.floor(Math.random() * characters.length));
             }
             return result;
@@ -180,14 +180,14 @@ export default {
             };
         },
         getAvatarBackground(str, brightness) {
-            function getChannel(code, brightness){
+            function getChannel(code, brightness) {
                 code = (code % 255) / 255;
-                let r = 255-brightness,
-                    n = 0|((code * r) + brightness),
+                let r = 255 - brightness,
+                    n = 0 | ((code * r) + brightness),
                     s = n.toString(16);
-                return s.length===1 ? '0'+s : s;
+                return s.length === 1 ? '0' + s : s;
             }
-            return '#' + getChannel(str.charCodeAt(0)||120, brightness) + getChannel(str.charCodeAt(1)||120, brightness) + getChannel(120, brightness);
+            return '#' + getChannel(str.charCodeAt(0) || 120, brightness) + getChannel(str.charCodeAt(1) || 120, brightness) + getChannel(120, brightness);
         },
         nl2br(str) {
             return str.replace(/([^>])\n+/g, '$1<br/>');
@@ -201,8 +201,8 @@ export default {
                 frame.setAttribute('name', 'print');
                 frame.setAttribute('id', 'print');
                 document.body.appendChild(frame);
-                frame.onload = function(){
-                    setTimeout(function(){
+                frame.onload = function() {
+                    setTimeout(function() {
                         // todo печать страницы по url
                         // задержка нужна для того чтобы отработал vue.js
                         // решение так себе
@@ -223,9 +223,9 @@ export default {
                 } else {
                     for (const key in filter[keyC]) {
                         if (
-                            Array.isArray(filter[keyC][key])
-                                ? filter[keyC][key].length
-                                : filter[keyC][key]
+                            Array.isArray(filter[keyC][key]) ?
+                            filter[keyC][key].length :
+                            filter[keyC][key]
                         ) {
                             if (newFilter[keyC]) {
                                 newFilter[keyC][key] = filter[keyC][key];
@@ -253,8 +253,7 @@ export default {
             return newFilter;
         },
         tradingFormatsList() {
-            return [
-                {
+            return [{
                     id: 'trading_223',
                     name: 'Торги по 223-ФЗ'
                 },
@@ -265,11 +264,10 @@ export default {
             ];
         },
         getTradingFormat(format) {
-            return this.tradingFormatsList().find((item) => {return item.id === format}).name || format;
+            return this.tradingFormatsList().find((item) => { return item.id === format }).name || format;
         },
         tradingTypesList() {
-            return [
-                {
+            return [{
                     id: 'request_prices',
                     name: 'Запрос цен',
                 },
@@ -296,11 +294,10 @@ export default {
             ];
         },
         getTradingType(type) {
-            return this.tradingTypesList().find((item) => {return item.id === type}).name || type;
+            return this.tradingTypesList().find((item) => { return item.id === type }).name || type;
         },
         currenciesList() {
-            return [
-                {
+            return [{
                     id: 'rub',
                     name: 'Рубль',
                     symbol: '₽',
@@ -319,7 +316,7 @@ export default {
         },
         getCurrency(currency = 'rub') {
             currency = currency || 'rub';
-            return this.currenciesList().find((item) => {return item.id === currency});
+            return this.currenciesList().find((item) => { return item.id === currency });
         },
         convertPrice(value, digits = 0) {
             let si = [
@@ -350,14 +347,14 @@ export default {
         },
         formatPriceWithCurrency(value = 0, currency = 'rub', convert = false) {
             const c = this.getCurrency(currency).symbol || currency;
-            return (convert ? this.convertPrice(value) : this.formatPrice(value))+' '+c;
+            return (convert ? this.convertPrice(value) : this.formatPrice(value)) + ' ' + c;
         },
         getMeasure(measure = 'm') {
             let result = '';
             switch (measure) {
                 case 'unit':
                 case 'item':
-                    result ='шт';
+                    result = 'шт';
                     break;
                 default:
                     result = 'м';
@@ -365,6 +362,27 @@ export default {
 
             }
             return result;
+        },
+        formatDate(string) {
+            var d = new Date(string),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear(),
+                hour = '' + d.getHours(),
+                minutes = '' + d.getMinutes();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+            if (hour.length < 2)
+                hour = '0' + hour;
+            if (minutes.length < 2)
+                minutes = '0' + minutes;
+
+            var time = ' ' + hour + ':' + minutes;
+
+            return [day, month, year].join('.') + time;
         },
     }
 }
