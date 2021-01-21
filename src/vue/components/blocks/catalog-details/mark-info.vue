@@ -33,12 +33,12 @@
       </div>
       <div class="catalog-mark__price" v-if="root.price !== undefined">
         <p>Средняя цена <span>
-          <tempate v-if="root.price === 0">
+          <template v-if="root.price === 0">
             Неизвестно
-          </tempate>
-          <tempate v-else>
+          </template>
+          <template v-else>
             {{ formatPriceWithCurrency(root.price) }}
-          </tempate>
+          </template>
         </span></p>
         <a href="#availability" class="btn" @click="openTab($event, 'availability')">Наличие</a>
       </div>

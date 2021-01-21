@@ -1,5 +1,4 @@
 <template>
-<div>
     <div id="products-certificate-view" class="popup popup--alt certificate-view">
         <div class="popup__body">
             <button role="button" class="certificate-view__controls left" @click="changeItem('back')">
@@ -26,12 +25,11 @@
             </button>
         </div>
     </div>
-</div>
 </template>
 
 <script>
 export default {
-    name: "productsCertificateView",
+    name: "certificatesView",
     props: {
         document: Object
     },
@@ -67,10 +65,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    @import "../assets/sass/variables/variables";
-    @import "../assets/sass/variables/fluid-variables";
-    @import "../assets/sass/mixins/fluid-mixin";
-    @import "../assets/sass/mixins/mq";
+    @import "../../../assets/sass/variables/variables";
+    @import "../../../assets/sass/variables/fluid-variables";
+    @import "../../../assets/sass/mixins/fluid-mixin";
+    @import "../../../assets/sass/mixins/mq";
 
     .certificate-view {
         &__controls {

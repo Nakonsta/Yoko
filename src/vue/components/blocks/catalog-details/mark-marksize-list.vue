@@ -1,319 +1,226 @@
 <template>
-  <div class="company-products">
-    <div class="company-products__filters">
-      <mark-marksize-filter @changeFilter="changeFilter" @resetFilter="resetFilter" :companies="companies" />
-    </div>
-    <div class="company-products__table">
-      <div v-if="items.length && !isLoading" class="company-products__thead">
-        <div class="table-cell__title">
-          Маркоразмер
-        </div>
-        <div class="table-cell__quantity">
-          Наличие, м
-        </div>
-        <div class="table-cell__company">
-          Компания
-        </div>
-        <div class="table-cell__price">
-          Цена, руб
-        </div>
-        <div class="table-cell__certificates">
-          Сертификаты
-        </div>
-        <div class="table-cell__controls"></div>
-      </div>
-      <div v-for="(item, key) in items" :key="key">
-        <MarkSizeCard :item="item" @view-certificate="viewCertificate" />
-      </div>
-      <div v-if="!items.length && !isLoading">
-        Ничего не найдено
-      </div>
-      <transition name="fade-loader">
-        <div
-          v-if="isLoading"
-          class="card__loader card__loader--absolute"
+    <div class="products">
+        <productsFilter
+                :companies="companies"
+                @changeFilter="changeFilter"
+                @resetFilter="resetFilter"
+        />
+        <productsList
+                :items="items"
+                :companies="companies"
+                :loading="loadingItems"
+        />
+        <paginate
+                v-if="totalPages"
+                :page-count="totalPages"
+                :click-handler="changePagination"
+                prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                :prev-class="'catalog-pagination__prev'"
+                :next-class="'catalog-pagination__next'"
+                :container-class="'catalog-pagination'"
+                :page-class="'catalog-pagination__item'"
+                :value="page"
         >
-          <div class="preloader">
-            <div class="preloader__preloader">
-              <div class="preloader__loader"></div>
-            </div>
-          </div>
-        </div>
-      </transition>
+        </paginate>
     </div>
-    <div class="company-products__pagination">
-      <paginate
-        v-if="isFirstLoad && totalPages"
-        :page-count="totalPages"
-        :click-handler="pagination"
-        prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-        next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-        :prev-class="'catalog-pagination__prev'"
-        :next-class="'catalog-pagination__next'"
-        :container-class="'catalog-pagination'"
-        :page-class="'catalog-pagination__item'"
-        :value="page"
-      >
-      </paginate>
-    </div>
-    <ProductCertificateView :document="currentCertificate" @change-item="changeCertificate" />
-  </div>
 </template>
 
 <script>
-import api from '../../../helpers/api';
-import functions from '../../../helpers/functions';
-import MarkSizeCard from '../markSizeCardLarge.vue';
-import MarkMarksizeFilter from './mark-marksize-filter';
-import ProductCertificateView from '../../../productsCertificateView';
+    import api from '../../../helpers/api';
+    import functions from '../../../helpers/functions';
+    import productsFilter from '@/components/products/filter'
+    import productsList from '@/components/products/list'
 
-export default {
-  name: 'Products',
+    export default {
+        name: 'Products',
 
-  components: {
-    MarkSizeCard,
-    MarkMarksizeFilter,
-    ProductCertificateView
-  },
-
-  mixins: [api, functions],
-  props: {
-    marksizeId: {
-      type: String,
-      default: null
-    },
-    companies: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      isFirstLoad: false,
-      items: [],
-      page: 1,
-      totalPages: null,
-      isLoading: true,
-      currentFilter: {
-        q: null,
-        quantity: {
-          from: null,
-          to: null,
+        components: {
+            productsFilter,
+            productsList,
         },
-        price: {
-          from: null,
-          to: null,
-        }
-      },
-      certificates: [],
-      currentCertificate: null
-    }
-  },
-  created() {
-    this.getMarksizesData()
-  },
-  methods: {
-    pagination(page) {
-      this.isLoading = true
-      this.page = page
-      this.cancelCompanyRequest()
-      this.getMarksizesData(this.currentFilter)
-    },
-    getMarksizesData(filterValues = null) {
-      let companyId = null;
-      let filters = null;
-      if (filterValues) {
-        const { company_id, ...othersFilters } = filterValues;
-        companyId = company_id;
-        filters = othersFilters;
-      }
-      const marksizeInfo = {
-        company_id: companyId,
-        page: this.page,
-        filter: filters
-      }
-      const fData = this.objectToFormData(marksizeInfo)
-      this.filterMarksizeQuantity(this.marksizeId, fData).then((response) => {
-        if (response.data.data.items && response.data.data.items.length && this.companies.length) {
-          this.items = this.prepareItems(response.data.data.items);
-        } else {
-          this.items = [];
-        }
-        this.totalPages = Math.ceil(response.data.data.total / 8);
-        this.isFirstLoad = true
-        this.isLoading = false
-      }).catch((e) => {
-        console.log(e)
-      })
-    },
-    prepareItems(dataItems) {
-      const result = dataItems.map((item) => {
-        const company = this.companies.find((company) => company.id === item.company_id);
-        item.company = company;
-        return item;
-      });
-      return result;
-    },
-    changeFilter(filtersData) {
-      this.isLoading = true
-      this.page = 1
-      if(filtersData.company) {
-        this.currentFilter.company_id = filtersData.company.id
-      } else {
-        this.currentFilter.company_id = null
-      }
-      if(filtersData.metresFrom) {
-        this.currentFilter.quantity.from = filtersData.metresFrom
-      } else {
-        this.currentFilter.quantity.from = null
-      }
-      if(filtersData.metresTo) {
-        this.currentFilter.quantity.to = filtersData.metresTo
-      } else {
-        this.currentFilter.quantity.to = null
-      }
-      if(filtersData.priceFrom) {
-        this.currentFilter.price.from = filtersData.priceFrom
-      } else {
-        this.currentFilter.price.from = null
-      }
-      if(filtersData.priceTo) {
-        this.currentFilter.price.to = filtersData.priceTo
-      } else {
-        this.currentFilter.price.to = null
-      }
-      this.cancelCompanyRequest()
-      this.getMarksizesData(this.currentFilter)
-    },
-    resetFilter() {
-      this.isLoading = true
-      this.currentFilter = {
-        q: null,
-        quantity: {
-          from: null,
-          to: null,
+
+        mixins: [api, functions],
+        props: {
+            marksizeId: {
+                type: String,
+                default: null
+            },
+            companies: {
+                type: Array,
+                default: () => []
+            }
         },
-        price: {
-          from: null,
-          to: null,
+        data() {
+            return {
+                loadingItems: false,
+                perPage: 8,
+                items: [],
+                totalItems: 0,
+                page: 1,
+                companyId: null,
+                currentFilter: {
+                    q: null,
+                    company: null,
+                    quantity: {
+                        from: null,
+                        to: null,
+                    },
+                    price: {
+                        from: null,
+                        to: null,
+                    }
+                },
+            }
+        },
+        computed: {
+            totalPages() {
+                return Math.ceil(this.totalItems / this.perPage)
+            },
+        },
+        created() {
+            this.getItems()
+        },
+        methods: {
+            changePagination(page) {
+                this.page = page;
+                this.getItems();
+            },
+            getItems() {
+                this.cancelCompanyRequest();
+                this.loadingItems = true;
+                let companyId = null;
+                const { company_id, ...othersFilters } = this.currentFilter;
+                companyId = company_id;
+                let filters = othersFilters;
+                const marksizeInfo = {
+                    company_id: companyId,
+                    page: this.page,
+                    filter: filters,
+                };
+                const fData = this.objectToFormData(marksizeInfo);
+                this.filterMarksizeQuantity(this.marksizeId, fData).then((response) => {
+                    this.items = response.data.data.items || [];
+                    this.totalItems = response.data.data.total;
+                    this.loadingItems = false;
+                }).catch((e) => {
+                    if (!axios.isCancel(e)) {
+                        console.log(e);
+                        window.notificationError('Ошибка сервера');
+                        this.loadingItems = false;
+                    }
+                })
+            },
+            changeFilter(filtersData) {
+                this.page = 1;
+                this.currentFilter.q = (filtersData.cable ? filtersData.cable.title.toString() : null) || null;
+                this.currentFilter.company = (filtersData.company ? filtersData.company.id : null) || null;
+                this.currentFilter.quantity.from = filtersData.metresFrom || null;
+                this.currentFilter.quantity.to = filtersData.metresTo || null;
+                this.currentFilter.price.from = filtersData.priceFrom || null;
+                this.currentFilter.price.to = filtersData.priceTo || null;
+                this.getItems();
+            },
+            resetFilter() {
+                this.page = 1;
+                this.currentFilter = {
+                    q: null,
+                    company: null,
+                    quantity: {
+                        from: null,
+                        to: null,
+                    },
+                    price: {
+                        from: null,
+                        to: null,
+                    }
+                };
+                this.getItems();
+            },
         }
-      }
-      this.getMarksizesData(this.currentFilter)
-    },
-    viewCertificate(value) {
-      this.certificates = value.items;
-      this.currentCertificate = value.current;
-      openPopupById('#products-certificate-view');
-    },
-    changeCertificate(value) {
-      let idx = this.certificates.findIndex(item => item.properties.number === this.currentCertificate.properties.number);
-      if (idx >= 0) {
-        switch (value) {
-          case "next":
-            idx += 1;
-            break;
-          case "back":
-            idx -= 1;
-            break;
-          default:
-            console.log("Неизвестный тип переключения слайдера сертификата", value);
-            return;
-        }
-
-        if (idx > this.certificates.length - 1) {
-          idx = 0;
-        }
-
-        if (idx < 0) {
-          idx = this.certificates.length - 1;
-        }
-        this.currentCertificate = { ...this.certificates[idx], title: this.currentCertificate.title };
-      }
     }
-  }
-}
 </script>
 
 <style lang="scss" scoped>
-@import "../../../../assets/sass/variables/variables";
-@import "../../../../assets/sass/variables/fluid-variables";
-@import "../../../../assets/sass/mixins/fluid-mixin";
-@import "../../../../assets/sass/mixins/mq";
+    @import "../../../../assets/sass/variables/variables";
+    @import "../../../../assets/sass/variables/fluid-variables";
+    @import "../../../../assets/sass/mixins/fluid-mixin";
+    @import "../../../../assets/sass/mixins/mq";
 
-.company-products {
-  &__table {
-    position: relative;
-  }
-  &__thead {
-    display: flex;
-    align-items: flex-start;
-    font-weight: 500;
-    font-size: 14px;
-    color: $colorGray;
-  }
-}
-
-.card {
-  &__loader {
-    position: relative;
-    height: 400px;
-    animation: blur 1s linear forwards;
-    &--absolute {
-      position: absolute;
-      z-index: 10;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      height: 100%;
-      width: 100%;
-      padding: 10px;
-      box-sizing: content-box;
-      .preloader {
-        background-color: transparent;
-      }
-      .preloader__loader {
-        position: static;
-      }
-      .preloader__preloader {
-        align-items: center;
-        justify-content: center;
-      }
+    .company-products {
+        &__table {
+            position: relative;
+        }
+        &__thead {
+            display: flex;
+            align-items: flex-start;
+            font-weight: 500;
+            font-size: 14px;
+            color: $colorGray;
+        }
     }
-  }
-}
 
-@keyframes blur {
-  0%   {
-    backdrop-filter: blur(0px);
-  }
-  100% {
-    backdrop-filter: blur(2px);
-  }
-}
-
-@include mq($from: tablet) {
-  ::v-deep .cable-info,
-  ::v-deep .company-products__thead {
-    .table-cell {
-      &__title,
-      &__company,
-      &__certificates {
-        width: 25%;
-      }
-      &__quantity,
-      &__price {
-        width: 12.5%;
-      }
+    .card {
+        &__loader {
+            position: relative;
+            height: 400px;
+            animation: blur 1s linear forwards;
+            &--absolute {
+                position: absolute;
+                z-index: 10;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 100%;
+                width: 100%;
+                padding: 10px;
+                box-sizing: content-box;
+                .preloader {
+                    background-color: transparent;
+                }
+                .preloader__loader {
+                    position: static;
+                }
+                .preloader__preloader {
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
     }
-  }
-}
 
-@include mq($until: tablet) {
-  .company-products {
-    &__thead {
-      display: none;
+    @keyframes blur {
+        0%   {
+            backdrop-filter: blur(0px);
+        }
+        100% {
+            backdrop-filter: blur(2px);
+        }
     }
-  }
-}
+
+    @include mq($from: tablet) {
+        ::v-deep .cable-info,
+        ::v-deep .company-products__thead {
+            .table-cell {
+                &__title,
+                &__company,
+                &__certificates {
+                    width: 25%;
+                }
+                &__quantity,
+                &__price {
+                    width: 12.5%;
+                }
+            }
+        }
+    }
+
+    @include mq($until: tablet) {
+        .company-products {
+            &__thead {
+                display: none;
+            }
+        }
+    }
 
 </style>

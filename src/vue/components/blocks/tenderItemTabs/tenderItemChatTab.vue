@@ -84,7 +84,7 @@
                                 :placeholder="userCanReply ? 'Введите ответ на вопрос' : 'Введите вопрос'"
                                 :validationName="userCanReply ? 'ответ' : 'вопрос'"
                                 rules="required"
-                                counter="1000"
+                                :counter=1000
                                 :autoheight="true"
                                 :disabled="formDisabled"
                                 ref="textarea"

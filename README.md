@@ -51,4 +51,8 @@ sudo vi /etc/hosts, далее I, далее вставить строчку и 
 **convertPrice(value, digits)** - Форматирование числа в текстовое млрд., млн, тыс.  
 **formatPrice(value)** - Форматирование суммы  
 **formatPriceWithCurrency(value, currency, convert = false)** - Форматирование суммы + добавление символа валюты  
-**getMeasure(measure)** - получаем единицу измерения в нормальном виде   
+**getMeasure(measure)** - получаем единицу измерения в нормальном виде
+**scrollTo(element, offset = 0)** - плавная прокрутка страницы к элементу. offset - смещение  
+**scrollToError()** - плавная прокрутка к первому элементку .error     
+**setWindowHash(hash)** - установка hash у страницы  
+**getAvatar()** - получаение объекта аватара пользователя: имя и фоновый цвет   

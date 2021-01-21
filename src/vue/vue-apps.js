@@ -187,13 +187,13 @@ headerLoginStatus.forEach((el) => {
 // }
 
 // Продукция компании
-import Products from './components/blocks/products.vue'
-const products = document.querySelector('#products-info');
-if (products) {
-    let productsBlock = new Vue({
-        el: products,
+import CompanyProducts from './company-products.vue'
+const companyProducts = document.querySelector('#company-products');
+if (companyProducts) {
+    let companyProductsBlock = new Vue({
+        el: companyProducts,
         store: store,
-        render: function(h) { return h(Products); }
+        render: function(h) { return h(CompanyProducts); }
     })
 }
 

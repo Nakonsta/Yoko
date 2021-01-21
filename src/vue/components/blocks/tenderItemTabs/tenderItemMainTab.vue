@@ -143,7 +143,7 @@
                         {{ tenderItemData.payment_and_delivery.delivery_terms }}
                     </div>
                 </div>
-                <div v-if="tenderItemData.purchase_term" class="tender-item__tab-row">
+                <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.delivery_to" class="tender-item__tab-row">
                     <div class="tender-item__tab-row-name">
                         Дата поставки
                     </div>
@@ -193,7 +193,12 @@
             <div class="tender-item__tab-rows">
                 <div v-if="tenderItemData.purchase_term.application_end_date" class="tender-item__tab-row">
                     <div class="tender-item__tab-row-name">
-                        Дата окончания подачи заявки на конкурс
+                        <template v-if="tenderItemData.tender_trading_type === 'auction'">
+                            Дата окончания заявки на аукцион
+                        </template>
+                        <template v-else>
+                            Дата окончания заявки на конкурс
+                        </template>
                     </div>
                     <div class="tender-item__tab-row-value">
                         {{ formatDateNoTime(tenderItemData.purchase_term.application_end_date) }}

@@ -116,6 +116,16 @@ export default {
         params: {
           q: string,
         },
+        fetchUserById(id) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/user/${id}`,
+            )
+        },
+        cancelCatalogSearch() {
+            this.CancelTokens.searchCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchCancelToken = axios.CancelToken.source()
       });
     },
     authSignin(l, p) {
