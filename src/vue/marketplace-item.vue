@@ -15,7 +15,7 @@
                 @changeTab = "changeTab"
             />
             <TenderItemMenu
-                v-if="!isLoading"
+                v-if="!isLoading && $store.state.auth.loggedIn && $store.state.auth.user.id === tenderItemData.user_id"
                 :tenderItemData="tenderItemData"
                 :activeTab="activeTab"
                 @changeTab = "changeTab"

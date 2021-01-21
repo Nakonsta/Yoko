@@ -1,6 +1,8 @@
 import moment from 'moment';
+import api from "@/helpers/api";
 
 export default {
+    mixins: [api],
     methods: {
         declOfNum(num, expressions) {
             let result,
@@ -155,6 +157,14 @@ export default {
                 if (user === parseInt(user, 10)) {
                     // user is userID
                     // todo получение пользователя
+                    // this.fetchUserById(user)
+                    //     .then((response) => {
+                    //         console.log(response);
+                    //         return response.data.data;
+                    //     })
+                    //     .catch((e) => {
+                    //         console.log(e)
+                    //     });
                 }
                 if (typeof user === 'string' && user.length) {
                     // если user строка - парсим её
@@ -332,7 +342,7 @@ export default {
                     break;
                 }
             }
-            return (value / si[i].value).toFixed(digits).replace(rx, "$1") + ' ' + si[i].symbol;
+            return (value / si[i].value).toFixed(digits).replace(rx, "$1") + "\u00A0" + si[i].symbol;
         },
         formatPrice(value = 0) {
             let decimalCount = 2,
@@ -347,7 +357,11 @@ export default {
         },
         formatPriceWithCurrency(value = 0, currency = 'rub', convert = false) {
             const c = this.getCurrency(currency).symbol || currency;
+<<<<<<< HEAD
             return (convert ? this.convertPrice(value) : this.formatPrice(value)) + ' ' + c;
+=======
+            return ((convert ? this.convertPrice(value) : this.formatPrice(value))+' '+c).replace(/\s/g, "\u00A0");
+>>>>>>> e935567006122f3f50c09e017cefcca83c49db48
         },
         getMeasure(measure = 'm') {
             let result = '';
@@ -355,6 +369,12 @@ export default {
                 case 'unit':
                 case 'item':
                     result = 'шт';
+<<<<<<< HEAD
+=======
+                    break;
+                case 'km':
+                    result = 'км';
+>>>>>>> e935567006122f3f50c09e017cefcca83c49db48
                     break;
                 default:
                     result = 'м';

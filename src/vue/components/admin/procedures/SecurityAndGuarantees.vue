@@ -42,15 +42,14 @@
         <text-input
             v-model="selectedData.security.percentage_of_the_starting_price"
             label="Процент от начальной цены"
-            placeholder="Введите число"
+            placeholder="Введите процент"
             :disabled="isCreatedProcedure"
             :rules="{
               numeric: true,
-              max: 3,
               max_value: 100 ,
               required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security),
             }"
-            :input="() => countCollateralAmount('security')"
+            :input="countPercent('security')"
         ></text-input>
       </div>
       <div
@@ -65,6 +64,7 @@
             v-model="selectedData.security.collateral_amount_percents"
             :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security)}"
             label="Сумма обеспечения"
+            :inputmask="$priceInputmask"
         ></text-input>
       </div>
       <div
@@ -75,14 +75,13 @@
           class="col col-md-4 col-sm-6 col-xs-12"
       >
         <text-input
-            :maxlength=12
             v-model="selectedData.security.collateral_amount"
             label="Сумма обеспечения"
             :disabled="isCreatedProcedure"
-            placeholder="Введите число"
+            placeholder="Введите сумму"
+            :inputmask="$priceInputmask"
             :rules="{
-              required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security),
-              regex: /^\d{1,12}((\.|\,)\d{1,2})?$/,
+              required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security)
             }"
         ></text-input>
       </div>
@@ -137,15 +136,14 @@
         <text-input
             v-model="selectedData.request.percentage_of_the_starting_price"
             label="Процент от начальной цены"
-            placeholder="Введите число"
+            placeholder="Введите процент"
             :disabled="isCreatedProcedure"
             :rules="{
-              max: 3,
               numeric: true,
               max_value: 100,
               required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security),
             }"
-            :input="() => countCollateralAmount('request')"
+            :input="countPercent('request')"
         ></text-input>
       </div>
       <div
@@ -160,6 +158,7 @@
             v-model="selectedData.request.collateral_amount_percents"
             :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security)}"
             label="Сумма обеспечения"
+            :inputmask="$priceInputmask"
         ></text-input>
       </div>
       <div
@@ -170,14 +169,13 @@
           class="col col-md-4 col-sm-6 col-xs-12"
       >
         <text-input
-            :maxlength=12
             v-model="selectedData.request.collateral_amount"
             label="Сумма обеспечения"
             :disabled="isCreatedProcedure"
-            placeholder="Введите число"
+            placeholder="Введите сумму"
+            :inputmask="$priceInputmask"
             :rules="{
               required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security),
-              regex: /^\d{1,12}((\.|\,)\d{1,2})?$/,
             }"
         ></text-input>
       </div>
@@ -205,7 +203,11 @@
     <div v-if="procedureIdData.procedureType === 'Auction'">
       <radio-input
           :rules="{required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security)}"
-          :disabled="isCreatedProcedure"
+          :disabled="
+            isCreatedProcedure ||
+            !selectedData.application_security_of_the_contract &&
+            !selectedData.application_security_required
+          "
           title="Обеспечение заявки, внесенное победителем аукциона"
           name="securing_the_application"
           v-model="selectedData.securing_the_application"
@@ -254,16 +256,15 @@ import RadioInput from "@/components/forms/Radio";
         default: () => {},
         type: Function,
       },
+      countPercent: {
+        default: () => {},
+        type: Function,
+      },
     },
     methods: {
       securityChecked() {
         this.selectedData.application_bank_guarantee = 0
       },
-      countCollateralAmount(type) {
-        this.selectedData[type].collateral_amount_percents =
-            this.selectedData[type].percentage_of_the_starting_price *
-            this.procedureIdData.baseCount
-      }
     }
   }
 </script>

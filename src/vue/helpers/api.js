@@ -40,6 +40,9 @@ export default {
     fetchInn(filterRequest) {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, { params: { inn: filterRequest } });
     },
+    fetchCompaniesByInnByName(filterRequest) {
+      return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/`, { params: { shortNameOrInn: filterRequest } });
+    },
     fetchCompaniesByInn(inn) {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/users`);
     },
@@ -113,6 +116,17 @@ export default {
         params: {
           q: string,
         },
+        fetchUserById(id) {
+            return axios.get(
+                `${process.env.API_URL_AUTH_SERVICE}/user/${id}`,
+            )
+        },
+        cancelCatalogSearch() {
+            this.CancelTokens.searchCancelToken.cancel(
+                'Предыдущий запрос отменен',
+            )
+            this.CancelTokens.searchCancelToken = axios.CancelToken.source()
+        }
       });
     },
     authSignin(l, p) {
@@ -448,6 +462,9 @@ export default {
         },
         { cancelToken: this.CancelTokens.proceduresCancelToken.token },
       );
+    },
+    sendUserData(data) {
+      return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data)
     },
   },
 };

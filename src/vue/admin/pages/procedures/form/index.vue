@@ -49,13 +49,8 @@
               :procedure-id-data="procedureIdData"
               :is-created-procedure="isCreatedProcedure"
               :remove-block="removeBlock"
+              :count-percent="countCollateralAmount"
           ></app-security-and-guarantees>
-          <app-invitation-to-participate
-              :selected-data="selectedData"
-              :fields-data="fieldsData"
-              :procedure-id-data="procedureIdData"
-              :is-created-procedure="isCreatedProcedure"
-          ></app-invitation-to-participate>
           <app-payment-and-delivery
               :selected-data="selectedData"
               :fields-data="fieldsData"
@@ -94,6 +89,17 @@
               :save-field="saveField"
               :validation="validation"
           ></app-additional-fields>
+          <app-invitation-to-participate
+              :selected-data="selectedData"
+              :fields-data="fieldsData"
+              :procedure-id-data="procedureIdData"
+              :is-created-procedure="isCreatedProcedure"
+          ></app-invitation-to-participate>
+          <app-control-elements
+              v-if="!isCreatedProcedure"
+              :selected-data="selectedData"
+              :validation="validation"
+          ></app-control-elements>
         </div>
         <app-preview
             v-if="isPreview"
@@ -129,6 +135,7 @@ import moment from 'moment'
 import api from '@/helpers/api'
 import parsers from '@/helpers/parsers'
 import functions from '@/helpers/functions'
+import formatDate from '@/helpers/formatDate'
 import localPreloader from '@/components/preloader'
 import BasicInformation from '@/components/admin/procedures/BasicInformation'
 import PurchaseSubject from '@/components/admin/procedures/PurchaseSubject'
@@ -142,6 +149,7 @@ import ContactInformation from '@/components/admin/procedures/ContactInformation
 import InvitationToParticipate from '@/components/admin/procedures/InvitationToParticipate'
 import AdditionalFields from '@/components/admin/procedures/AdditionalFields'
 import AccreditationsTitle from '@/components/admin/accreditations/AccreditationsTitle'
+import ControlElements from "@/components/admin/procedures/ControlElements"
 import Preview from '@/components/admin/procedures/Preview'
 
 export default {
@@ -160,9 +168,10 @@ export default {
     appInvitationToParticipate: InvitationToParticipate,
     appAdditionalFields: AdditionalFields,
     AccreditationsTitle: AccreditationsTitle,
+    appControlElements: ControlElements,
     appPreview: Preview,
   },
-  mixins: [api, functions, parsers],
+  mixins: [api, functions, parsers, formatDate],
   data() {
     return {
       markImport: null,
@@ -183,6 +192,10 @@ export default {
         tenderAvailableAuc: [
           {id: 1, name: 'Открытый аукцион'},
           {id: 0, name: 'Закрытый аукцион'},
+        ],
+        tenderAvailableContest: [
+          {id: 1, name: 'Открытый конкурс'},
+          {id: 0, name: 'Закрытый конкурс'},
         ],
         tenderAvailablePur: [
           {id: 1, name: 'Открытая закупка'},
@@ -307,6 +320,7 @@ export default {
         currency: {id: 'rub', name: 'руб.'},
         application_submit_date_time_menu: null,
         application_submit_date_time: null,
+        application_submit_date_time_begin: null,
         application_submit_date: null,
         application_submit_time: '00:00:00',
         application_opening_menu: null,
@@ -378,12 +392,14 @@ export default {
       const totalCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       const biddingType = []
       const setMinDates = {}
+      const setSameDates = {}
       const setMinFiveDates = {}
       const setMinSevenDates = {}
       const setMin2WeeksDates = {}
       const lotsCounter = []
       const positionType = []
       let procedureType = ''
+      let tenderArray = this.fieldsData.tenderAvailable
       if (
           this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_format.id === 'trading_223'
@@ -433,6 +449,7 @@ export default {
           this.selectedData.tender_trading_type.id === 'contest'
       ) {
         procedureType = 'Contest'
+        tenderArray = this.fieldsData.tenderAvailableContest
       } else if (
           this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_type &&
@@ -454,6 +471,7 @@ export default {
           this.selectedData.tender_trading_type.id === 'auction'
       ) {
         procedureType = 'Auction'
+        tenderArray = this.fieldsData.tenderAvailableAuc
       } else if (
           this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_type &&
@@ -468,6 +486,7 @@ export default {
           this.selectedData.tender_trading_type.id === 'purchase_from_supplier'
       ) {
         procedureType = 'FromSupplier'
+        tenderArray = this.fieldsData.tenderAvailablePur
       } else if (
           this.selectedData.tender_trading_format &&
           this.selectedData.tender_trading_type &&
@@ -530,30 +549,52 @@ export default {
 
       datesArray.map((item) => {
         if (this.selectedData[item]) {
-          setMinDates[item] = moment(this.selectedData[item].end || this.selectedData[item])
-              .add(1, 'day')
-              .format('YYYY-MM-DD')
-          setMin2WeeksDates[item] = moment(this.selectedData[item].end || this.selectedData[item])
-              .add(16, 'days')
-              .format('YYYY-MM-DD')
-          setMinFiveDates[item] = moment(this.selectedData[item].end || this.selectedData[item])
-              .add(6, 'days')
-              .format('YYYY-MM-DD')
-          setMinSevenDates[item] = moment(this.selectedData[item].end || this.selectedData[item])
-              .add(8, 'days')
-              .format('YYYY-MM-DD')
+          const days15 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 15)
+          const days7 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 7)
+          const days5 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 5)
+          const days1 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 1)
+          setSameDates[item] = moment(this.selectedData[item].end || this.selectedData[item]).format('YYYY-MM-DD')
+          setMinDates[item] = days1.format('YYYY-MM-DD')
+          setMin2WeeksDates[item] = days15.format('YYYY-MM-DD')
+          setMinFiveDates[item] = days5.format('YYYY-MM-DD')
+          setMinSevenDates[item] = days7.format('YYYY-MM-DD')
         }
       })
+
+      if(this.selectedData.publication_date || procedureType) {
+        const days15 = this.addWeekdays(this.selectedData.publication_date, 15)
+        const days7 = this.addWeekdays(this.selectedData.publication_date, 7)
+        const days5 = this.addWeekdays(this.selectedData.publication_date, 5)
+        switch (procedureType) {
+          case "Auction":
+            this.selectedData.application_delivery_time = days15._d
+            break;
+          case "FromSupplier":
+          case "Contest":
+            this.selectedData.application_submit_date_time = days15._d
+            break;
+          case "Query":
+            this.selectedData.application_end_date = days5._d
+            break;
+          case "Offers":
+            this.selectedData.application_end_date = days7._d
+            break;
+          default:
+            this.selectedData.application_submit_date_time = days15._d
+        }
+      }
 
       return {
         update,
         totalCount,
         lotsCounter,
+        tenderArray,
         baseCount,
         biddingType,
         positionType,
         procedureType,
         setMinDates,
+        setSameDates,
         setMinFiveDates,
         setMinSevenDates,
         setMin2WeeksDates,
@@ -597,8 +638,6 @@ export default {
     const fromState = this.$store.state.auth.user
     if (fromState) {
       this.fieldsData.companies = this.$store.getters.companyBuyer
-      this.selectedData.contact_phone = fromState.phone
-      this.selectedData.contact_email = fromState.email
       if(this.fieldsData.companies.length === 1) {
         this.selectedData.companyName = this.fieldsData.companies[0]
       }
@@ -895,6 +934,7 @@ export default {
           ...this.selectedData,
           reviewForm,
           commission: this.get(data, 'summarizings.competition_commission'),
+          application_submit_date_time_begin: this.get(data, 'summarizings.application_start_date'),
           application_opening_date_time: this.get(data, 'summarizings.documentation_receipt_date'),
           place_of_receipt: {
             id: this.get(data, 'summarizings.documentation_receipt_place'),
@@ -943,18 +983,28 @@ export default {
       ) {
         this.selectedData.positions[index].quantity = 1
       }
-      const getSum = this.selectedData.positions[index].quantity * this.selectedData.positions[index].price_for_one
-      this.selectedData.positions[index].total_price = !isNaN(getSum) ? getSum.toFixed(2) : '0.00'
-    },
-    scrollToError() {
-      const slide = document.querySelector('.error')
-      if(slide) {
-        const top = window.scrollY + slide.getBoundingClientRect().y
-        window.scrollTo({
-          top: top - 60,
-          behavior: "smooth"
-        });
+      // const price = this.selectedData.positions[index].price_for_one.replace(/\d+/g, '');
+      const price = this.selectedData.positions[index].price_for_one ? this.selectedData.positions[index].price_for_one.replace(/[^0-9.]/g, '') : 0
+      const getSum = this.selectedData.positions[index].quantity * price
+      this.selectedData.positions[index].total_price = !isNaN(getSum) ? getSum.toFixed(2) : 0
+      if (this.selectedData.application_security_of_the_contract &&
+          this.selectedData.security.calculate_the_amount_of_collateral &&
+          this.selectedData.security.calculate_the_amount_of_collateral.id === 'percent') {
+        this.countCollateralAmount('security');
       }
+      if (this.selectedData.application_security_required &&
+          this.selectedData.request.calculate_the_amount_of_collateral &&
+          this.selectedData.request.calculate_the_amount_of_collateral.id === 'percent') {
+        this.countCollateralAmount('request');
+      }
+    },
+    countCollateralAmount(type) {
+      this.$nextTick(() => {
+        this.selectedData[type].collateral_amount_percents =
+            this.selectedData[type].percentage_of_the_starting_price *
+            this.procedureIdData.baseCount /
+            100
+      });
     },
     getFieldsData() {
       const id = this.$route.params.id
@@ -1037,7 +1087,13 @@ export default {
       //     })
       this.fetchCompaniesByInn(this.$store.state.auth.user.companies[0].inn)
           .then((response) => {
-            this.fieldsData.contacts_list = response.data.data
+            const result = response.data.data
+            this.fieldsData.contacts_list = result
+            if(result.length === 1) {
+              this.selectedData.contact_full_name = result[0]
+              this.selectedData.contact_phone = result[0].phone
+              this.selectedData.contact_email = result[0].email
+            }
           })
           .catch((e) => {
             console.log(e)
@@ -1052,6 +1108,8 @@ export default {
       this.fetchProceduresPropertyList('procedure_guarantees', 'calc_amount')
           .then((response) => {
             this.fieldsData.amountOfCollateral = response.data.data
+            this.selectedData.security.calculate_the_amount_of_collateral = response.data.data[0]
+            this.selectedData.request.calculate_the_amount_of_collateral = response.data.data[0]
           })
           .catch((e) => {
             console.log(e)
@@ -1195,7 +1253,7 @@ export default {
           lots_number: this.get(this.selectedData, 'count_lots.id'),
           positional_purchase: this.selectedData.purchase_positional,
           products_analogues: this.get(this.selectedData, 'analog_products.id'),
-          start_price: this.procedureIdData.baseCount,
+          start_price: this.procedureIdData.baseCount.replace(/[^0-9.]/g, ''),
           products: [],
           lot_amounts: [],
         },
@@ -1304,6 +1362,7 @@ export default {
             item.name = item.names && item.names.name;
             item.is_product = item.type && item.type.id;
             item.category_okpd2 = item.category_okpd && item.category_okpd.code;
+            item.price_for_one = item.price_for_one.replace(/[^0-9.]/g, '');
           })
           if (item.total_price !== 0) {
             formData.purchase_subject.lot_amounts[index] = item.total_price
@@ -1317,6 +1376,7 @@ export default {
       ) {
         formData.summarizing = {
           competition_commission: this.selectedData.commission,
+          application_start_date: this.parseDate(this.selectedData.application_submit_date_time_begin),
           documentation_receipt_date: this.parseDate(this.selectedData.application_opening_date_time),
           documentation_receipt_place: this.get(this.selectedData, 'place_of_receipt.id'),
           application_consideration_date: this.parseDate(this.selectedData.application_date_time),
@@ -1342,14 +1402,14 @@ export default {
         if (this.selectedData.security.calculate_the_amount_of_collateral.id === 'percent') {
           formData.guarantee.contract_collateral = {
             ...formData.guarantee.contract_collateral,
-            amount: this.selectedData.security.collateral_amount_percents,
+            amount: this.selectedData.security.collateral_amount_percents.replace(/[^0-9.]/g, ''),
             percent_of_init_price: this.selectedData.security.percentage_of_the_starting_price,
           }
         }
         if (this.selectedData.security.calculate_the_amount_of_collateral.id === 'monetary_expression') {
           formData.guarantee.contract_collateral = {
             ...formData.guarantee.contract_collateral,
-            amount: this.selectedData.security.collateral_amount,
+            amount: this.selectedData.security.collateral_amount.replace(/[^0-9.]/g, ''),
           }
         }
       }
@@ -1364,14 +1424,14 @@ export default {
         if (this.selectedData.request.calculate_the_amount_of_collateral.id === 'percent') {
           formData.guarantee.application_collateral = {
             ...formData.guarantee.application_collateral,
-            amount: this.selectedData.request.collateral_amount_percents,
+            amount: this.selectedData.request.collateral_amount_percents.replace(/[^0-9.]/g, ''),
             percent_of_init_price: this.selectedData.request.percentage_of_the_starting_price,
           }
         }
         if (this.selectedData.request.calculate_the_amount_of_collateral.id === 'monetary_expression') {
           formData.guarantee.application_collateral = {
             ...formData.guarantee.application_collateral,
-            amount: this.selectedData.request.collateral_amount,
+            amount: this.selectedData.request.collateral_amount.replace(/[^0-9.]/g, ''),
           }
         }
       }

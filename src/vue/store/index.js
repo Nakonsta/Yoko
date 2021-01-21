@@ -94,7 +94,7 @@ const store = new Vuex.Store({
                         state.token = token
                         state.auth.user = response.data.data
                         state.auth.loggedIn = true
-                        console.log(storageUser === JSON.stringify(response.data.data))
+                        // console.log(storageUser === JSON.stringify(response.data.data))
                         sessionStorage.setItem('user', JSON.stringify(response.data.data))
                         if (storageUser !== JSON.stringify(response.data.data)) {
                             state.newUserDataSignal++
@@ -151,8 +151,8 @@ const store = new Vuex.Store({
     }
 })
 
-console.log(store.state)
-console.log(store.state.auth.token, axios.defaults.headers.common.Authorization)
+// console.log(store.state)
+// console.log(store.state.auth.token, axios.defaults.headers.common.Authorization)
 
 store.commit('authorization')
 

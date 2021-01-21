@@ -80,6 +80,7 @@
         <text-input
             :disabled="true"
             v-model="procedureIdData.totalCount[index - 1]"
+            :inputmask="$priceInputmask"
             :label="'Сумма лота ' + index"
         ></text-input>
       </div>
@@ -89,6 +90,7 @@
         <text-input
             :disabled="true"
             v-model="procedureIdData.baseCount"
+            :inputmask="$priceInputmask"
             label="Начальная цена"
         ></text-input>
       </div>
@@ -255,7 +257,7 @@ export default {
               loaderName: false,
             })
             if (item[1]) {
-              this.searchProceduresOKPD2(item[1].replace(/[0-9/.]/g, ''))
+              this.searchProceduresOKPD2(item[1].replace(/[^.0-9]/gim,''))
                   .then((response) => {
                     const result = response.data.data;
                     this.fieldsData.OKPD2 = this.parseOKPD2(result)
