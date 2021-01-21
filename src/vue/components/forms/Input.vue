@@ -136,7 +136,8 @@ export default {
       if( this.inputmask === false ) return;
       let clipboardData = evt.clipboardData || window.clipboardData,
         pastedData = clipboardData.getData('Text');
-      let newValue = Inputmask.format(pastedData, {mask: this.inputmask});
+      // let newValue = Inputmask.format(pastedData, {mask: this.inputmask});
+      let newValue = Inputmask.format(pastedData, this.inputmask);
       this.innerValue = newValue;
     }
   }
