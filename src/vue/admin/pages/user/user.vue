@@ -114,11 +114,16 @@
                 class="file-listing"
               >
                 <div class="file-listing__info">
-                  <div class="file-listing__file">
+                  <div v-if="userData.documentLink" class="file-listing__file">
+                    <a class="user-data__link" :href="userData.documentLink" download>
+                      {{ userData.document.name }}
+                    </a>
+                  </div>
+                  <div v-else class="file-listing__file">
                     {{ userData.document.name }}
                   </div>
                 </div>
-                <a
+                <!-- <a
                   class="file-listing__delete"
                   fab
                   dark
@@ -146,7 +151,7 @@
                       fill="#31ACB8"
                     />
                   </svg>
-                </a>
+                </a> -->
               </div>
             </div>
             <div class="user-data__file-number">
@@ -442,6 +447,7 @@ export default {
         documentNumber: null,
         documentWithoutNumber: false,
         documentDate: null,
+        documentLink: null,
         phone: null,
         currentPhoneCode: {
           id: 0,
@@ -512,6 +518,16 @@ export default {
       if (this.$store.state.auth.user.position) {
         this.userData.position = this.$store.state.auth.user.position;
       }
+      if (this.$store.state.auth.user.doc) {
+        this.userData.document = this.$store.state.auth.user.doc;
+        this.userData.documentLink = this.$store.state.auth.user.doc.path;
+      }
+      if (this.$store.state.auth.user.docDate) {
+        this.userData.documentDate = this.$store.state.auth.user.docDate;
+      }
+      if (this.$store.state.auth.user.docNum) {
+        this.userData.documentNumber = this.$store.state.auth.user.docNum;
+      }
     },
     getCountries() {
       this.fetchCountries()
@@ -571,14 +587,15 @@ export default {
       if (!files.length) return;
       if (['application/pdf', 'image/jpeg', 'image/png'].includes(files[0].type)) {
         this.userData.document = files[0];
+        this.userData.documentLink = null,
         Object.assign(evt.target, { value: '' });
       } else {
         window.notificationError('Загружаемый файл должен быть форматов: pdf, jpeg, png');
       }
     },
-    removeFile() {
-      this.userData.document = null;
-    },
+    // removeFile() {
+    //   this.userData.document = null;
+    // },
     toggleDocumentNumeration() {
       this.userData.documentNumber = null;
       this.userData.documentWithoutNumber = !this.userData.documentWithoutNumber;
@@ -591,7 +608,9 @@ export default {
         formData.name = this.userData.name;
         formData.secondName = this.userData.secondName;
         formData.position = this.userData.position;
-        formData.doc = this.userData.document;
+        if (this.userData.document instanceof File) {
+          formData.doc = this.userData.document;
+        }
         formData.docNum = this.userData.documentNumber;
         formData.docDate = this.userData.documentDate;
         formData.phone = this.userData.phone;
@@ -611,7 +630,7 @@ export default {
         formData.password = this.passwordChanging.password;
         formData.newPassword = this.passwordChanging.newPassword;
       }
-      const formDataObj = this.objectToFormData(formData);
+      const formDataObj = this.objectToFormData(formData);      
       this.sendUserData(formDataObj)
         .then(() => {
           window.notificationSuccess('Данные успешно обновлены');
@@ -818,6 +837,10 @@ export default {
   .file-listing {
     margin-left: 0;
     margin-top: 1rem;
+  }
+  &__link {
+    color: $colorTurquoise;
+    text-decoration: none;
   }
 }
 </style>
