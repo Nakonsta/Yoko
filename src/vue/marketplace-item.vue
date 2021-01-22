@@ -12,6 +12,7 @@
                 v-if="!isLoading && winnerChoice"
                 :tenderItemData="tenderItemData"
                 :participants="participants"
+                :itemsStatuses="itemsStatuses"
                 @changeTab = "changeTab"
             />
             <TenderItemMenu
@@ -345,7 +346,6 @@ export default {
             this.fetchMarketplaceProceduresFilter()
                 .then((response) => {
                     let filterData = response.data.data.procedures;
-                    console.log(filterData);
                     this.itemsStatuses = this.parseObjToArr(filterData.values.status);
                 })
                 .catch((e) => {
@@ -358,7 +358,29 @@ export default {
         getApplicationsList(){
             this.fetchApplicationsList()
                 .then((data) => {
-                    this.participants = data.data.data.items;
+                    const items = data.data.data.items;
+                    const companiesINN = [];
+                    items.forEach((item, index) => {
+                        items[index].company = null;
+                        if (companiesINN.indexOf(items[index].inn) === -1) companiesINN.push(items[index].inn);
+                    });
+                    if (companiesINN.length) {
+                        this.fetchCompaniesByINN(companiesINN)
+                            .then((response) => {
+                                const companies = response.data.data.elements;
+                                companies.forEach((company) => {
+                                    items.forEach((item) => {
+                                        if (parseInt(company.inn) === parseInt(item.inn)) {
+                                            item.company = company;
+                                        }
+                                    });
+                                });
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                            });
+                    }
+                    this.participants = items;
                 })
                 .catch((e) => {
                     console.log(e)

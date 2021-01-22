@@ -40,9 +40,9 @@
                                     </div>
                                 </div>
                                 <div class="winner-choice__item-block winner-choice__item-name">
-                                    <div v-if="participant.inn">
+                                    <div v-if="participant.company && participant.company.name">
                                         <div class="winner-choice__item-title">Участник</div>
-                                        <div class="winner-choice__item-value">{{ participant.inn }}</div>
+                                        <div class="winner-choice__item-value">{{ participant.company.name }}</div>
                                     </div>
                                 </div>
                                 <div class="winner-choice__item-block winner-choice__item-date">
@@ -54,17 +54,23 @@
                                 <div class="winner-choice__item-block winner-choice__item-lots">
                                     <div v-show="participant.procedure && participant.procedure.purchase_subject && participant.procedure.purchase_subject.lot_amounts.length">
                                         <div class="winner-choice__item-title">Лоты</div>
-                                        <div class="winner-choice__item-value">{{ participant.procedure.purchase_subject.lot_amounts.length }} из {{ tenderItemData.purchase_subject.lot_amounts.length }}</div>
+                                        <div class="winner-choice__item-value">
+                                            {{ participant.procedure.purchase_subject.lot_amounts.length }} 
+                                             из 
+                                            {{ tenderItemData.purchase_subject.lot_amounts.length }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="winner-choice__item-block winner-choice__item-price">
-                                    <div v-show="participant.subject && participant.subject.start_price">
+                                    <div v-show="participant.subject && participant.subject.start_price && participant.procedure && participant.procedure.purchase_currency">
                                         <div class="winner-choice__item-title">Предложенная цена</div>
-                                        <div class="winner-choice__item-value">{{ participant.subject.start_price }}</div>
+                                        <div class="winner-choice__item-value">
+                                            {{ formatPriceWithCurrency(participant.subject.start_price, participant.procedure.purchase_currency) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div v-show="participant.status" class="winner-choice__item-block winner-choice__item-status">
-                                    <div class="winner-choice__item-title">{{ participant.status }}</div>
+                                    <div class="winner-choice__item-title">{{ getTenderStatusName(participant) }}</div>
                                     <div class="winner-choice__item-value">
                                         <a href="#" class="winner-choice__item-link">Подробнее</a>
                                     </div>
@@ -88,6 +94,10 @@ export default {
             type: Object,
             required: true,
         },
+        itemsStatuses: {
+            type: Array,
+            default: () => [],
+        },
         participants: {
             type: Array,
             default: () => [],
@@ -95,7 +105,19 @@ export default {
         },
     },
 
-    mixins: [functions]
+    mixins: [functions],
+
+    methods: {
+        getTenderStatusName(item) {
+            const status = this.itemsStatuses.find(
+                (status) => status.id === item.status,
+            );
+            if (status) {
+                return status.name;
+            }
+            return item.status;
+        },
+    }
 }
 </script>
 
@@ -126,7 +148,7 @@ export default {
                 width: 10%;
             }
             &-name {
-                width: 20%;
+                width: 30%;
             }
             &-date {
                 width: 15%;
@@ -135,10 +157,10 @@ export default {
                 width: 10%;
             }
             &-price {
-                width: 25%;
+                width: 20%;
             }
             &-status {
-                width: 20%;
+                width: 15%;
             }
             &-title {
                 font-weight: 500;
