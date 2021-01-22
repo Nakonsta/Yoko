@@ -124,6 +124,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  store.commit('setCrumbs');
+
   const userRole = store.getters.userRole;
   const { role } = to.meta;
   const companyBuyer = store.getters.companyBuyer;
