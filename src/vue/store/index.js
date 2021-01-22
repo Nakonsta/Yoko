@@ -39,7 +39,6 @@ const store = new Vuex.Store({
   },
   mutations: {
     setCrumbs(state, data = []) {
-      console.log(data);
       state.breadCrumbs = [
         {
           name: 'Главная',

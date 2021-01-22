@@ -32,13 +32,8 @@ export default {
       return this.$store.state.breadCrumbs;
     },
   },
-  created() {
-    this.$store.commit('setCrumbs');
-  },
-  watch: {
-    $route() {
-      this.$store.commit('setCrumbs');
-    },
-  },
+  // created() {
+  //   this.$store.commit('setCrumbs');
+  // },
 };
 </script>
