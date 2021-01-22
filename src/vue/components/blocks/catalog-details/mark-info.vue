@@ -50,11 +50,11 @@
           class="catalog-mark__el"
         >
           <div class="catalog-mark__title">
-            {{ item.title }}
+            {{ item.name }}
           </div>
           <div
             class="catalog-mark__text"
-            v-html="item.desc"
+            v-html="item.value"
           />
         </div>
       </div>

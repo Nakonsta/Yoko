@@ -117,7 +117,7 @@ import MarkCharacters from './components/blocks/catalog-details/mark-characters.
 import MarkAppointment from './components/blocks/catalog-details/mark-appointment.vue';
 import MarkDocuments from './components/blocks/catalog-details/mark-documents.vue';
 import MarkManufacturer from './components/blocks/catalog-details/mark-manufacturer.vue';
-import MarkAdditional from './components/blocks/catalog-details/mark-additional.vue';
+// import MarkAdditional from './components/blocks/catalog-details/mark-additional.vue';
 import MarkMarksizeList from './components/blocks/catalog-details/mark-marksize-list';
 import { initMore } from '../assets/js/main/modules/more.js';
 
@@ -130,7 +130,7 @@ export default {
     MarkDescription,
     MarkAppointment,
     MarkManufacturer,
-    MarkAdditional,
+    // MarkAdditional,
     MarkMarksizeList,
     breadCrumbs,
     pageTitle,
@@ -266,7 +266,7 @@ export default {
     },
   },
   watch: {
-    tabs(newValue) {
+    tabs() {
       this.$nextTick(() => {
         initMore();
         const tabs = this.$refs.tabs;
@@ -310,6 +310,7 @@ export default {
         description: '',
         appointment: '',
         price: 0,
+        price_average: 0,
         images: [],
         items: [],
         containers: [],
@@ -347,36 +348,33 @@ export default {
     setCharacters(data) {
       const characters = [];
       const descriptionCharacters = [];
-      for (const key in data) {
-        if (key.includes('property_')) {
-          const name = this.characterTitles[key] ? this.characterTitles[key] : key;
-          const value = data[key];
-
-          if (value && Array.isArray(value) && value.length) {
-            characters.push({ name, desc: value.join('<br>') });
-
-            if (this.descriptionCharacters[key]) {
-              descriptionCharacters.push({ title: this.descriptionCharacters[key], desc: value.join(', ') });
-            }
-          }
+      Object.keys(data.properties).forEach((property) => {
+        const prop = {
+          id: data.properties[property].id,
+          name: data.properties[property].name,
+          value: data.properties[property].value.join('<br />'),
+        };
+        characters.push(prop);
+        if (this.descriptionCharacters[prop.id]) {
+          descriptionCharacters.push(prop);
         }
-      }
+      });
       if (characters.length) {
         this.rootData.characters = characters;
       }
       if (descriptionCharacters.length) {
-        this.rootData.items = descriptionCharacters;
+        this.rootData.items = [{ name: 'Описание', value: data.description }, ...descriptionCharacters];
       }
     },
     setDocuments(data) {
       const { documents } = data;
       if (documents) {
         let result = [];
-        for (const key in documents) {
+        Object.keys(documents).forEach((key) => {
           if (Array.isArray(documents[key])) {
             result.push(...documents[key]);
           }
-        }
+        });
         result = result.map((item) => ({
           id: item.id,
           name: item.name,
@@ -390,23 +388,15 @@ export default {
         const ids = data.companies.map((item) => item.company_id);
         this.fetchCompaniesByIds(ids).then((response) => {
           this.rootData.companies = response.data.data.elements;
-          const result = this.rootData.companies.map((item) => {
-            const tags = [];
-            if (item.contractor) {
-              tags.push('Поставщик');
-            }
-            tags.push(item.businessSize.value);
-            item.ico = './content/company-default.jpg';
-            item.tags = tags;
-            return item;
-          });
-          this.rootData.manufacturers = result;
+          this.rootData.manufacturers = response.data.data.elements;
         });
       }
     },
+    // eslint-disable-next-line no-unused-vars
     setContainers(data) {
       // todo тара
     },
+    // eslint-disable-next-line no-unused-vars
     setBoxing(data) {
       // todo упаковка
     },
