@@ -1,7 +1,6 @@
 <template>
     <div class="tender-item__menu">
-        <!-- <div v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)" class="tender-item__menu-inner"> -->
-        <div v-if="true" class="tender-item__menu-inner">    
+        <div v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)" class="tender-item__menu-inner">
             <div
                     v-for="(item, key) in buyerMenu"
                     :key="key"

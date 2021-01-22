@@ -31,10 +31,10 @@
             <TenderItemDocumentsTab :tenderItemData="tenderItemData" />
         </div>
         <div class="tabs__content tabs__content--plane no-print" id="chat" data-print-title="Разъяснения" v-if="tenderItemData.tender_trading_format === 'trading_223'">
-            <!-- <TenderItemChatTab :tenderItemData="tenderItemData" :company="company" /> -->
+            <TenderItemChatTab :tenderItemData="tenderItemData" :company="company" />
         </div>
         <div class="tabs__content no-print" id="protocols" data-print-title="Протоколы" v-if="tenderItemData.tender_trading_format === 'trading_223'">
-            <TenderItemProtocolsTab :tenderItemData="tenderItemData" />
+            <TenderItemProtocolsTab :tenderItemData="tenderItemData" :company="company" />
         </div>
         <div class="tabs__content no-print" id="logs" data-print-title="Журнал событий">
             <TenderItemLogsTab :tenderItemData="tenderItemData" />
