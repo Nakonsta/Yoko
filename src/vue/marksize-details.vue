@@ -311,7 +311,9 @@ export default {
         appointment: '',
         price: 0,
         price_average: 0,
-        images: [],
+        images: [
+          '/content/no-photo.jpg',
+        ],
         items: [],
         containers: [],
         marksizes: [],

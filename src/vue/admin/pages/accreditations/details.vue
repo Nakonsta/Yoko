@@ -187,6 +187,12 @@ export default {
     },
   },
   created() {
+    this.$store.commit('setCrumbs', [
+      {
+        name: `Заявка на аккредитацию ${this.viewType.isCreate ? '' : `№${this.id}`}`,
+        link: '/',
+      },
+    ]);
     this.getAccreditationSampleRequiredFiles();
     if (!this.viewType.isCreate) {
       this.getAccreditationDetails();

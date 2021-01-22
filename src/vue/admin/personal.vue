@@ -1,6 +1,6 @@
 <template>
   <div>
-    <breadCrumbs :crumbs="breadCrumbs" />
+    <breadCrumbs />
     <div class="section section--green">
       <div class="container">
         <div
@@ -53,16 +53,6 @@ export default {
   ],
   data() {
     return {
-      breadCrumbs: [
-        {
-          name: 'Главная',
-          link: '/',
-        },
-        {
-          name: 'Личный кабинет',
-          link: '/personal',
-        },
-      ],
       windowWidth: window.innerWidth,
       fullMode: false,
     };

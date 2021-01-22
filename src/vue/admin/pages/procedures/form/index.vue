@@ -611,6 +611,12 @@ export default {
     this.$emit('fullMode')
     this.getFieldsData()
     const id = this.$route.params.id
+    this.$store.commit('setCrumbs', [
+      {
+        name: id !== 'new' ? `Редактировать процедуру №${id}` : 'Создать процедуру',
+        link: '/',
+      },
+    ]);
     if(id !== 'new') {
       this.getProcedureItemMainData(id)
       this.title = id && `Редактировать процедуру №${id}`

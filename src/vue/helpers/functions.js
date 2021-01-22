@@ -376,6 +376,23 @@ export default {
       }
       return result;
     },
+    formatDate(string) {
+      const d = new Date(string);
+      let month = `${d.getMonth() + 1}`;
+      let day = `${d.getDate()}`;
+      const year = d.getFullYear();
+      let hour = `${d.getHours()}`;
+      let minutes = `${d.getMinutes()}`;
+
+      if (month.length < 2) month = `0${month}`;
+      if (day.length < 2) day = `0${day}`;
+      if (hour.length < 2) hour = `0${hour}`;
+      if (minutes.length < 2) minutes = `0${minutes}`;
+
+      const time = ` ${hour}:${minutes}`;
+
+      return [day, month, year].join('.') + time;
+    },
     getItemsCompanies(items) {
       console.log(items);
       if (!items || !items.length) return items;
