@@ -83,7 +83,7 @@ export default {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/user/settings/${string}`);
     },
     fetchTotalCatalog(group, filter) {
-      let body = {};
+      const body = {};
       body.group = group;
 
       if (filter) {
@@ -101,14 +101,14 @@ export default {
       return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/digests/okved/search/`, { params: { q: string } });
     },
     fetchListSearchCatalog(string, company_id = 0) {
-      let params = {
+      const params = {
         q: string,
       };
       if (company_id) {
         params.company_id = company_id;
       }
       return axios.get(`${process.env.API_URL_CONTENT_SERVICE}/api/catalog/search/`, {
-        params: params,
+        params,
       });
     },
     fetchListSearchCompany(string) {
@@ -117,16 +117,16 @@ export default {
           q: string,
         },
         fetchUserById(id) {
-            return axios.get(
-                `${process.env.API_URL_AUTH_SERVICE}/user/${id}`,
-            )
+          return axios.get(
+            `${process.env.API_URL_AUTH_SERVICE}/user/${id}`,
+          );
         },
         cancelCatalogSearch() {
-            this.CancelTokens.searchCancelToken.cancel(
-                'Предыдущий запрос отменен',
-            )
-            this.CancelTokens.searchCancelToken = axios.CancelToken.source()
-        }
+          this.CancelTokens.searchCancelToken.cancel(
+            'Предыдущий запрос отменен',
+          );
+          this.CancelTokens.searchCancelToken = axios.CancelToken.source();
+        },
       });
     },
     authSignin(l, p) {
@@ -235,7 +235,7 @@ export default {
     fetchCompaniesByName(name) {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies`, {
         params: {
-          name: name,
+          name,
         },
         cancelToken: this.CancelTokens.companiesCancelToken.token,
       });
@@ -353,7 +353,7 @@ export default {
         { query },
         {
           headers: {
-            Authorization: 'Token ' + process.env.DA_API_KEY,
+            Authorization: `Token ${process.env.DA_API_KEY}`,
           },
         },
       );
@@ -402,7 +402,7 @@ export default {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/inn/${inn}/full`);
     },
     fetchProductList(props) {
-      let body = {};
+      const body = {};
 
       if (props.page !== null) {
         body.page = props.page;
@@ -464,7 +464,23 @@ export default {
       );
     },
     sendUserData(data) {
-      return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data)
+      return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data);
+    },
+    fetchContractsFilter(field) {
+      return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/contracts/filter/${field}/`);
+    },
+    fetchContractList(filter, page) {
+      return axios.post(
+        `${process.env.API_URL_TENDER_SERVICE}/api/contracts/list/`,
+        {
+          ...filter,
+          page,
+        },
+        { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+      );
+    },
+    fetchContract(id) {
+      return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/contracts/${id}/`);
     },
   },
 };
