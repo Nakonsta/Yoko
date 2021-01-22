@@ -297,7 +297,9 @@ export default {
     prepareMarkData(data) {
       this.rootData = {
         description: '',
-        images: [],
+        images: [
+          '/content/no-photo.jpg',
+        ],
         marksizes: [],
         characters: [],
         appointment: '',
@@ -389,8 +391,10 @@ export default {
           this.prepareMarkData(markData);
         })
         .catch((e) => {
-          if (e.response.status === 404) {
+          if (e.response && e.response.status === 404) {
             window.location.href = '/404';
+          } else {
+            console.log(e);
           }
         });
     },
