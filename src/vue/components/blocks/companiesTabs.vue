@@ -1,21 +1,21 @@
 <template>
   <div
-    class="tabs tabs--line tabs--companies"
     v-if="isVisible"
+    class="tabs tabs--line tabs--companies"
   >
     <ul>
-      <li 
-        v-for="company in companies" 
-        :key="company.id" 
-        :class="{ 
+      <li
+        v-for="company in companies"
+        :key="company.id"
+        :class="{
           active: company.inn === innerValue.inn
         }"
       >
-        <a 
-          href="javascript:{}" 
+        <a
+          href="javascript:{}"
           @click="select($event, company)"
         >
-          {{ company.name }}
+          {{ company.shortName }}
         </a>
       </li>
     </ul>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'companiesTabs',
+  name: 'CompaniesTabs',
   props: {
     companies: {
       default: () => [],
@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     isVisible() {
-      return (!this.hideWithoutOptions && this.companies.length) 
+      return (!this.hideWithoutOptions && this.companies.length)
       || (this.hideWithoutOptions && this.companies.length > 1);
     },
     innerValue: {
