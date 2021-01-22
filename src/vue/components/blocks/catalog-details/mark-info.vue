@@ -52,10 +52,20 @@
           <div class="catalog-mark__title">
             {{ item.name }}
           </div>
-          <div
-            class="catalog-mark__text"
-            v-html="item.value"
-          />
+          <template v-if="item.id === 'description' && item.isHTML && item.value.length > 1000">
+            <div class="catalog-mark__text">
+              <a
+                href="#description"
+                @click="openTab($event, 'description')"
+              >Перейти к описанию</a>
+            </div>
+          </template>
+          <template v-else>
+            <div
+              class="catalog-mark__text"
+              v-html="item.value"
+            />
+          </template>
         </div>
       </div>
       <div
@@ -73,6 +83,7 @@
           </span>
         </p>
         <a
+          v-if="root.companies.length"
           href="#availability"
           class="btn"
           @click="openTab($event, 'availability')"

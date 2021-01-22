@@ -355,6 +355,7 @@ export default {
           id: data.properties[property].id,
           name: data.properties[property].name,
           value: data.properties[property].value.join('<br />'),
+          isHTML: true,
         };
         characters.push(prop);
         if (this.descriptionCharacters[prop.id]) {
@@ -365,7 +366,9 @@ export default {
         this.rootData.characters = characters;
       }
       if (descriptionCharacters.length) {
-        this.rootData.items = [{ name: 'Описание', value: data.description }, ...descriptionCharacters];
+        this.rootData.items = [{
+          id: 'description', name: 'Описание', value: data.description, isHTML: this.isHTML(data.description),
+        }, ...descriptionCharacters];
       }
     },
     setDocuments(data) {
@@ -413,6 +416,10 @@ export default {
             window.location.href = '/404';
           }
         });
+    },
+    isHTML(str) {
+      const doc = new DOMParser().parseFromString(str, 'text/html');
+      return Array.from(doc.body.childNodes).some((node) => node.nodeType === 1);
     },
   },
 };
