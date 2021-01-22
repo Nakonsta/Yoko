@@ -68,6 +68,8 @@ const store = new Vuex.Store({
       }, 1000);
     },
     authorization(state, options = {}) {
+      store.commit('setCrumbs');
+
       const token = Cookies.get('auth._token.local');
       const storageUser = sessionStorage.getItem('user');
       const redirect = options.redirect ? options.redirect : null;
