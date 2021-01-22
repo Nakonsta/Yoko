@@ -497,6 +497,12 @@ export default {
   },
 
   created() {
+    this.$store.commit('setCrumbs', [
+      {
+        name: 'Личные данные пользователя',
+        link: '/',
+      },
+    ]);
     this.fillUserDataFromStore();
     this.getCountries();
   },

@@ -249,6 +249,12 @@ export default {
     },
   },
   created() {
+    this.$store.commit('setCrumbs', [
+      {
+        name: 'Общая информация',
+        link: '/',
+      },
+    ]);
     if (this.companies && this.companies.length) {
       window.openLoader();
       this.fetchCompanyByInn(this.companies[0].inn)

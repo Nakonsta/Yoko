@@ -63,6 +63,12 @@ export default {
     },
   },
   created() {
+    this.$store.commit('setCrumbs', [
+      {
+        name: 'Пользователи',
+        link: '/',
+      },
+    ]);
     if (this.companies && this.companies.length) {
       this.currentCompany = this.companies[0];
       this.fetchUsers();

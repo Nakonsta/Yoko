@@ -269,6 +269,19 @@ export default {
           },
           {
             icon: 'mdi-buffer',
+            title: 'Список договоров',
+            to: '/personal/contracts',
+            order: 2,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Список договоров',
+                to: '/personal/contracts'
+              },
+            ]
+          },
+          {
+            icon: 'mdi-buffer',
             title: 'Заявки на аккредитацию',
             to: '/personal/accreditations',
             order: 3,
@@ -370,6 +383,19 @@ export default {
               {
                 title: 'Список заявок-черновиков',
                 to: '/personal/applications/drafts'
+              },
+            ]
+          },
+          {
+            icon: 'mdi-buffer',
+            title: 'Список договоров',
+            to: '/personal/contracts',
+            order: 2,
+            isActive: true,
+            subItems: [
+              {
+                title: 'Список договоров',
+                to: '/personal/contracts'
               },
             ]
           },

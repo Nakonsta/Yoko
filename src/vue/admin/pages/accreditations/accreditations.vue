@@ -1,106 +1,123 @@
 <template>
-    <div class="accreditations">
-        <router-link class="accreditations__create" to="accreditations/new">
-            создать заявку
-        </router-link>
-        <accreditations-title title="Список заявок"></accreditations-title>
+  <div class="accreditations">
+    <router-link
+      class="accreditations__create"
+      to="accreditations/new"
+    >
+      создать заявку
+    </router-link>
+    <accreditations-title title="Список заявок" />
 
-        <div class="accreditations__filters">
-            <accreditations-sort @on-sort="onSort"></accreditations-sort>
-            <accreditations-search @on-search="onSearch"></accreditations-search>
-        </div>
-
-        <div v-if="loading" class="accreditations__preloader">
-            <div class="preloader">
-                <div class="preloader__preloader">
-                    <div class="preloader__loader"></div>
-                </div>
-            </div>
-        </div>
-
-        <accreditations-list v-else :items="accreditations"></accreditations-list>
-
-        <div v-if="!loading && accreditations.length === 0" class="accreditations__empty-search">
-            Заявления не найдены
-        </div>
-
-        <paginate
-            v-if="totalPages"
-            class="accreditations__pagination"
-            :page-count="totalPages"
-            :click-handler="changePage"
-            prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-            next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-            :value="currentPage"
-        >
-        </paginate>
+    <div class="accreditations__filters">
+      <accreditations-sort @on-sort="onSort" />
+      <accreditations-search @on-search="onSearch" />
     </div>
+
+    <div
+      v-if="loading"
+      class="accreditations__preloader"
+    >
+      <div class="preloader">
+        <div class="preloader__preloader">
+          <div class="preloader__loader" />
+        </div>
+      </div>
+    </div>
+
+    <accreditations-list
+      v-else
+      :items="accreditations"
+    />
+
+    <div
+      v-if="!loading && accreditations.length === 0"
+      class="accreditations__empty-search"
+    >
+      Заявления не найдены
+    </div>
+
+    <paginate
+      v-if="totalPages"
+      class="accreditations__pagination"
+      :page-count="totalPages"
+      :click-handler="changePage"
+      prev-text="<svg width=&quot;6&quot; height=&quot;11&quot; viewBox=&quot;0 0 6 11&quot; fill=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;><path d=&quot;M5 1L1 5.5L5 10&quot; stroke=&quot;#9B9B9A&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg>"
+      next-text="<svg width=&quot;6&quot; height=&quot;11&quot; viewBox=&quot;0 0 6 11&quot; fill=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;><path d=&quot;M5 1L1 5.5L5 10&quot; stroke=&quot;#9B9B9A&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg>"
+      :value="currentPage"
+    />
+  </div>
 </template>
 <script>
-import api from '../../../helpers/api'
+import api from '../../../helpers/api';
 
-import AccreditationsTitle from '../../../components/admin/accreditations/AccreditationsTitle.vue'
-import AccreditationsSearch from '../../../components/admin/accreditations/AccreditationsSearch.vue'
-import AccreditationsSort from '../../../components/admin/accreditations/AccreditationsSort.vue'
-import AccreditationsList from '../../../components/admin/accreditations/AccreditationsList.vue'
+import AccreditationsTitle from '../../../components/admin/accreditations/AccreditationsTitle.vue';
+import AccreditationsSearch from '../../../components/admin/accreditations/AccreditationsSearch.vue';
+import AccreditationsSort from '../../../components/admin/accreditations/AccreditationsSort.vue';
+import AccreditationsList from '../../../components/admin/accreditations/AccreditationsList.vue';
 
 export default {
-    name: 'accreditations',
-    components: {
-        AccreditationsTitle,
-        AccreditationsSearch,
-        AccreditationsSort,
-        AccreditationsList
-    },
-    mixins: [api],
-    data() {
-        return {
-            accreditations: [],
-            loading: true,
-            search: '',
-            totalPages: null,
-            currentPage: 1,
-            orderDir: 'DESC',
-            debounceTimer: null
-        }
-    },
-    methods: {
-        getAccreditations() {
-            this.loading = true
+  name: 'Accreditations',
+  components: {
+    AccreditationsTitle,
+    AccreditationsSearch,
+    AccreditationsSort,
+    AccreditationsList,
+  },
+  mixins: [api],
+  data() {
+    return {
+      accreditations: [],
+      loading: true,
+      search: '',
+      totalPages: null,
+      currentPage: 1,
+      orderDir: 'DESC',
+      debounceTimer: null,
+    };
+  },
+  created() {
+    this.$store.commit('setCrumbs', [
+      {
+        name: 'Список заявок на аккредитацию',
+        link: '/',
+      },
+    ]);
+    this.getAccreditations();
+  },
+  methods: {
+    getAccreditations() {
+      this.loading = true;
 
-            this.fetchAccreditationsList({
-                page: this.currentPage,
-                search: this.search,
-                orderDir: this.orderDir
-            })
-                .then(data => {
-                    this.accreditations = data?.data?.data?.items ?? []
-                    this.totalPages = Math.ceil((data?.data?.data?.total ?? 0) / 20)
-                })
-                .finally(() => (this.loading = false))
-        },
-        changePage(page) {
-            this.currentPage = page
-            this.getAccreditations()
-        },
-        onSort(value) {
-            this.orderDir = value
-            this.currentPage = 1
-
-            this.getAccreditations()
-        },
-        onSearch(value) {
-            this.search = value
-            this.currentPage = 1
-
-            clearTimeout(this.debounceTimer)
-            this.debounceTimer = setTimeout(() => this.getAccreditations(), 500)
-        }
+      this.fetchAccreditationsList({
+        page: this.currentPage,
+        search: this.search,
+        orderDir: this.orderDir,
+      })
+        .then((data) => {
+          this.accreditations = data?.data?.data?.items ?? [];
+          this.totalPages = Math.ceil((data?.data?.data?.total ?? 0) / 20);
+        })
+        .finally(() => (this.loading = false));
     },
-    created() {
-        this.getAccreditations()
-    }
-}
+    changePage(page) {
+      this.currentPage = page;
+      this.getAccreditations();
+    },
+    onSort(value) {
+      this.orderDir = value;
+      this.currentPage = 1;
+
+      this.getAccreditations();
+    },
+    onSearch(value) {
+      this.search = value;
+      this.currentPage = 1;
+
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => this.getAccreditations(), 500);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '../../../../assets/sass/variables/variables';
