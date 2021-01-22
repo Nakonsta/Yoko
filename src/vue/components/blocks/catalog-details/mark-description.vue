@@ -1,19 +1,21 @@
 <template>
-  <div id="description-mark" class="typography" v-if="root.description">
-    <p>{{ root.description }}</p>
-  </div>
+  <div
+    id="description-mark"
+    class="typography"
+    v-html="root.description"
+  />
 </template>
 
 <script>
 export default {
-  name: "MarkAppointment",
+  name: 'MarkAppointment',
   props: {
     root: {
-      default: {},
+      default: () => {},
       type: Object,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
