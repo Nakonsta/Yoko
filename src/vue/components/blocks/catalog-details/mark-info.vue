@@ -237,6 +237,7 @@ export default {
       background: $colorWhite;
 
       @include mq($from: desktop) {
+        flex-shrink: 0;
         margin: 0 0 0 rem(32px);
         width: rem(282px);
       }
