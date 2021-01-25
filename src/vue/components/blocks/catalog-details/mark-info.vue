@@ -1,123 +1,178 @@
 <template>
   <div class="catalog-mark__info">
     <div class="catalog-mark__gallery">
-      <div class="gallery-group" v-if="root.images.length">
+      <div
+        v-if="root.images.length"
+        class="gallery-group"
+      >
         <VueSlickCarousel
-                ref="thumbs"
-                class="gallery-thumbs"
-                v-bind="settingsThumbs"
-                @beforeChange="syncSliders"
+          ref="thumbs"
+          class="gallery-thumbs"
+          v-bind="settingsThumbs"
+          @beforeChange="syncSliders"
         >
-          <div v-for="(src, i) in root.images" :key="i" class="gallery-thumb">
-            <img draggable="false" :src="src" alt="" />
+          <div
+            v-for="(src, i) in root.images"
+            :key="i"
+            class="gallery-thumb"
+          >
+            <img
+              draggable="false"
+              :src="src"
+              alt=""
+            >
           </div>
         </VueSlickCarousel>
         <VueSlickCarousel
-                ref="gallery"
-                class="gallery-top"
-                v-bind="settingsGallery"
-                @beforeChange="syncSliders"
+          ref="gallery"
+          class="gallery-top"
+          v-bind="settingsGallery"
+          @beforeChange="syncSliders"
         >
-          <div v-for="(src, i) in root.images" :key="i" class="gallery-image">
-            <img draggable="false" :src="src" alt="" />
+          <div
+            v-for="(src, i) in root.images"
+            :key="i"
+            class="gallery-image"
+          >
+            <img
+              draggable="false"
+              :src="src"
+              alt=""
+            >
           </div>
         </VueSlickCarousel>
       </div>
     </div>
     <div class="catalog-mark__wrap">
       <div class="catalog-mark__inner">
-        <div v-for="item in root.items" class="catalog-mark__el">
-          <div class="catalog-mark__title">{{ item.title }}</div>
-          <div class="catalog-mark__text">{{ item.desc }}</div>
+        <div
+          v-for="item in root.items"
+          class="catalog-mark__el"
+        >
+          <div class="catalog-mark__title">
+            {{ item.name }}
+          </div>
+          <template v-if="item.id === 'description' && item.isHTML && item.value.length > 1000">
+            <div class="catalog-mark__text">
+              <a
+                href="#description"
+                @click="openTab($event, 'description')"
+              >Перейти к описанию</a>
+            </div>
+          </template>
+          <template v-else>
+            <div
+              class="catalog-mark__text"
+              v-html="item.value"
+            />
+          </template>
         </div>
       </div>
-      <div class="catalog-mark__price" v-if="root.price">
-        <p>Средняя цена <span>{{ root.price }}</span></p>
-        <a href="#availability" class="btn" @click="openTab($event, 'availability')">Наличие</a>
+      <div
+        v-if="root.price !== undefined"
+        class="catalog-mark__price"
+      >
+        <p>
+          Средняя цена<span>
+            <template v-if="root.price === 0">
+              Неизвестно
+            </template>
+            <template v-else>
+              {{ formatPriceWithCurrency(root.price) }}
+            </template>
+          </span>
+        </p>
+        <a
+          v-if="root.companies.length"
+          href="#availability"
+          class="btn"
+          @click="openTab($event, 'availability')"
+        >Наличие</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import VueSlickCarousel from 'vue-slick-carousel'
+import VueSlickCarousel from 'vue-slick-carousel';
+import functions from '@/helpers/functions';
 
-  export default {
-    name: "mark-info",
-    components: {
-      VueSlickCarousel
+export default {
+  name: 'MarkInfo',
+  components: {
+    VueSlickCarousel,
+  },
+  mixins: [functions],
+  props: {
+    root: {
+      default: {},
+      type: Object,
     },
-    data() {
-      return {
-        settingsThumbs: {
-          slidesToShow: 4,
-          focusOnSelect: true,
-          arrows: true,
-          vertical: true,
-          verticalSwiping: true,
-          responsive: [
-            {
-              breakpoint: 1250,
-              settings: {
-                vertical: false,
-                verticalSwiping: false,
-              },
+  },
+  data() {
+    return {
+      settingsThumbs: {
+        slidesToShow: 4,
+        focusOnSelect: true,
+        arrows: true,
+        vertical: true,
+        verticalSwiping: true,
+        responsive: [
+          {
+            breakpoint: 1250,
+            settings: {
+              vertical: false,
+              verticalSwiping: false,
             },
-            {
-              breakpoint: 1024,
-              settings: {
-                slidesToShow: 3,
-                vertical: false,
-                verticalSwiping: false,
-              },
+          },
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              vertical: false,
+              verticalSwiping: false,
             },
-          ],
-        },
-        settingsGallery: {
-          arrows: false,
-          slidesToShow: 1,
-          fade: true,
-          swipeToSlide: true,
-          focusOnSelect: true,
-          responsive: [
-            {
-              breakpoint: 769,
-              settings: {
-                dots: true,
-              },
-            },
-          ],
-        },
-      }
-    },
-    props: {
-      root: {
-        default: {},
-        type: Object
-      }
-    },
-    methods: {
-      syncSliders(currentPosition, nextPosition) {
-        // asNavFor плохое решение. смотреть тут https://github.com/staskjs/vue-slick/issues/68#issuecomment-636056601
-        this.$refs['thumbs'].goTo(nextPosition);
-        this.$refs['gallery'].goTo(nextPosition);
+          },
+        ],
       },
-      openTab(evt, hash) {
-        evt.preventDefault();
-        let link = document.querySelector('.js-tabs li a[href="#'+hash+'"]');
-        if (link) {
-          link.click();
-          const top = window.scrollY + link.getBoundingClientRect().y;
-          window.scrollTo({
-            top: top,
-            behavior: "smooth"
-          });
-        }
+      settingsGallery: {
+        arrows: false,
+        slidesToShow: 1,
+        fade: true,
+        swipeToSlide: true,
+        focusOnSelect: true,
+        responsive: [
+          {
+            breakpoint: 769,
+            settings: {
+              dots: true,
+            },
+          },
+        ],
+      },
+    };
+  },
+  methods: {
+    syncSliders(currentPosition, nextPosition) {
+      // asNavFor плохое решение. смотреть тут https://github.com/staskjs/vue-slick/issues/68#issuecomment-636056601
+      this.$refs.thumbs.goTo(nextPosition);
+      this.$refs.gallery.goTo(nextPosition);
+    },
+    openTab(evt, hash) {
+      evt.preventDefault();
+      const link = document.querySelector(`.js-tabs li a[href="#${hash}"]`);
+      if (link) {
+        link.click();
+        const top = window.scrollY + link.getBoundingClientRect().y;
+        window.scrollTo({
+          top,
+          behavior: 'smooth',
+        });
       }
-    }
-  }
+    },
+  },
+};
 </script>
-
 
 <style lang="scss" scoped>
   @import "../../../../assets/sass/variables/fluid-variables";
@@ -246,9 +301,6 @@
         width: 96px;
         margin: 0 rem(26px) 0 0;
 
-        ::v-deep .slick-list {
-          height: rem(400px) !important; // (2px + 96px + 2px) * 4
-        }
         /*::v-deep .slick-track {*/
         /*  &::before,*/
         /*  &::after {*/
@@ -259,6 +311,13 @@
 
       @include mq($until: tablet) {
         display: none;
+      }
+
+      ::v-deep .slick-list {
+        flex-grow: 1;
+        @include mq($from: widescreen) {
+          height: rem(400px) !important; // (2px + 96px + 2px) * 4
+        }
       }
 
       ::v-deep .slick-slide {

@@ -23,11 +23,23 @@ Inputmask.extendDefinitions({
     },
 });
 Vue.directive('inputmask', {
-    bind: function(el, binding) {
-        if( !binding || binding.value === false ) return;
+    bind: function(el, binding, domEL) {
+        if (!binding || binding.value === false) return;
+        Inputmask(binding.value).mask(el);
+    },
+    update: function(el, binding, domEL) {
+        if (!binding || binding.value === false || binding.value !== binding.oldValue || el.inputmask) return;
         Inputmask(binding.value).mask(el);
     }
 });
+
+Vue.prototype.$priceInputmask = {
+    alias: 'currency',
+    groupSeparator: ' ',
+    radixPoint: '.',
+    allowMinus: false,
+    rightAlign: false,
+};
 
 import VCalendar from 'v-calendar'
 Vue.use(VCalendar)
@@ -187,13 +199,13 @@ headerLoginStatus.forEach((el) => {
 // }
 
 // Продукция компании
-import Products from './components/blocks/products.vue'
-const products = document.querySelector('#products-info');
-if (products) {
-    let productsBlock = new Vue({
-        el: products,
+import CompanyProducts from './company-products.vue'
+const companyProducts = document.querySelector('#company-products');
+if (companyProducts) {
+    let companyProductsBlock = new Vue({
+        el: companyProducts,
         store: store,
-        render: function(h) { return h(Products); }
+        render: function(h) { return h(CompanyProducts); }
     })
 }
 
@@ -262,5 +274,38 @@ if (signatureProviders) {
         el: signatureProviders,
         store: store,
         render: function(h) { return h(DigitalSignatureProviders); }
+    })
+}
+
+// Кнопка создать процедуру в публичной части торговой площадки
+import ButtonCreateProcedure from './button-create-procedure.vue'
+const buttonCreateProcedureEl = document.querySelector('#button-create-procedure');
+if (buttonCreateProcedureEl) {
+    let appButtonCreateProcedure = new Vue({
+        el: buttonCreateProcedureEl,
+        store: store,
+        render: function(h) { return h(ButtonCreateProcedure); }
+    })
+}
+
+// Кнопка создать продукцию в публичной части каталога
+import ButtonCreateProduct from './button-create-product.vue'
+const buttonCreateProductEl = document.querySelector('#button-create-product');
+if (buttonCreateProductEl) {
+    let appButtonCreateProduct = new Vue({
+        el: buttonCreateProductEl,
+        store: store,
+        render: function(h) { return h(ButtonCreateProduct); }
+    })
+}
+
+// Реестр компаний
+import companies from './companies.vue'
+const companiesBlock = document.querySelector('#companies');
+if (companiesBlock) {
+    let appCompanies = new Vue({
+        el: companiesBlock,
+        store: store,
+        render: function(h) { return h(companies); }
     })
 }

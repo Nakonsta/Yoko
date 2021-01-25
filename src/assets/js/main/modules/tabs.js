@@ -9,7 +9,7 @@ document.addEventListener('click', (e) => {
         let tab = document.getElementById(link.getAttribute('href').substr(1));
         if( el.getAttribute('href') === link.getAttribute('href') ) {
             if (tab) {
-                if (tab.classList.contains('laws__folders')) {
+                if (tab.classList.contains('laws__folders') || tab.classList.contains('tariffs__items')) {
                     tab.style.display = 'flex';
                 } else {
                     tab.style.display = 'block';
@@ -49,5 +49,5 @@ document.addEventListener('click', (e) => {
     if (!e.isTrusted || vw > 767 || el.tagName !== 'A' || !el.closest('li.active')) return;
     e.preventDefault();
     e.stopPropagation();
-    el.closest('.js-tabs').classList.toggle('hover');
+    el.closest('.tabs').classList.toggle('hover');
 });

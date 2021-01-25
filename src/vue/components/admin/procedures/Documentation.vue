@@ -12,7 +12,7 @@
     >
       <tooltip content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
     </div>
-    <h3 class="procedure__main-title">Документация</h3>
+    <h3 class="procedure__main-title">Конкурсная документация</h3>
     <div class="row">
         <!--      TODO: доделать бэк для раздела документации-->
         <!--<div class="col col-lg-6 col-md-6 col-xs-12">
@@ -59,6 +59,7 @@
                 'application/pdf',
                 'application/msword',
                 'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sh',
               ]"

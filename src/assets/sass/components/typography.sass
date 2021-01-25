@@ -93,39 +93,58 @@
         width: auto !important
         height: auto !important
 
+    table
+        width: 100%
+        th
+            font-weight: 500
+            color: $colorGray
+            text-align: left
+        th,
+        td
+            padding: .5em 0
+            + th,
+            + td
+                padding-left: 1em
+
 h1,.h1,
 h2,.h2,
 h3,.h3,
 h4,.h4,
 h5,.h5,
 h6,.h6
-    margin: 0 0 1em
+    margin: 1em 0 .5em
 
-h1,.h1
-    font-weight: 900
-    font-size: 60px
-    line-height: (70/60)
-
-    @include mq($until: large)
-        font-size: 54px
-
-    @include mq($until: widescreen)
-        font-size: 48px
+h1,.h1,
+h2,.h2
+    font-weight: 700
+    font-size: rem(24px)
+    line-height: 1.2
 
     @include mq($until: desktop)
-        font-size: 42px
+        font-size: rem(20px)
 
-    @include mq($until: tablet)
-        font-size: 32px
+h3,.h3,
+h4,.h4
+    font-weight: 700
+    font-size: rem(18px)
+    line-height: 1.2
 
+    @include mq($until: desktop)
+        font-size: rem(16px)
 
-h2,.h2
-    font-weight: 900
-    font-size: 60px
-    line-height: (70/60)
+h3,.h3,
+h4,.h4
+    font-weight: 700
+    font-size: rem(16px)
+    line-height: 1.2
 
-p
-    margin: rem(40px) 0
+    @include mq($until: desktop)
+        font-size: rem(14px)
+
+p,
+ul,
+ol
+    margin: .5em 0
 
 .link
     color: $colorTurquoise
@@ -138,3 +157,6 @@ p
             width: 20px
             height: 20px
             margin-right: 8px
+
+.typography--small
+    font-size: rem(14px)

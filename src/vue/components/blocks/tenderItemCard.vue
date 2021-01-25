@@ -7,16 +7,16 @@
                         № {{ tenderItemData.id }}
                     </div>
                     <div class="tender-item__type">
-                       {{ TENDER_TRADING_FORMATS_AND_TYPES[tenderItemData.tender_trading_format] }} {{ TENDER_TRADING_FORMATS_AND_TYPES[tenderItemData.tender_trading_type] }}
+                       {{ getTradingFormat(tenderItemData.tender_trading_format) }}: {{ getTradingType(tenderItemData.tender_trading_type) }}
                     </div>
                 </div>
                 <div class="tender-item__common">
-                    <div v-if="company.name" class="tender-item__row">
+                    <div v-if="company" class="tender-item__row">
                         <div class="tender-item__row-name">
                             Компания
                         </div>
                         <div class="tender-item__row-value">
-                            {{ company.name }}
+                            <a :href="'/compregister/'+company.id">{{ company.name }}</a>
                         </div>
                     </div>
                     <div v-if="company.directorFio" class="tender-item__row">
@@ -68,11 +68,17 @@
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
                         </a>
                         <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
-                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" v-if="$store.getters.userRole === 'contractor'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
+                        <!-- <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" v-if="$store.getters.userRole === 'contractor'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
                             <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                         </a>
                         <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'" v-if="$store.state.auth.loggedIn" @click="updateItemMark(tenderItemData, 'hidden')" :class="{active: itemMarkExist(tenderItemData, 'hidden')}">
                             <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
+                        </a> -->
+                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(tenderItemData, 'hidden', itemMarkExist(tenderItemData, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="[{active: itemMarkExist(tenderItemData, 'hidden')}, 'tender-item__actions-link']">
+                            <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
+                        </a>
+                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(tenderItemData, 'favorite', itemMarkExist(tenderItemData, 'favorite') ? 'Процедура удалена из избранного' : 'Процедура добавлена в избранное')" v-if="$store.getters.userRole === 'contractor'" :class="[{active: itemMarkExist(tenderItemData, 'favorite')}, 'tender-item__actions-link']">
+                            <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                         </a>
                     </div>
                 </div>
@@ -81,7 +87,7 @@
                         Начальная цена:
                     </div>
                     <div class="tender-item__start-price-num">
-                        {{ tenderItemData.purchase_subject.start_price }} &#8381;
+                        {{ formatPriceWithCurrency(tenderItemData.purchase_subject.start_price, tenderItemData.purchase_currency) }}
                     </div>
                 </div>
                 <div class="tender-item__dates">
@@ -93,12 +99,12 @@
                             {{ formatDateNoTime(tenderItemData.publication_date) }}
                         </div>
                     </div>
-                    <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.application_end_date" class="tender-item__date">
+                    <div v-if="tenderItemData.purchase_term && tenderItemData.purchase_term.procedure_date_to" class="tender-item__date">
                         <div class="tender-item__date-text">
                             Дата окончания:
                         </div>
                         <div class="tender-item__date-day">
-                            {{ formatDateNoTime(tenderItemData.purchase_term.application_end_date) }}
+                            {{ formatDateNoTime(tenderItemData.purchase_term.procedure_date_to) }}
                         </div>
                     </div>
                 </div>
@@ -143,6 +149,7 @@
 <script>
 import api from '../../helpers/api'
 import formatDate from "@/helpers/formatDate"
+import functions from "@/helpers/functions";
 import Actions from './actions.vue'
 import TenderItemProductCard from './tenderItemProductCard.vue'
 import popupCompanyContact from "@/components/blocks/popupCompanyContact"
@@ -173,19 +180,10 @@ export default {
         popupTenderDelivery,
     },
 
-    mixins: [api, formatDate],
-    
+    mixins: [api, formatDate, functions],
+
     data() {
         return {
-            TENDER_TRADING_FORMATS_AND_TYPES: {
-                trading_223: 'Торги по 223-ФЗ',
-                commercial_trading: 'Коммерческие торги',
-                contest: 'Конкурс',
-                request_prices_or_offers: 'Запрос цен / запрос предложений',
-                auction: 'Аукцион',
-                request_prices: 'Запрос цен',
-                purchase_from_supplier: 'Закупка у единственного поставщика',
-            },
             isProductsShown: false,
         }
     },
@@ -204,10 +202,7 @@ export default {
             return item.status;
         },
         itemMarkExist(item, mark) {
-            if (item.marks) {
-                return item.marks.find((item) => item.mark_code === mark);
-            }
-            return false;
+            return item.marks.find((item) => item.mark_code === mark);
         },
         updateItemMark(item, mark) {
             if( !this.itemMarkExist(item, mark) ) {
@@ -229,6 +224,39 @@ export default {
                     })
                     .catch((e) => {
                         console.log(e);
+                    });
+            }
+        },
+        updateItemMark(item, mark, msg) {
+            if( this.itemMarkExist(item, mark) ) {
+                this.removeMarketplaceProcedureMark(item.id, mark)
+                    .then((response) => {
+                        // const newMark = response.data.data;
+                        item.marks.forEach((i, index) => {
+                            if (i.mark_code === mark) item.marks.splice(index, 1)
+                        });
+                        window.notificationSuccess(msg);
+                        if (this.$store.getters.userRole === 'contractor' && ((mark === 'hidden' && this.view !== 'favorite') || (mark === 'favorite' && this.view === 'favorite'))) {
+                            this.$emit('getItems');
+                        }
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        window.notificationError('Ошибка сервера');
+                    });
+            } else {
+                this.addMarketplaceProcedureMark(item.id, mark)
+                    .then((response) => {
+                        const newMark = response.data.data;
+                        item.marks.push(newMark);
+                        window.notificationSuccess(msg);
+                        if (this.$store.getters.userRole === 'contractor' && ((mark === 'hidden' && this.view !== 'favorite') || (mark === 'favorite' && this.view === 'favorite'))) {
+                            this.$emit('getItems');
+                        }
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        window.notificationError('Ошибка сервера');
                     });
             }
         },
@@ -261,8 +289,8 @@ export default {
             background-color: #fff;
             border-radius: 6px;
             padding: rem(24px) rem(32px);
-            width: calc(100% - 315px);
-            margin-right: 32px;
+            /*width: calc(100% - 315px);*/
+            flex-grow: 1;
             @media print {
                 margin: 0;
                 border-radius: 0;
@@ -299,10 +327,20 @@ export default {
             }
             &-value {
                 color: $colorTurquoise;
-                text-decoration: underline;
+                /*text-decoration: underline;*/
                 @media print {
                     text-decoration: none;
                     color: $colorText;
+                }
+                a {
+                    color: $colorTurquoise;
+                    @media print {
+                        text-decoration: none;
+                        color: $colorText;
+                    }
+                    &:hover {
+                        color: $colorTurquoiseHover;
+                    }
                 }
             }
         }
@@ -356,6 +394,25 @@ export default {
                     width: 20px;
                     height: 20px;
                     margin-left: 1rem;
+                }
+            }
+            &-link {
+                svg.sprite-hide,
+                svg.sprite-favorite {
+                    fill: $colorGray;
+                }
+                &.active {
+                    svg.sprite-hide,
+                    svg.sprite-favorite {
+                        fill: $colorTurquoise;
+                    }
+
+                    &:hover {
+                        svg.sprite-hide,
+                        svg.sprite-favorite {
+                            fill: $colorTurquoiseHover;
+                        }
+                    }
                 }
             }
         }

@@ -1,12 +1,8 @@
 <template>
     <div class="tender-item__protocols">
         <div class="tender-item__protocols-block">
-            <!-- <div 
-                v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)"
-                class="tender-item__protocol-attach-block"
-            > -->
             <div 
-                v-if="true"
+                v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)"
                 class="tender-item__protocol-attach-block"
             >
                 <span class="btn tender-item__protocol-attach" @click="openModal('#tender-item__protocols-modal')">Прикрепить протокол</span>
@@ -116,6 +112,10 @@ export default {
 
     props: {
         tenderItemData: {
+            type: Object,
+            required: true,
+        },
+        company: {
             type: Object,
             required: true,
         }

@@ -13,10 +13,11 @@
             <ul>
               <li v-if="data.id"><b>№{{data.id}}</b></li>
               <li>{{ data.tender_trading_format.name }}</li>
+              <li>{{ data.tender_trading_type.name }}</li>
             </ul>
           </div>
           <div class="col">
-            <a href="javascript:{}" title="Распечатать">
+            <a href="javascript:{}" onclick="window.print()" title="Распечатать">
               <svg class="sprite-print">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#print"></use>
               </svg>

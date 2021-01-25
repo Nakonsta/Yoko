@@ -1,14 +1,16 @@
 import moment from 'moment';
+import api from '@/helpers/api';
 
 export default {
+    mixins: [api],
     methods: {
         declOfNum(num, expressions) {
-            let result,
-                count = num % 100;
+            let result;
+            let count = num % 100;
             if (count >= 5 && count <= 20) {
                 result = expressions['2'];
             } else {
-                count = count % 10;
+                count %= 10;
                 if (count === 1) {
                     result = expressions['0'];
                 } else if (count >= 2 && count <= 4) {
@@ -20,114 +22,122 @@ export default {
             return result;
         },
         objectToFormDataJava(data) {
-            const fData = new FormData()
+            const fData = new FormData();
 
-            function appendFormData(data, root, formDataObj) {
-                root = root || ''
-                if (data instanceof File) {
-                    formDataObj.append(root, data)
-                } else if (Array.isArray(data)) {
-                    for (let i = 0; i < data.length; i++) {
-                        appendFormData(data[i], root, formDataObj)
+            function appendFormData(d, root = '', formDataObj) {
+                if (d instanceof File) {
+                    formDataObj.append(root, d);
+                } else if (Array.isArray(d)) {
+                    for (let i = 0; i < d.length; i += 1) {
+                        appendFormData(d[i], root, formDataObj);
                     }
-                } else if (typeof data === 'object' && data) {
-                    for (const key in data) {
+                } else if (typeof d === 'object' && d) {
+                    for (const key in d) {
                         // eslint-disable-next-line
-                        if (data.hasOwnProperty(key)) {
+                        if (d.hasOwnProperty(key)) {
                             if (root === '') {
-                                appendFormData(data[key], key, formDataObj)
+                                appendFormData(d[key], key, formDataObj);
                             } else {
-                                appendFormData(data[key], root + '.' + key, formDataObj)
+                                appendFormData(d[key], `${root}.${key}`, formDataObj);
                             }
                         }
                     }
-                } else if (data !== null && typeof data !== 'undefined') {
-                    formDataObj.append(root, data)
+                } else if (d !== null && typeof d !== 'undefined') {
+                    formDataObj.append(root, d);
                 }
             }
 
-            appendFormData(data, '', fData)
+            appendFormData(data, '', fData);
 
-            return fData
+            return fData;
         },
         objectToFormData(data) {
             const fData = new FormData();
 
-            function appendFormData(data, root, formDataObj) {
-                root = root || ''
-                if (data instanceof File) {
-                    formDataObj.append(root, data);
-                } else if (data instanceof Date) {
-                    formDataObj.append(root, moment(data).format('YYYY-MM-DD'));
-                } else if (Array.isArray(data)) {
-                    for (let i = 0; i < data.length; i++) {
-                        if (data[i]) {
-                            appendFormData(data[i], root + '[' + i + ']', formDataObj)
+            function appendFormData(d, root = '', formDataObj) {
+                if (d instanceof File) {
+                    formDataObj.append(root, d);
+                } else if (d instanceof Date) {
+                    formDataObj.append(root, moment(d).format('YYYY-MM-DD'));
+                } else if (Array.isArray(d)) {
+                    for (let i = 0; i < d.length; i += 1) {
+                        if (d[i]) {
+                            appendFormData(d[i], `${root}[${i}]`, formDataObj);
                         }
                     }
-                } else if (typeof data === 'object' && data) {
-                    for (const key in data) {
+                } else if (typeof d === 'object' && d) {
+                    for (const key in d) {
                         // eslint-disable-next-line
-                        if (data.hasOwnProperty(key)) {
+                        if (d.hasOwnProperty(key)) {
                             if (root === '') {
-                                appendFormData(data[key], key, formDataObj)
+                                appendFormData(d[key], key, formDataObj);
                             } else {
-                                appendFormData(data[key], root + '[' + key + ']', formDataObj)
+                                appendFormData(d[key], `${root}[${key}]`, formDataObj);
                             }
                         }
                     }
-                } else if (data !== null && typeof data !== 'undefined') {
-                    formDataObj.append(root, data)
+                } else if (d !== null && typeof d !== 'undefined') {
+                    formDataObj.append(root, d);
                 }
             }
 
-            appendFormData(data, '', fData)
+            appendFormData(data, '', fData);
 
-            return fData
+            return fData;
         },
         moveArrayElements(arr, index, toTheEnd) {
-            const getSplicedElem = arr.splice(index, 1)
+            const getSplicedElem = arr.splice(index, 1);
             if (toTheEnd) {
-                arr.push(getSplicedElem[0])
+                arr.push(getSplicedElem[0]);
             } else {
-                arr.unshift(getSplicedElem[0])
+                arr.unshift(getSplicedElem[0]);
             }
         },
         get(obj, path, defaultValue = undefined) {
-            const travel = regexp =>
-                String.prototype.split
-                    .call(path, regexp)
-                    .filter(Boolean)
-                    .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
+            const travel = (regexp) => String.prototype.split
+                .call(path, regexp)
+                .filter(Boolean)
+                .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
             const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
             return result === undefined || result === obj ? defaultValue : result;
         },
-        convertFileSize({bytes, convertTo = 'bytes', round = 4, withPreffix = false}) {
+        convertFileSize({
+            bytes,
+            convertTo = 'bytes',
+            round = 4,
+            withPreffix = false,
+        }) {
             if (bytes === 0) {
                 return 0;
             }
 
-            convertTo = convertTo.toLowerCase()
-
-            if (convertTo === 'bytes') {
+            if (convertTo.toLowerCase() === 'bytes') {
                 return bytes;
             }
 
-            round = round <= 0 ? 0 : round;
-            const convertTypes = {'kb': 1,'mb': 2,'gb': 3,'tb': 4,'pb': 5,'eb': 6,'zb': 7,'yb': 8};
-            const result = parseFloat((bytes / Math.pow(1024,convertTypes[convertTo])).toFixed(round))
+            const convertTypes = {
+                kb: 1,
+                mb: 2,
+                gb: 3,
+                tb: 4,
+                pb: 5,
+                eb: 6,
+                zb: 7,
+                yb: 8,
+            };
+            const result = parseFloat((bytes / Math.pow(1024, convertTypes[convertTo.toLowerCase()]))
+                .toFixed(round <= 0 ? 0 : round));
 
             if (withPreffix) {
                 return `${result} ${convertTo.toUpperCase()}`;
-            } else {
-                return result;   
             }
+            return result;
         },
         scrollTo(el, offset = 0) {
             if (!el) return;
             window.scrollTo({
                 top: window.scrollY + el.getBoundingClientRect().y - offset,
-                behavior: "smooth"
+                behavior: 'smooth',
             });
         },
         scrollToError() {
@@ -135,15 +145,15 @@ export default {
             this.scrollTo(el, 60);
         },
         setWindowHash(hash) {
-            if (history.pushState) {
-                window.history.pushState(null, null, '#' + hash);
+            if (window.history.pushState) {
+                window.history.pushState(null, null, `#${hash}`);
             } else {
-                window.location.hash = '#' + hash;
+                window.location.hash = `#${hash}`;
             }
         },
         getStrRand(length = 32, characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890') {
             let result = '';
-            for ( let i=0; i<length; i++ ) {
+            for (let i = 0; i < length; i += 1) {
                 result += characters.charAt(Math.floor(Math.random() * characters.length));
             }
             return result;
@@ -155,14 +165,22 @@ export default {
                 if (user === parseInt(user, 10)) {
                     // user is userID
                     // todo получение пользователя
+                    // this.fetchUserById(user)
+                    //     .then((response) => {
+                    //         console.log(response);
+                    //         return response.data.data;
+                    //     })
+                    //     .catch((e) => {
+                    //         console.log(e)
+                    //     });
                 }
                 if (typeof user === 'string' && user.length) {
                     // если user строка - парсим её
-                    user = user.split(' ');
-                    if (user.length > 1) {
-                        name = user[0].substring(0, 1) + user[1].substring(0, 1);
+                    const userName = user.split(' ');
+                    if (userName.length > 1) {
+                        name = userName[0].substring(0, 1) + userName[1].substring(0, 1);
                     } else {
-                        name = user[0].substring(0, 2);
+                        name = userName[0].substring(0, 2);
                     }
                 } else if (typeof user === 'object') {
                     // если user - объект
@@ -170,24 +188,25 @@ export default {
                 }
             }
             if (!name.length) {
-                // если не смогли получить пользователя - отдаём случайную строку ибо вообще не понятно что делать
-                // name = this.getStrRand(2, 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЮЯ');
+                // если не смогли получить пользователя - отдаём случайную строку
+                // ибо вообще не понятно что делать
+                name = this.getStrRand(2, 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЮЯ');
             }
-            let color = this.getAvatarBackground(name, 120);
+            const color = this.getAvatarBackground(name, 120);
             return {
-                name: name,
-                color: color,
+                name,
+                color,
             };
         },
         getAvatarBackground(str, brightness) {
-            function getChannel(code, brightness){
-                code = (code % 255) / 255;
-                let r = 255-brightness,
-                    n = 0|((code * r) + brightness),
-                    s = n.toString(16);
-                return s.length===1 ? '0'+s : s;
+            function getChannel(code) {
+                const c = (code % 255) / 255;
+                const r = 255 - brightness;
+                const n = ((c * r) + brightness) || 0;
+                const s = n.toString(16);
+                return s.length === 1 ? `0${s}` : s;
             }
-            return '#' + getChannel(str.charCodeAt(0)||120, brightness) + getChannel(str.charCodeAt(1)||120, brightness) + getChannel(120, brightness);
+            return `#${getChannel(str.charCodeAt(0) || 120)}${getChannel(str.charCodeAt(1) || 120)}${getChannel(120)}`;
         },
         nl2br(str) {
             return str.replace(/([^>])\n+/g, '$1<br/>');
@@ -201,8 +220,8 @@ export default {
                 frame.setAttribute('name', 'print');
                 frame.setAttribute('id', 'print');
                 document.body.appendChild(frame);
-                frame.onload = function(){
-                    setTimeout(function(){
+                frame.onload = function() {
+                    setTimeout(() => {
                         // todo печать страницы по url
                         // задержка нужна для того чтобы отработал vue.js
                         // решение так себе
@@ -214,6 +233,190 @@ export default {
                 };
             }
             frame.setAttribute('src', url);
-        }
-    }
-}
+        },
+        parseFilter(filter) {
+            const newFilter = {};
+            for (const keyC in filter) {
+                if (!Array.isArray(filter[keyC])) {
+                    newFilter[keyC] = filter[keyC];
+                } else {
+                    for (const key in filter[keyC]) {
+                        if (
+                            Array.isArray(filter[keyC][key]) ?
+                            filter[keyC][key].length :
+                            filter[keyC][key]
+                        ) {
+                            if (newFilter[keyC]) {
+                                newFilter[keyC][key] = filter[keyC][key];
+                            } else {
+                                // newFilter[keyC] = {};
+                                // newFilter[keyC][key] = filter[keyC][key];
+                                newFilter[keyC] = [];
+                                newFilter[keyC].push(filter[keyC][key]);
+                            }
+                        }
+                    }
+                }
+            }
+            // Форматирование дат
+            if (newFilter.publication_date_from) {
+                newFilter.publication_date_from = this.formatDateForFilter(
+                    newFilter.publication_date_from,
+                );
+            }
+            if (newFilter.publication_date_to) {
+                newFilter.publication_date_to = this.formatDateForFilter(
+                    newFilter.publication_date_to,
+                );
+            }
+            return newFilter;
+        },
+        tradingFormatsList() {
+            return [{
+                    id: 'trading_223',
+                    name: 'Торги по 223-ФЗ',
+                },
+                {
+                    id: 'commercial_trading',
+                    name: 'Коммерческие торги',
+                },
+            ];
+        },
+        getTradingFormat(format) {
+            return this.tradingFormatsList().find((item) => item.id === format).name || format;
+        },
+        tradingTypesList() {
+            return [{
+                    id: 'request_prices',
+                    name: 'Запрос цен',
+                },
+                {
+                    id: 'auction',
+                    name: 'Аукцион',
+                },
+                {
+                    id: 'request_offers',
+                    name: 'Запрос предложений',
+                },
+                {
+                    id: 'contest',
+                    name: 'Конкурс',
+                },
+                {
+                    id: 'purchase_from_supplier',
+                    name: 'Закупка у единственного поставщика',
+                },
+                {
+                    id: '',
+                    name: 'Коммерческая закупка',
+                },
+            ];
+        },
+        getTradingType(type) {
+            return this.tradingTypesList().find((item) => item.id === type).name || type;
+        },
+        currenciesList() {
+            return [{
+                    id: 'rub',
+                    name: 'Рубль',
+                    symbol: '₽',
+                },
+                {
+                    id: 'eur',
+                    name: 'Евро',
+                    symbol: '€',
+                },
+                {
+                    id: 'usd',
+                    name: 'Доллар',
+                    symbol: '$',
+                },
+            ];
+        },
+        getCurrency(currency = 'rub') {
+            return this.currenciesList().find((item) => item.id === currency);
+        },
+        convertPrice(value, digits = 0) {
+            const si = [
+                { value: 1, symbol: '' },
+                { value: 1E3, symbol: 'тыс.' },
+                { value: 1E6, symbol: 'млн' },
+                { value: 1E9, symbol: 'млрд.' },
+            ];
+            const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+            let i;
+            for (i = si.length - 1; i > 0; i -= 1) {
+                if (value >= si[i].value) {
+                    break;
+                }
+            }
+            return `${(value / si[i].value).toFixed(digits).replace(rx, '$1')}\u00A0${si[i].symbol}`;
+        },
+        formatPrice(value = 0) {
+            let decimalCount = 2;
+            const decimal = '.';
+            const thousands = ' ';
+            decimalCount = Math.abs(decimalCount);
+            decimalCount = Number.isNaN(decimalCount) ? 2 : decimalCount;
+            const negativeSign = value < 0 ? '-' : '';
+            const i = parseInt(Math.abs(Number(value) || 0).toFixed(decimalCount), 10).toString();
+            const j = (i.length > 3) ? i.length % 3 : 0;
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${thousands}`) + (decimalCount ? decimal + Math.abs(value - i).toFixed(decimalCount).slice(2) : '');
+        },
+        formatPriceWithCurrency(value = 0, currency = 'rub', convert = false) {
+            const c = this.getCurrency(currency).symbol || currency;
+            return (`${convert ? this.convertPrice(value) : this.formatPrice(value)} ${c}`).replace(/\s/g, '\u00A0');
+        },
+        getMeasure(measure = 'm') {
+            let result = '';
+            switch (measure) {
+                case 'unit':
+                case 'item':
+                    result = 'шт';
+                    break;
+                case 'km':
+                    result = 'км';
+                    break;
+                default:
+                    result = 'м';
+                    break;
+            }
+            return result;
+        },
+        getItemsCompanies(items) {
+            console.log(items);
+            if (!items || !items.length) return items;
+            const companiesINN = [];
+            items.forEach((item, index) => {
+                if (items[index].participation_application &&
+                    items[index].participation_application.procedure &&
+                    items[index].participation_application.procedure.inn) {
+                    this.$set(items[index].participation_application.procedure, 'company', null);
+                    if (companiesINN.indexOf(items[index].participation_application.procedure.inn) === -1) {
+                        companiesINN.push(items[index].participation_application.procedure.inn);
+                    }
+                }
+            });
+            if (companiesINN.length) {
+                this.fetchCompaniesByINN(companiesINN)
+                    .then((response) => {
+                        const companies = response.data.data.elements;
+                        companies.forEach((company) => {
+                            items.forEach((item) => {
+                                if (parseInt(company.inn, 10) === parseInt(item.participation_application.procedure.inn, 10)) {
+                                    item.participation_application.procedure.company = company;
+                                }
+                            });
+                        });
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            }
+            return items;
+        },
+        openPopupById(id) {
+            window.openPopupById(id);
+        },
+    },
+};

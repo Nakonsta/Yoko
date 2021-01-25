@@ -1,10 +1,13 @@
 <template>
   <div id="characters-mark">
     <ul class="characters">
-      <li v-for="(item, index) in this.root" :key="index">
+      <li
+        v-for="(item, index) in this.root"
+        :key="index"
+      >
         <dl>
           <dt><span>{{ item.name }}</span></dt>
-          <dd>{{ item.desc }}</dd>
+          <dd v-html="item.value" />
         </dl>
       </li>
     </ul>
@@ -13,22 +16,18 @@
 
 <script>
 export default {
-  name: "MarkCharacters",
-  data() {
-    return {}
-  },
+  name: 'MarkCharacters',
   props: {
     root: {
       default: () => [],
       type: Array,
-    }
-  }
-}
+    },
+  },
+  data() {
+    return {};
+  },
+};
 </script>
-
-
-
-
 
 <style lang="scss" scoped>
   @import "../../../../assets/sass/variables/variables";
@@ -87,6 +86,7 @@ export default {
       width: rem(265px);
       margin-left: rem(20px);
       background: $colorWhite;
+      font-weight: 500;
       color: $colorText;
       padding-left: rem(5px);
       position: relative;

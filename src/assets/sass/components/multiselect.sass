@@ -43,11 +43,30 @@
                 border: 1px solid $colorTurquoise
                 border-radius: 4px
 
+    .multiselect__option
+        padding: 12px 25px
+        &--highlight
+            background: #F4F4F4
+            color: $colorTextLight
+        &--selected
+            font-weight: 400
+            color: $colorTextLight
+
+    &__input,
+    &__single
+        margin-top: 0 !important
+        margin-bottom: 0 !important
+
 .multiselect--active .multiselect
     &__select
         transform: translateY(-50%) rotate(180deg)
 
 .form-select
+    .multiselect__placeholder
+        @media(max-width: 900px)
+            overflow: hidden
+            white-space: nowrap
+            text-overflow: ellipsis
     .multiselect__tags
         padding: rem(6px) rem(40px) rem(3px) rem(10px)
     .multiselect__placeholder
@@ -67,5 +86,8 @@
             color: $colorTextLight
             //background-color: transparent !important
     &--multiple
-        height: auto
+        //height: auto
         height: rem(48px)
+    &--stay
+        .multiselect__tags
+            height: rem(48px)

@@ -1,21 +1,25 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import store from '@/store'
-Vue.use(VueRouter)
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import store from '@/store';
 
-import AccreditationsDetail from '../pages/accreditations/details.vue'
-import Catalog from '../pages/catalog/items.vue'
-import CatalogNew from '../pages/catalog/new.vue'
-import CatalogList from '../pages/catalog/positions.vue'
-import CatalogDetail from '../pages/catalog/details.vue'
-import Procedures from '../pages/procedures/items.vue'
-import Procedure from '../pages/procedures/form/index.vue'
-import ApplicationDetails from '../pages/procedures/applications/details.vue'
-import ProcedureApplications from '../pages/procedures/applications/applications.vue'
-import Accreditations from '../pages/accreditations/accreditations.vue'
-import User from '../pages/user/user.vue'
-import page404 from '../pages/page404.vue'
+import AccreditationsDetail from '../pages/accreditations/details.vue';
+import Catalog from '../pages/catalog/items.vue';
+import CatalogNew from '../pages/catalog/new.vue';
+import CatalogList from '../pages/catalog/positions.vue';
+import CatalogDetail from '../pages/catalog/details.vue';
+import Procedures from '../pages/procedures/items.vue';
+import Procedure from '../pages/procedures/form/index.vue';
+import ApplicationDetails from '../pages/procedures/applications/details.vue';
+import ProcedureApplications from '../pages/procedures/applications/applications.vue';
+import Accreditations from '../pages/accreditations/accreditations.vue';
+import User from '../pages/user/user.vue';
+import Applications from '../pages/applications/items.vue';
+import Contracts from '../pages/contracts/items.vue';
+import page404 from '../pages/page404.vue';
 import CompanyInfo from '../pages/company/info.vue';
+import CompanyUsers from '../pages/company/users.vue';
+
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -39,6 +43,10 @@ const routes = [
     component: CompanyInfo,
   },
   {
+    path: '/personal/company/users',
+    component: CompanyUsers,
+  },
+  {
     path: '/personal/procedures',
     component: Procedures,
   },
@@ -60,8 +68,12 @@ const routes = [
     meta: { role: 'buyer' },
   },
   {
+    path: '/personal/contracts',
+    component: Contracts,
+  },
+  {
     path: '/personal/catalog',
-    component:  Catalog,
+    component: Catalog,
     meta: { role: 'contractor' },
   },
   {
@@ -79,34 +91,47 @@ const routes = [
   },
   {
     path: '/personal/user',
-    component:  User,
+    component: User,
   },
   {
     path: '/personal/catalog/positions',
-    component:  CatalogList,
+    component: CatalogList,
   },
   {
     path: '/personal/catalog/positions/:id',
     component: CatalogDetail,
   },
   {
+    path: '/personal/applications',
+    component: Applications,
+    meta: { role: 'contractor' },
+  },
+  {
+    path: '/personal/applications/drafts',
+    component: Applications,
+    meta: { role: 'contractor' },
+    props: { type: 'drafts' },
+  },
+  {
     path: '*',
     component: page404,
   },
-]
+];
 
 const router = new VueRouter({
   mode: 'history',
   routes,
-})
+});
 
 router.beforeEach((to, from, next) => {
-  const userRole = store.getters.userRole
-  const { role } = to.meta
-  const companyBuyer = store.getters.companyBuyer
-  const companyContractor = store.getters.companyContractor
+  store.commit('setCrumbs');
 
-  console.log(to)
+  const userRole = store.getters.userRole;
+  const { role } = to.meta;
+  const companyBuyer = store.getters.companyBuyer;
+  const companyContractor = store.getters.companyContractor;
+
+  // console.log(to)
 
   if (userRole !== 'guest') {
     if (role) {
@@ -114,33 +139,33 @@ router.beforeEach((to, from, next) => {
         switch (userRole) {
           case 'buyer':
             if (companyBuyer.length) {
-              next()
+              next();
             } else {
-              next('/personal/accreditations/new')
+              next('/personal/accreditations/new');
             }
-            break
+            break;
           case 'contractor':
             if (companyContractor.length) {
-              next()
+              next();
             } else {
-              next('/personal/accreditations/new')
+              next('/personal/accreditations/new');
             }
-            break
+            break;
         }
       } else {
-        next('/personal')
+        next('/personal');
       }
     } else {
-      next()
+      next();
     }
   } else {
-    openPopupById('#singin')
+    openPopupById('#singin');
     if (to.path === '/personal') {
-      next()
+      next();
     } else {
-      next('/personal')
+      next('/personal');
     }
   }
-})
+});
 
-export default router
+export default router;

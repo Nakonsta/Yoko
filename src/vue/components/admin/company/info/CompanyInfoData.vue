@@ -1,7 +1,7 @@
 <template>
-  <div 
+  <div
     v-if="isVisible"
-    class="company-info__data" 
+    class="company-info__data"
   >
     <div class="company-info__heading">
       <slot>
@@ -9,26 +9,27 @@
       </slot>
     </div>
     <slot name="pre" />
-    <div 
-      v-for="(row, index) in info" 
+    <div
+      v-for="(row, index) in info"
       :key="index"
       class="company-info__row"
     >
       <label class="company-info__label">
-        {{ row.title}}
+        {{ row.title }}
       </label>
       <input
-        v-if="isOnEdit" 
+        v-if="isOnEdit"
         :value="row.value"
         class="field company-info__input"
         type="text"
         @input="(value) => apply(row.key, value)"
       >
-      <div 
-        v-else 
+      <div
+        v-else
         class="company-info__text"
       >
-        {{ row.value}}
+        <span v-if="!row.value">Нет данных</span>
+        {{ row.value }}
       </div>
     </div>
   </div>
@@ -61,7 +62,7 @@ export default {
       this.$emit('change', { [key]: value });
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -83,8 +84,10 @@ export default {
 
   &__row {
     margin-top: 20px;
-    display: flex;
-    align-items: center;
+
+    @media screen and (min-width: 768px) {
+      display: flex;
+    }
   }
 
   &__label {
@@ -103,6 +106,11 @@ export default {
 
   &__text {
     flex: 1;
+    margin-top: 8px;
+
+    @media screen and (min-width: 768px) {
+      margin-top: 0;
+    }
   }
 }
 </style>

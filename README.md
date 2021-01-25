@@ -40,3 +40,32 @@ sudo vi /etc/hosts, далее I, далее вставить строчку и 
 Образец применения: `:rules="{ customPhone: true }"`
     
     <ValidationProvider name="Телефон" v-slot="{ errors, failed }" :rules="{ required: true, customPhone: true }" tag="label" class="field__container">
+
+## Вспомогательные функции в helpers/functions.js
+**tradingFormatsList()** - Список объектов с описанием всех возможных форматов процедур  
+**getTradingFormat(format)** - Получение объекта с описанием формата процедуры
+**tradingTypesList()** - Список объектов с описанием всех возможных типов процедур (если что - дополняйте)  
+**getTradingType(type)** - Получение объекта с описанием типа процедуры  
+**currenciesList()** - Список объектов с описанием всех возможных валют  
+**getCurrency(currency)** - Получение объекта с описанием валюты
+**convertPrice(value, digits)** - Форматирование числа в текстовое млрд., млн, тыс.  
+**formatPrice(value)** - Форматирование суммы  
+**formatPriceWithCurrency(value, currency, convert = false)** - Форматирование суммы + добавление символа валюты  
+**getMeasure(measure)** - получаем единицу измерения в нормальном виде
+**scrollTo(element, offset = 0)** - плавная прокрутка страницы к элементу. offset - смещение  
+**scrollToError()** - плавная прокрутка к первому элементку .error     
+**setWindowHash(hash)** - установка hash у страницы  
+**getAvatar()** - получаение объекта аватара пользователя: имя и фоновый цвет   
+
+## Хлебные крошки в ЛК
+Применять в хуке created
+```
+created() {
+    this.$store.commit('setCrumbs', [
+      {
+        name: 'Пользователи',
+        link: '/',
+      },
+    ]);
+}
+```
