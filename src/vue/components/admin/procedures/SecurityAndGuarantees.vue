@@ -75,13 +75,14 @@
           class="col col-md-4 col-sm-6 col-xs-12"
       >
         <text-input
+            :maxlength=16
             v-model="selectedData.security.collateral_amount"
             label="Сумма обеспечения"
             :disabled="isCreatedProcedure"
             placeholder="Введите сумму"
             :inputmask="$priceInputmask"
             :rules="{
-              required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security)
+              required: !(procedureIdData.procedureType === 'Commercial' && fieldsData.hideBlock.application_security),
             }"
         ></text-input>
       </div>
@@ -169,6 +170,7 @@
           class="col col-md-4 col-sm-6 col-xs-12"
       >
         <text-input
+            :maxlength=16
             v-model="selectedData.request.collateral_amount"
             label="Сумма обеспечения"
             :disabled="isCreatedProcedure"
