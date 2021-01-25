@@ -1,30 +1,33 @@
 <template>
-    <div class="application-tooltip">
-        <svg>
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hint"></use>
-        </svg>
-        <span>
-            <slot>{{ text }}</slot>
-        </span>
-    </div>
+  <div class="application-tooltip">
+    <svg>
+      <use
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xlink:href="\./img/sprite.svg#hint"
+      />
+    </svg>
+    <span>
+      <slot>{{ text }}</slot>
+    </span>
+  </div>
 </template>
 <script>
 export default {
-    name: 'application-tooltip',
-    props: {
-        text: {
-            type: String
-        },
-        disabled: {
-            type: Boolean
-        }
+  name: 'ApplicationTooltip',
+  props: {
+    text: {
+      type: String,
     },
-    computed: {
-        classes() {
-            return ['application-tooltip', { 'application-tooltip--disabled': this.disabled }]
-        }
-    }
-}
+    disabled: {
+      type: Boolean,
+    },
+  },
+  computed: {
+    classes() {
+      return ['application-tooltip', { 'application-tooltip--disabled': this.disabled }];
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '../../../../../assets/sass/variables/variables';
