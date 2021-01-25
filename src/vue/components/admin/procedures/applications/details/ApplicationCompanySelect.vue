@@ -52,7 +52,10 @@ export default {
     },
     methods: {
         handleSelect(value) {
-            window.openLoader()
+            if (!this.defaultINN) {
+                window.openLoader()
+            }
+
             this.fetchCompanyByInn(value.inn)
                 .then(({ data }) => {
                     this.$emit('on-select', data.data)

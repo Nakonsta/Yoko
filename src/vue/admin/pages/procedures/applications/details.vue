@@ -1,11 +1,17 @@
 <template>
-    <div class="application">
+    <div :class="['application', { 'application--with-tabs': tabs.length && !loading }]">
+        <application-tabs
+            v-if="tabs.length && !loading"
+            class="application__tabs"
+            :tabs="tabs"
+            @on-change="currentTabIndex = $event"
+        ></application-tabs>
         <div v-if="loading" class="preloader">
             <div class="preloader__preloader">
                 <div class="preloader__loader"></div>
             </div>
         </div>
-        <div v-else class="application__content">
+        <div v-if="currentTabIndex === 0 && !loading" class="application__content">
             <application-title title="Заявка на участие в торговой процедуре" margin="0 0 32px"></application-title>
             <application-purchase-block
                 :procedure="procedure"
@@ -66,7 +72,24 @@
                     Сохранить черновик
                 </button>
             </div>
+            <div v-if="viewType.chooseWinner" class="application__buttons">
+                <button class="application__button" @click="chooseWinnerApplication">
+                    Выбрать победителем
+                </button>
+                <button class="application__button application__button--second" @click="rejectApplication">
+                    Отклонить
+                </button>
+            </div>
         </div>
+
+        <application-request-price
+            v-if="currentTabIndex === 2"
+            :procedure="procedure"
+            :application="application"
+            :is-auction="viewType.isAuction"
+            :lots="lots"
+            :currency-type="currencyType"
+        ></application-request-price>
     </div>
 </template>
 <script>
@@ -81,6 +104,8 @@ import ApplicationSecurityBlock from '../../../../components/admin/procedures/ap
 import ApplicationLotsBlock from '../../../../components/admin/procedures/applications/blocks/ApplicationLotsBlock.vue'
 import ApplicationCompanyBlock from '../../../../components/admin/procedures/applications/blocks/ApplicationCompanyBlock.vue'
 import ApplicationAdditionalBlock from '../../../../components/admin/procedures/applications/blocks/ApplicationAdditionalBlock.vue'
+import ApplicationTabs from '../../../../components/admin/procedures/applications/ApplicationTabs.vue'
+import ApplicationRequestPrice from '../../../../components/admin/procedures/applications/ApplicationRequestPrice.vue'
 
 export default {
     components: {
@@ -91,7 +116,9 @@ export default {
         ApplicationPurchaseBlock,
         ApplicationTooltip,
         ApplicationCheckbox,
-        ApplicationTitle
+        ApplicationTitle,
+        ApplicationRequestPrice,
+        ApplicationTabs
     },
     mixins: [api, functions],
     filters: {
@@ -126,23 +153,49 @@ export default {
             errors: {
                 company: false,
                 lots: false
-            }
+            },
+            currentTabIndex: 0
         }
     },
     computed: {
-        id() {
+        procedureId() {
             return this.$route.params.id
         },
-        appId() {
+        applicationId() {
             return this.$route.params.appid
         },
         viewType() {
             return {
-                isCreate: this.appId === 'new',
+                isCreate: this.applicationId === 'new',
                 isAuction: this.procedure.tender_trading_type == 'auction',
                 isDraft: this.application.status === 'draft',
-                isView: this.application.status !== 'draft' && this.appId !== 'new'
+                isView: this.application.status !== 'draft' && this.applicationId !== 'new',
+                chooseWinner: this.application.status === 'submitted' && this.$store.state.auth.role === 'buyer',
+                winnerProcessing:
+                    this.application.status === 'winner_processing' && this.$store.state.auth.role === 'contractor'
             }
+        },
+        tabs() {
+            const tabs = []
+            if (this.viewType.winnerProcessing) {
+                if (this.procedure?.rebidding_info?.declared_rebidding_type === 'rebidding') {
+                    tabs.push({ index: 1, name: 'Переторжка' })
+                }
+
+                if (this.procedure?.rebidding_info?.declared_rebidding_type === 'price_request') {
+                    tabs.push({ index: 2, name: 'Запрос цен' })
+                }
+
+                if (this.viewType.isAuction) {
+                    tabs.push({ index: 3, name: 'Аукцион' })
+                }
+
+                if (tabs.length) {
+                    tabs.unshift({ index: 0, name: 'Заявка' })
+                }
+            }
+
+            return tabs
         },
         tradingType() {
             switch (this.procedure.tender_trading_type) {
@@ -207,7 +260,7 @@ export default {
     },
     methods: {
         getProcedureDetails() {
-            return this.fetchTenderItem(this.id).then(({ data }) => {
+            return this.fetchTenderItem(this.procedureId).then(({ data }) => {
                 this.procedure = Object.assign(this.procedure, data.data)
                 this.createLots()
 
@@ -217,7 +270,7 @@ export default {
             })
         },
         getApplication() {
-            return this.fetchProcedureApplication(this.appId).then(({ data }) => {
+            return this.fetchProcedureApplication(this.applicationId).then(({ data }) => {
                 this.procedure = Object.assign(this.procedure, data.data.procedure)
 
                 this.application = Object.assign(this.application, data.data)
@@ -250,10 +303,10 @@ export default {
             }
 
             window.openLoader()
-            this.sendProcedureApplicationDraft(this.id, data)
+            this.sendProcedureApplicationDraft(this.procedureId, data)
                 .then(({ data }) => {
                     window.notificationSuccess('Черновик успешно сохранен')
-                    this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
+                    this.$router.push(`/personal/procedures/${this.procedureId}/applications/${data.data.id}`)
                 })
                 .finally(() => window.closeLoader())
         },
@@ -266,22 +319,38 @@ export default {
 
             window.openLoader()
             if (this.viewType.isCreate) {
-                this.sendProcedureApplicationDraft(this.id, data).then(({ data }) => {
-                    this.sendProcedureApplication(data.data.id)
+                this.sendProcedureApplicationDraft(this.procedureId, data).then(({ data }) => {
+                    this.sendProcedureApplicationStatus(data.data.id, 'submitted')
                         .then(() => {
                             window.notificationSuccess('Заявка успешно отправлена')
-                            this.$router.push(`/personal/procedures/${this.id}/applications/${data.data.id}`)
+                            this.$router.push(`/personal/procedures/${this.procedureId}/applications/${data.data.id}`)
                         })
                         .finally(() => window.closeLoader())
                 })
             } else {
-                this.sendProcedureApplication(this.appId)
+                this.sendProcedureApplicationStatus(this.applicationId, 'submitted')
                     .then(() => {
                         window.notificationSuccess('Заявка успешно отправлена')
                         this.init()
                     })
                     .finally(() => window.closeLoader())
             }
+        },
+        rejectApplication() {
+            this.sendProcedureApplicationStatus(this.applicationId, 'rejected')
+                .then(() => {
+                    window.notificationSuccess('Заявка успешно отклонена')
+                    this.init()
+                })
+                .finally(() => window.closeLoader())
+        },
+        chooseWinnerApplication() {
+            this.sendProcedureApplicationStatus(this.applicationId, 'winner_chosen')
+                .then(() => {
+                    window.notificationSuccess('Победитель успешно выбран')
+                    this.init()
+                })
+                .finally(() => window.closeLoader())
         },
         createApplicationObject() {
             const applicationCopy = Object.assign({}, this.application)
@@ -468,35 +537,63 @@ export default {
 @import '../../../../../assets/sass/mixins/mq';
 
 .application {
-    padding: rem(40px);
     background-color: #fff;
-    border-radius: 6px;
     min-height: 300px;
-
-    *::-webkit-scrollbar {
-        background-color: transparent;
-        border-radius: 0;
-        height: 4px;
-        width: 4px;
-    }
-
-    *::-webkit-scrollbar-thumb {
-        background-color: $colorTurquoise;
-        width: 4px;
-        height: 4px;
-        border-radius: 4px;
-    }
-
-    @include mq($until: desktop) {
-        padding: rem(80px) rem(16px) rem(40px);
-    }
 
     * {
         outline: none;
+
+        &::-webkit-scrollbar {
+            background-color: transparent;
+            border-radius: 0;
+            height: 4px;
+            width: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $colorTurquoise;
+            width: 4px;
+            height: 4px;
+            border-radius: 4px;
+        }
+    }
+
+    &--with-tabs {
+        position: relative;
+
+        margin-top: rem(106px);
+
+        @include mq($until: desktop) {
+            margin-top: rem(212px);
+        }
+    }
+
+    &--with-tabs &__content {
+        padding-top: 0;
+
+        @include mq($until: desktop) {
+            padding: 0 rem(16px) rem(40px);
+        }
+    }
+
+    &__tabs {
+        position: absolute;
+        top: -72px;
+        left: 0;
+
+        @include mq($until: desktop) {
+            top: -87px;
+        }
     }
 
     &__content {
         width: 100%;
+        padding: rem(40px);
+        border-radius: 6px;
+
+        @include mq($until: desktop) {
+            padding: rem(80px) rem(16px) rem(40px);
+        }
     }
 
     &__section {

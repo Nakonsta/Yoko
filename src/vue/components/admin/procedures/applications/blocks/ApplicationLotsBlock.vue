@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="application__section-row">
+        <div v-if="!requestPrice" class="application__section-row">
             <div class="application__section-title">
                 Дополнительная информация:
             </div>
@@ -48,7 +48,7 @@
                 :disabled="disabled"
             ></application-file-uploader>
         </div>
-        <div class="divider"></div>
+        <div v-if="!requestPrice" class="divider"></div>
     </div>
 </template>
 <script>
@@ -83,6 +83,9 @@ export default {
             required: true
         },
         isAuction: {
+            type: Boolean
+        },
+        requestPrice: {
             type: Boolean
         },
         disabled: {

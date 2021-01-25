@@ -283,11 +283,16 @@ export default {
                 data
             )
         },
-        sendProcedureApplication(id) {
+        sendProcedureApplicationStatus(id, status) {
             return axios.post(
                 `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}/status`,
-                { status: 'submitted' }
+                { status }
             )
+        },
+        sendProcedureApplicationNewPrice(id, data) {
+            return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}/products`, {
+                data
+            })
         },
         fetchProcedureApplication(id) {
             return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}`)

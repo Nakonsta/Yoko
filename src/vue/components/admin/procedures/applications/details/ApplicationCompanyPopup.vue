@@ -1,7 +1,7 @@
 <template>
     <div id="application-company-info" class="popup popup--alt">
         <div class="popup__body">
-            <div class="company-info">
+            <div class="company-info popup__content">
                 <div class="popup__close" @click="closeModal">
                     <svg class="sprite-close">
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"></use>
@@ -92,11 +92,17 @@ export default {
 @import '@/../assets/sass/mixins/mq';
 
 .company-info {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
     position: relative;
 
     width: 100%;
-    max-width: 661px;
+    max-width: 1322px;
     margin: rem(20px);
+    padding: 0;
     background-color: #fff;
     border-radius: 6px;
 
@@ -126,6 +132,7 @@ export default {
         justify-content: flex-start;
         align-items: flex-start;
 
+        width: 100%;
         padding: rem(38px) rem(48px) rem(48px);
     }
 
