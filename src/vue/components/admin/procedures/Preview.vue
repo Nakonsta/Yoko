@@ -138,9 +138,13 @@
         <h3>Сроки конкурса</h3>
         <div class="preview-block">
           <previews
-            :label="calculatedData.procedureType === 'Auction'
-              ? 'Дата начала процедуры'
-              : 'Дата окончания подачи заявок'"
+            :label="
+              calculatedData.procedureType === 'Auction'
+                ? 'Дата начала процедуры'
+                : calculatedData.procedureType === 'Contest'
+                  ? 'Дата начала подачи заявки на конкурс'
+                  : 'Дата окончания подачи заявок'
+            "
             :value="convertedData.application_end_date"
           />
           <previews
