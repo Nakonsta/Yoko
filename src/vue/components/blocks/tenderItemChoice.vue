@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import formatDate from '@/helpers/formatDate.js'
 import functions from '@/helpers/functions.js'
 export default {
     name: 'TenderItemChoice',
@@ -105,7 +106,7 @@ export default {
         },
     },
 
-    mixins: [functions],
+    mixins: [formatDate, functions],
 
     methods: {
         getTenderStatusName(item) {
