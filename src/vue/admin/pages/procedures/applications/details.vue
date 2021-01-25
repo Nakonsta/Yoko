@@ -356,6 +356,9 @@ export default {
             `/personal/procedures/${this.procedureId}/applications/${data.data.id}`,
           );
         })
+        .catch(() => {
+          window.notificationError('Ошибка сервера');
+        })
         .finally(() => window.closeLoader());
     },
     createApplication() {
@@ -376,6 +379,9 @@ export default {
                   `/personal/procedures/${this.procedureId}/applications/${data.data.id}`,
                 );
               })
+              .catch(() => {
+                window.notificationError('Ошибка сервера');
+              })
               .finally(() => window.closeLoader());
           },
         );
@@ -384,6 +390,9 @@ export default {
           .then(() => {
             window.notificationSuccess('Заявка успешно отправлена');
             this.init();
+          })
+          .catch(() => {
+            window.notificationError('Ошибка сервера');
           })
           .finally(() => window.closeLoader());
       }
@@ -394,6 +403,9 @@ export default {
           window.notificationSuccess('Заявка успешно отклонена');
           this.init();
         })
+        .catch(() => {
+          window.notificationError('Ошибка сервера');
+        })
         .finally(() => window.closeLoader());
     },
     chooseWinnerApplication() {
@@ -401,6 +413,9 @@ export default {
         .then(() => {
           window.notificationSuccess('Победитель успешно выбран');
           this.init();
+        })
+        .catch(() => {
+          window.notificationError('Ошибка сервера');
         })
         .finally(() => window.closeLoader());
     },
