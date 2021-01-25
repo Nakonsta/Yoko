@@ -1,78 +1,83 @@
 <template>
-    <div :class="classes">
-        <multiselect
-            v-model="value"
-            label="name"
-            selectedLabel=""
-            selectLabel=""
-            deselectLabel=""
-            placeholder="Выбрать компанию"
-            :options="companies"
-            :searchable="false"
-            :allow-empty="false"
-            :show-labels="false"
-            :disabled="disabled"
-            @select="handleSelect"
-        >
-            <template v-if="companies.length === 0" slot="noOptions">
-                Компаний нет
-            </template>
-        </multiselect>
-    </div>
+  <div :class="classes">
+    <multiselect
+      v-model="value"
+      label="name"
+      selected-label=""
+      select-label=""
+      deselect-label=""
+      placeholder="Выбрать компанию"
+      :options="companies"
+      :searchable="false"
+      :allow-empty="false"
+      :show-labels="false"
+      :disabled="disabled"
+      @select="handleSelect"
+    >
+      <template
+        v-if="companies.length === 0"
+        slot="noOptions"
+      >
+        Компаний нет
+      </template>
+    </multiselect>
+  </div>
 </template>
 <script>
-import api from '@/helpers/api'
+import api from '@/helpers/api';
+
 export default {
-    name: 'application-company-select',
-    mixins: [api],
-    props: {
-        defaultINN: {
-            type: [Number, String]
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        },
-        hasError: {
-            type: Boolean
-        }
+  name: 'ApplicationCompanySelect',
+  mixins: [api],
+  props: {
+    // eslint-disable-next-line vue/require-default-prop
+    defaultINN: {
+      type: [Number, String],
     },
-    data() {
-        return {
-            value: null
-        }
+    disabled: {
+      type: Boolean,
+      default: false,
     },
-    computed: {
-        classes() {
-            return ['application-company-select', { 'application-company-select--error': this.hasError }]
-        },
-        companies() {
-            return this.$store.getters.companyContractor
-        }
+    hasError: {
+      type: Boolean,
     },
-    methods: {
-        handleSelect(value) {
-            if (!this.defaultINN) {
-                window.openLoader()
-            }
-
-            this.fetchCompanyByInn(value.inn)
-                .then(({ data }) => {
-                    this.$emit('on-select', data.data)
-
-                    if (!this.value) {
-                        this.value = data.data
-                    }
-                })
-                .finally(() => window.closeLoader())
-        }
+  },
+  data() {
+    return {
+      value: null,
+    };
+  },
+  computed: {
+    classes() {
+      return ['application-company-select', { 'application-company-select--error': this.hasError }];
     },
-    created() {
-        if (this.defaultINN) {
-            this.handleSelect({ inn: this.defaultINN })
-        }
+    companies() {
+      return this.$store.getters.companyContractor;
+    },
+  },
+  created() {
+    if (this.defaultINN) {
+      this.handleSelect({ inn: this.defaultINN });
     }
-}
+  },
+  methods: {
+    handleSelect(value) {
+      if (!this.defaultINN) {
+        window.openLoader();
+      }
+
+      this.fetchCompanyByInn(value.inn)
+        .then(({ data }) => {
+          this.$emit('on-select', data.data);
+
+          if (!this.value) {
+            this.value = data.data;
+          }
+        })
+        .finally(() => window.closeLoader());
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

@@ -65,13 +65,13 @@
 <script>
 import ApplicationTitle from '../ApplicationTitle.vue';
 import ApplicationFileUploader from '../details/ApplicationFileUploader.vue';
-import ApplicationCheckbox from '../ApplicationCheckbox.vue';
+// import ApplicationCheckbox from '../ApplicationCheckbox.vue';
 import ApplicationLots from '../details/ApplicationLots.vue';
 
 export default {
   name: 'ApplicationLotsBlock',
   components: {
-    ApplicationCheckbox,
+    // ApplicationCheckbox,
     ApplicationFileUploader,
     ApplicationTitle,
     ApplicationLots,

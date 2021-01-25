@@ -1,135 +1,153 @@
 <template>
-    <div :class="classes">
-        <div v-if="!isUploaded" class="application-file-uploader__description" @click="selectFile">
-            <div class="application-file-uploader__icon">
-                <svg>
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#paperclip"></use>
-                </svg>
-            </div>
-            <div class="application-file-uploader__link">
-                {{ label }}
-            </div>
-        </div>
-        <div v-else class="application-file-uploader__file-info">
-            <div class="application-file-uploader__file">
-                <a class="application-file-uploader__link" :href="localFile.url" target="_blank">{{
-                    localFile.name
-                }}</a>
-                <div
-                    v-if="!disabled && (localFile.name || fileName)"
-                    class="application-file-uploader__remove"
-                    @click="removeFile"
-                >
-                    <svg>
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"></use>
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <input
-            style="display: none"
-            type="file"
-            ref="input"
-            accept="image/.jpg,.png,.jpeg,.pdf,.doc,.docx,.xls,.xlsx"
-            @change="uploadFile"
-        />
+  <div :class="classes">
+    <div
+      v-if="!isUploaded"
+      class="application-file-uploader__description"
+      @click="selectFile"
+    >
+      <div class="application-file-uploader__icon">
+        <svg>
+          <use
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:href="/img/sprite.svg#paperclip"
+          />
+        </svg>
+      </div>
+      <div class="application-file-uploader__link">
+        {{ label }}
+      </div>
     </div>
+    <div
+      v-else
+      class="application-file-uploader__file-info"
+    >
+      <div class="application-file-uploader__file">
+        <a
+          class="application-file-uploader__link"
+          :href="localFile.url"
+          target="_blank"
+        >{{
+          localFile.name
+        }}</a>
+        <div
+          v-if="!disabled && (localFile.name || fileName)"
+          class="application-file-uploader__remove"
+          @click="removeFile"
+        >
+          <svg>
+            <use
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:href="/img/sprite.svg#close"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <input
+      ref="input"
+      style="display: none"
+      type="file"
+      accept="image/.jpg,.png,.jpeg,.pdf,.doc,.docx,.xls,.xlsx"
+      @change="uploadFile"
+    >
+  </div>
 </template>
 <script>
-import functions from '@/helpers/functions'
+import functions from '@/helpers/functions';
+
 export default {
-    name: 'application-file-uploader',
-    props: {
-        label: {
-            type: String,
-            required: true
-        },
-        disabled: {
-            type: Boolean
-        },
-        fileName: {
-            type: String
-        },
-        fileUrl: {
-            type: String
-        },
-        hasError: {
-            type: Boolean
-        }
+  name: 'ApplicationFileUploader',
+  mixins: [functions],
+  props: {
+    label: {
+      type: String,
+      required: true,
     },
-    mixins: [functions],
-    data() {
-        return {
-            localFile: {
-                name: this.fileName ?? '',
-                url: this.fileUrl ?? '',
-                file: null
-            }
-        }
+    disabled: {
+      type: Boolean,
     },
-    computed: {
-        classes() {
-            return [
-                'application-file-uploader',
-                { 'application-file-uploader-error': this.hasError },
-                { 'application-file-uploader-disabled': this.disabled }
-            ]
-        },
-        isUploaded() {
-            return this.localFile.name && this.localFile.url
-        }
+    fileName: {
+      type: String,
     },
-    methods: {
-        selectFile() {
-            if (!this.disabled) {
-                this.$refs.input.click()
-            }
-        },
-        uploadFile() {
-            const types = [
-                'image/png',
-                'image/jpg',
-                'image/jpeg',
-                'application/pdf',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.ms-excel'
-            ]
-            const file = this.$refs.input.files[0]
+    fileUrl: {
+      type: String,
+    },
+    hasError: {
+      type: Boolean,
+    },
+  },
+  data() {
+    return {
+      localFile: {
+        name: this.fileName ?? '',
+        url: this.fileUrl ?? '',
+        file: null,
+      },
+    };
+  },
+  computed: {
+    classes() {
+      return [
+        'application-file-uploader',
+        { 'application-file-uploader-error': this.hasError },
+        { 'application-file-uploader-disabled': this.disabled },
+      ];
+    },
+    isUploaded() {
+      return this.localFile.name && this.localFile.url;
+    },
+  },
+  methods: {
+    selectFile() {
+      if (!this.disabled) {
+        this.$refs.input.click();
+      }
+    },
+    uploadFile() {
+      const types = [
+        'image/png',
+        'image/jpg',
+        'image/jpeg',
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-excel',
+      ];
+      const file = this.$refs.input.files[0];
 
-            if (file) {
-                if (this.convertFileSize({ bytes: file.size, convertTo: 'MB' }) >= 20) {
-                    window.notificationError(
-                        'Вы пытаетесь загрузить файл превыщающий максимальный вес. Максимальный допустимый вес файла 20MB'
-                    )
-                    return
-                }
-
-                if (types.includes(file.type)) {
-                    this.localFile.name = file.name
-                    this.localFile.url = URL.createObjectURL(file)
-                    this.localFile.file = file
-                    this.$emit('uploaded', file)
-                } else {
-                    window.notificationError(
-                        'Вы пытаетесь загрузить файл неверного формата. Разрешенные форматы .pdf, .jpeg, .png, .doc, .docx, .xls, .xlsx'
-                    )
-                }
-            }
-
-            this.$refs.input.files = null
-            this.$refs.input.value = ''
-        },
-        removeFile() {
-            this.$emit('remove', this.localFile.file)
-
-            this.localFile = { name: '', url: '', file: null }
-            this.$refs.input.files = null
-            this.$refs.input.value = ''
+      if (file) {
+        if (this.convertFileSize({ bytes: file.size, convertTo: 'MB' }) >= 20) {
+          window.notificationError(
+            'Вы пытаетесь загрузить файл превыщающий максимальный вес. Максимальный допустимый вес файла 20MB',
+          );
+          return;
         }
-    }
-}
+
+        if (types.includes(file.type)) {
+          this.localFile.name = file.name;
+          this.localFile.url = URL.createObjectURL(file);
+          this.localFile.file = file;
+          this.$emit('uploaded', file);
+        } else {
+          window.notificationError(
+            'Вы пытаетесь загрузить файл неверного формата. Разрешенные форматы .pdf, .jpeg, .png, .doc, .docx, .xls, .xlsx',
+          );
+        }
+      }
+
+      this.$refs.input.files = null;
+      this.$refs.input.value = '';
+    },
+    removeFile() {
+      this.$emit('remove', this.localFile.file);
+
+      this.localFile = { name: '', url: '', file: null };
+      this.$refs.input.files = null;
+      this.$refs.input.value = '';
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

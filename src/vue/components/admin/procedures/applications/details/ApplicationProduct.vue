@@ -1,154 +1,156 @@
 <template>
-    <div class="application-product">
-        <div class="application-product__field" v-for="header in headers" :key="header.value">
-            <div v-if="header.value !== 'country'" class="application-product__text">
-                <div v-if="isPriceEdit && header.value === 'price_for_one'" class="application-product__input">
-                    <input
-                        ref="input"
-                        type="number"
-                        :value="product[header.value].replace(' ', '')"
-                        @blur="changePrice"
-                        min="1"
-                    />
-                </div>
-                <span
-                    v-else
-                    :class="{ 'price-span': header.value === 'price_for_one' }"
-                    @click="header.value === 'price_for_one' ? startEdit() : null"
-                >
-                    {{ showField(header.value) }}
-                </span>
-                <div
-                    v-if="!disabled && header.value === 'name' && canReplace"
-                    class="application-product__replace"
-                    @click="$emit('on-select-replace')"
-                >
-                    <svg>
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#replace"></use>
-                    </svg>
-                </div>
-                <!-- <application-tooltip
-                    v-if="header.value === 'price_for_one' || header.value === 'amount_per_position'"
-                ></application-tooltip> -->
-            </div>
-            <application-country-select
-                v-else
-                :disabled="disabled"
-                :countries="countries"
-                :defaultValue="product.country"
-                @on-select="$emit('on-country-change', $event)"
-                :key="product.country.name"
-            ></application-country-select>
+  <div class="application-product">
+    <div
+      v-for="header in headers"
+      :key="header.value"
+      class="application-product__field"
+    >
+      <div
+        v-if="header.value !== 'country'"
+        class="application-product__text"
+      >
+        <div
+          v-if="isPriceEdit && header.value === 'price_for_one'"
+          class="application-product__input"
+        >
+          <input
+            ref="input"
+            type="number"
+            :value="product[header.value].replace(' ', '')"
+            min="1"
+            @blur="changePrice"
+          >
         </div>
+        <span
+          v-else
+          :class="{ 'price-span': header.value === 'price_for_one' }"
+          @click="header.value === 'price_for_one' ? startEdit() : null"
+        >
+          {{ showField(header.value) }}
+        </span>
+        <div
+          v-if="!disabled && header.value === 'name' && canReplace"
+          class="application-product__replace"
+          @click="$emit('on-select-replace')"
+        >
+          <svg>
+            <use
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:href="\./img/sprite.svg#replace"
+            />
+          </svg>
+        </div>
+        <!-- <application-tooltip
+            v-if="header.value === 'price_for_one' || header.value === 'amount_per_position'">
+        </application-tooltip> -->
+      </div>
+      <application-country-select
+        v-else
+        :key="product.country.name"
+        :disabled="disabled"
+        :countries="countries"
+        :default-value="product.country"
+        @on-select="$emit('on-country-change', $event)"
+      />
     </div>
+  </div>
 </template>
 <script>
-import ApplicationCountrySelect from './ApplicationCountrySelect.vue'
-import ApplicationTooltip from '../ApplicationTooltip'
+import ApplicationCountrySelect from './ApplicationCountrySelect.vue';
+// import ApplicationTooltip from '../ApplicationTooltip';
 
 export default {
-    name: 'application-product',
-    components: {
-        ApplicationTooltip,
-        ApplicationCountrySelect
+  name: 'ApplicationProduct',
+  components: {
+    // ApplicationTooltip,
+    ApplicationCountrySelect,
+  },
+  props: {
+    headers: {
+      type: Array,
+      required: true,
     },
-    props: {
-        headers: {
-            type: Array,
-            required: true
-        },
-        countries: {
-            type: Array,
-            required: true
-        },
-        product: {
-            type: Object,
-            required: true
-        },
-        canReplace: {
-            type: Boolean
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        }
+    countries: {
+      type: Array,
+      required: true,
     },
-    computed: {
-        showField() {
-            return value => {
-                switch (value) {
-                    case 'measure':
-                        return this.measure
-                        break
-                    case 'currency':
-                        return this.currencyType.text
-                        break
-                    case 'vat':
-                        return `${this.product[value]}%`
-                        break
-                    case 'price_for_one':
-                        return `${this.numberWithSpaces(this.product[value].replace('.00', ''))} ${
-                            this.currencyType.symbol
-                        }`
-                        break
-                    case 'amount_per_position':
-                        return `${this.numberWithSpaces(this.product[value].replace('.00', ''))} ${
-                            this.currencyType.symbol
-                        }`
-                        break
-                    default:
-                        return this.product[value]
-                        break
-                }
-            }
-        },
-        currencyType() {
-            switch (this.product.currency) {
-                case 'rub':
-                    return { text: 'Рубль', symbol: '₽' }
-                    break
-                case 'eur':
-                    return { text: 'Евро', symbol: '€' }
-                    break
-                case 'usd':
-                    return { text: 'Доллар', symbol: '$' }
-                    break
-                default:
-                    return { text: 'Рубль', symbol: '₽' }
-                    break
-            }
-        },
-        measure() {
-            if (this.product.measure === 'km') {
-                return 'км'
-            } else if (this.product.measure === 'm') {
-                return 'м'
-            } else {
-                return this.product.measure
-            }
-        }
+    product: {
+      type: Object,
+      required: true,
     },
-    data() {
-        return {
-            isPriceEdit: false
-        }
+    canReplace: {
+      type: Boolean,
     },
-    methods: {
-        numberWithSpaces(n) {
-            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-        },
-        startEdit() {
-            this.isPriceEdit = true
-            setTimeout(() => {
-                this.$refs.input[0].focus()
-            }, 1)
-        },
-        changePrice(event) {
-            this.isPriceEdit = false
-            this.$emit('on-price-change', event.target.value)
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      isPriceEdit: false,
+    };
+  },
+  computed: {
+    showField() {
+      return (value) => {
+        switch (value) {
+          case 'measure':
+            return this.measure;
+          case 'currency':
+            return this.currencyType.text;
+          case 'vat':
+            return `${this.product[value]}%`;
+          case 'price_for_one':
+            return `${this.numberWithSpaces(this.product[value].replace('.00', ''))} ${
+              this.currencyType.symbol
+            }`;
+          case 'amount_per_position':
+            return `${this.numberWithSpaces(this.product[value].replace('.00', ''))} ${
+              this.currencyType.symbol
+            }`;
+          default:
+            return this.product[value];
         }
-    }
-}
+      };
+    },
+    currencyType() {
+      switch (this.product.currency) {
+        case 'rub':
+          return { text: 'Рубль', symbol: '₽' };
+        case 'eur':
+          return { text: 'Евро', symbol: '€' };
+        case 'usd':
+          return { text: 'Доллар', symbol: '$' };
+        default:
+          return { text: 'Рубль', symbol: '₽' };
+      }
+    },
+    measure() {
+      if (this.product.measure === 'km') {
+        return 'км';
+      } if (this.product.measure === 'm') {
+        return 'м';
+      }
+      return this.product.measure;
+    },
+  },
+  methods: {
+    numberWithSpaces(n) {
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    },
+    startEdit() {
+      this.isPriceEdit = true;
+      setTimeout(() => {
+        this.$refs.input[0].focus();
+      }, 1);
+    },
+    changePrice(event) {
+      this.isPriceEdit = false;
+      this.$emit('on-price-change', event.target.value);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

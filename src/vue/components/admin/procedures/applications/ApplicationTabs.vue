@@ -1,43 +1,46 @@
 <template>
-    <div class="application-tabs">
-        <ul class="application-tabs__list">
-            <li
-                :class="['application-tabs__tab', { 'application-tabs__tab--active': currentTabIndex === tab.index }]"
-                v-for="tab in tabs"
-                :key="tab.index"
-                @click="changeTab(tab.index)"
-            >
-                {{ tab.name }}
-            </li>
-        </ul>
-    </div>
+  <div class="application-tabs">
+    <ul class="application-tabs__list">
+      <li
+        v-for="tab in tabs"
+        :key="tab.index"
+        :class="[
+          'application-tabs__tab',
+          { 'application-tabs__tab--active': currentTabIndex === tab.index }
+          ]"
+        @click="changeTab(tab.index)"
+      >
+        {{ tab.name }}
+      </li>
+    </ul>
+  </div>
 </template>
 <script>
 export default {
-    name: 'application-tabs',
-    props: {
-        tabs: {
-            type: Array,
-            required: true
-        }
+  name: 'ApplicationTabs',
+  props: {
+    tabs: {
+      type: Array,
+      required: true,
     },
-    data() {
-        return {
-            currentTabIndex: 0
-        }
-    },
-    methods: {
-        changeTab(index) {
-            this.currentTabIndex = index
-            this.$emit('on-change', this.currentTabIndex)
-        }
-    },
-    created() {
-        if (this.tabs.length) {
-            this.currentTabIndex = this.tabs[0].index
-        }
+  },
+  data() {
+    return {
+      currentTabIndex: 0,
+    };
+  },
+  created() {
+    if (this.tabs.length) {
+      this.currentTabIndex = this.tabs[0].index;
     }
-}
+  },
+  methods: {
+    changeTab(index) {
+      this.currentTabIndex = index;
+      this.$emit('on-change', this.currentTabIndex);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

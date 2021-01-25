@@ -1,89 +1,124 @@
 <template>
-    <div id="application-company-info" class="popup popup--alt">
-        <div class="popup__body">
-            <div class="company-info popup__content">
-                <div class="popup__close" @click="closeModal">
-                    <svg class="sprite-close">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"></use>
-                    </svg>
-                </div>
-                <div class="company-info__content">
-                    <application-title title="Сведения о компании" margin="0 0 32px 0"></application-title>
-                    <div class="divider"></div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">
-                            Название:
-                        </div>
-                        <div class="company-info__content-text">{{ company.shortName }}</div>
-                    </div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">
-                            Полное название:
-                        </div>
-                        <div class="company-info__content-text">{{ company.name }}</div>
-                    </div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">ИНН:</div>
-                        <div class="company-info__content-text">{{ company.inn }}</div>
-                    </div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">ОГРН:</div>
-                        <div class="company-info__content-text">{{ company.ogrn }}</div>
-                    </div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">
-                            Юридический адрес:
-                        </div>
-                        <div class="company-info__content-text">{{ company.legalAddress }}</div>
-                    </div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">
-                            Фактический адрес:
-                        </div>
-                        <div class="company-info__content-text">{{ company.address }}</div>
-                    </div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">
-                            Контактное лицо:
-                        </div>
-                        <div class="company-info__content-text">{{ company.directorFio }}</div>
-                    </div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">
-                            Почта:
-                        </div>
-                        <div class="company-info__content-text">{{ company.email }}</div>
-                    </div>
-                    <div class="company-info__content-row">
-                        <div class="company-info__content-title">
-                            Телефон:
-                        </div>
-                        <div class="company-info__content-text">{{ company.phone }}</div>
-                    </div>
-                </div>
-            </div>
+  <div
+    id="application-company-info"
+    class="popup popup--alt"
+  >
+    <div class="popup__body">
+      <div class="company-info popup__content">
+        <div
+          class="popup__close"
+          @click="closeModal"
+        >
+          <svg class="sprite-close">
+            <use
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:href="/img/sprite.svg#close"
+            />
+          </svg>
         </div>
+        <div class="company-info__content">
+          <application-title
+            title="Сведения о компании"
+            margin="0 0 32px 0"
+          />
+          <div class="divider" />
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              Название:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.shortName }}
+            </div>
+          </div>
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              Полное название:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.name }}
+            </div>
+          </div>
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              ИНН:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.inn }}
+            </div>
+          </div>
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              ОГРН:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.ogrn }}
+            </div>
+          </div>
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              Юридический адрес:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.legalAddress }}
+            </div>
+          </div>
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              Фактический адрес:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.address }}
+            </div>
+          </div>
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              Контактное лицо:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.directorFio }}
+            </div>
+          </div>
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              Почта:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.email }}
+            </div>
+          </div>
+          <div class="company-info__content-row">
+            <div class="company-info__content-title">
+              Телефон:
+            </div>
+            <div class="company-info__content-text">
+              {{ company.phone }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 <script>
-import ApplicationTitle from '../ApplicationTitle'
+import ApplicationTitle from '../ApplicationTitle';
+
 export default {
-    name: 'application-company-popup',
-    components: {
-        ApplicationTitle
+  name: 'ApplicationCompanyPopup',
+  components: {
+    ApplicationTitle,
+  },
+  props: {
+    company: {
+      type: Object,
+      required: true,
     },
-    props: {
-        company: {
-            type: Object,
-            required: true
-        }
+  },
+  methods: {
+    closeModal() {
+      window.closePopupById('application-company-info');
     },
-    methods: {
-        closeModal() {
-            window.closePopupById('application-company-info')
-        }
-    }
-}
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

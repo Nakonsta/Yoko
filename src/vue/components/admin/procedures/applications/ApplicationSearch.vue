@@ -1,46 +1,49 @@
 <template>
-    <div class="application-search">
-        <svg @click="showInput">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#search"></use>
-        </svg>
+  <div class="application-search">
+    <svg @click="showInput">
+      <use
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xlink:href="/img/sprite.svg#search"
+      />
+    </svg>
 
-        <input
-            type="text"
-            ref="input"
-            placeholder="Поиск"
-            :value="search"
-            @input="handleSearch($event.target.value)"
-            @blur="hideInput"
-            :class="['application-search__input', { 'application-search__input--show': show }]"
-        />
-    </div>
+    <input
+      ref="input"
+      type="text"
+      placeholder="Поиск"
+      :value="search"
+      :class="['application-search__input', { 'application-search__input--show': show }]"
+      @input="handleSearch($event.target.value)"
+      @blur="hideInput"
+    >
+  </div>
 </template>
 <script>
 export default {
-    name: 'application-search',
-    data() {
-        return {
-            search: '',
-            show: false
-        }
-    },
-    methods: {
-        handleSearch(value) {
-            this.search = value
+  name: 'ApplicationSearch',
+  data() {
+    return {
+      search: '',
+      show: false,
+    };
+  },
+  methods: {
+    handleSearch(value) {
+      this.search = value;
 
-            this.$emit('on-search', this.search)
-        },
-        showInput() {
-            this.show = true
-            this.$refs.input.focus()
-        },
-        hideInput() {
-            if (!this.search) {
-                this.show = false
-            }
-        }
-    }
-}
+      this.$emit('on-search', this.search);
+    },
+    showInput() {
+      this.show = true;
+      this.$refs.input.focus();
+    },
+    hideInput() {
+      if (!this.search) {
+        this.show = false;
+      }
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';
@@ -51,7 +54,7 @@ export default {
 .application-search {
     flex: 1;
     position: relative;
-	min-width: 80px;
+    min-width: 80px;
 
     @media screen and (max-width: 701px) {
         width: 100%;

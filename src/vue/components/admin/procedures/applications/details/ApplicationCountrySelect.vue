@@ -1,78 +1,81 @@
 <template>
-    <div :class="classes">
-        <multiselect
-            v-model="value"
-            label="name"
-            selectedLabel=""
-            selectLabel=""
-            deselectLabel=""
-            placeholder="Выбрать страну"
-            :options="countries"
-            :allow-empty="false"
-            :show-labels="false"
-            :disabled="disabled"
-            open-direction="bottom"
-            :option-height="250"
-            @select="handleSelect"
-        >
-            <template v-if="countries.length === 0" slot="noOptions">
-                Странн нет
-            </template>
-        </multiselect>
-    </div>
+  <div :class="classes">
+    <multiselect
+      v-model="value"
+      label="name"
+      selected-label=""
+      select-label=""
+      deselect-label=""
+      placeholder="Выбрать страну"
+      :options="countries"
+      :allow-empty="false"
+      :show-labels="false"
+      :disabled="disabled"
+      open-direction="bottom"
+      :option-height="250"
+      @select="handleSelect"
+    >
+      <template
+        v-if="countries.length === 0"
+        slot="noOptions"
+      >
+        Странн нет
+      </template>
+    </multiselect>
+  </div>
 </template>
 <script>
 export default {
-    name: 'application-country-select',
+  name: 'ApplicationCountrySelect',
 
-    props: {
-        defaultValue: {
-            type: [Object, String]
-        },
-        disabled: {
-            type: Boolean
-        },
-        hasError: {
-            type: Boolean
-        },
-        countries: {
-            type: Array,
-            required: true
-        }
+  props: {
+    defaultValue: {
+      type: [Object, String],
     },
-    data() {
-        return {
-            value: {
-                code: 'RU',
-                flag:
+    disabled: {
+      type: Boolean,
+    },
+    hasError: {
+      type: Boolean,
+    },
+    countries: {
+      type: Array,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      value: {
+        code: 'RU',
+        flag:
                     'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAa0lEQVR42u3QwQkAMAgAMfdf2hYc4yIc6NPM7k659PMAAAAAAAAAAAAAAFy1AQAAAAAAAAAAAAAAAIC/zF2VAAAAAAAAAAAAAAAAAODqCQAAAAAAAAAAAAAAAAAAgGwAAAAAAAAAAAAAAER72yqN3ef7lPIAAAAASUVORK5CYII=',
-                id: 131,
-                name: 'Россия',
-                name_en: 'Russia',
-                phone_code: 7
-            }
-        }
+        id: 131,
+        name: 'Россия',
+        name_en: 'Russia',
+        phone_code: 7,
+      },
+    };
+  },
+  computed: {
+    classes() {
+      return ['application-country-select', { 'application-country-select--error': this.hasError }];
     },
-    computed: {
-        classes() {
-            return ['application-country-select', { 'application-country-select--error': this.hasError }]
-        }
-    },
-    methods: {
-        handleSelect(value) {
-            this.$emit('on-select', value)
-        }
-    },
-    created() {
-        if (this.defaultValue) {
-            if (this.defaultValue instanceof Object) {
-                this.value = this.defaultValue
-            } else {
-                this.value = this.countries.filter(country => country.code === this.defaultValue)[0]
-            }
-        }
+  },
+  created() {
+    if (this.defaultValue) {
+      if (this.defaultValue instanceof Object) {
+        this.value = this.defaultValue;
+      } else {
+        this.value = this.countries.filter((country) => country.code === this.defaultValue)[0];
+      }
     }
-}
+  },
+  methods: {
+    handleSelect(value) {
+      this.$emit('on-select', value);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

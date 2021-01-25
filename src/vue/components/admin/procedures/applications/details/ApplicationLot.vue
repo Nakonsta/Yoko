@@ -1,150 +1,129 @@
 <template>
-    <div :class="classes">
-        <div class="application-lot__header">
-            <application-checkbox
-                :value="lot.checked"
-                @click="$emit('on-change', $event)"
-                :disabled="disabled"
-                :hasError="errors"
-            ></application-checkbox>
-            <div
-                :class="[
-                    'application-lot__title',
-                    { 'application-lot__title--error': errors, 'application-lot__title--disabled': !lot.checked }
-                ]"
-                @click="toggleOpened"
-            >
-                <span>{{ lot.name }}</span>
-                <span class="application-lot__amount"
-                    >{{ lot.amountWithVat.replace('.00', '') | numberWithSpaces }} {{ lot.currency.symbol }}</span
-                >
-                <svg>
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#arrow-bottom"></use>
-                </svg>
-            </div>
-        </div>
-        <div class="application-lot__content">
-            <div class="application-lot__country">
-                <span>Страна происхождения Лота</span>
-                <application-country-select
-                    :countries="countries"
-                    :disabled="disabled"
-                    @on-select="$emit('on-country-change', $event)"
-                ></application-country-select>
-            </div>
-            <application-products
-                :products="lot.products"
-                :is-auction="isAuction"
-                :can-replace="canReplace"
-                :countries="countries"
-                :disabled="disabled"
-                @on-replace="replaceProduct"
-            ></application-products>
-        </div>
+  <div :class="classes">
+    <div class="application-lot__header">
+      <application-checkbox
+        :value="lot.checked"
+        :disabled="disabled"
+        :has-error="errors"
+        @click="$emit('on-change', $event)"
+      />
+      <div
+        :class="[
+          'application-lot__title',
+          {
+            'application-lot__title--error': errors,
+            'application-lot__title--disabled': !lot.checked
+          }
+        ]"
+        @click="toggleOpened"
+      >
+        <span>{{ lot.name }}</span>
+        <span
+          class="application-lot__amount"
+        >
+          {{ lot.amountWithVat.replace('.00', '') | numberWithSpaces }} {{ lot.currency.symbol }}
+        </span>
+        <svg>
+          <use
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:href="/img/sprite.svg#arrow-bottom"
+          />
+        </svg>
+      </div>
     </div>
+    <div class="application-lot__content">
+      <div class="application-lot__country">
+        <span>Страна происхождения Лота</span>
+        <application-country-select
+          :countries="countries"
+          :disabled="disabled"
+          @on-select="$emit('on-country-change', $event)"
+        />
+      </div>
+      <application-products
+        :products="lot.products"
+        :is-auction="isAuction"
+        :can-replace="canReplace"
+        :countries="countries"
+        :disabled="disabled"
+        @on-replace="$emit('on-replace', $event)"
+      />
+    </div>
+  </div>
 </template>
 <script>
-import ApplicationCheckbox from '../ApplicationCheckbox.vue'
-import ApplicationProducts from './ApplicationProducts.vue'
-import ApplicationCountrySelect from './ApplicationCountrySelect.vue'
+import ApplicationCheckbox from '../ApplicationCheckbox.vue';
+import ApplicationProducts from './ApplicationProducts.vue';
+import ApplicationCountrySelect from './ApplicationCountrySelect.vue';
+
 export default {
-    name: 'application-lot',
-    components: {
-        ApplicationCountrySelect,
-        ApplicationCheckbox,
-        ApplicationProducts
+  name: 'ApplicationLot',
+  components: {
+    ApplicationCountrySelect,
+    ApplicationCheckbox,
+    ApplicationProducts,
+  },
+  filters: {
+    numberWithSpaces(n) {
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
     },
-    filters: {
-        numberWithSpaces(n) {
-            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-        }
+  },
+  props: {
+    lot: {
+      type: Object,
+      required: true,
     },
-    props: {
-        lot: {
-            type: Object,
-            required: true
-        },
-        isAuction: {
-            type: Boolean,
-            required: true
-        },
-        countries: {
-            type: Array,
-            required: true
-        },
-        canReplace: {
-            type: Boolean
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        },
-        errors: {
-            type: Boolean,
-            default: false
-        }
+    isAuction: {
+      type: Boolean,
+      required: true,
     },
-    computed: {
-        classes() {
-            return ['application-lot', { 'application-lot--opened': this.isOpened }]
-        }
+    countries: {
+      type: Array,
+      required: true,
     },
-    data() {
-        return {
-            isOpened: false
-        }
+    canReplace: {
+      type: Boolean,
     },
-    methods: {
-        toggleOpened() {
-            this.isOpened = !this.isOpened
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    errors: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      isOpened: false,
+    };
+  },
+  computed: {
+    classes() {
+      return ['application-lot', { 'application-lot--opened': this.isOpened }];
+    },
+  },
+  methods: {
+    toggleOpened() {
+      this.isOpened = !this.isOpened;
 
-            const element = this.$el.children[1]
-            const sectionHeight = element.scrollHeight
+      const element = this.$el.children[1];
+      const sectionHeight = element.scrollHeight;
 
-            if (this.isOpened) {
-                element.style.overflow = 'auto'
-                requestAnimationFrame(() => {
-                    element.style.height = sectionHeight + 'px'
-                })
-            } else {
-                element.style.overflow = null
-                requestAnimationFrame(() => {
-                    element.style.height = 0 + 'px'
-                })
-            }
-        },
-        replaceProduct(value, products) {
-            this.lot.products = this.lot.products.map(product => {
-                if (product.id === value.id) {
-                    product = value
-                }
-
-                return product
-            })
-
-            this.lot.amount = parseFloat(
-                this.lot.products.reduce((amount, product) => {
-                    return (
-                        amount +
-                        parseFloat(parseInt(product.quantity ?? 0, 10) * parseFloat(product.price_for_one ?? 0, 10), 10)
-                    )
-                }, 0),
-                10
-            )
-                .toFixed(2)
-                .replace('.00', '')
-
-            this.lot.amountWithVat = parseFloat(
-                this.lot.products.reduce((amountWithVat, product) => {
-                    return amountWithVat + parseFloat(product.amount_per_position, 10)
-                }, 0),
-                10
-            )
-                .toFixed(2)
-                .replace('.00', '')
-        }
-    }
-}
+      if (this.isOpened) {
+        element.style.overflow = 'auto';
+        requestAnimationFrame(() => {
+          element.style.height = `${sectionHeight}px`;
+        });
+      } else {
+        element.style.overflow = null;
+        requestAnimationFrame(() => {
+          element.style.height = `${0}px`;
+        });
+      }
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

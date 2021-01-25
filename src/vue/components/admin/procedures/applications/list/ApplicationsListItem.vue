@@ -1,57 +1,63 @@
 <template>
-    <div class="applications-list-item">
-        <div class="applications-list-item__header">
-            <router-link
-                class="applications-list-item__title"
-                :to="`/personal/procedures/${procedureId}/applications/${application.id}`"
-                >Заявка №{{ application.id }}</router-link
-            >
-            <div
-                :class="[
-                    'applications-list-item__status',
-                    `applications-list-item__status--${applicationStatus(application.status).type}`
-                ]"
-            >
-                {{ applicationStatus(application.status).text }}
-            </div>
-        </div>
-        <time class="applications-list-item__date">от {{ formatDate(application.created_at) }}</time>
-        <router-link class="applications-list-item__company" to="#">{{ application.company.name }}</router-link>
+  <div class="applications-list-item">
+    <div class="applications-list-item__header">
+      <router-link
+        class="applications-list-item__title"
+        :to="`/personal/procedures/${procedureId}/applications/${application.id}`"
+      >
+        Заявка №{{ application.id }}
+      </router-link>
+      <div
+        :class="[
+          'applications-list-item__status',
+          `applications-list-item__status--${applicationStatus(application.status).type}`
+        ]"
+      >
+        {{ applicationStatus(application.status).text }}
+      </div>
     </div>
+    <time class="applications-list-item__date">от {{ formatDate(application.created_at) }}</time>
+    <router-link
+      class="applications-list-item__company"
+      to="#"
+    >
+      {{ application.company.name }}
+    </router-link>
+  </div>
 </template>
 <script>
-import api from '@/helpers/api'
-import formatDate from '@/helpers/formatDate'
+import api from '@/helpers/api';
+import formatDate from '@/helpers/formatDate';
 
 export default {
-    name: 'applications-list-item',
-    mixins: [api, formatDate],
-    props: {
-        application: {
-            type: Object,
-            required: true
-        }
+  name: 'ApplicationsListItem',
+  mixins: [api, formatDate],
+  props: {
+    application: {
+      type: Object,
+      required: true,
     },
-    computed: {
-        procedureId() {
-            return this.$route.params.id
-        },
-        applicationStatus() {
-            return status => {
-                const statuses = {
-                    submitted: { text: 'Новая', type: 'new' },
-                    winner_processing: { text: 'Определяется победитель', type: 'default' },
-                    rejected: { text: 'Отклонена', type: 'rejected' },
-                    winner_chosen: { text: 'Одобрена', type: 'default' },
-                    canceled: { text: 'Отменена', type: 'rejected' },
-                    draft: { text: 'Черновик', type: 'draft' }
-                }
+  },
+  computed: {
+    procedureId() {
+      return this.$route.params.id;
+    },
+    applicationStatus() {
+      return (status) => {
+        const statuses = {
+          submitted: { text: 'Новая', type: 'new' },
+          winner_processing: { text: 'Определяется победитель', type: 'default' },
+          rejected: { text: 'Отклонена', type: 'rejected' },
+          winner_chosen: { text: 'Одобрена', type: 'default' },
+          canceled: { text: 'Отменена', type: 'rejected' },
+          draft: { text: 'Черновик', type: 'draft' },
+        };
 
-                return statuses[status] ?? { text: 'Нет данных', type: 'default' }
-            }
-        }
-    }
-}
+        return statuses[status] ?? { text: 'Нет данных', type: 'default' };
+      };
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

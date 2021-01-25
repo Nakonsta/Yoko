@@ -1,24 +1,25 @@
 <template>
-    <div class="applications-list">
-        <applications-list-item
-            v-for="application in applications"
-            :key="application.id"
-            :application="application"
-        ></applications-list-item>
-    </div>
+  <div class="applications-list">
+    <applications-list-item
+      v-for="application in applications"
+      :key="application.id"
+      :application="application"
+    />
+  </div>
 </template>
 <script>
-import ApplicationsListItem from './ApplicationsListItem.vue'
+import ApplicationsListItem from './ApplicationsListItem.vue';
+
 export default {
-    name: 'applications-list',
-    components: { ApplicationsListItem },
-    props: {
-        applications: {
-            type: Array,
-            required: true
-        }
-    }
-}
+  name: 'ApplicationsList',
+  components: { ApplicationsListItem },
+  props: {
+    applications: {
+      type: Array,
+      required: true,
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';

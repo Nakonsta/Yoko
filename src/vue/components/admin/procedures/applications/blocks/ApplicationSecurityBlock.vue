@@ -1,93 +1,103 @@
 <template>
-    <div class="application__section">
-        <application-title title="Сведения об обеспечении" subtitle></application-title>
-        <div class="divider"></div>
+  <div class="application__section">
+    <application-title
+      title="Сведения об обеспечении"
+      subtitle
+    />
+    <div class="divider" />
 
-        <div class="application__section-row">
-            <div class="application__section-title">
-                Обеспечение контракта:
-            </div>
-            <div class="application__section-text">
-                {{
-                    procedure.guarantee
-                        ? securityType(procedure.guarantee.contract_collateral.amount)
-                        : 'Без обеспечения'
-                }}
-            </div>
-        </div>
-        <div class="application__section-row">
-            <div class="application__section-title">
-                Обеспечение заявки:
-            </div>
-            <div class="application__section-text">
-                {{
-                    procedure.guarantee
-                        ? securityType(procedure.guarantee.application_collateral.amount)
-                        : 'Без обеспечения'
-                }}
-            </div>
-        </div>
-        <div class="application__section-row">
-            <div class="application__section-title">
-                Подтверждающий документ:
-            </div>
-            <application-file-uploader
-                label="Прикрепить платежное поручение или банковскую гарантию"
-                :fileName="securityFile.name"
-                :fileUrl="securityFile.url"
-                :disabled="disabled"
-                @uploaded="$emit('on-upload', $event)"
-                @remove="$emit('on-upload', {})"
-            ></application-file-uploader>
-        </div>
-        <a href="#" class="application__sber">
-            <img src="/content/sber.png" alt="" />
-            <span>
-                Подать онлайн заявку <br />
-                на банковскую гарантию
-            </span>
-        </a>
-        <div class="divider divider--no-margin"></div>
+    <div class="application__section-row">
+      <div class="application__section-title">
+        Обеспечение контракта:
+      </div>
+      <div class="application__section-text">
+        {{
+          procedure.guarantee
+            ? securityType(procedure.guarantee.contract_collateral.amount)
+            : 'Без обеспечения'
+        }}
+      </div>
     </div>
+    <div class="application__section-row">
+      <div class="application__section-title">
+        Обеспечение заявки:
+      </div>
+      <div class="application__section-text">
+        {{
+          procedure.guarantee
+            ? securityType(procedure.guarantee.application_collateral.amount)
+            : 'Без обеспечения'
+        }}
+      </div>
+    </div>
+    <div class="application__section-row">
+      <div class="application__section-title">
+        Подтверждающий документ:
+      </div>
+      <application-file-uploader
+        label="Прикрепить платежное поручение или банковскую гарантию"
+        :file-name="securityFile.name"
+        :file-url="securityFile.url"
+        :disabled="disabled"
+        @uploaded="$emit('on-upload', $event)"
+        @remove="$emit('on-upload', {})"
+      />
+    </div>
+    <a
+      href="#"
+      class="application__sber"
+    >
+      <img
+        src="/content/sber.png"
+        alt=""
+      >
+      <span>
+        Подать онлайн заявку <br>
+        на банковскую гарантию
+      </span>
+    </a>
+    <div class="divider divider--no-margin" />
+  </div>
 </template>
 <script>
-import ApplicationTitle from '../ApplicationTitle'
-import ApplicationFileUploader from '../details/ApplicationFileUploader'
+import ApplicationTitle from '../ApplicationTitle';
+import ApplicationFileUploader from '../details/ApplicationFileUploader';
+
 export default {
-    name: 'application-security-block',
-    components: {
-        ApplicationFileUploader,
-        ApplicationTitle
+  name: 'ApplicationSecurityBlock',
+  components: {
+    ApplicationFileUploader,
+    ApplicationTitle,
+  },
+  props: {
+    procedure: {
+      type: Object,
+      required: true,
     },
-    props: {
-        procedure: {
-            type: Object,
-            required: true
-        },
-        application: {
-            type: Object,
-            required: true
-        },
-        currencyType: {
-            type: Object,
-            required: true
-        },
-        disabled: {
-            type: Boolean
-        }
+    application: {
+      type: Object,
+      required: true,
     },
-    computed: {
-        securityType() {
-            return amount =>
-                amount !== null && amount != 0
-                    ? `${this.$parent.$options.filters.numberWithSpaces(amount)} ${this.currencyType.symbol}`
-                    : 'Без обеспечения'
-        },
-        securityFile() {
-            return this.application.documents.security?.[0] ?? {}
-        }
-    }
-}
+    currencyType: {
+      type: Object,
+      required: true,
+    },
+    disabled: {
+      type: Boolean,
+    },
+  },
+  computed: {
+    securityType() {
+      // eslint-disable-next-line eqeqeq
+      return (amount) => (amount !== null && amount != 0
+        ? `${this.$parent.$options.filters.numberWithSpaces(amount)} ${this.currencyType.symbol}`
+        : 'Без обеспечения');
+    },
+    securityFile() {
+      return this.application.documents.security?.[0] ?? {};
+    },
+  },
+};
 </script>
 <style lang="scss">
 @import '@/../assets/sass/variables/variables';

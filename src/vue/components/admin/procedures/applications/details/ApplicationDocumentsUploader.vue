@@ -1,154 +1,184 @@
 <template>
-    <div :class="classes">
-        <div v-if="isUploaded" class="application-documents-uploader__files">
-            <div class="application-documents-uploader__file" v-for="(file, i) in localFiles" :key="i">
-                <span>
-                    <svg>
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#file"></use>
-                    </svg>
-                </span>
-                <a class="application-documents-uploader__link" :href="file.url" target="_blank">{{ file.name }}</a>
-                <div v-if="!disabled" class="application-documents-uploader__remove" @click="removeFile(i)">
-                    <svg>
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#close"></use>
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="application-documents-uploader__upload">
-            <div class="application-documents-uploader__icon">
-                <svg>
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#upload"></use>
-                </svg>
-            </div>
-            <div class="application-documents-uploader__label">Перетащите файл (-ы) в область</div>
-            <span>или</span>
-            <button @click.stop="selectFile">Загрузите файл (-ы)</button>
-            <input
-                type="file"
-                ref="input"
-                accept="image/.jpg,.png,.jpeg,.pdf,.doc,.docx,.xls,.xlsx"
-                multiple
-                :disabled="disabled"
-                @change="uploadFile"
+  <div :class="classes">
+    <div
+      v-if="isUploaded"
+      class="application-documents-uploader__files"
+    >
+      <div
+        v-for="(file, i) in localFiles"
+        :key="i"
+        class="application-documents-uploader__file"
+      >
+        <span>
+          <svg>
+            <use
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:href="/img/sprite.svg#file"
             />
+          </svg>
+        </span>
+        <a
+          class="application-documents-uploader__link"
+          :href="file.url"
+          target="_blank"
+        >{{ file.name }}</a>
+        <div
+          v-if="!disabled"
+          class="application-documents-uploader__remove"
+          @click="removeFile(i)"
+        >
+          <svg>
+            <use
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:href="/img/sprite.svg#close"
+            />
+          </svg>
         </div>
+      </div>
     </div>
+    <div class="application-documents-uploader__upload">
+      <div class="application-documents-uploader__icon">
+        <svg>
+          <use
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:href="/img/sprite.svg#upload"
+          />
+        </svg>
+      </div>
+      <div class="application-documents-uploader__label">
+        Перетащите файл (-ы) в область
+      </div>
+      <span>или</span>
+      <button @click.stop="selectFile">
+        Загрузите файл (-ы)
+      </button>
+      <input
+        ref="input"
+        type="file"
+        accept="image/.jpg,.png,.jpeg,.pdf,.doc,.docx,.xls,.xlsx"
+        multiple
+        :disabled="disabled"
+        @change="uploadFile"
+      >
+    </div>
+  </div>
 </template>
 <script>
-import functions from '@/helpers/functions'
+import functions from '@/helpers/functions';
+
 export default {
-    name: 'application-documents-uploader',
-    props: {
-        disabled: {
-            type: Boolean
-        },
-        hasError: {
-            type: Boolean
-        },
-        documents: {
-            type: [Array, Object]
-        }
+  name: 'ApplicationDocumentsUploader',
+  mixins: [functions],
+  props: {
+    disabled: {
+      type: Boolean,
     },
-    mixins: [functions],
-    data() {
-        return {
-            localFiles: this.documents ?? []
-        }
+    hasError: {
+      type: Boolean,
     },
-    computed: {
-        classes() {
-            return [
-                'application-documents-uploader',
-                { 'application-documents-uploader--error': this.hasError },
-                { 'application-documents-uploader--disabled': this.disabled }
-            ]
-        },
-        isUploaded() {
-            return this.localFiles.length
-        }
+    // eslint-disable-next-line vue/require-default-prop
+    documents: {
+      type: [Array, Object],
     },
-    methods: {
-        selectFile() {
-            if (!this.disabled) {
-                this.$refs.input.click()
-            }
-        },
-        uploadFile() {
-            const types = [
-                'image/png',
-                'image/jpg',
-                'image/jpeg',
-                'application/pdf',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.ms-excel'
-            ]
-            const files = this.$refs.input.files
+  },
+  data() {
+    return {
+      localFiles: this.documents ?? [],
+    };
+  },
+  computed: {
+    classes() {
+      return [
+        'application-documents-uploader',
+        { 'application-documents-uploader--error': this.hasError },
+        { 'application-documents-uploader--disabled': this.disabled },
+      ];
+    },
+    isUploaded() {
+      return this.localFiles.length;
+    },
+  },
+  methods: {
+    selectFile() {
+      if (!this.disabled) {
+        this.$refs.input.click();
+      }
+    },
+    uploadFile() {
+      const types = [
+        'image/png',
+        'image/jpg',
+        'image/jpeg',
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-excel',
+      ];
+      const files = this.$refs.input.files;
 
-            if (files.length) {
-                let hasErrors = false
-                const filesAsArray = []
+      if (files.length) {
+        let hasErrors = false;
+        const filesAsArray = [];
 
-                files.forEach(file => {
-                    if (this.convertFileSize({ bytes: file.size, convertTo: 'MB' }) >= 20) {
-                        window.notificationError(
-                            'Вы пытаетесь загрузить файл превыщающий максимальный вес. Максимальный допустимый вес файла 20MB'
-                        )
-                        hasErrors = true
-                        return
-                    }
+        files.forEach((file) => {
+          if (this.convertFileSize({ bytes: file.size, convertTo: 'MB' }) >= 20) {
+            window.notificationError(
+              'Вы пытаетесь загрузить файл превыщающий максимальный вес. Максимальный допустимый вес файла 20MB',
+            );
+            hasErrors = true;
+            return;
+          }
 
-                    if (types.includes(file.type)) {
-                        const localFile = {}
+          if (types.includes(file.type)) {
+            const localFile = {};
 
-                        localFile.name = file.name
-                        localFile.url = URL.createObjectURL(file)
-                        localFile.file = file
+            localFile.name = file.name;
+            localFile.url = URL.createObjectURL(file);
+            localFile.file = file;
 
-                        this.localFiles.push(localFile)
-                    } else {
-                        window.notificationError(
-                            'Вы пытаетесь загрузить файл неверного формата. Разрешенные форматы .pdf, .jpeg, .png, .doc, .docx, .xls, .xlsx'
-                        )
-                        hasErrors = true
-                    }
-                })
+            this.localFiles.push(localFile);
+          } else {
+            window.notificationError(
+              'Вы пытаетесь загрузить файл неверного формата. Разрешенные форматы .pdf, .jpeg, .png, .doc, .docx, .xls, .xlsx',
+            );
+            hasErrors = true;
+          }
+        });
 
-                this.localFiles.forEach(file => {
-                    if (file.id) {
-                        filesAsArray.push(file)
-                    } else {
-                        filesAsArray.push(file.file)
-                    }
-                })
+        this.localFiles.forEach((file) => {
+          if (file.id) {
+            filesAsArray.push(file);
+          } else {
+            filesAsArray.push(file.file);
+          }
+        });
 
-                if (!hasErrors) {
-                    this.$emit('uploaded', filesAsArray)
-                    this.$refs.input.value = ''
-                }
-            }
-
-            this.$refs.input.files = null
-            this.$refs.input.value = ''
-        },
-        removeFile(index) {
-            this.localFiles.splice(index, 1)
-
-            const files = []
-            this.localFiles.forEach(file => {
-                if (file.id) {
-                    files.push(file)
-                } else {
-                    files.push(file.file)
-                }
-            })
-
-            this.$emit('remove', files)
+        if (!hasErrors) {
+          this.$emit('uploaded', filesAsArray);
+          this.$refs.input.value = '';
         }
-    }
-}
+      }
+
+      this.$refs.input.files = null;
+      this.$refs.input.value = '';
+    },
+    removeFile(index) {
+      this.localFiles.splice(index, 1);
+
+      const files = [];
+      this.localFiles.forEach((file) => {
+        if (file.id) {
+          files.push(file);
+        } else {
+          files.push(file.file);
+        }
+      });
+
+      this.$emit('remove', files);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/../assets/sass/variables/variables';
