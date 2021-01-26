@@ -2,7 +2,7 @@
   <ValidationProvider
       tag="div"
       :rules="rules"
-      class="field__container"
+      :class="parentClass"
       :name="$attrs.label && $attrs.label.toLowerCase()"
       v-slot="{ errors, failed, validate }"
   >
@@ -43,6 +43,10 @@ export default {
     mode: {
       type: String,
       default: 'date'
+    },
+    parentClass: {
+      type: String,
+      default: 'field__container'
     },
     placeholder: {
       type: String,
