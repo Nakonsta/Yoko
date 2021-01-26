@@ -10,7 +10,7 @@
         v-if="procedureIdData.procedureType === 'Commercial'"
         @click="removeBlock('payment_info')"
     >
-      <tooltip content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
+      <tooltip class-main="tooltip tooltip--right" content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
     </div>
     <h3 class="procedure__main-title">Условия оплаты и поставки</h3>
     <div class="row">

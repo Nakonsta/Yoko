@@ -10,7 +10,7 @@
         v-if="procedureIdData.procedureType === 'Commercial'"
         @click="removeBlock('documentation')"
     >
-      <tooltip content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
+      <tooltip class-main="tooltip tooltip--right" content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
     </div>
     <h3 class="procedure__main-title">Конкурсная документация</h3>
     <div class="row">
