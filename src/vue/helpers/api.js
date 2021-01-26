@@ -273,15 +273,31 @@ export default {
         { cancelToken: this.CancelTokens.proceduresCancelToken.token },
       );
     },
-    fetchEISProcedure(eis) {
-      return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/eis/${eis}`);
+    fetchApplications(page, filter, order) {
+      return axios.post(
+        `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/list`,
+        {
+          page,
+          filter,
+          order,
+        },
+      );
     },
     sendProcedureApplicationDraft(id, data) {
-      return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/participation-applications`, data);
+      return axios.post(
+        `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/participation-applications`,
+        data,
+      );
     },
-    sendProcedureApplication(id) {
-      return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}/status`, {
-        status: 'submitted',
+    sendProcedureApplicationStatus(id, status) {
+      return axios.post(
+        `${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}/status`,
+        { status },
+      );
+    },
+    sendProcedureApplicationNewPrice(id, data) {
+      return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/participation-applications/${id}/products`, {
+        data,
       });
     },
     fetchProcedureApplication(id) {

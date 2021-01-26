@@ -1,0 +1,119 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
+.items
+  &__head
+    display: flex
+    justify-content: space-between
+    font-weight: 500
+    font-size: 14px
+    line-height: 160%
+    margin-left: rem(-12px);
+    margin-right: rem(-12px);
+
+    @include mq($until: widescreen)
+      flex-wrap: wrap
+
+    &-counter,
+    &-checkbox,
+    &-item,
+    &-filter
+      margin: 0 rem(12px) rem(24px)
+
+      @include mq($until: widescreen)
+        margin: 0 rem(12px) rem(20px)
+        width: calc(50% - #{rem(24px)})
+
+    &-counter
+      margin-right: auto
+      /*height: 32px*/
+      color: #9b9b9a
+      display: flex
+      align-items: center
+      @include mq($until: desktop)
+        width: calc(100% - 200px)
+    
+      span
+        color: $colorTurquoise
+
+    &-checkbox,
+    &-item
+      //margin-left: rem(56px)
+
+      //&:first-child
+        margin-left: 0 !important
+
+      @include mq($until: desktop)
+        max-width: calc(33.33% - #{rem(24px)})
+        width: auto
+    
+      @include mq($until: tablet)
+        max-width: none
+        width: calc(100% - #{rem(24px)})
+  
+    &-checkbox
+      align-self: center
+      display: block
+      padding-left: rem(34px)
+      position: relative
+      color: $colorText
+
+      .checkbox__body
+        margin-top: rem(-10px)
+        position: absolute
+        top: 50%
+        left: 0
+
+      .checkbox__text
+        margin: 0
+        font-size: rem(14px)
+        line-height: 24/14
+
+    &-item
+      color: $colorGray
+  
+    &-filter
+      display: none
+      align-items: center
+      width: rem(152px) !important
+      cursor: pointer
+
+      @include mq($until: desktop)
+        display: flex
+        justify-content: flex-end
+    
+      span
+        transition: .3s color
+        margin-left: rem(12px)
+        font-weight: bold
+        font-size: rem(16px)
+        line-height: 140%
+        color: $colorTurquoise
+    
+      path
+        transition: .3s fill
+    
+      &:hover
+        span
+          color: $colorTurquoiseHover
+      
+        path
+          fill: $colorTurquoiseHover
+
+
+.item
+  background: $colorWhite
+  border-radius: rem(6px)
+  padding: rem(24px) rem(32px)
+  font-weight: 500
+
+  & + &
+    margin-top: rem(24px)
+
+  &--empty
+    text-align: left
+
+  &--loading
+    min-height: rem(200px)
+    position: relative

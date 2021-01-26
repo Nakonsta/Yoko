@@ -70,6 +70,7 @@
       </div>
       <div class="col col-xl-4 col-sm-6 col-xs-12">
         <date-time
+            parent-class="field__container field__container--ha"
             mode="dateTime"
             v-model="selectedData.application_date_time"
             label="Дата и время рассмотрения заявок"

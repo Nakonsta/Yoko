@@ -365,11 +365,9 @@ export default {
       if (characters.length) {
         this.rootData.characters = characters;
       }
-      if (descriptionCharacters.length) {
-        this.rootData.items = [{
-          id: 'description', name: 'Описание', value: data.description, isHTML: this.isHTML(data.description),
-        }, ...descriptionCharacters];
-      }
+      this.rootData.items = [{
+        id: 'description', name: 'Описание', value: data.description, isHTML: this.isHTML(data.description),
+      }, ...descriptionCharacters];
     },
     setDocuments(data) {
       const { documents } = data;
