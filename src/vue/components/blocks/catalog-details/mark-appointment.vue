@@ -1,6 +1,6 @@
 <template>
   <div id="appointment-mark" class="typography">
-    <p>{{ root.appointment }}</p>
+    <p v-for="(item) in root.appointment.split('\n')">{{ item }}</p>
   </div>
 </template>
 
