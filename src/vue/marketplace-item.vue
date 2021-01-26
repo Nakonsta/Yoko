@@ -356,7 +356,7 @@ export default {
             this.winnerChoice = choice
         },
         getApplicationsList(){
-            this.fetchApplicationsList()
+            this.fetchProcedureApplicationsList(this.tenderItemId)
                 .then((data) => {
                     const items = data.data.data.items;
                     const companiesINN = [];

@@ -463,6 +463,15 @@ export default {
         { cancelToken: this.CancelTokens.proceduresCancelToken.token },
       );
     },
+    fetchProcedureApplicationsList(id, filter = null) {
+        return axios.post(
+          `${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/participation-applications/list`,
+          {
+            ...filter,
+          },
+          { cancelToken: this.CancelTokens.proceduresCancelToken.token },
+        );
+      },
     sendUserData(data) {
       return axios.post(`${process.env.API_URL_AUTH_SERVICE}/user/edit`, data);
     },
