@@ -10,7 +10,7 @@
         v-if="procedureIdData.procedureType === 'Commercial'"
         @click="removeBlock('additional_info')"
     >
-      <tooltip content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
+      <tooltip class-main="tooltip tooltip--right" content="Скрыть блок" icon="\./img/sprite.svg#cancel" />
     </div>
     <h3 class="procedure__main-title">Дополнительная информация</h3>
     <textarea-input
