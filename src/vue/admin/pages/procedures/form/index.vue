@@ -1225,7 +1225,7 @@ export default {
     filesValidate() {
       if (
         this.procedureIdData.procedureType === 'Commercial'
-          ? !this.fieldsData.hideBlock.documentation
+          ? this.fieldsData.hideBlock.documentation
           : Array.isArray(this.selectedData.file)
             ? !this.selectedData.file.length
             : !this.selectedData.file
