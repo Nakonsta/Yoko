@@ -4,6 +4,7 @@ const textError = {
     repeatPass: 'Пароли не совпадают',
     customPhone: 'Поле некорректно заполнено',
     checkValue: 'Выберите значение',
+    range: 'Выберите срок с минимальной разницей в 1 день',
     maxDate: 'Дата должна быть не больше ',
     minDate: 'Дата должна быть не меньше ',
 }
@@ -42,6 +43,22 @@ export default {
             }
             if (min !== undefined && min[0] !== undefined && min !== null) {
                 return textError.minDate + moment(min, 'YYYY-MM-DD').format('DD.MM.YYYY')
+            }
+            return true
+        }
+    },
+    theSameDate: {
+        validate: (value) => {
+            if (value) {
+                const formatDateEnd = moment(value.end).format('YYYY-MM-DD')
+                const formatDateStart = moment(value.start).format('YYYY-MM-DD')
+                if (
+                    (Date.parse(formatDateEnd) > Date.parse(formatDateStart)) &&
+                    (value.end !== null || value.start !== null)
+                ) {
+                    return true
+                }
+                return textError.range
             }
             return true
         }
