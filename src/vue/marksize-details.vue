@@ -199,9 +199,9 @@ export default {
         property_electrical_resistance: 'Электрическое сопротивление',
       },
       descriptionCharacters: {
-        property_veins_count: 'Число жил',
-        property_section: 'Сечение, мм²',
         property_voltage: 'Напряжение, кВ',
+        property_veins_count: 'Количество жил',
+        property_section: 'Сечение, мм²',
       },
     };
   },
