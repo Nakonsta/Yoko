@@ -1,47 +1,53 @@
 <template>
-    <div :class="classes" @click="handleClick">
-        <div :class="['check', { 'check--checked': this.value }]">
-            <svg>
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#ok"></use>
-            </svg>
-        </div>
-        <span>{{ label }}</span>
+  <div
+    :class="classes"
+    @click="handleClick"
+  >
+    <div :class="['check', { 'check--checked': this.value }]">
+      <svg>
+        <use
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xlink:href="\./img/sprite.svg#ok"
+        />
+      </svg>
     </div>
+    <span>{{ label }}</span>
+  </div>
 </template>
 <script>
 export default {
-    name: 'application-checkbox',
-    props: {
-        value: {
-            type: Boolean
-        },
-        disabled: {
-            type: Boolean
-        },
-        label: {
-            type: String
-        },
-        hasError: {
-            type: Boolean
-        }
+  name: 'ApplicationCheckbox',
+  props: {
+    value: {
+      type: Boolean,
     },
-    computed: {
-        classes() {
-            return [
-                'application-checkbox',
-                { 'application-checkbox--disabled': this.disabled },
-                { 'application-checkbox--error': this.hasError }
-            ]
-        }
+    disabled: {
+      type: Boolean,
     },
-    methods: {
-        handleClick() {
-            if (!this.disabled) {
-                this.$emit('click', !this.value)
-            }
-        }
-    }
-}
+    label: {
+      type: String,
+    },
+    hasError: {
+      type: Boolean,
+    },
+  },
+  computed: {
+    classes() {
+      return [
+        'application-checkbox',
+        { 'application-checkbox--disabled': this.disabled },
+        { 'application-checkbox--error': this.hasError },
+      ];
+    },
+  },
+  methods: {
+    handleClick() {
+      if (!this.disabled) {
+        this.$emit('click', !this.value);
+      }
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '../../../../../assets/sass/variables/variables';

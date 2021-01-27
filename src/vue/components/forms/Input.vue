@@ -1,111 +1,174 @@
 <template>
   <ValidationProvider
-      :tag="tag"
-      :rules="rules"
-      class="input__container"
-      :class="parentClass"
-      v-slot="{ errors, failed, failedRules }"
-      :name="$attrs.label && $attrs.label.toLowerCase() || validationName"
-      :vid="vid"
+    v-slot:default="{ errors, failed, failedRules }"
+    :tag="tag"
+    :rules="rules"
+    class="input__container"
+    :class="parentClass"
+    :name="$attrs.label && $attrs.label.toLowerCase() || validationName"
+    :vid="vid"
   >
-    <span v-if="$attrs.label" class="field__label">{{ $attrs.label }}</span>
-    <div class="relative">
-      <input
-          :class="{field: true, error: failed}"
+    <span
+      v-if="$attrs.label"
+      class="field__label"
+    >{{ $attrs.label }}</span>
+    <template v-if="prefix.length || suffix.length">
+      <div class="field__group">
+        <span
+          v-if="prefix.length"
+          class="field__prefix"
+          v-html="prefix"
+        />
+        <span
+          v-if="suffix.length"
+          class="field__suffix"
+          v-html="suffix"
+        />
+        <div class="relative">
+          <input
+            v-model="innerValue"
+            v-mask="mask || noMask"
+            v-inputmask="inputmask"
+            :class="{field: true, error: failed}"
+            :type="type"
+            :disabled="disabled"
+            :placeholder="placeholder"
+            :maxlength="maxlength || false"
+            :max="type === 'number' && max ? max : false"
+            :min="type === 'number' && min ? min : false"
+            @input="input"
+            @paste="paste"
+          >
+          <div
+            v-show="loading"
+            class="multiselect__spinner field__spinner"
+          />
+          <tooltip
+            v-if="!!content"
+            :content="content"
+          />
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="relative">
+        <input
+          v-model="innerValue"
           v-mask="mask || noMask"
           v-inputmask="inputmask"
+          :class="{field: true, error: failed}"
           :type="type"
-          v-model="innerValue"
           :disabled="disabled"
-          @input="input"
           :placeholder="placeholder"
           :maxlength="maxlength || false"
           :max="type === 'number' && max ? max : false"
           :min="type === 'number' && min ? min : false"
+          @input="input"
           @paste="paste"
-      >
-      <div class="multiselect__spinner field__spinner" v-show="loading"></div>
-      <tooltip v-if="!!content" :content="content" />
-    </div>
-    <span v-if="failed && !failedRules.excluded" class="field__error">{{ errors[0] }}</span>
-    <span v-if="failed && failedRules.excluded" class="field__error">Нужно ввести уникальное значение.</span>
+        >
+        <div
+          v-show="loading"
+          class="multiselect__spinner field__spinner"
+        />
+        <tooltip
+          v-if="!!content"
+          :content="content"
+        />
+      </div>
+    </template>
+    <span
+      v-if="failed && !failedRules.excluded"
+      class="field__error"
+    >{{ errors[0] }}</span>
+    <span
+      v-if="failed && failedRules.excluded"
+      class="field__error"
+    >Нужно ввести уникальное значение.</span>
   </ValidationProvider>
 </template>
 
 <script>
-import Tooltip from "../tooltip";
+import Tooltip from '../tooltip';
 
 export default {
   name: 'Input',
   components: {
-    Tooltip
+    Tooltip,
   },
   props: {
     content: {
       type: String,
-      default: ''
+      default: '',
     },
     tag: {
       type: String,
-      default: 'label'
+      default: 'label',
     },
     parentClass: {
       type: String,
-      default: 'field__container'
+      default: 'field__container',
     },
     mask: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     inputmask: {
       default: false,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     placeholder: {
       type: String,
-      default: ''
+      default: '',
     },
     vid: {
       type: String,
-      default: ''
+      default: '',
     },
     type: {
       type: String,
-      default: 'text'
+      default: 'text',
     },
     validationName: {
       type: String,
-      default: ''
+      default: '',
     },
     input: {
       type: Function,
-      default: () => {}
+      default: () => {},
     },
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     rules: {
       type: [Object, String],
-      default: 'required'
+      default: 'required',
     },
     value: {
-      type: null
+      type: null,
     },
     maxlength: {
       default: false,
-      type: [Number, Boolean]
+      type: [Number, Boolean],
     },
     max: {
       default: 0,
-      type: Number
+      type: Number,
     },
     min: {
       default: 0,
-      type: Number
+      type: Number,
+    },
+    prefix: {
+      default: '',
+      type: String,
+    },
+    suffix: {
+      default: '',
+      type: String,
     },
   },
   data: () => ({
@@ -113,34 +176,34 @@ export default {
     noMask: {
       mask: '*'.repeat(255),
       tokens: {
-        '*': { pattern: /./ }
-      }
-    }
+        '*': { pattern: /./ },
+      },
+    },
   }),
   watch: {
-    innerValue (newVal) {
+    innerValue(newVal) {
       this.$emit('input', newVal);
     },
-    value (newVal) {
+    value(newVal) {
       this.innerValue = newVal;
-    }
+    },
   },
-  created () {
+  created() {
     if (this.value) {
       this.innerValue = this.value;
     }
   },
   methods: {
-    paste: function(evt) {
+    paste(evt) {
       // fix Inputmask & vue past issue
-      if( this.inputmask === false ) return;
-      let clipboardData = evt.clipboardData || window.clipboardData,
-        pastedData = clipboardData.getData('Text');
+      if (this.inputmask === false) return;
+      const clipboardData = evt.clipboardData || window.clipboardData;
+      const pastedData = clipboardData.getData('Text');
       // let newValue = Inputmask.format(pastedData, {mask: this.inputmask});
-      let newValue = Inputmask.format(pastedData, this.inputmask);
+      const newValue = Inputmask.format(pastedData, this.inputmask);
       this.innerValue = newValue;
-    }
-  }
+    },
+  },
 };
 </script>
 

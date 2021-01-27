@@ -326,6 +326,10 @@ export default {
             isActive: true,
             subItems: [
               {
+                title: 'Пользователи',
+                to: '/personal/company/users',
+              },
+              {
                 title: 'Общая информация',
                 to: '/personal/company/info',
               },

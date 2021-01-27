@@ -261,7 +261,13 @@ export default {
         this.filterKey += 1;
       }
       if (this.companies.length && this.currentCompany) {
-        this.currentFilter.inn = this.currentCompany.inn;
+        this.currentFilter.inn = {};
+        if (this.$store.getters.userRole === 'buyer') {
+          // todo 'customer' to 'buyer'
+          this.currentFilter.inn.buyer = this.currentCompany.inn;
+        } else {
+          this.currentFilter.inn.contractor = this.currentCompany.inn;
+        }
       }
       const filter = {
         filter: this.parseFilter(this.currentFilter),
@@ -283,6 +289,7 @@ export default {
         })
         .catch((e) => {
           console.log(e);
+          this.loadingItems = false;
         });
     },
     sortItems(sortBy) {

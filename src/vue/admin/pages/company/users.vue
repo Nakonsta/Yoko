@@ -40,26 +40,16 @@ export default {
   }),
   computed: {
     companies() {
-      const {
-        userRole,
-        companyBuyer,
-        companyContractor,
-      } = this.$store.getters;
-
-      switch (userRole) {
-        case 'buyer': return companyBuyer;
-        case 'contractor': return companyContractor;
-        default: return [];
-      }
+      return this.$store.state.auth.user.companies;
     },
     userRoles() {
-      return this.users.filter((user) => user.role === 'USER');
+      return this.users.filter((user) => user.company_role === 'USER');
     },
     adminRoles() {
-      return this.users.filter((user) => user.role === 'ADMIN');
+      return this.users.filter((user) => user.company_role === 'ADMIN');
     },
     comissionRoles() {
-      return this.users.filter((user) => user.role === 'COMISSION');
+      return this.users.filter((user) => user.company_role === 'COMISSION');
     },
   },
   created() {
@@ -77,10 +67,17 @@ export default {
   methods: {
     fetchUsers() {
       if (!this.currentCompany) return;
+      window.openLoader();
 
       this.fetchUsersFromCompany(this.currentCompany.id)
-        .then(({ data }) => this.users = data.data)
-        .catch((error) => console.error(error));
+        .then(({ data }) => {
+          this.users = data.data;
+          window.closeLoader();
+        })
+        .catch((error) => {
+          console.error(error);
+          window.closeLoader();
+        });
     },
     changeCompany(company) {
       this.currentCompany = company;
