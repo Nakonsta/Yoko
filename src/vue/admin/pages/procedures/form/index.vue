@@ -40,6 +40,7 @@
             :procedure-id-data="procedureIdData"
             :true-false-select="trueFalseSelect"
             :is-created-procedure="isCreatedProcedure"
+            :change-users="changeUsers"
             :get-eis="getEisInfo"
             :clear-tender-trading-type="clearTenderTradingType"
           />
@@ -690,6 +691,21 @@ export default {
     }
   },
   methods: {
+    changeUsers(e) {
+      this.fetchCompaniesByInn(e.inn)
+        .then((response) => {
+          const result = response.data.data;
+          this.fieldsData.contacts_list = result;
+          if (result.length === 1) {
+            this.selectedData.contact_full_name = result[0];
+            this.selectedData.contact_phone = result[0].phone;
+            this.selectedData.contact_email = result[0].email;
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     getEisInfo() {
       window.openLoader();
       this.fetchEISProcedure(this.selectedData.tender_eis_id)
@@ -1121,19 +1137,6 @@ export default {
       //     .catch((e) => {
       //       console.log(e)
       //     })
-      this.fetchCompaniesByInn(this.$store.state.auth.user.companies[0].inn)
-        .then((response) => {
-          const result = response.data.data;
-          this.fieldsData.contacts_list = result;
-          if (result.length === 1) {
-            this.selectedData.contact_full_name = result[0];
-            this.selectedData.contact_phone = result[0].phone;
-            this.selectedData.contact_email = result[0].email;
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
       this.fetchProceduresOKPD2('okpd')
         .then((response) => {
           this.fieldsData.OKPD2 = this.parseOKPD2(response.data.data.items);

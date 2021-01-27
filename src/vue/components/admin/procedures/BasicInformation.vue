@@ -11,6 +11,7 @@
             label="Компания"
             :options="fieldsData.companies"
             :disabled="isCreatedProcedure || fieldsData.companies.length === 1"
+            :select="changeUsers"
         ></select-input>
       </div>
     </div>
@@ -328,6 +329,10 @@ export default {
     isCreatedProcedure: {
       default: false,
       type: Boolean,
+    },
+    changeUsers: {
+      default: () => {},
+      type: Function,
     },
     getEis: {
       default: () => {},

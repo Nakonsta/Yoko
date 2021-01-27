@@ -54,7 +54,11 @@
             :disabled="isCreatedProcedure"
             placeholder="Выберите период"
             :min-date="new Date(procedureIdData.setMinDates.application_date_time_summing_up || new Date())"
-            :rules="{required: true, minMaxDateCheck: procedureIdData.setMinDates.application_date_time_summing_up}"
+            :rules="{
+              required: true,
+              minMaxDateCheck: procedureIdData.setMinDates.application_date_time_summing_up,
+              theSameDate: true
+            }"
         ></date-range>
       </div>
       <div
@@ -81,11 +85,11 @@
             :rules="{
               required: true,
               minMaxDateCheck:
-
                 procedureIdData.procedureType === 'Contest' ||
                 procedureIdData.procedureType === 'Suppliers'
                   ? procedureIdData.setMinDates.application_terms_of_contract
-                  : procedureIdData.setMinDates.application_end_date
+                  : procedureIdData.setMinDates.application_end_date,
+              theSameDate: true
             }"
         ></date-range>
       </div>
