@@ -40,6 +40,7 @@
             :procedure-id-data="procedureIdData"
             :true-false-select="trueFalseSelect"
             :is-created-procedure="isCreatedProcedure"
+            :change-users="changeUsers"
             :get-eis="getEisInfo"
             :clear-tender-trading-type="clearTenderTradingType"
           />
@@ -690,6 +691,21 @@ export default {
     }
   },
   methods: {
+    changeUsers(e) {
+      this.fetchCompaniesByInn(e.inn)
+        .then((response) => {
+          const result = response.data.data;
+          this.fieldsData.contacts_list = result;
+          if (result.length === 1) {
+            this.selectedData.contact_full_name = result[0];
+            this.selectedData.contact_phone = result[0].phone;
+            this.selectedData.contact_email = result[0].email;
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     getEisInfo() {
       window.openLoader();
       this.fetchEISProcedure(this.selectedData.tender_eis_id)
@@ -1121,19 +1137,6 @@ export default {
       //     .catch((e) => {
       //       console.log(e)
       //     })
-      this.fetchCompaniesByInn(this.$store.state.auth.user.companies[0].inn)
-        .then((response) => {
-          const result = response.data.data;
-          this.fieldsData.contacts_list = result;
-          if (result.length === 1) {
-            this.selectedData.contact_full_name = result[0];
-            this.selectedData.contact_phone = result[0].phone;
-            this.selectedData.contact_email = result[0].email;
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
       this.fetchProceduresOKPD2('okpd')
         .then((response) => {
           this.fieldsData.OKPD2 = this.parseOKPD2(response.data.data.items);
@@ -1225,7 +1228,7 @@ export default {
     filesValidate() {
       if (
         this.procedureIdData.procedureType === 'Commercial'
-          ? !this.fieldsData.hideBlock.documentation
+          ? this.fieldsData.hideBlock.documentation
           : Array.isArray(this.selectedData.file)
             ? !this.selectedData.file.length
             : !this.selectedData.file
@@ -1351,15 +1354,11 @@ export default {
       }
       if (this.procedureIdData.procedureType === 'Auction') {
         formData.purchase_term = {
-          application_end_date: this.parseDate(this.selectedData.application_end_date),
+          application_end_date: this.parseDate(this.selectedData.application_delivery_time),
           procedure_date_from: this.parseDate(this.selectedData.application_end_date),
           procedure_date_to: this.parseDate(this.selectedData.application_delivery_time),
           consideration_of_bids: this.selectedData.consideration_of_auction_bids,
           comment: this.selectedData.application_comment,
-        };
-        formData.guarantee = {
-          ...formData.guarantee,
-          application_ensuring: this.selectedData.securing_the_application,
         };
       }
       if (
@@ -1456,6 +1455,7 @@ export default {
             calc_amount: this.get(this.selectedData.request, 'calculate_the_amount_of_collateral.id'),
             blocking_period: this.get(this.selectedData.request, 'blocking_period_days.id'),
           },
+          application_ensuring: this.selectedData.securing_the_application,
         };
         if (this.selectedData.request.calculate_the_amount_of_collateral.id === 'percent') {
           formData.guarantee.application_collateral = {
