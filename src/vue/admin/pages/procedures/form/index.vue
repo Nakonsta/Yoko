@@ -1360,10 +1360,6 @@ export default {
           consideration_of_bids: this.selectedData.consideration_of_auction_bids,
           comment: this.selectedData.application_comment,
         };
-        formData.guarantee = {
-          ...formData.guarantee,
-          application_ensuring: this.selectedData.securing_the_application,
-        };
       }
       if (
         this.procedureIdData.procedureType === 'FromSupplier'
@@ -1459,6 +1455,7 @@ export default {
             calc_amount: this.get(this.selectedData.request, 'calculate_the_amount_of_collateral.id'),
             blocking_period: this.get(this.selectedData.request, 'blocking_period_days.id'),
           },
+          application_ensuring: this.selectedData.securing_the_application,
         };
         if (this.selectedData.request.calculate_the_amount_of_collateral.id === 'percent') {
           formData.guarantee.application_collateral = {
