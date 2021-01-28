@@ -1354,15 +1354,11 @@ export default {
       }
       if (this.procedureIdData.procedureType === 'Auction') {
         formData.purchase_term = {
-          application_end_date: this.parseDate(this.selectedData.application_end_date),
+          application_end_date: this.parseDate(this.selectedData.application_delivery_time),
           procedure_date_from: this.parseDate(this.selectedData.application_end_date),
           procedure_date_to: this.parseDate(this.selectedData.application_delivery_time),
           consideration_of_bids: this.selectedData.consideration_of_auction_bids,
           comment: this.selectedData.application_comment,
-        };
-        formData.guarantee = {
-          ...formData.guarantee,
-          application_ensuring: this.selectedData.securing_the_application,
         };
       }
       if (
@@ -1459,6 +1455,7 @@ export default {
             calc_amount: this.get(this.selectedData.request, 'calculate_the_amount_of_collateral.id'),
             blocking_period: this.get(this.selectedData.request, 'blocking_period_days.id'),
           },
+          application_ensuring: this.selectedData.securing_the_application,
         };
         if (this.selectedData.request.calculate_the_amount_of_collateral.id === 'percent') {
           formData.guarantee.application_collateral = {

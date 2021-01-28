@@ -213,26 +213,21 @@
           :disabled="isCreatedProcedure"
         />
       </div>
-    </div>
-    <div v-if="procedureIdData.procedureType === 'Auction'">
-      <radio-input
-        v-model="selectedData.securing_the_application"
-        :rules="{
-          required:
-            !(procedureIdData.procedureType === 'Commercial'
-              && fieldsData.hideBlock.application_security)
-            && (!!selectedData.application_security_of_the_contract
-              || !!selectedData.application_security_required)
-        }"
-        :disabled="
-          isCreatedProcedure ||
-            !selectedData.application_security_of_the_contract &&
-            !selectedData.application_security_required
-        "
-        title="Обеспечение заявки, внесенное победителем аукциона"
-        name="securing_the_application"
-        :label="fieldsData.securingTheApplication"
-      />
+      <div class="col col-xs-12">
+        <radio-input
+          v-model="selectedData.securing_the_application"
+          :rules="{
+            required:
+              !(procedureIdData.procedureType === 'Commercial'
+                && fieldsData.hideBlock.application_security)
+                && !!selectedData.application_security_required
+            }"
+          :disabled="isCreatedProcedure"
+          title="Обеспечение заявки, внесенное победителем аукциона"
+          name="securing_the_application"
+          :label="fieldsData.securingTheApplication"
+        />
+      </div>
     </div>
   </div>
 </template>
