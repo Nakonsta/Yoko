@@ -142,7 +142,7 @@
               /></svg></a>
               <a
                 v-if="$store.getters.userRole === 'contractor'"
-                href="`/platform/${item.id}#chat`"
+                :href="`/platform/${item.id}#chat`"
                 title="Написать продавцу"
               ><svg class="sprite-message"><use
                 xmlns:xlink="http://www.w3.org/1999/xlink"
