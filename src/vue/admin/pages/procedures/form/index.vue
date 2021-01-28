@@ -1354,7 +1354,7 @@ export default {
       }
       if (this.procedureIdData.procedureType === 'Auction') {
         formData.purchase_term = {
-          application_end_date: this.parseDate(this.selectedData.application_end_date),
+          application_end_date: this.parseDate(this.selectedData.application_delivery_time),
           procedure_date_from: this.parseDate(this.selectedData.application_end_date),
           procedure_date_to: this.parseDate(this.selectedData.application_delivery_time),
           consideration_of_bids: this.selectedData.consideration_of_auction_bids,
