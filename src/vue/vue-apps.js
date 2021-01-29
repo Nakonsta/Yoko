@@ -41,7 +41,8 @@ Vue.prototype.$priceInputmask = {
     rightAlign: false,
 };
 
-import VCalendar from 'v-calendar'
+// import VCalendar from 'v-calendar'
+import VCalendar from '../assets/js/vendors/modules/v-calendar.common'
 Vue.use(VCalendar)
 
 // validate
