@@ -420,5 +420,82 @@ export default {
     openPopupById(id) {
       window.openPopupById(id);
     },
+    diffDays(startDate, endDate) {
+      const start = moment(startDate);
+      const end = moment(endDate);
+      if (end <= start) {
+        return 0;
+      }
+      return (end - start) / (60 * 60 * 24 * 1000) - 1;
+    },
+    diffDaysWorking(startDate, endDate, production_calendar = []) {
+      if (startDate === undefined || endDate === undefined) {
+        return 0;
+      }
+      const start = moment(startDate);
+      const end = moment(endDate);
+      if (end <= start) {
+        return 0;
+      }
+      // разница между датами в днях
+      let days = this.diffDays(start, end);
+      // вычитаем субботы и воскресенья
+      days -= Math.floor(days / 7) * 2;
+      // дополнительная проверка на субботу и воскресение
+      const startDay = start.isoWeekday();
+      const endDay = end.isoWeekday();
+      // убираем субботу и воскресение, которые, возможно, не убраны ДО этого
+      // if (startDay - endDay > 1) {
+      //   days -= 2;
+      //   console.log(`days1=${days}`);
+      // }
+      // если начало - воскресение, а конец ДО субботы
+      if (startDay === 7 && endDay !== 6) {
+        days -= 1;
+      }
+      // если конец - суббота, а начало ПОСЛЕ воскресения
+      if (endDay === 6 && startDay !== 7) {
+        days -= 1;
+      }
+      if (production_calendar && production_calendar.length) {
+        production_calendar.forEach((date) => {
+          const day = moment(date);
+          if ((day >= start) && (day <= end)) {
+            if (day.isoWeekday() !== 6 && day.isoWeekday() !== 7) {
+              // если не суббота и не воскесенье тогда вычитаем
+              days -= 1;
+            } else {
+              // если суббота или воскесенье тогда добавляем (рабочий выходной)
+              days += 1;
+            }
+          }
+        });
+      }
+      return days;
+    },
+    addDaysWorking(startDate, add = 0, production_calendar = []) {
+      if (!add) {
+        return startDate;
+      }
+      const date = moment(startDate);
+      let i = add;
+      do {
+        date.add(1, 'days');
+        const endDate = date.format('YYYY-MM-DD 00:00:00');
+        if (production_calendar.indexOf(endDate) !== -1) {
+          // если дата есть в календаре
+          if (date.isoWeekday() !== 6 && date.isoWeekday() !== 7) {
+            // и это не суббота или воскресенье - добавляем ещё день
+          } else {
+            i -= 1;
+          }
+        } else if (date.isoWeekday() === 6 || date.isoWeekday() === 7) {
+          // и это суббота или воскресенье - добавляем ещё день
+        } else {
+          i -= 1;
+        }
+      } while (i > 0);
+      return date.format('YYYY-MM-DD 00:00:00');
+    },
   },
 };
