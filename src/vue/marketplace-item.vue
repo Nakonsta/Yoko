@@ -11,7 +11,6 @@
       <TenderItemChoice
         v-if="!isLoading && winnerChoice"
         :tender-item-data="tenderItemData"
-        :participants="participants"
         :items-statuses="itemsStatuses"
         @changeTab="changeTab"
       />
@@ -189,7 +188,6 @@ export default {
         { action: 'winner', name: 'Выбор победителя' },
         // {action: 'return', name: 'Вернуться к процедуре'}
       ],
-      participants: [],
     };
   },
 
@@ -260,7 +258,6 @@ export default {
     this.getTenderItemMainData(this.tenderItemId);
     this.checkUrlHash();
     this.getMarketplaceProceduresFilter();
-    this.getApplicationsList();
   },
 
   mounted() {
@@ -390,6 +387,7 @@ export default {
                         });
                 }
                 this.participants = items;
+                this.totalParticipants = data.data.data.total;
             })
             .catch((e) => {
                 console.log(e)
