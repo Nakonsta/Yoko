@@ -42,8 +42,8 @@
             type="tel"
             :rules="
               dataForm.organizationType === 'LEGAL_ENTITY'
-                ? 'required|length:12'
-                : 'required|length:14'
+                ? 'required|lengthNoSpaces:10'
+                : 'required|lengthNoSpaces:12'
             "
             :mask="
               dataForm.organizationType === 'LEGAL_ENTITY'
