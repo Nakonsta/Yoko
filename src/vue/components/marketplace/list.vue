@@ -45,7 +45,7 @@
         @change="sortItems"
       />
       <dropdownList
-        v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'"
+        v-if="$store.getters.userRole === 'buyer' && $store.getters.companyBuyer.length || $store.getters.userRole === 'contractor' && $store.getters.companyContractor.length"
         class="items__head-item"
         label="Показывать:"
         :options="viewList"
@@ -149,7 +149,7 @@
                 xlink:href="\./img/sprite.svg#message"
               /></svg></a>
               <a
-                v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'"
+                v-if="$store.getters.userRole === 'buyer' && $store.getters.companyBuyer.length || $store.getters.userRole === 'contractor' && $store.getters.companyContractor.length"
                 href="javascript:{}"
                 :title="itemMarkExist(item, 'hidden') ? 'Показать' : 'Скрыть'"
                 :class="{active: itemMarkExist(item, 'hidden')}"
@@ -161,7 +161,7 @@
                 /></svg>
               </a>
               <a
-                v-if="$store.getters.userRole === 'contractor'"
+                v-if="$store.getters.userRole === 'contractor' && $store.getters.companyContractor.length"
                 href="javascript:{}"
                 :title="itemMarkExist(item, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'"
                 :class="{active: itemMarkExist(item, 'favorite')}"
@@ -228,14 +228,14 @@
             <div class="procedures__item-buttons">
               <template>
                 <router-link
-                  v-if="$store.getters.userRole !== 'buyer' && $router"
+                  v-if="$store.getters.userRole === 'contractor' && $store.getters.companyContractor.length && $router"
                   :to="`/personal/procedures/${item.id}/applications/new`"
                   class="btn btn--bdr procedures__item-request"
                 >
                   Отправить заявку
                 </router-link>
                 <a
-                  v-if="$store.getters.userRole !== 'buyer' && !$router"
+                  v-if="$store.getters.userRole === 'contractor' && $store.getters.companyContractor.length && !$router"
                   :href="`/personal/procedures/${item.id}/applications/new`"
                   class="btn btn--bdr procedures__item-request"
                 >Отправить заявку</a>
