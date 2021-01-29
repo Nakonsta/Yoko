@@ -19,7 +19,7 @@
                 <a :href="item.url" @click="changeActiveTab($event, item.url)" class="tender-item__menu-link">{{ item.name }}</a>
             </div>
         </div>
-        <div class="tender-item__menu-rebidding">
+        <div v-if="$store.getters.userRole === 'buyer' && this.$store.getters.companyBuyer.find((firm) => firm.inn === company.inn)" class="tender-item__menu-rebidding">
             <a href="#" class="btn btn--bdr">Объявить переторжку</a>
         </div>
     </div>

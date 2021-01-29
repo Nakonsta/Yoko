@@ -7,7 +7,7 @@
             >
                 <span class="btn tender-item__protocol-attach" @click="openModal('#tender-item__protocols-modal')">Прикрепить протокол</span>
             </div>
-            <div class="tender-item__protocols-rows">
+            <div v-if="tenderItemData.protocols" class="tender-item__protocols-rows">
                 <div v-for="(group, index) in protocolGroups" :key="index" class="tender-item__protocol">
                     <div class="tender-item__protocol-title">
                         {{ group.name }}
@@ -42,6 +42,9 @@
                         Протоколов процедуры пока нет.
                     </div>                    
                 </div>
+            </div>
+            <div v-else class="tender-item__empty">
+                Протоколов пока нет
             </div>
         </div>
         <div id="tender-item__protocols-modal" class="popup popup--alt">
