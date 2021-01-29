@@ -11,12 +11,11 @@
       <TenderItemChoice
         v-if="!isLoading && winnerChoice"
         :tender-item-data="tenderItemData"
-        :participants="participants"
         :items-statuses="itemsStatuses"
         @changeTab="changeTab"
       />
       <TenderItemMenu
-        v-if="!isLoading && $store.state.auth.loggedIn && $store.state.auth.user.id === tenderItemData.user_id"
+        v-if="!isLoading"
         :tender-item-data="tenderItemData"
         :active-tab="activeTab"
         :tabs="tabs"
@@ -189,7 +188,6 @@ export default {
         { action: 'winner', name: 'Выбор победителя' },
         // {action: 'return', name: 'Вернуться к процедуре'}
       ],
-      participants: [],
     };
   },
 
@@ -260,7 +258,6 @@ export default {
     this.getTenderItemMainData(this.tenderItemId);
     this.checkUrlHash();
     this.getMarketplaceProceduresFilter();
-    this.getApplicationsList();
   },
 
   mounted() {
@@ -364,36 +361,37 @@ export default {
     chooseWinner(choice) {
       this.winnerChoice = choice;
     },
-    getApplicationsList() {
-      this.fetchApplicationsList()
-        .then((data) => {
-          const items = data.data.data.items;
-          const companiesINN = [];
-          items.forEach((item, index) => {
-            items[index].company = null;
-            if (companiesINN.indexOf(items[index].inn) === -1) companiesINN.push(items[index].inn);
-          });
-          if (companiesINN.length) {
-            this.fetchCompaniesByINN(companiesINN)
-              .then((response) => {
-                const companies = response.data.data.elements;
-                companies.forEach((company) => {
-                  items.forEach((item) => {
-                    if (parseInt(company.inn) === parseInt(item.inn)) {
-                      item.company = company;
-                    }
-                  });
+    getApplicationsList(){
+        this.fetchProcedureApplicationsList(this.tenderItemId)
+            .then((data) => {
+                const items = data.data.data.items;
+                const companiesINN = [];
+                items.forEach((item, index) => {
+                    items[index].company = null;
+                    if (companiesINN.indexOf(items[index].inn) === -1) companiesINN.push(items[index].inn);
                 });
-              })
-              .catch((e) => {
-                console.log(e);
-              });
-          }
-          this.participants = items;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+                if (companiesINN.length) {
+                    this.fetchCompaniesByINN(companiesINN)
+                        .then((response) => {
+                            const companies = response.data.data.elements;
+                            companies.forEach((company) => {
+                                items.forEach((item) => {
+                                    if (parseInt(company.inn) === parseInt(item.inn)) {
+                                        item.company = company;
+                                    }
+                                });
+                            });
+                        })
+                        .catch((e) => {
+                            console.log(e)
+                        });
+                }
+                this.participants = items;
+                this.totalParticipants = data.data.data.total;
+            })
+            .catch((e) => {
+                console.log(e)
+            })
     },
   },
 };

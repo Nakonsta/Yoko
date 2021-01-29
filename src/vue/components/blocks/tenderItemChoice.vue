@@ -20,7 +20,9 @@
                         :key="i"
                         class="js-more__item"
                     >
-                        <a href="#">Лот {{ i+1 }}</a>
+                        <a href="#" @click="getParticipantsByLot(i+1)">
+                            Лот {{ i+1 }}
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -81,6 +83,18 @@
                 </div>
             </div>
         </div>
+        <paginate
+            v-if="totalPages"
+            :page-count="totalPages"
+            :click-handler="changePagination"
+            prev-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            next-text='<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5.5L5 10" stroke="#9B9B9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            :prev-class="'catalog-pagination__prev'"
+            :next-class="'catalog-pagination__next'"
+            :container-class="'catalog-pagination'"
+            :page-class="'catalog-pagination__item'"
+            :value="page"
+        />
     </div>
 </template>
 
@@ -99,14 +113,30 @@ export default {
             type: Array,
             default: () => [],
         },
-        participants: {
-            type: Array,
-            default: () => [],
-            required: true,
-        },
     },
 
     mixins: [formatDate, functions],
+
+    data() {
+        return {
+            perPage: 9,
+            page: 1,
+            currentFilter: {},
+            participants: [],
+            totalParticipants: 0,
+        }
+    },
+
+    computed: {
+        totalPages() {
+            return Math.ceil(this.totalParticipants / this.perPage)
+        },
+    },
+
+    created() {
+        this.getApplicationsList();
+        this.getItems()
+    },
 
     methods: {
         getTenderStatusName(item) {
@@ -118,6 +148,77 @@ export default {
             }
             return item.status;
         },
+        changePagination(page) {
+            this.page = page;
+            this.getApplicationsList();
+        },
+        getApplicationsList() {
+            this.fetchProcedureApplicationsList(this.tenderItemData.id, this.currentFilter, this.page)
+                .then((data) => {
+                    const items = data.data.data.items;
+                    const companiesINN = [];
+                    items.forEach((item, index) => {
+                        items[index].company = null;
+                        if (companiesINN.indexOf(items[index].inn) === -1) companiesINN.push(items[index].inn);
+                    });
+                    if (companiesINN.length) {
+                        this.fetchCompaniesByINN(companiesINN)
+                            .then((response) => {
+                                const companies = response.data.data.elements;
+                                companies.forEach((company) => {
+                                    items.forEach((item) => {
+                                        if (parseInt(company.inn) === parseInt(item.inn)) {
+                                            item.company = company;
+                                        }
+                                    });
+                                });
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                            });
+                    }
+                    this.participants = items;
+                    this.totalParticipants = data.data.data.total;
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
+        getParticipantsByLot(lot) {
+            this.fetchProcedureApplicationsListByLot(lot, this.tenderItemData.id, this.currentFilter, this.page)
+                .then((data) => {
+                    const items = data.data.data.items;
+                    const companiesINN = [];
+                    items.forEach((item, index) => {
+                        items[index].company = null;
+                        if (companiesINN.indexOf(items[index].inn) === -1) companiesINN.push(items[index].inn);
+                    });
+                    if (companiesINN.length) {
+                        this.fetchCompaniesByINN(companiesINN)
+                            .then((response) => {
+                                const companies = response.data.data.elements;
+                                companies.forEach((company) => {
+                                    items.forEach((item) => {
+                                        if (parseInt(company.inn) === parseInt(item.inn)) {
+                                            item.company = company;
+                                        }
+                                    });
+                                });
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                            });
+                    }
+                    this.participants = items;
+                    this.totalParticipants = data.data.data.total;
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
+        getItems() {
+            this.sendProcedureApplicationStatus((159, 'submitted'))
+        }
     }
 }
 </script>

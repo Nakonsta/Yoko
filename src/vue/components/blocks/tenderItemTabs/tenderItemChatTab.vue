@@ -134,9 +134,13 @@ export default {
     },
     computed: {
         count() {
-            let inn = this.$store.getters.companyContractor[0].inn || '';
-            if (!inn) return 0;
-            return this.tenderItemData.q_counts.filter((item)=>{return item.inn === inn;})[0].count || 0;
+            if (!this.$store.getters.companyContractor.length) {
+                return 0;
+            } else {
+                let inn = this.$store.getters.companyContractor[0].inn || '';
+                if (!inn) return 0;
+                return this.tenderItemData.q_counts.filter((item)=>{return item.inn === inn;})[0].count || 0;
+            }
         },
         countText() {
             return [

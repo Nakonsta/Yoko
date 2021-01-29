@@ -67,17 +67,31 @@
                         <a href="javascript:{}" title="Приложенные файлы" @click="changeActiveTab($event, '#documents')">
                             <svg class="sprite-paperclip"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#paperclip"></use></svg>
                         </a>
-                        <a href="javascript:{}" title="Написать продавцу" v-if="$store.getters.userRole === 'contractor'"><svg class="sprite-message"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use></svg></a>
-                        <!-- <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" v-if="$store.getters.userRole === 'contractor'" @click="updateItemMark(tenderItemData, 'favorite')" :class="{active: itemMarkExist(tenderItemData, 'favorite')}">
-                            <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
+                        <a 
+                            href="javascript:{}"
+                            title="Написать продавцу"
+                            v-if="$store.getters.userRole === 'contractor' && $store.getters.companyContractor.length"
+                        >
+                            <svg class="sprite-message">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#message"></use>
+                            </svg>
                         </a>
-                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'" v-if="$store.state.auth.loggedIn" @click="updateItemMark(tenderItemData, 'hidden')" :class="{active: itemMarkExist(tenderItemData, 'hidden')}">
-                            <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
-                        </a> -->
-                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'" @click="updateItemMark(tenderItemData, 'hidden', itemMarkExist(tenderItemData, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')" v-if="$store.getters.userRole === 'buyer' || $store.getters.userRole === 'contractor'" :class="[{active: itemMarkExist(tenderItemData, 'hidden')}, 'tender-item__actions-link']">
+                        <a 
+                            href="javascript:{}"
+                            :title="itemMarkExist(tenderItemData, 'hidden') ? 'Показать' : 'Скрыть'"
+                            @click="updateItemMark(tenderItemData, 'hidden', itemMarkExist(tenderItemData, 'hidden') ? 'Процедура показана' : 'Процедура скрыта')"
+                            v-if="$store.getters.userRole === 'buyer' && $store.getters.companyBuyer.length || $store.getters.userRole === 'contractor' && $store.getters.companyContractor.length"
+                            :class="[{active: itemMarkExist(tenderItemData, 'hidden')}, 'tender-item__actions-link']"
+                        >
                             <svg class="sprite-hide"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#hide"></use></svg>
                         </a>
-                        <a href="javascript:{}" :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'" @click="updateItemMark(tenderItemData, 'favorite', itemMarkExist(tenderItemData, 'favorite') ? 'Процедура удалена из избранного' : 'Процедура добавлена в избранное')" v-if="$store.getters.userRole === 'contractor'" :class="[{active: itemMarkExist(tenderItemData, 'favorite')}, 'tender-item__actions-link']">
+                        <a
+                            href="javascript:{}"
+                            :title="itemMarkExist(tenderItemData, 'favorite') ? 'Удалить из избранного' : 'Добавить в избранное'"
+                            @click="updateItemMark(tenderItemData, 'favorite', itemMarkExist(tenderItemData, 'favorite') ? 'Процедура удалена из избранного' : 'Процедура добавлена в избранное')"
+                            v-if="$store.getters.userRole === 'contractor' && $store.getters.companyContractor.length"
+                            :class="[{active: itemMarkExist(tenderItemData, 'favorite')}, 'tender-item__actions-link']"
+                        >
                             <svg class="sprite-favorite"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#favorite"></use></svg>
                         </a>
                     </div>
@@ -115,7 +129,7 @@
                 <span @click="isProductsShown = !isProductsShown" :class="[isProductsShown ? '': 'tender-item__products-show--hided', 'tender-item__products-show']">
                     {{isProductsShown ? 'Скрыть позиции' : 'Показать позиции' }}
                 </span>
-                <a v-if="$store.getters.userRole === 'contractor'" href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
+                <a v-if="$store.getters.userRole === 'contractor' && $store.getters.companyContractor.length" href="#" class="btn btn--bdr tender-item__products-apply">Отправить заявку</a>
             </div>
             <div v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.products" class="tender-item__products-table">
                 <div v-if="tenderItemData.purchase_subject.products.length" class="tender-item__products-thead company-products__thead">
