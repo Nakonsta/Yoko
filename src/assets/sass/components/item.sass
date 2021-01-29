@@ -2,118 +2,68 @@
 @import "../mixins/fluid-mixin"
 @import "../mixins/mq"
 
-.items
-  &__head
-    display: flex
-    justify-content: space-between
-    font-weight: 500
-    font-size: 14px
-    line-height: 160%
-    margin-left: rem(-12px);
-    margin-right: rem(-12px);
-
-    @include mq($until: widescreen)
-      flex-wrap: wrap
-
-    &-counter,
-    &-checkbox,
-    &-item,
-    &-filter
-      margin: 0 rem(12px) rem(24px)
-
-      @include mq($until: widescreen)
-        margin: 0 rem(12px) rem(20px)
-        width: calc(50% - #{rem(24px)})
-
-    &-counter
-      margin-right: auto
-      /*height: 32px*/
-      color: #9b9b9a
-      display: flex
-      align-items: center
-      @include mq($until: desktop)
-        width: calc(100% - 200px)
-    
-      span
-        color: $colorTurquoise
-
-    &-checkbox,
-    &-item
-      //margin-left: rem(56px)
-
-      //&:first-child
-        margin-left: 0 !important
-
-      @include mq($until: desktop)
-        max-width: calc(33.33% - #{rem(24px)})
-        width: auto
-    
-      @include mq($until: tablet)
-        max-width: none
-        width: calc(100% - #{rem(24px)})
-  
-    &-checkbox
-      align-self: center
-      display: block
-      padding-left: rem(34px)
-      position: relative
-      color: $colorText
-
-      .checkbox__body
-        margin-top: rem(-10px)
-        position: absolute
-        top: 50%
-        left: 0
-
-      .checkbox__text
-        margin: 0
-        font-size: rem(14px)
-        line-height: 24/14
-
-    &-item
-      color: $colorGray
-  
-    &-filter
-      display: none
-      align-items: center
-      width: rem(152px) !important
-      cursor: pointer
-
-      @include mq($until: desktop)
-        display: flex
-        justify-content: flex-end
-    
-      span
-        transition: .3s color
-        margin-left: rem(12px)
-        font-weight: bold
-        font-size: rem(16px)
-        line-height: 140%
-        color: $colorTurquoise
-    
-      path
-        transition: .3s fill
-    
-      &:hover
-        span
-          color: $colorTurquoiseHover
-      
-        path
-          fill: $colorTurquoiseHover
-
-
 .item
-  background: $colorWhite
-  border-radius: rem(6px)
-  padding: rem(24px) rem(32px)
-  font-weight: 500
+  &__block
+    & + &
+      margin-top: rem(40px)
 
-  & + &
-    margin-top: rem(24px)
+    &-title
+      margin-bottom: rem(8px)
+      border-bottom: 1px solid $colorBdr
+      padding-bottom: rem(12px)
+      font-weight: 500
+      font-size: rem(18px)
+      color: $colorTurquoise
+    &-content
+      border-bottom: 1px solid $colorBdr
+      dl
+        display: flex
+        margin: 0
+        padding: rem(14px) 0
+        font-size: rem(14px)
+        line-height: rem(20px)
+        color: $colorTextLight
+        @media print
+          padding: rem(5px) 0
+        @include mq($until: 575px)
+          display: block
+      dt
+        flex-shrink: 0
+        margin: 0
+        padding: 0 68px 0 0
+        width: 420px
+        font-weight: 500
+        @include mq($until: desktop)
+          padding-right: 2rem
+          width: 250px
+        @include mq($until: 575px)
+          padding-right: 0
+          width: 100%
+        @media print
+          width: 40%
+          padding-right: rem(24px)
+      dd
+        margin: 0
+        padding: 0
+        @include mq($until: 575px)
+          padding-top: rem(8px)
+        a
+          font-weight: 500
+          color: $colorTurquoise
 
-  &--empty
-    text-align: left
+          &:hover
+            color: $colorTurquoiseHover
+          &.file
+            padding-left: rem(20px)
+            position: relative
+            &:hover
+              svg
+                fill: $colorTurquoiseHover
+            svg
+              width: rem(16px)
+              height: rem(16px)
+              fill: $colorTurquoise
+              position: absolute
+              top: 0
+              left: 0
 
-  &--loading
-    min-height: rem(200px)
-    position: relative

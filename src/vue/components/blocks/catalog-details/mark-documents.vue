@@ -1,24 +1,33 @@
 <template>
   <div class="documents">
-    <a class="btn btn--white btn--with-icon" :href="item.link" target="_blank" v-for="(item, index) in root" :key="index">
+    <a
+      v-for="(item, index) in root"
+      :key="index"
+      class="btn btn--white btn--with-icon"
+      :href="item.link"
+      target="_blank"
+    >
       <svg class="sprite-download">
-        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/img/sprite.svg#download"></use>
+        <use
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xlink:href="/img/sprite.svg#download"
+        />
       </svg>
-      {{ item.name }}
+      <span>{{ item.name }}</span>
     </a>
   </div>
 </template>
 
 <script>
 export default {
-  name: "MarkDocuments",
+  name: 'MarkDocuments',
   props: {
     root: {
       default: [],
       type: Array,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -56,6 +65,13 @@ export default {
         @media(max-width: 1199px) {
           left: rem(26px)
         }
+      }
+
+      span {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

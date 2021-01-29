@@ -518,5 +518,11 @@ export default {
     fetchContract(id) {
       return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/contracts/${id}/`);
     },
+    addContractDocument(id, data) {
+      return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/contracts/${id}/documents/store`, data);
+    },
+    copyContractDocument(id, data) {
+      return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/contracts/${id}/documents/copy`, data);
+    },
   },
 };

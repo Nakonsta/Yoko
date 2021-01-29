@@ -15,6 +15,7 @@ import Accreditations from '../pages/accreditations/accreditations.vue';
 import User from '../pages/user/user.vue';
 import Applications from '../pages/applications/items.vue';
 import Contracts from '../pages/contracts/items.vue';
+import ContractsDetail from '../pages/contracts/details.vue';
 import page404 from '../pages/page404.vue';
 import CompanyInfo from '../pages/company/info.vue';
 import CompanyUsers from '../pages/company/users.vue';
@@ -70,6 +71,10 @@ const routes = [
   {
     path: '/personal/contracts',
     component: Contracts,
+  },
+  {
+    path: '/personal/contracts/:id',
+    component: ContractsDetail,
   },
   {
     path: '/personal/catalog',
