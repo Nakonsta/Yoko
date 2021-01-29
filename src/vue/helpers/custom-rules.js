@@ -7,6 +7,7 @@ const textError = {
   range: 'Выберите срок с минимальной разницей в 1 день',
   maxDate: 'Дата должна быть не больше ',
   minDate: 'Дата должна быть не меньше ',
+  lengthNoSpaces: 'Длинна поля дожна быть ',
 };
 
 export default {
@@ -65,6 +66,13 @@ export default {
         return textError.range;
       }
       return true;
+    },
+  },
+  lengthNoSpaces: {
+    validate: (value, args) => {
+      const length = window.parseInt(args[0]);
+      const valueNoSpaces = value.replace(/\s/g, '');
+      return valueNoSpaces.length === length ? true : textError.lengthNoSpaces + length;
     },
   },
 };

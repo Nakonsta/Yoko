@@ -53,8 +53,8 @@
         "
         :rules="
           organizationType === 'LEGAL_ENTITY'
-            ? 'required|length:15'
-            : 'required|length:17'
+            ? 'required|lengthNoSpaces:13'
+            : 'required|lengthNoSpaces:15'
         "
       />
       <text-input
@@ -63,7 +63,7 @@
         label="КПП"
         mask="#########"
         :disabled="oldCompany === '1'"
-        rules="required|length:9"
+        rules="required|lengthNoSpaces:9"
       />
       <text-input
         v-model="dataForm.okpo"
@@ -76,8 +76,8 @@
         :disabled="oldCompany === '1'"
         :rules="
           organizationType === 'LEGAL_ENTITY'
-            ? 'required|length:9'
-            : 'required|length:11'
+            ? 'required|lengthNoSpaces:8'
+            : 'required|lengthNoSpaces:10'
         "
       />
       <div class="registration-form__title">
@@ -88,21 +88,21 @@
         label="Р/c"
         mask="#### #### #### #### ####"
         :disabled="oldCompany === '1'"
-        rules="required|length:24"
+        rules="required|lengthNoSpaces:20"
       />
       <text-input
         v-model="dataForm.ks"
         label="К/c"
         mask="#### #### #### #### ####"
         :disabled="oldCompany === '1'"
-        rules="required|length:24"
+        rules="required|lengthNoSpaces:20"
       />
       <text-input
         v-model="dataForm.bik"
         label="БИК"
         mask="#########"
         :disabled="oldCompany === '1'"
-        rules="required|length:9"
+        rules="required|lengthNoSpaces:9"
       />
       <div class="registration-form__title">
         Юридический адрес
