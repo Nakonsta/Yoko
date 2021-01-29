@@ -10111,11 +10111,22 @@ const PATCH_TIME = 3;
       } // 2. Validation (date or range)
 
 
-      let isDisabled;
+      let isDisabled = false;
 
       if (this.isRange) {
-        isDisabled = this.hasValue(normalizedValue) && this.disabledAttribute && // this.disabledAttribute.intersectsDate(normalizedValue.start) &&
-        this.disabledAttribute.intersectsDate(normalizedValue.end); // this.disabledAttribute.intersectsDate(normalizedValue);
+        if (this.hasValue(value)) {
+          if (value.start <= value.end) {
+            isDisabled = this.hasValue(normalizedValue) && this.disabledAttribute && this.disabledAttribute.intersectsDate(normalizedValue.end);
+          } else {
+            isDisabled = this.hasValue(normalizedValue) && this.disabledAttribute && this.disabledAttribute.intersectsDate(normalizedValue.start); // this.disabledAttribute.intersectsDate(normalizedValue);
+          }
+        } // isDisabled =
+        //   this.hasValue(normalizedValue) &&
+        //   this.disabledAttribute &&
+        //   // this.disabledAttribute.intersectsDate(normalizedValue.start) &&
+        //   this.disabledAttribute.intersectsDate(normalizedValue.start);
+        //   // this.disabledAttribute.intersectsDate(normalizedValue);
+
       } else {
         isDisabled = this.hasValue(normalizedValue) && this.disabledAttribute && this.disabledAttribute.intersectsDate(normalizedValue);
       }
