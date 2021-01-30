@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Cookies from 'js-cookie';
+import moment from 'moment';
 import api from '../helpers/api';
 
 Vue.use(Vuex);
@@ -11,6 +12,13 @@ const store = new Vuex.Store({
       user: null,
       loggedIn: false,
       role: localStorage.getItem('role') ? localStorage.getItem('role') : 'buyer',
+    },
+    settings: {
+      productionCalendar: {
+        status: 'unloaded',
+        enabledDates: [],
+        disabledDates: [],
+      },
     },
     breadCrumbs: [],
     token: null,
@@ -23,7 +31,6 @@ const store = new Vuex.Store({
     userRole(state) {
       return state.auth.loggedIn ? state.auth.role : 'guest';
     },
-    // todo: эти дела пока не работают
     companyBuyer(state) {
       return state.auth.user.companies
         ? state.auth.user.companies.filter(
@@ -35,6 +42,37 @@ const store = new Vuex.Store({
         ? state.auth.user.companies.filter(
           (company) => company.contractor,
         ) : [];
+    },
+  },
+  actions: {
+    loadProductionCalendar(context) {
+      if (context.state.settings.productionCalendar.status === 'unloaded') {
+        context.commit('setStatusProductionCalendar', 'loading');
+        api.methods.fetchSettingsProcedures()
+          .then((response) => {
+            const dates = response.data.data.production_calendar;
+            const enabledDates = [];
+            const disabledDates = [];
+
+            dates.forEach((date) => {
+              const dateMoment = moment(date);
+              if (dateMoment.isoWeekday() !== 6 && dateMoment.isoWeekday() !== 7) {
+                disabledDates.push(date);
+              } else {
+                enabledDates.push(date);
+              }
+            });
+
+            context.commit('setProductionCalendar', {
+              enabledDates,
+              disabledDates,
+            });
+            context.commit('setStatusProductionCalendar', 'done');
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
     },
   },
   mutations: {
@@ -67,6 +105,14 @@ const store = new Vuex.Store({
         document.location.reload();
       }, 1000);
     },
+    setStatusProductionCalendar(state, data) {
+      state.settings.productionCalendar.status = data;
+    },
+    setProductionCalendar(state, date) {
+      state.settings.productionCalendar.enabledDates = date.enabledDates;
+      state.settings.productionCalendar.disabledDates = date.disabledDates;
+    },
+    // todo: нужен рефакторинг
     authorization(state, options = {}) {
       const token = Cookies.get('auth._token.local');
       const storageUser = sessionStorage.getItem('user');
@@ -112,7 +158,7 @@ const store = new Vuex.Store({
             window.closeLoader();
             if (!storageUser) {
               window.notificationSuccess('Вы вошли в систему');
-              // todo: перазагрузка страницы после авторизации
+              // перазагрузка страницы после авторизации
               setTimeout(() => {
                 if (redirect) {
                   document.location.href = redirect;
