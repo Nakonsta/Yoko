@@ -69,3 +69,12 @@ created() {
     ]);
 }
 ```
+
+## Компоненты выбора дат
+src/vue/components/forms/DateTime.vue  
+src/vue/components/forms/DateRange.vue 
+ 
+Эти компоненты стандартно используют производственный календарь.
+
+Чтобы отключить его использование используйте пропс
+`:use-production-calendar="false"`
