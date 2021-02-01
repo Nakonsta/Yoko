@@ -13,6 +13,7 @@
         :tender-item-data="tenderItemData"
         :items-statuses="itemsStatuses"
         @changeTab="changeTab"
+        @visibleRebiddingBtn="toggleRebiddingBtn"
       />
       <TenderItemMenu
         v-if="!isLoading"
@@ -21,6 +22,7 @@
         :tabs="tabs"
         :company="company"
         :buyer-menu="buyerMenu"
+        :visibleRebiddingBtn="visibleRebiddingBtn"
         @changeTab="changeTab"
         @chooseWinner="chooseWinner"
       />
@@ -78,6 +80,7 @@ export default {
       isLoading: true,
       activeTab: 'info',
       winnerChoice: false,
+      visibleRebiddingBtn: false,
       tenderItemData: {
         addition_information: null,
         additional_fields: [],
@@ -393,6 +396,10 @@ export default {
                 console.log(e)
             })
     },
+    toggleRebiddingBtn(flag) {
+      this.visibleRebiddingBtn = flag;
+      return false;
+    }
   },
 };
 </script>
