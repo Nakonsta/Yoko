@@ -318,7 +318,7 @@ export default {
       return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/settings/`);
     },
     fetchProceduresPropertyList(entity, property) {
-      return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/property/${entity}/${property}`);
+      return axios.get(`${process.env.API_URL_TENDER_SERVICE}/api/property/${entity}/${property}`);
     },
     fetchUsersFromCompany(id) {
       return axios.get(`${process.env.API_URL_AUTH_SERVICE}/companies/${id}/users`);
