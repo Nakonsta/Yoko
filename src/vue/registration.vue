@@ -317,7 +317,7 @@ export default {
           rs: this.forms.form3.rs.replace(/\s/g, ''),
           ks: this.forms.form3.ks.replace(/\s/g, ''),
           bik: this.forms.form3.bik.replace(/\s/g, ''),
-          directorFio: this.forms.form3.directorFio.replace(/\s/g, ''),
+          directorFio: this.forms.form3.directorFio,
           legalCountry: parseInt(this.forms.form3.legalAddress.country.id),
           legalAddress: this.forms.form3.legalAddress.address,
           legalPostcode: this.forms.form3.legalAddress.mailIndex,

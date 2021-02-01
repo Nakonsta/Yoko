@@ -1,37 +1,47 @@
 <template>
   <ValidationProvider
-      tag="div"
-      :rules="rules"
-      class="field__container"
-      :name="$attrs.label && $attrs.label.toLowerCase()"
-      v-slot="{ errors, failed, validate }"
+    v-slot:default="{ errors, failed, validate }"
+    tag="div"
+    :rules="rules"
+    class="field__container"
+    :name="$attrs.label && $attrs.label.toLowerCase()"
   >
-    <label v-if="$attrs.label" class="field__label">{{ $attrs.label }}</label>
+    <label
+      v-if="$attrs.label"
+      class="field__label"
+    >{{ $attrs.label }}</label>
     <v-date-picker
-        is24hr
-        locale="ru"
-        mode="date"
-        v-model="innerValue"
-        class="date-picker"
-        is-range
-        :min-date="minDate.toString() !== 'Invalid Date' ? minDate : null"
-        :disabled-dates='disableDates'
-        :popover="{ visibility: 'click' }"
+      v-model="innerValue"
+      is24hr
+      locale="ru"
+      mode="date"
+      class="date-picker"
+      is-range
+      :min-date="minDate.toString() !== 'Invalid Date' ? minDate : null"
+      :disabled-dates="useProductionCalendar ? disableDates : null"
+      :available-dates="useProductionCalendar ? enabledDates : null"
+      :popover="{ visibility: 'click' }"
     >
-      <template v-slot="{ inputValue, inputEvents }">
+      <template v-slot:default="{ inputValue, inputEvents }">
         <input
-            type="text"
-            :placeholder="placeholder"
-            :class="{field: true, error: failed}"
-            :value="inputValue.start !== null ? `${inputValue.start} - ${inputValue.end}` : ''"
-            v-on="inputEvents.start"
-            :disabled="disabled"
-            @blur="() => validateField(validate)"
+          type="text"
+          :placeholder="placeholder"
+          :class="{field: true, error: failed}"
+          :value="inputValue.start !== null ? `${inputValue.start} - ${inputValue.end}` : ''"
+          :disabled="disabled"
+          v-on="inputEvents.start"
+          @blur="() => validateField(validate)"
+        >
+        <span
+          slot="afterDateInput"
+          class="icon-calendar-outlilne"
         />
-        <span slot="afterDateInput" class="icon-calendar-outlilne"></span>
       </template>
     </v-date-picker>
-    <span v-if="failed" class="field__error">{{ errors[0] }}</span>
+    <span
+      v-if="failed"
+      class="field__error"
+    >{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 
@@ -42,62 +52,73 @@ export default {
   props: {
     mode: {
       type: String,
-      default: 'date'
+      default: 'date',
     },
     placeholder: {
       type: String,
-      default: ''
+      default: '',
     },
     minDate: {
       type: Date,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     rules: {
       type: [Object, String],
-      default: 'required'
+      default: 'required',
     },
     value: {
-      type: null
-    }
+      type: null,
+    },
+    useProductionCalendar: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
-      disableDates: [
-        { weekdays: [1, 7] },
-        new Date(2021, 2, 8),
-        new Date(2021, 1, 23),
-        {
-          start: new Date(2021, 0, 1),
-          end:  new Date(2021, 0, 9)
-        },
-      ],
       innerValue: {
         start: null,
         end: null,
       },
-    }
+    };
+  },
+  computed: {
+    disableDates() {
+      return [
+        { weekdays: [1, 7] },
+        ...this.$store.state.settings.productionCalendar.disabledDates,
+        {
+          start: new Date(2021, 0, 1),
+          end: new Date(2021, 0, 9),
+        },
+      ];
+    },
+    enabledDates() {
+      return this.$store.state.settings.productionCalendar.enabledDates;
+    },
   },
   watch: {
-    innerValue (newVal) {
+    innerValue(newVal) {
       this.$emit('input', newVal);
     },
-    value (newVal) {
+    value(newVal) {
       this.innerValue = newVal;
-    }
+    },
   },
-  created () {
+  created() {
+    this.$store.dispatch('loadProductionCalendar');
     if (this.value) {
       this.innerValue = this.value;
     }
   },
   methods: {
     validateField(validate) {
-      setTimeout(() => validate(), 100)
-    }
-  }
+      setTimeout(() => validate(), 100);
+    },
+  },
 };
 </script>
 

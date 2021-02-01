@@ -193,6 +193,7 @@
             <date-time
               v-model="userData.documentDate"
               :disabled="!userData.document"
+              :use-production-calendar="false"
               label="Дата публикации"
               placeholder="Выберите дату"
               class="user-data__file-term"

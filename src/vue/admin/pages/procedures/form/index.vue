@@ -687,6 +687,7 @@ export default {
       this.fieldsData.companies = this.$store.getters.companyBuyer;
       if (this.fieldsData.companies.length === 1) {
         this.selectedData.companyName = this.fieldsData.companies[0];
+        this.changeUsers(this.selectedData.companyName);
       }
     }
   },
