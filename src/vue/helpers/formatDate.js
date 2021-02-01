@@ -12,6 +12,10 @@ export default {
       return moment(string).format('YYYY-MM-DD hh:mm:ss');
     },
     addWeekdays(date, days) {
+      /*
+      *  FIXME: Сделать правильный просчет окончания процедуры с учетом производственного календаря
+      *  Пример, можно выбрать 2 февраля и тип процедуры конкурс, тогда окончание процедуры попадает на 23 февраля
+      * */
       date = moment(date);
       while (days > 0) {
         date = date.add(1, 'days');

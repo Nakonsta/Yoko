@@ -1258,8 +1258,7 @@ export default {
       if (toPublish) {
         this.sendNewProcedureData(true);
       } else {
-        // TODO: апи для отправки на модерацию
-        this.sendNewProcedureData(true);
+        this.sendNewProcedureData(true, true);
       }
     },
     validation(toPublish) {
@@ -1287,9 +1286,9 @@ export default {
       this.selectedData.file = files;
       this.isNotFiles = !this.filesValidate();
     },
-    sendNewProcedureData(toPublish) {
+    sendNewProcedureData(toPublish, toModeration = false) {
       const formData = {
-        status: toPublish ? 'planned' : 'draft',
+        status: toPublish ? toModeration ? 'moderation' : 'planned' : 'draft',
         tender_trading_format: this.get(this.selectedData, 'tender_trading_format.id'),
         tender_trading_type: this.get(this.selectedData, 'tender_trading_type.id'),
         analog_products: this.get(this.selectedData, 'analog_products.id'),
@@ -1530,7 +1529,11 @@ export default {
       this.sendProcedure(formDataObj, this.selectedData.id)
         .then(() => {
           if (toPublish) {
-            openPopupById('#send-procedure');
+            if (toModeration) {
+              window.notificationSuccess('Новая процедура отправлена на модерацию');
+            } else {
+              openPopupById('#send-procedure');
+            }
           } else {
             window.notificationSuccess('Новая процедура добавлена в черновик');
           }
