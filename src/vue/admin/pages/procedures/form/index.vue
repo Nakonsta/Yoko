@@ -215,6 +215,7 @@ export default {
   mixins: [api, functions, parsers, formatDate],
   data() {
     return {
+      production_calendar: [],
       markImport: null,
       fieldsData: {
         hideBlock: {
@@ -590,10 +591,10 @@ export default {
 
       datesArray.map((item) => {
         if (this.selectedData[item]) {
-          const days15 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 15);
-          const days7 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 7);
-          const days5 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 5);
-          const days1 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 1);
+          const days15 = this.addDaysWorking(this.selectedData[item].end || this.selectedData[item], 15, this.production_calendar, true);
+          const days7 = this.addDaysWorking(this.selectedData[item].end || this.selectedData[item], 7, this.production_calendar, true);
+          const days5 = this.addDaysWorking(this.selectedData[item].end || this.selectedData[item], 5, this.production_calendar, true);
+          const days1 = this.addDaysWorking(this.selectedData[item].end || this.selectedData[item], 1, this.production_calendar, true);
           setSameDates[item] = moment(this.selectedData[item].end || this.selectedData[item]).format('YYYY-MM-DD');
           setMinDates[item] = days1.format('YYYY-MM-DD');
           setMin2WeeksDates[item] = days15.format('YYYY-MM-DD');
@@ -603,9 +604,9 @@ export default {
       });
 
       if (this.selectedData.publication_date || procedureType) {
-        const days15 = this.addWeekdays(this.selectedData.publication_date, 15);
-        const days7 = this.addWeekdays(this.selectedData.publication_date, 7);
-        const days5 = this.addWeekdays(this.selectedData.publication_date, 5);
+        const days15 = this.addDaysWorking(this.selectedData.publication_date, 15, this.production_calendar, true);
+        const days7 = this.addDaysWorking(this.selectedData.publication_date, 7, this.production_calendar, true);
+        const days5 = this.addDaysWorking(this.selectedData.publication_date, 5, this.production_calendar, true);
         switch (procedureType) {
           case 'Auction':
             this.selectedData.application_delivery_time = days15._d;
@@ -1079,6 +1080,7 @@ export default {
       this.fetchSettingsProcedures()
         .then((response) => {
           this.fieldsData.validationLength = response.data.data;
+          this.production_calendar = response.data.data.production_calendar
           if (id === 'new') {
             this.isLoading = false;
           }
