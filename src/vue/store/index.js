@@ -77,17 +77,21 @@ const store = new Vuex.Store({
   },
   mutations: {
     setCrumbs(state, data = []) {
-      state.breadCrumbs = [
-        {
-          name: 'Главная',
-          link: '/',
-        },
-        {
-          name: 'Личный кабинет',
-          link: '/personal',
-        },
-        ...data,
-      ];
+      if (Array.isArray(data)) {
+        state.breadCrumbs = [
+          {
+            name: 'Главная',
+            link: '/',
+          },
+          {
+            name: 'Личный кабинет',
+            link: '/personal',
+          },
+          ...data,
+        ];
+      } else {
+        state.breadCrumbs = [...data.crumbs];
+      }
     },
     selectRoleBuyer(state) {
       window.openLoader();
