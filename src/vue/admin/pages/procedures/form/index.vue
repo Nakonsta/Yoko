@@ -647,17 +647,15 @@ export default {
     markImport(file) {
       this.importFile(file);
     },
+    isPreview(val) {
+      this.setBreadCrumbs(val);
+    },
   },
   created() {
     this.$emit('fullMode');
     this.getFieldsData();
     const id = this.$route.params.id;
-    this.$store.commit('setCrumbs', [
-      {
-        name: id !== 'new' ? `Редактировать процедуру №${id}` : 'Создать процедуру',
-        link: '/',
-      },
-    ]);
+    this.setBreadCrumbs();
     if (id !== 'new') {
       this.getProcedureItemMainData(id);
       this.title = id && `Редактировать процедуру №${id}`;
@@ -692,6 +690,23 @@ export default {
     }
   },
   methods: {
+    setBreadCrumbs(isPreview = false) {
+      if (isPreview) {
+        this.$store.commit('setCrumbs', [
+          {
+            name: 'Предпросмотр',
+            link: '/',
+          },
+        ]);
+      } else {
+        this.$store.commit('setCrumbs', [
+          {
+            name: this.$route.params.id !== 'new' ? `Редактировать процедуру №${this.$route.params.id}` : 'Создать процедуру',
+            link: '/',
+          },
+        ]);
+      }
+    },
     changeUsers(e) {
       this.fetchCompaniesByInn(e.inn)
         .then((response) => {

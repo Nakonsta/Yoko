@@ -240,10 +240,18 @@
                   class="btn btn--bdr procedures__item-request"
                 >Отправить заявку</a>
               </template>
-              <a
-                :href="`/platform/${item.id}`"
-                class="btn btn--bdr procedures__item-request"
-              >Подробнее</a>
+              <template>
+                <a
+                  v-if="item.status !== 'draft'"
+                  :href="`/platform/${item.id}`"
+                  class="btn btn--bdr procedures__item-request"
+                >Подробнее</a>
+                <a
+                  v-else
+                  :href="`/personal/procedures/${item.id}`"
+                  class="btn btn--bdr procedures__item-request"
+                >Редактировать</a>
+              </template>
             </div>
           </div>
           <div
