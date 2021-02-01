@@ -473,7 +473,7 @@ export default {
       }
       return days;
     },
-    addDaysWorking(startDate, add = 0, production_calendar = []) {
+    addDaysWorking(startDate, add = 0, production_calendar = [], returnMoment = false) {
       if (!add) {
         return startDate;
       }
@@ -495,6 +495,9 @@ export default {
           i -= 1;
         }
       } while (i > 0);
+      if (returnMoment) {
+        return date;
+      }
       return date.format('YYYY-MM-DD 00:00:00');
     },
   },
