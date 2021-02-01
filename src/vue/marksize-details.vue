@@ -396,7 +396,7 @@ export default {
               },
               {
                 name: 'Каталог',
-                link: '/',
+                link: '/catalog',
               },
               {
                 name: marksizeDetailData.name,
