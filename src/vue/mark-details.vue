@@ -1,8 +1,6 @@
 <template>
   <div>
-    <breadCrumbs
-      :crumbs="breadCrumbs"
-    />
+    <breadCrumbs />
     <pageTitle
       :title="title"
     />
@@ -102,6 +100,7 @@ import MarkManufacturer from './components/blocks/catalog-details/mark-manufactu
 import MarkAdditional from './components/blocks/catalog-details/mark-additional.vue';
 import { initMore } from '../assets/js/main/modules/more.js';
 import api from './helpers/api';
+import metaDataPage from "@/helpers/metaDataPage";
 
 export default {
   name: 'MarkDetails',
@@ -117,12 +116,11 @@ export default {
     breadCrumbs,
     pageTitle,
   },
-  mixins: [api],
+  mixins: [api, metaDataPage],
   data() {
     return {
       markId: null,
       title: '',
-      breadCrumbs: [],
       rootData: {
         description: '',
         images: [],
@@ -275,22 +273,6 @@ export default {
     this.getMarkData(this.markId);
   },
   methods: {
-    setBeadCrumbs(name) {
-      this.breadCrumbs = [
-        {
-          name: 'Главная',
-          link: '/',
-        },
-        {
-          name: 'Каталог',
-          link: '/catalog',
-        },
-        {
-          name,
-          link: '/',
-        },
-      ];
-    },
     setTitle(name) {
       this.title = name;
     },
@@ -311,7 +293,6 @@ export default {
       };
 
       this.setTitle(data.name);
-      this.setBeadCrumbs(data.name);
 
       this.setCharacters(data);
       this.setDocuments(data);
@@ -389,6 +370,23 @@ export default {
       this.fetchMark(id)
         .then((response) => {
           const markData = response.data.data;
+          this.$store.commit('setCrumbs', {
+            crumbs: [
+              {
+                name: 'Главная',
+                link: '/',
+              },
+              {
+                name: 'Каталог',
+                link: '/',
+              },
+              {
+                name: markData.name,
+                link: '/',
+              },
+            ],
+          });
+          this.setHeadTitle(markData.name);
           this.prepareMarkData(markData);
         })
         .catch((e) => {

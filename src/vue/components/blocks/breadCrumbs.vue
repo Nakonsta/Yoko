@@ -32,8 +32,5 @@ export default {
       return this.$store.state.breadCrumbs;
     },
   },
-  // created() {
-  //   this.$store.commit('setCrumbs');
-  // },
 };
 </script>
