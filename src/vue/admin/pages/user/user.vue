@@ -762,7 +762,8 @@ export default {
         transition: 0.2s;
 
         font-family: Roboto;
-        font-size: 10px;
+        font-size: 12px;
+        line-height: 1;
         color: #fff;
 
         @include mq($until: tablet) {
