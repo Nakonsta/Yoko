@@ -1,34 +1,34 @@
 <template>
     <div class="tender-item__winner">
         <div class="tender-item__tabs">
-            <div class="tabs tabs--line js-tabs js-more" v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.lot_amounts && tenderItemData.purchase_subject.lot_amounts.length > 0">
+            <div class="tabs tabs--line" v-if="tenderItemData.purchase_subject && tenderItemData.purchase_subject.lot_amounts && tenderItemData.purchase_subject.lot_amounts.length > 0">
                 <ul v-if="tenderItemData.purchase_subject.lot_amounts.length === 1" class="js-more__items">
                     <li
-                        class="js-more__item active"
+                        class="active"
                     >
-                        <a href="#">Все заявки</a>
+                        <a>Все заявки</a>
                     </li>
                 </ul>
-                <ul v-else class="js-more__items">
+                <ul v-else class="js-more__items js-more__items--pointer">
                     <li
-                        class="js-more__item active"
+                        :class="[{'active': actualTab === 'all'}]"
                     >
-                        <a href="#">Все заявки</a>
+                        <a @click="getApplicationsList()">Все заявки</a>
                     </li>
                     <li
                         v-for="(item, i) in tenderItemData.purchase_subject.lot_amounts"
                         :key="i"
-                        class="js-more__item"
+                        :class="[{'active': actualTab === i+1}]"
                     >
-                        <a href="#" @click="getParticipantsByLot(i+1)">
+                        <a @click="getParticipantsByLot(i+1)">
                             Лот {{ i+1 }}
                         </a>
                     </li>
                 </ul>
             </div>
-            <div class="winner-choice">
+            <div v-if="!isLoading" class="winner-choice">
                 <div class="winner-choice-all">
-                    <div class="winner-choice-all__items">
+                    <div v-if="participants.length" class="winner-choice-all__items">
                         <div 
                             v-for="participant in participants"
                             :key="participant.id"
@@ -54,10 +54,15 @@
                                     </div>
                                 </div>
                                 <div class="winner-choice__item-block winner-choice__item-lots">
-                                    <div v-show="participant.procedure && participant.procedure.purchase_subject && participant.procedure.purchase_subject.lot_amounts.length">
+                                    <div v-show="participant.subject && participant.subject.lots_number">
                                         <div class="winner-choice__item-title">Лоты</div>
                                         <div class="winner-choice__item-value">
-                                            {{ participant.procedure.purchase_subject.lot_amounts.length }} 
+                                            <template v-if="typeof(participant.subject.lots_number) == 'number'">
+                                                {{ participant.subject.lots_number }}
+                                            </template>
+                                            <template v-if="typeof(participant.subject.lots_number) == 'array'">
+                                                {{ participant.subject.lots_number.length }}
+                                            </template>
                                              из 
                                             {{ tenderItemData.purchase_subject.lot_amounts.length }}
                                         </div>
@@ -79,6 +84,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div v-else class="winner-choice-all__items">
+                        Заявок пока нет
                     </div>
                 </div>
             </div>
@@ -124,6 +132,9 @@ export default {
             currentFilter: {},
             participants: [],
             totalParticipants: 0,
+            actualTab: 'all',
+            isLoading: true,
+            visibleRebiddingBtn: false
         }
     },
 
@@ -135,7 +146,7 @@ export default {
 
     created() {
         this.getApplicationsList();
-        this.getItems()
+        this.showInitialRedibbingBtn();
     },
 
     methods: {
@@ -179,6 +190,9 @@ export default {
                     }
                     this.participants = items;
                     this.totalParticipants = data.data.data.total;
+                    this.actualTab = 'all';
+                    this.isLoading = false;
+                    this.toggleRedibbingBtn(false);
                 })
                 .catch((e) => {
                     console.log(e)
@@ -187,6 +201,7 @@ export default {
         getParticipantsByLot(lot) {
             this.fetchProcedureApplicationsListByLot(lot, this.tenderItemData.id, this.currentFilter, this.page)
                 .then((data) => {
+                    this.isLoading = true;
                     const items = data.data.data.items;
                     const companiesINN = [];
                     items.forEach((item, index) => {
@@ -211,13 +226,24 @@ export default {
                     }
                     this.participants = items;
                     this.totalParticipants = data.data.data.total;
+                    this.actualTab = lot;
+                    this.isLoading = false;
+                    this.toggleRedibbingBtn(true);
                 })
                 .catch((e) => {
                     console.log(e)
                 })
         },
-        getItems() {
-            this.sendProcedureApplicationStatus((159, 'submitted'))
+        showInitialRedibbingBtn() {
+            if (this.tenderItemData.purchase_subject.lot_amounts.length === 1) {
+                this.visibleRebiddingBtn = true;
+                this.$emit('visibleRebiddingBtn', true);
+                return false;
+            }
+        },
+        toggleRedibbingBtn(flag) {
+            this.$emit('visibleRebiddingBtn', flag);
+            return false;
         }
     }
 }
@@ -270,6 +296,11 @@ export default {
                 line-height: 20px;
                 color: $colorGray;
                 padding-bottom: 0.75rem;
+            }
+        }
+        .js-more__items {
+            &--pointer {
+                cursor: pointer;
             }
         }
     }
