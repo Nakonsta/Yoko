@@ -524,5 +524,8 @@ export default {
     copyContractDocument(id, data) {
       return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/contracts/${id}/documents/copy`, data);
     },
+    sendRebidding(id, data) {
+      return axios.post(`${process.env.API_URL_TENDER_SERVICE}/api/procedure/${id}/rebidding`, data);
+    }
   },
 };

@@ -13,6 +13,7 @@
         :tender-item-data="tenderItemData"
         :items-statuses="itemsStatuses"
         @changeTab="changeTab"
+        @changeLotTab="changeLotTab"
         @visibleRebiddingBtn="toggleRebiddingBtn"
       />
       <TenderItemMenu
@@ -23,6 +24,7 @@
         :company="company"
         :buyer-menu="buyerMenu"
         :visibleRebiddingBtn="visibleRebiddingBtn"
+        :activeLotTab="activeLotTab"
         @changeTab="changeTab"
         @chooseWinner="chooseWinner"
       />
@@ -79,6 +81,7 @@ export default {
       tenderItemId: '',
       isLoading: true,
       activeTab: 'info',
+      activeLotTab: 'all',
       winnerChoice: false,
       visibleRebiddingBtn: false,
       tenderItemData: {
@@ -315,6 +318,10 @@ export default {
           }
         }
       }
+      return false;
+    },
+    changeLotTab(lotTab) {
+      this.activeLotTab = lotTab;
       return false;
     },
     checkUrlHash() {

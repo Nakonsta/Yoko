@@ -27,18 +27,94 @@
             " 
             class="tender-item__menu-rebidding"
         >
-            <a href="#" class="btn btn--bdr">Объявить переторжку</a>
+            <span class="btn btn--bdr" @click="openModal('#winner-choice__rebidding-modal')">Объявить переторжку</span>
+        </div>
+        <div id="winner-choice__rebidding-modal" class="popup popup--alt">
+            <div class="popup__body">
+                <div class="popup__content">
+                    <a href="javascript:{}" class="popup__close" @click="closeModal('#winner-choice__rebidding-modal')"><svg class="sprite-close"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="\./img/sprite.svg#close"></use></svg></a>
+                    <div class="popup__title">Объявление переторжки</div>
+                    <div class="popup__content-container">
+                         <ValidationObserver ref="form" tag="div" mode="eager">
+                            <form class="popup__form" @submit.prevent="sendForm" slot-scope="{ valid }">
+                                <radio-input
+                                    name="rebidding_type"
+                                    v-model="rebiddingData.declared_rebidding_type"
+                                    :label="[
+                                    {name: 'Новый запрос цен', id: 'price_request'},
+                                    {name: 'Переторжка', id: 'rebidding'}
+                                    ]"
+                                    rules="required"
+                                ></radio-input>
+                                <date-time
+                                    v-if="rebiddingData.declared_rebidding_type === 'price_request'"
+                                    mode="dateTime"
+                                    v-model="rebiddingData.rebidding_date_end"
+                                    label="Дата и время окончания"
+                                    placeholder="Выберите дату"
+                                    :rules="{required: true}"
+                                ></date-time>
+                                <date-time
+                                    v-if="rebiddingData.declared_rebidding_type === 'rebidding'"
+                                    mode="dateTime"
+                                    v-model="rebiddingData.rebidding_date_start"
+                                    label="Дата и время начала акциона"
+                                    placeholder="Выберите дату"
+                                    :rules="{required: true}"
+                                ></date-time>
+                                <InputInput
+                                    v-model="rebiddingData.minimal_step"
+                                    label="Минимальный шаг аукциона:"
+                                    parent-class="field__container"
+                                    validation-name="Минимальный шаг аукциона"
+                                    placeholder="Введите значение"
+                                    rules="required"
+                                />
+                                <SelectInput
+                                    v-if="rebiddingData.declared_rebidding_type === 'rebidding'"
+                                    parentClass="field__container"
+                                    label="Время на ответ участника:"
+                                    rules="required"
+                                    :isSingle="true"
+                                    placeholder="Выберите из списка"
+                                    :close="true"
+                                    v-model="rebiddingData.response_time_minutes"
+                                    :options="answerTimes"
+                                />
+                                <button type="submit" class="btn" :disabled="!valid">Сохранить</button>
+                            </form>
+                        </ValidationObserver>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import SelectInput from "@/components/forms/Select";
+import RadioInput from '@/components/forms/Radio.vue';
+import DateTime from '@/components/forms/DateTime.vue';
+import InputInput from '@/components/forms/Input';
+import functions from '@/helpers/functions';
+import formatDate from '@/helpers/formatDate';
+
 export default {
     name: 'TenderItemMenu',
+
+    components: {
+        SelectInput,
+        RadioInput,
+        DateTime,
+        InputInput
+    },
 
     props: {
         activeTab: {
             type: String,
+            required: true,
+        },
+        activeLotTab: {
             required: true,
         },
         tabs: {
@@ -65,6 +141,27 @@ export default {
         }
     },
 
+    mixins: [functions, formatDate],
+
+    data() {
+        return {
+            answerTimes: [
+                {id: 10, name: '10 мин'},
+                {id: 20, name: '20 мин'},
+                {id: 30, name: '30 мин'},
+                {id: 40, name: '40 мин'},
+                {id: 50, name: '50 мин'},
+                {id: 60, name: '60 мин'}],
+            rebiddingData: {
+                response_time_minutes: null,
+                declared_rebidding_type: 'price_request',
+                rebidding_date_start: null,
+                rebidding_date_end: null,
+                minimal_step: null
+            }
+        }
+    },
+
     methods: {
         changeActiveTab(evt, hash) {
             evt.preventDefault();
@@ -86,6 +183,37 @@ export default {
             //     evt.preventDefault();
             //     this.$emit('chooseWinner', false);
             // }
+        },
+        openModal(popupId) {
+            openPopupById(popupId);
+        },
+        closeModal(popupId) {
+            closePopupById(popupId);
+        },
+        sendForm(evt) {
+            evt.preventDefault();
+            let fData = {
+                lot: this.activeLotTab === 'all' ? 1 : this.activeLotTab,
+                response_time_minutes: this.rebiddingData.response_time_minutes.id,
+                declared_rebidding_type: this.rebiddingData.declared_rebidding_type,
+            };
+            if (this.rebiddingData.declared_rebidding_type === 'price_request') {
+                fData.rebidding_date_end = this.formatDateForFilter(this.rebiddingData.rebidding_date_end);
+            }
+            if (this.rebiddingData.declared_rebidding_type === 'rebidding') {
+                fData.rebidding_date_start = this.formatDateForFilter(this.rebiddingData.rebidding_date_start);
+                fData.minimal_step = this.rebiddingData.minimal_step;
+            }
+            const formDataObj = this.objectToFormData(fData);
+            console.log(formDataObj);
+            this.sendRebidding(this.tenderItemData.id, formDataObj)
+                .then(() => {
+                    window.notificationSuccess('Объявлена переторжка');
+                    closePopupById('#winner-choice__rebidding-modal');
+                })
+                .catch((response) => {
+                    window.notificationError('Ошибка сервера');
+                });
         }
     }
 }

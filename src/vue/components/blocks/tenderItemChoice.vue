@@ -191,6 +191,7 @@ export default {
                     this.participants = items;
                     this.totalParticipants = data.data.data.total;
                     this.actualTab = 'all';
+                    this.$emit('changeLotTab', 'all');
                     this.isLoading = false;
                     this.toggleRedibbingBtn(false);
                 })
@@ -227,6 +228,7 @@ export default {
                     this.participants = items;
                     this.totalParticipants = data.data.data.total;
                     this.actualTab = lot;
+                    this.$emit('changeLotTab', lot);
                     this.isLoading = false;
                     this.toggleRedibbingBtn(true);
                 })
