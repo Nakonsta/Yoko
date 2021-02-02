@@ -29,19 +29,19 @@
           :disabled="isCreatedProcedure"
           :min-date="
             procedureIdData.procedureType === 'Query'
-              ? new Date(procedureIdData.setMinFiveDates.publication_date)
+              ? addOneDay(procedureIdData.setMinFiveDates.publication_date)
               : procedureIdData.procedureType === 'Offers'
-                ? new Date(procedureIdData.setMinSevenDates.publication_date)
-                : new Date(procedureIdData.setSameDates.publication_date)
+                ? addOneDay(procedureIdData.setMinSevenDates.publication_date)
+                : addOneDay(procedureIdData.setSameDates.publication_date)
           "
           :rules="{
             required: true,
             minMaxDateCheck:
               procedureIdData.procedureType === 'Query'
-                ? procedureIdData.setMinFiveDates.publication_date
+                ? addOneDay(procedureIdData.setMinFiveDates.publication_date, true)
                 : procedureIdData.procedureType === 'Offers'
-                  ? procedureIdData.setMinSevenDates.publication_date
-                  : procedureIdData.setSameDates.publication_date
+                  ? addOneDay(procedureIdData.setMinSevenDates.publication_date, true)
+                  : addOneDay(procedureIdData.setSameDates.publication_date, true)
           }"
         />
       </div>
@@ -148,6 +148,7 @@ import DateTime from '@/components/forms/DateTime.vue';
 import TextInput from '@/components/forms/Input.vue';
 import CheckboxInput from '@/components/forms/Checkbox.vue';
 import DateRange from '@/components/forms/DateRange.vue';
+import moment from 'moment';
 
 export default {
   name: 'TermsOfPurchase',
@@ -169,6 +170,20 @@ export default {
     procedureIdData: {
       default: null,
       type: Object,
+    },
+  },
+  methods: {
+    addOneDay(textDate, returnText = false) {
+      const date = new Date(textDate);
+      const addDays = 1;
+
+      date.setDate(date.getDate() + addDays);
+
+      if (returnText) {
+        return moment(date).format('YYYY-MM-DD');
+      }
+
+      return date;
     },
   },
 };
