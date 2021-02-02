@@ -215,6 +215,7 @@ export default {
   mixins: [api, functions, parsers, formatDate],
   data() {
     return {
+      production_calendar: [],
       markImport: null,
       fieldsData: {
         hideBlock: {
@@ -590,10 +591,10 @@ export default {
 
       datesArray.map((item) => {
         if (this.selectedData[item]) {
-          const days15 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 15);
-          const days7 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 7);
-          const days5 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 5);
-          const days1 = this.addWeekdays(this.selectedData[item].end || this.selectedData[item], 1);
+          const days15 = this.addDaysWorking(this.selectedData[item].end || this.selectedData[item], 15, this.production_calendar, true);
+          const days7 = this.addDaysWorking(this.selectedData[item].end || this.selectedData[item], 7, this.production_calendar, true);
+          const days5 = this.addDaysWorking(this.selectedData[item].end || this.selectedData[item], 5, this.production_calendar, true);
+          const days1 = this.addDaysWorking(this.selectedData[item].end || this.selectedData[item], 1, this.production_calendar, true);
           setSameDates[item] = moment(this.selectedData[item].end || this.selectedData[item]).format('YYYY-MM-DD');
           setMinDates[item] = days1.format('YYYY-MM-DD');
           setMin2WeeksDates[item] = days15.format('YYYY-MM-DD');
@@ -603,9 +604,9 @@ export default {
       });
 
       if (this.selectedData.publication_date || procedureType) {
-        const days15 = this.addWeekdays(this.selectedData.publication_date, 15);
-        const days7 = this.addWeekdays(this.selectedData.publication_date, 7);
-        const days5 = this.addWeekdays(this.selectedData.publication_date, 5);
+        const days15 = this.addDaysWorking(this.selectedData.publication_date, 15, this.production_calendar, true);
+        const days7 = this.addDaysWorking(this.selectedData.publication_date, 7, this.production_calendar, true);
+        const days5 = this.addDaysWorking(this.selectedData.publication_date, 5, this.production_calendar, true);
         switch (procedureType) {
           case 'Auction':
             this.selectedData.application_delivery_time = days15._d;
@@ -647,17 +648,15 @@ export default {
     markImport(file) {
       this.importFile(file);
     },
+    isPreview(val) {
+      this.setBreadCrumbs(val);
+    },
   },
   created() {
     this.$emit('fullMode');
     this.getFieldsData();
     const id = this.$route.params.id;
-    this.$store.commit('setCrumbs', [
-      {
-        name: id !== 'new' ? `Редактировать процедуру №${id}` : 'Создать процедуру',
-        link: '/',
-      },
-    ]);
+    this.setBreadCrumbs();
     if (id !== 'new') {
       this.getProcedureItemMainData(id);
       this.title = id && `Редактировать процедуру №${id}`;
@@ -692,6 +691,23 @@ export default {
     }
   },
   methods: {
+    setBreadCrumbs(isPreview = false) {
+      if (isPreview) {
+        this.$store.commit('setCrumbs', [
+          {
+            name: 'Предпросмотр',
+            link: '/',
+          },
+        ]);
+      } else {
+        this.$store.commit('setCrumbs', [
+          {
+            name: this.$route.params.id !== 'new' ? `Редактировать процедуру №${this.$route.params.id}` : 'Создать процедуру',
+            link: '/',
+          },
+        ]);
+      }
+    },
     changeUsers(e) {
       this.fetchCompaniesByInn(e.inn)
         .then((response) => {
@@ -1064,6 +1080,7 @@ export default {
       this.fetchSettingsProcedures()
         .then((response) => {
           this.fieldsData.validationLength = response.data.data;
+          this.production_calendar = response.data.data.production_calendar
           if (id === 'new') {
             this.isLoading = false;
           }
@@ -1243,8 +1260,7 @@ export default {
       if (toPublish) {
         this.sendNewProcedureData(true);
       } else {
-        // TODO: апи для отправки на модерацию
-        this.sendNewProcedureData(true);
+        this.sendNewProcedureData(true, true);
       }
     },
     validation(toPublish) {
@@ -1272,9 +1288,9 @@ export default {
       this.selectedData.file = files;
       this.isNotFiles = !this.filesValidate();
     },
-    sendNewProcedureData(toPublish) {
+    sendNewProcedureData(toPublish, toModeration = false) {
       const formData = {
-        status: toPublish ? 'planned' : 'draft',
+        status: toPublish ? toModeration ? 'moderation' : 'planned' : 'draft',
         tender_trading_format: this.get(this.selectedData, 'tender_trading_format.id'),
         tender_trading_type: this.get(this.selectedData, 'tender_trading_type.id'),
         analog_products: this.get(this.selectedData, 'analog_products.id'),
@@ -1515,7 +1531,11 @@ export default {
       this.sendProcedure(formDataObj, this.selectedData.id)
         .then(() => {
           if (toPublish) {
-            openPopupById('#send-procedure');
+            if (toModeration) {
+              window.notificationSuccess('Новая процедура отправлена на модерацию');
+            } else {
+              openPopupById('#send-procedure');
+            }
           } else {
             window.notificationSuccess('Новая процедура добавлена в черновик');
           }

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <breadCrumbs
-      :crumbs="breadCrumbs"
-    />
+    <breadCrumbs />
     <pageTitle
       :title="title"
     />
@@ -120,6 +118,7 @@ import MarkManufacturer from './components/blocks/catalog-details/mark-manufactu
 // import MarkAdditional from './components/blocks/catalog-details/mark-additional.vue';
 import MarkMarksizeList from './components/blocks/catalog-details/mark-marksize-list';
 import { initMore } from '../assets/js/main/modules/more.js';
+import metaDataPage from "@/helpers/metaDataPage";
 
 export default {
   name: 'MarkSizeDetails',
@@ -135,12 +134,11 @@ export default {
     breadCrumbs,
     pageTitle,
   },
-  mixins: [api],
+  mixins: [api, metaDataPage],
   data() {
     return {
       marksizeId: null,
       title: '',
-      breadCrumbs: [],
       rootData: {
         description: '',
         appointment: '',
@@ -286,22 +284,6 @@ export default {
     initMore();
   },
   methods: {
-    setBeadCrumbs(name) {
-      this.breadCrumbs = [
-        {
-          name: 'Главная',
-          link: '/',
-        },
-        {
-          name: 'Каталог',
-          link: '/catalog',
-        },
-        {
-          name,
-          link: '/',
-        },
-      ];
-    },
     setTitle(name) {
       this.title = name;
     },
@@ -325,7 +307,6 @@ export default {
       };
 
       this.setTitle(data.name);
-      this.setBeadCrumbs(data.name);
 
       this.setContainers(data);
       this.setCharacters(data);
@@ -407,6 +388,23 @@ export default {
       this.fetchMarksizeDetail(id)
         .then((response) => {
           const marksizeDetailData = response.data.data;
+          this.$store.commit('setCrumbs', {
+            crumbs: [
+              {
+                name: 'Главная',
+                link: '/',
+              },
+              {
+                name: 'Каталог',
+                link: '/catalog',
+              },
+              {
+                name: marksizeDetailData.name,
+                link: '/',
+              },
+            ],
+          });
+          this.setHeadTitle(marksizeDetailData.name);
           this.prepareMarksizeDetailData(marksizeDetailData);
         })
         .catch((e) => {
