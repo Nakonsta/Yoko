@@ -73,7 +73,7 @@
             <button
                 class="btn btn--bdr"
                 @click="() => saveField(key)"
-                :disabled="!(field.value && field.description && field.name)"
+                :disabled="!(field.value && field.description && field.name) || field.isSave"
             >
               Сохранить
             </button>
