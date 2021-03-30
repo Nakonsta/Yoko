@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yokohama - авторизация</title>
+</head>
+<body>
+    <div class="modal-page">
+        <div class="modal-page__bg"></div>
+        <div class="modal-page__bg modal-page__bg--call"></div>
+        <div class="modal-page__bg modal-page__bg--login"></div>
+        <header class="header-modal">
+            <div class="container">
+                <div class="header-modal__inner d-flex justify">
+                    <div class="header-modal__logo">
+                        <svg class="header-modal__svg"  xmlns="http://www.w3.org/2000/svg" width="217" height="31" viewBox="0 0 217 31" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M18.2025 15.505L2.59722 31H0L15.6053 15.505L0 0.0105343H2.59722L18.2025 15.505Z" fill="#E2302E"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M32.1127 12.1231L44.3508 0H46.9476L33.4333 13.4418L34.2483 14.229L48.5546 0H51.1518L19.9632 30.989H17.3664L32.9713 15.484L17.3664 0H19.9632L25.6417 5.64668L31.3207 0.0105355H33.9179L26.9408 6.94379L27.7993 7.80518L35.6566 0H38.2538L29.0979 9.10325L29.956 9.95363L40.0145 0H42.6117L31.2767 11.2512L32.1127 12.1231Z" fill="#E2302E"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M22.5384 15.505L6.93353 31H4.33583L19.9416 15.505L4.33583 0.0105343H6.93353L22.5384 15.505Z" fill="#E2302E"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M26.8747 15.505L11.2694 31H8.67166L24.277 15.505L8.67166 0.0105343H11.2694L26.8747 15.505Z" fill="#E2302E"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M31.2106 15.505L15.6053 31H13.0081L28.6129 15.505L13.0081 0.0105343H15.6053L31.2106 15.505Z" fill="#E2302E"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M205.676 9.72674L203.256 16.6576H208.158L205.676 9.72674ZM204.032 3.73723H207.326L217 26.7209H212.346L209.864 20.7883H201.674L199.13 26.7209H194.476L204.032 3.73723ZM169.729 26.7209V3.73723H175.489L181.662 21.317L187.908 3.73723H193.735V26.7209H189.49V9.42605L183.498 26.7209H179.899L173.973 9.42605V26.7209H169.729ZM158.014 9.72674L155.595 16.6576H160.496L158.014 9.72674ZM156.37 3.73723H159.664L169.338 26.7209H164.685L162.203 20.7883H154.013L151.469 26.7209H146.815L156.37 3.73723ZM129.508 3.73723H133.753V12.9616H142.004V3.73723H146.219V26.7209H142.004V17.0612H133.753V26.7209H129.508V3.73723ZM109.015 15.4515C109.067 16.6418 109.342 17.7187 109.843 18.6868C110.339 19.6545 110.98 20.4723 111.761 21.1355C112.542 21.8025 113.364 22.3043 114.232 22.6414C115.096 22.978 115.903 23.1489 116.652 23.1489C118.017 23.1489 119.289 22.8023 120.468 22.1142C121.652 21.4252 122.598 20.4781 123.312 19.2772C124.025 18.0759 124.408 16.7558 124.47 15.327C124.47 13.9916 124.164 12.7337 123.56 11.5534C122.955 10.3736 122.092 9.41025 120.964 8.67048C119.843 7.93023 118.55 7.52132 117.081 7.438C116.202 7.438 115.293 7.60416 114.352 7.92975C113.411 8.26109 112.537 8.75284 111.73 9.416C110.919 10.0782 110.267 10.9166 109.765 11.9413C109.263 12.9616 109.015 14.1318 109.015 15.4515ZM104.828 15.6329C104.828 13.0497 105.412 10.8295 106.585 8.96017C107.754 7.09183 109.269 5.68362 111.12 4.73174C112.965 3.78416 114.874 3.30774 116.833 3.30774C118.436 3.30774 119.967 3.63381 121.424 4.28069C122.883 4.93332 124.16 5.82392 125.256 6.9568C126.357 8.08489 127.21 9.38439 127.825 10.8544C128.44 12.3195 128.746 13.8517 128.746 15.4462C128.746 15.5233 128.741 15.6325 128.731 15.7723C128.72 15.9169 128.715 16.0256 128.715 16.0984C128.643 17.4706 128.167 19.0335 127.288 20.7883C126.41 22.5432 125.065 24.0649 123.266 25.3486C121.467 26.6371 119.239 27.2792 116.581 27.2792C114.621 27.2428 112.889 26.8597 111.39 26.1248C109.89 25.395 108.654 24.4427 107.682 23.2672C106.715 22.0974 105.997 20.8396 105.531 19.4994C105.06 18.164 104.828 16.8755 104.828 15.6329ZM92.4208 3.73723H96.6657V13.7387L103.832 3.73723H108.92L100.234 15.0119L108.92 26.7209H103.832L96.6657 16.5958V26.7209H92.4208V3.73723ZM71.9285 15.4515C71.9797 16.6418 72.2541 17.7187 72.7559 18.6868C73.252 19.6545 73.8932 20.4723 74.6737 21.1355C75.4547 21.8025 76.2768 22.3043 77.1454 22.6414C78.0092 22.978 78.8156 23.1489 79.565 23.1489C80.9302 23.1489 82.202 22.8023 83.3813 22.1142C84.565 21.4252 85.5112 20.4781 86.2247 19.2772C86.9381 18.0759 87.3207 16.7558 87.3825 15.327C87.3825 13.9916 87.0775 12.7337 86.4727 11.5534C85.8679 10.3736 85.0046 9.41025 83.8769 8.67048C82.7555 7.93023 81.4626 7.52132 79.994 7.438C79.1154 7.438 78.2051 7.60416 77.2642 7.92975C76.3228 8.26109 75.4494 8.75284 74.6425 9.416C73.8309 10.0782 73.1792 10.9166 72.6774 11.9413C72.1765 12.9616 71.9285 14.1318 71.9285 15.4515ZM67.7401 15.6329C67.7401 13.0497 68.3243 10.8295 69.4984 8.96017C70.6663 7.09183 72.1818 5.68362 74.0325 4.73174C75.8779 3.78416 77.7861 3.30774 79.746 3.30774C81.3487 3.30774 82.8795 3.63381 84.3376 4.28069C85.7951 4.93332 87.0727 5.82392 88.1683 6.9568C89.2696 8.08489 90.1234 9.38439 90.7382 10.8544C91.3535 12.3195 91.6585 13.8517 91.6585 15.4462C91.6585 15.5233 91.6532 15.6325 91.6432 15.7723C91.6327 15.9169 91.6274 16.0256 91.6274 16.0984C91.5556 17.4706 91.0796 19.0335 90.2009 20.7883C89.3218 22.5432 87.9777 24.0649 86.1787 25.3486C84.3787 26.6371 82.1512 27.2792 79.4927 27.2792C77.5333 27.2428 75.8013 26.8597 74.3021 26.1248C72.8024 25.395 71.567 24.4427 70.5944 23.2672C69.6277 22.0974 68.9089 20.8396 68.4435 19.4994C67.9733 18.164 67.7401 16.8755 67.7401 15.6329ZM51.7302 3.73723H56.4462L61.4094 14.23L66.4664 3.73723H71.1149L63.5508 18.2415V26.7209H59.3054V18.2415L51.7302 3.73723Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="header-modal__auth">
+                        <a href="#" class="header-modal__auth-link d-flex align-center">
+                            <span class="header-modal__auth-text">
+                                Авторизоваться
+                            </span>
+                            <svg class="header-modal__auth-svg" xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 0 17 18" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.3459 17.998L7 16.598L14.308 8.99962L7.00282 1.4L8.34872 0L17 9L15.6541 10.4L15.6538 10.3997L8.3459 17.998ZM1.3459 17.998L0 16.598L7.30798 8.99962L0.00281906 1.4L1.34872 0L10 9L8.6541 10.4L8.65381 10.3997L1.3459 17.998Z" fill="white"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main  class="modal-page__main">
+            <section class="modal-page__content">
+                <div class="container">
+                    <div class="modal-page__content-inner">
+                        <div class="auth__block">
+                            <div class="auth__text" >
+                                <div class="auth__title accent">
+                                    Хотите 
+                                    стать 
+                                    партнёром?
+                                </div>
+                                <div class="auth__desc">
+                                    Оставьте свои контактные данные 
+                                    и наши менеджеры свяжутся 
+                                    с Вами для согласования условий
+                                </div>
+                                <div class="auth__bottom">
+                                    <a href="#" class="btn btn--red btn--skew btn--arrow auth__call-btn" tabindex="0">
+                                        <span class="btn-text">Обратный звонок</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="call d-flex justify" style="display: none;">
+                            <div class="auth__text" >
+                                <div class="auth__title accent">
+                                    Обратный звонок
+                                </div>
+                                <div class="auth__desc">
+                                    Оставьте свои контактные данные 
+                                    и наши менеджеры свяжутся 
+                                    с Вами для согласования условий
+                                </div>
+                                <div class="auth__bottom">
+                                    <a href="#" class="btn btn--gray btn--skew btn--arrow call__return" tabindex="0">
+                                        <svg class="btn-svg-return" xmlns="http://www.w3.org/2000/svg" width="7" height="13" viewBox="0 0 7 13" fill="none">
+                                            <path opacity="0.6" fill-rule="evenodd" clip-rule="evenodd" d="M7 11.7L5.82228 13L-2.84133e-07 6.5002L0.000139906 6.50004L0.000101282 6.5L5.82228 -5.14798e-08L7 1.3L2.34215 6.50012L7 11.7Z" fill="black"/>
+                                        </svg>
+                                        <span class="btn-text">Вернуться</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="modal-page__form-wrapper">
+                                <form class="modal-page__form">
+                                    <div class="form__row">
+                                        <input name="name" type="text" class="input" id="name" required>
+                                        <label for="name" class="label">
+                                            Ваше имя*
+                                        </label>
+                                    </div>
+                                    <div class="form__row">
+                                        <input name="phone" type="tel" class="input tel" id="phone" required>
+                                        <label for="phone" class="label">
+                                            Телефон*
+                                        </label>
+                                    </div>
+                                    <div class="custom-checkbox__wrapper">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" value="value-1">
+                                            <span>
+                                                <span class="checkbox-text">
+                                                    Нажимая кнопку «Заказать звонок», 
+                                                    я даю свое согласие на обработку моих персональных данных, в соответствии 
+                                                    с Федеральным законом от 27.07.2006 года №152-ФЗ «О персональных данных», на условиях и для целей, определенных 
+                                                    в Согласии на <a href="#" class="checkbox-link">обработку персональных данных</a>
+                                                </span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <a href="#" class="btn btn--red btn--skew btn--arrow" tabindex="0">
+                                        <span class="btn-text">Заказать звонок</span>
+                                    </a>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="login__block d-flex justify" style="display: none;">
+                            <div class="auth__text" >
+                                <div class="auth__title accent">
+                                    Авторизация
+                                </div>
+                                <div class="auth__desc">
+                                    Мы рады, что вы присоединились 
+                                    к нам, и стали нашими партнерами
+                                </div>
+                                <div class="auth__bottom">
+                                    <a href="#" class="btn btn--gray btn--skew btn--arrow call__return" tabindex="0">
+                                        <svg class="btn-svg-return" xmlns="http://www.w3.org/2000/svg" width="7" height="13" viewBox="0 0 7 13" fill="none">
+                                            <path opacity="0.6" fill-rule="evenodd" clip-rule="evenodd" d="M7 11.7L5.82228 13L-2.84133e-07 6.5002L0.000139906 6.50004L0.000101282 6.5L5.82228 -5.14798e-08L7 1.3L2.34215 6.50012L7 11.7Z" fill="black"/>
+                                        </svg>
+                                        <span class="btn-text">Вернуться</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="modal-page__form-wrapper">
+                                <form class="modal-page__form" id="auth-form">
+                                    <div class="form__row">
+                                        <input name="login" type="text" class="input" id="login" required>
+                                        <label for="login" class="label">
+                                            Логин*
+                                        </label>
+                                    </div>
+                                    <div class="form__row">
+                                        <input name="password" type="password" class="input input--large" id="password" required>
+                                        <label for="password" class="label">
+                                            Пароль*
+                                        </label>
+                                    </div>
+                                    <div class="custom-checkbox__wrapper">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" value="value-1">
+                                            <span>
+                                                Запомнить меня на этом устройстве
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="modal-page__btns d-flex justify align-items">
+                                        <button type="submit" class="btn btn--red btn--skew btn--arrow" tabindex="0">
+                                            <span class="btn-text">Войти</span>
+                                        </button>
+                                        <a href="#" class="modal-page__forgot" tabindex="0">
+                                            Забыли пароль?
+                                        </a>
+                                    </div>
+                                </form>
+                                <div class="modal-page__rules">
+                                    Вход в систему означает согласие<br>
+                                    с <a href="#" class="modal-page__rules-link">
+                                        условиями сотрудничества
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="login__block-forgot d-flex justify" style="display: none;">
+                            <div class="auth__text" >
+                                <div class="auth__title accent">
+                                    Восстановление пароля
+                                </div>
+                                <div class="auth__desc">
+                                    Мы вышлем вам электронное письмо с информацией 
+                                    о дальнейших действиях
+                                </div>
+                                <div class="auth__bottom">
+                                    <a href="#" class="btn btn--gray btn--skew btn--arrow call__return" tabindex="0">
+                                        <svg class="btn-svg-return" xmlns="http://www.w3.org/2000/svg" width="7" height="13" viewBox="0 0 7 13" fill="none">
+                                            <path opacity="0.6" fill-rule="evenodd" clip-rule="evenodd" d="M7 11.7L5.82228 13L-2.84133e-07 6.5002L0.000139906 6.50004L0.000101282 6.5L5.82228 -5.14798e-08L7 1.3L2.34215 6.50012L7 11.7Z" fill="black"/>
+                                        </svg>
+                                        <span class="btn-text">Вернуться</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="modal-page__form-wrapper">
+                                <form class="modal-page__form">
+                                    <div class="form__row">
+                                        <input name="login" type="text" class="input" id="login" required>
+                                        <label for="login" class="label">
+                                            Эл. почта*
+                                        </label>
+                                    </div>
+                                    <div class="modal-page__btns d-flex justify align-items">
+                                        <a href="#" class="btn btn--red btn--skew btn--arrow" tabindex="0">
+                                            <span class="btn-text">Отправить</span>
+                                        </a>
+                                    </div>
+                                </form>
+                                <div class="modal-page__rules">
+                                    Вход в систему означает согласие<br>
+                                    с <a href="#" class="modal-page__rules-link">
+                                        условиями сотрудничества
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="footer-modal">
+            <div class="container">
+                <div class="footer-modal__inner d-flex justify">
+                    <div class="footer-modal__copy">
+                        &copy; 2020 YOKOHAMA RUSSIA
+                    </div>
+                    <div class="footer-modal__right d-flex">
+                        <a href="#" class="footer-modal__link">О компании</a>
+                        <a href="#" class="footer-modal__link">Условия сотрудничества</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

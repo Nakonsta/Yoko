@@ -1,0 +1,159 @@
+.about
+    &__h1
+        padding-bottom: 0
+    &__inner
+        @include mq($until: desktop)
+            flex-direction: column
+    &__found
+        width: 35%
+        position: relative
+        z-index: 5
+        @include mq($until: desktop)
+            width: 100%
+            padding-bottom: 2rem
+        &-title
+            line-height: rem(36px)
+            &--top
+                max-width: rem(416px)
+                padding-top: rem(24px)
+                padding-bottom: rem(60px)
+            &--middle
+                max-width: rem(607px)
+                padding-bottom: rem(23px)
+                &::after
+                    content: none
+            &--bottom
+                max-width: rem(456px)
+                padding-bottom: rem(23px)
+                &::after
+                    content: none
+            @include mq($until: widescreen)
+                font-size: rem(20px)
+                line-height: 1.2
+                max-width: none
+        &-desc
+            line-height: rem(25px)
+            &--top
+                max-width: rem(525px)
+            &--middle
+                max-width: rem(896px)
+                padding-bottom: rem(63px)
+                @include mq($until: desktop)
+                    padding-bottom: 2rem
+            &--bottom
+                max-width: rem(514px)
+            @include mq($until: desktop)
+                max-width: none
+        &-pic
+            width: 65%
+            @include mq($until: desktop)
+                width: 100%
+            &-inner
+                height: 449px
+                background: url(../img/about-1.jpg) no-repeat 50% 50%
+                background-size: cover
+                position: relative
+                &::after
+                    content: ''
+                    position: absolute
+                    top: 0
+                    bottom: 0
+                    left: 60px
+                    width: 70px
+                    background: linear-gradient(to right, $white, $white 25px, $gray 25px, $gray 35px, $white 35px, $white 45px, $gray 45px, $gray 57px, $white 57px, $white 62px, $gray 62px, $gray)
+                    transform: skewX(-25deg)
+                    z-index: 3
+                    @include mq($until: desktop)
+                        content: none
+                &::before
+                    content: ''
+                    position: absolute
+                    top: 0
+                    height: 85%
+                    left: -95px
+                    width: 240px
+                    background: $white
+                    transform: skewX(-25deg)
+                    z-index: 4
+                    @include mq($until: desktop)
+                        content: none
+    &__bottom-beige
+        background: linear-gradient(to bottom, $white, $white 85%, $gray 85%, $gray)
+    &-market
+        padding: rem(83px) 0 rem(92px)
+    &-demand
+        background: linear-gradient(to bottom, $gray, $gray 15%, $white 15%, $white)
+        padding-bottom: rem(72px)
+        &__inner
+            padding-bottom: rem(68px)
+            @include mq($until: desktop)
+                flex-direction: column
+        &__pic
+            width: 50%
+            @include mq($until: desktop)
+                width: 100%
+                margin-bottom: 1.5rem
+            &-inner
+                height: 522px
+                background: url(../img/about-2.jpg) no-repeat 50% 50%
+                background-size: cover
+        &__text
+            width: 50%
+            padding-left: rem(86px)
+            @include mq($until: desktop)
+                width: 100%
+                padding-left: 0
+.quote
+    position: relative
+    padding: rem(36px) rem(165px)
+    @include mq($until: desktop)
+        width: 80%
+        margin: 0 auto
+        padding: rem(28px) rem(65px)
+    @include mq($until: mobile)
+        padding: rem(28px) rem(40px)
+    &::after
+        content: ''
+        background-color: $white
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        transform: skew(-35deg)
+        z-index: 2
+        @include mq($until: mobile)
+            transform: skew(-10deg)
+    &__inner
+        position: relative
+        z-index: 4
+    &__quotes
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        &::before,
+        &::after
+            content: '«'
+            position: absolute
+            top: 50%
+            left: -20px
+            transform: translateY(-50%)
+            color: $forest
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-weight: 700
+            font-size: rem(64px)
+            line-height: rem(36px)
+            z-index: 7
+        &::after
+            content: '»'
+            left: auto
+            right: -12px
+    &__title
+        color: $forest
+        padding-bottom: 0.25rem
+    &__text
+        text-transform: uppercase
+        font-weight: 700
+        font-family: 'RobotoCondensed', Arial, sans-serif

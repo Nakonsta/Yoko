@@ -1,0 +1,462 @@
+.order-search
+    background-color: $black
+    padding: rem(25px) rem(75px) rem(53px)
+    color: $white
+    @include mq($until: widescreen)
+        padding: rem(40px) rem(25px) rem(53px)
+    @include mq($until: mobile)
+        margin-bottom: 1.5rem
+    &__title
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-weight: 700
+        font-size: rem(20px)
+        line-height: rem(24px)
+        padding-bottom: rem(46px)
+        text-transform: uppercase
+        @include mq($until: mobile)
+            white-space: nowrap
+        &--active
+            position: relative
+            cursor: default
+            &::after
+                content: ''
+                position: absolute
+                bottom: 36px
+                left: 0
+                right: 0
+                height: 3px
+                background-color: $cherry
+    &__titles
+        @include mq($until: desktop)
+        overflow-x: auto
+        .order-search__title
+            margin-right: 3rem
+            color: rgb(102, 102, 102)
+            cursor: pointer
+            &:hover,
+            &:focus
+                color: $white
+            &--active
+                color: $white
+    &__submit
+        width: 56px
+        height: 56px
+        background-color: $forest
+        border: none
+        justify-content: center
+        transition: all $animation
+        @include mq($until: desktop)
+            width: 100%
+            margin-bottom: 0.5rem
+        &--desktop
+            @include mq($until: 1023px)
+                display: none
+        &--mobile
+            display: none
+            @include mq($until: 1023px)
+                display: block
+    &__reset
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-weight: 700
+        font-size: rem(15px)
+        line-height: rem(32px)
+        text-transform: uppercase
+        color: rgba($border, 0.7)
+        cursor: pointer
+        opacity: 0
+        &:hover,
+        &:focus
+            color: $white
+        &--active
+            opacity: 1
+    &__dash
+        font-size: rem(15px)
+        line-height: rem(32px)
+        color: $gray60
+        @include mq($until: desktop)
+            display: none
+    &__form
+        @include mq($until: desktop)
+            flex-direction: column
+        &-row
+            margin-bottom: rem(38px)
+            @include mq($until: desktop)
+                flex-direction: column
+                margin-bottom: 0
+            &:last-child
+                margin-right: 0
+        &-checkboxs
+            width: 54%
+            flex-shrink: 0
+            @include mq($until: 1023px)
+                width: 100%
+                flex-direction: column
+                align-items: flex-start
+        .custom-checkbox__wrapper
+            margin-right: rem(30px)
+            &:last-child
+                margin-right: 0
+        .custom-checkbox > span
+            color: rgba($white, 0.6)
+    .form__row
+        width: 18%
+        flex-shrink: 0
+        @include mq($until: desktop)
+            width: 100%
+            padding-bottom: 2.5rem
+        .input
+            width: 100%
+            font-size: rem(17px)
+    .select2
+        width: 100% !important
+    &__header
+        padding: rem(29px) rem(75px) 0
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(15px)
+        line-height: rem(32px)
+        text-transform: uppercase
+        @include mq($until: widescreen)
+            padding: rem(29px) rem(25px) 0
+        @include mq($until: mobile)
+            display: none
+        &--nopadding
+            padding: rem(29px) 0 0 rem(28px)
+        &--nopaddingtop
+            padding-top: 0
+        &--wide
+            @include mq($until: 1023px)
+                display: none
+        &--justify
+            justify-content: space-between
+    &__row
+        @include mq($until: mobile)
+            flex-direction: column
+        &--wide
+            @include mq($until: 1023px)
+                flex-direction: column
+                align-items: flex-start
+    &__num,
+    &__date,
+    &__status,
+    &__sum,
+    &__action
+        width: 20%
+        @include mq($until: mobile)
+            width: 100%
+    &__action
+        &.order-search__row-cell
+            display: none
+            color: $cherry
+    &__num.order-search__row-cell
+        font-weight: 700
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(20px)
+    &__status
+        position: relative
+        padding-left: rem(17px)
+        &::before
+            content: ''
+            position: absolute
+            top: 50%
+            left: 0
+            transform: translateY(-50%)
+            width: 8px
+            height: 8px
+            border-radius: 50%
+        &--process::before
+            background-color: $sunny
+        &--done::before
+            background-color: $forest
+        &--cancelled::before
+            background-color: $cherry
+    &__address,
+    &__contacts
+        width: 37%
+        @include mq($until: mobile)
+            width: 100%
+            padding-bottom: 1.5rem
+    &__address
+        &.order-search__row-cell
+            padding-right: rem(80px)
+            font-size: rem(17px)
+            line-height: rem(25px)
+            @include mq($until: mobile)
+                font-size: rem(14px)
+                line-height: 1.4
+                padding-right: 0
+    &__contacts
+        &.order-search__row-cell
+            padding-right: rem(80px)
+            font-size: rem(15px)
+            line-height: rem(25px)
+            @include mq($until: mobile)
+                font-size: rem(14px)
+                line-height: 1.4
+                padding-right: 0
+    &__hours
+        width: 26%
+        @include mq($until: mobile)
+            width: 100%
+            font-size: rem(14px)
+            line-height: 1.4
+            padding-right: 0
+    &__action
+        position: relative
+        &-inner
+            display: none
+            position: absolute
+            background-color: $white
+            padding: rem(15px) rem(30px) rem(8px) rem(28px)
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.11)
+            left: -30%
+            z-index: 5
+            .order__action
+                padding-left: 0
+                font-size: rem(13px)
+                line-height: rem(40px)
+        &:hover,
+        &:focus
+            color: $cherry
+        &:hover .order-search__action-inner,
+        &:focus .order-search__action-inner
+            display: block
+            color: $black
+    &__fav
+        width: 4%
+        line-height: rem(18px)
+        flex-shrink: 0
+        padding: rem(18px) 0
+        transition: all .5s ease-in
+        @include mq($until: 1023px)
+            position: relative
+            padding-left:  6rem
+            width: 100%
+            &::before
+                content: attr(data-name)
+                position: absolute
+                left: 0
+                font-size: 0.75rem
+                color: rgba($black, 0.6)            
+        &-svg
+            &--active,
+            &:hover,
+            &:focus
+                path
+                    opacity: 1
+                    stroke: $cherry
+    &__art
+        width: 10%
+        line-height: rem(18px)
+        flex-shrink: 0
+        padding: rem(18px) 0
+        @include mq($until: 1439px)
+            font-size: rem(14px)
+        @include mq($until: 1023px)
+            position: relative
+            padding-left:  6rem
+            width: 100%
+            &::before
+                content: attr(data-name)
+                position: absolute
+                left: 0
+                font-size: 0.75rem
+                color: rgba($black, 0.6)
+        &.order-search__row-cell
+            font-weight: 700
+            font-size: rem(20px)
+            font-family: 'RobotoCondensed', Arial, sans-serif
+    &__quantity
+        width: 14%
+        line-height: rem(18px)
+        flex-shrink: 0
+        padding: rem(18px) 0
+        @include mq($until: 1439px)
+            font-size: rem(14px)
+        @include mq($until: 1200px)
+            margin-left: 0.5rem
+        @include mq($until: 1023px)
+            position: relative
+            padding-left:  6rem
+            width: 100%
+            margin-left: 0
+            &::before
+                content: attr(data-name)
+                position: absolute
+                left: 0
+                font-size: 0.75rem
+                color: rgba($black, 0.6)
+    &__model
+        width: 17%
+        line-height: rem(18px)
+        flex-shrink: 0
+        padding: rem(18px) 0
+        @include mq($until: 1439px)
+            font-size: rem(14px)
+        @include mq($until: 1023px)
+            position: relative
+            padding-left:  6rem
+            width: 100%
+            &::before
+                content: attr(data-name)
+                position: absolute
+                left: 0
+                font-size: 0.75rem
+                color: rgba($black, 0.6)
+    &__width,
+    &__height,
+    &__diametr,
+    &__vat-price,
+    &__have
+        width: 8%
+        line-height: rem(18px)
+        flex-shrink: 0
+        padding: rem(18px) 0
+        @include mq($until: 1439px)
+            font-size: rem(14px)
+        @include mq($until: 1023px)
+            position: relative
+            padding-left:  6rem
+            width: 100%
+            &::before
+                content: attr(data-name)
+                position: absolute
+                left: 0
+                font-size: 0.75rem
+                color: rgba($black, 0.6)
+    &__desc
+        width: 30%
+        line-height: rem(18px)
+        flex-shrink: 0
+        padding: rem(18px) 2rem rem(18px) 0
+        line-height: rem(25px)
+        @include mq($until: large)
+            font-size: rem(14px)
+        @include mq($until: 1023px)
+            position: relative
+            padding-left: 6rem
+            width: 100%
+    &__have
+        &-num
+            padding-right: 0.5rem
+        &-hint
+            position: relative
+        &-info
+            display: none
+            position: absolute
+            left: -50px
+            top: 30px
+            background-color: $white
+            padding: rem(3px) rem(10px)
+            font-size: rem(13px)
+            line-height: rem(35px)
+            white-space: nowrap
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.11)
+            z-index: 5
+            &--right
+                left: 0
+        &-hint:hover,
+        &-hint:focus
+            .order-search__have-info
+                display: block
+    &__period
+        width: 35%
+        flex-shrink: 0
+        @include mq($until: mobile)
+            position: relative
+            width: 100%
+    &__document
+        width: 23%
+        flex-shrink: 0
+        @include mq($until: mobile)
+            position: relative
+            width: 100%
+    &__download
+        width: 12%
+        flex-shrink: 0
+        @include mq($until: widescreen)
+            width: 20%
+        @include mq($until: mobile)
+            position: relative
+            width: 100%
+    &__buy
+        margin-left: 50px
+        width: 15%
+        padding: rem(23px) rem(20px)
+        text-transform: uppercase
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(15px)
+        line-height: rem(35px)
+        font-weight: 700
+        color: $cherry
+        position: relative
+        @include mq($until: large)
+            font-size: rem(14px)
+        @include mq($until: 1200px)
+            margin-left: 1rem
+        @include mq($until: 1023px)
+            margin-left: rem(-28px)
+            width: calc(100% + 28px)
+        &::before
+            content: ''
+            position: absolute
+            top: 0
+            bottom: 0
+            left: -35px
+            width: 80px
+            transform: skew(-25deg)
+            @include mq($until: 1200px)
+                content: none
+        &-text
+            position: relative
+            z-index: 5
+            white-space: nowrap
+        &--disabled
+            background-color: $cherry
+            color: $white
+            &::before
+                background-color: $cherry
+            &:hover,
+            &:focus
+                .order-search__buy-text
+                    color: $white
+        &--ok
+            background-color: $forest
+            color: $white
+            &::before
+                background-color: $forest
+    &__modal
+        max-width: 785px
+        &-pic
+            margin-bottom: rem(26px)
+            display: flex
+            justify-content: center
+        &-info
+            font-size: rem(20px)
+            line-height: rem(30px)
+            margin-bottom: rem(36px)
+            @include mq($until: mobile)
+                font-size: rem(16px)
+                line-height: 1.4
+                margin-bottom: rem(20px)
+        &-title
+            text-align: center
+            color: $cherry
+            font-weight: 700
+        &-text
+            text-align: center
+        &-continue
+            text-align: center
+            font-weight: 700
+        &-btns
+            justify-content: center
+            @include mq($until: mobile)
+                flex-direction: column
+        .btn
+            &--gray
+                &:focus::after
+                    content: none
+            &:first-child
+                margin-right: 0.5rem
+                @include mq($until: mobile)
+                    margin-right: 0
+                    margin-bottom: 0.5rem

@@ -1,0 +1,457 @@
+.lk
+    @include mq($until: mobile)
+        padding-top: 0.75rem
+    &__section
+        display: none
+        &--active
+            display: block
+    &__top
+        @include mq($until: 1023px)
+            overflow-x: auto
+            justify-content: flex-start
+        &-wrapper
+            border-bottom: 1px solid $gray
+    &__tabs
+        &-item
+            padding-right: 2rem
+            &--active
+                .lk__tabs-link
+                    border-bottom-color: $cherry
+                    font-weight: 700
+                    color: $black
+                    cursor: default
+                    &:hover,
+                    &:focus
+                        color: $black
+        &-link
+            display: inline-block
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(15px)
+            line-height: rem(30px)
+            text-transform: uppercase
+            color: $deepGray
+            padding-bottom: rem(4px)
+            border-bottom: 3px solid transparent
+            white-space: nowrap
+    &__exit
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(15px)
+        line-height: rem(30px)
+        text-transform: uppercase
+        color: #666666
+        padding-bottom: rem(4px)
+        border-bottom: 3px solid transparent
+    &__person
+        &-inner
+            padding: rem(63px) 0 rem(53px)
+            @include mq($until: desktop)
+                flex-direction: column
+        &-form
+            padding-bottom: rem(6px)
+        &-info
+            width: 58%
+            @include mq($until: 1023px)
+                width: 100%
+            .form__row
+                width: 50%
+                margin-right: rem(25px)
+                margin-bottom: rem(45px)
+                @include mq($until: 1023px)
+                    width: 100%
+                @include mq($until: mobile)
+                    margin-right: 0
+                &-block
+                    @include mq($until: mobile)
+                        flex-direction: column
+                .input
+                    width: 100%
+                    background-color: $white
+                    border-color: $white
+                    font-size: 17px
+                    font-weight: 500
+                .label
+                    font-weight: 400
+                &:last-child
+                    margin-right: 0
+        &-subtitle
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(20px)
+            line-height: rem(24px)
+            text-transform: uppercase
+            font-weight: 700
+            padding-bottom: rem(26px)
+        &-address
+            &-block
+                padding-bottom: rem(10px)
+            &-name
+                font-size: rem(15px)
+                line-height: rem(32px)
+            &-value
+                font-weight: 500
+    &__balance
+        width: 42%
+        padding-left: rem(120px)
+        @include mq($until: widescreen)
+            padding-left: rem(50px)
+        @include mq($until: desktop)
+            width: 100%
+            padding-left: 0
+            margin-top: 2rem
+        &-inner
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.08)
+        &-top
+            background-color: $black
+            padding: rem(22px) rem(60px) rem(21px) rem(31px)
+            &-pic
+                width: 38px
+                flex-shrink: 0
+            &-title
+                color: $white
+                font-family: 'RobotoCondensed', Arial, sans-serif
+                font-size: rem(20px)
+                line-height: rem(28px)
+                text-transform: uppercase
+                font-weight: 700
+        &-main
+            background-color: $white
+            padding: rem(4px) rem(62px) rem(15px)
+        &-block
+            padding: rem(16px) 0
+            border-bottom: 1px solid $middleGray
+            &:last-child
+                border-bottom: none
+        &-name
+            color: rgba($black, 0.6)
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(15px)
+            line-height: rem(28px)
+            text-transform: uppercase
+        &-value
+            font-size: rem(20px)
+            line-height: rem(35px)
+            &--total
+                color: $forest
+                font-size: rem(30px)
+                line-height: rem(35px)
+    &__block
+        padding-top: rem(58px)
+        &:last-child
+            padding-bottom: rem(62px)
+    &__title
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(30px)
+        line-height: rem(32px)
+        font-weight: 700
+        padding-bottom: rem(26px)
+        position: relative
+        &--nopadding
+            padding-bottom: 0
+            @include mq($until: mobile)
+                padding-bottom: 1.5rem
+        .tab-sup
+            top: 2px
+            right: -25px
+    &__more
+        padding-top: rem(16px)
+        &-link
+            color: $cherry
+            font-size: rem(15px)
+            line-height: rem(24px)
+            &:hover,
+            &:focus
+                color: $black
+    &__search
+        @include mq($until: 1023px)
+            margin-bottom: 1rem
+        &-select
+            width: 617px
+            margin-right: rem(25px)
+            @include mq($until: mobile)
+                margin-right: 0.5rem
+                width: calc(100% - 60px)
+            .select2
+                width: 100% !important
+        .order-search__submit
+            @include mq($until: 1023px)
+                width: 56px
+                margin-bottom: 0
+    &__complaint
+        &-create
+            margin-bottom: rem(8px)
+            background-color: $white
+            padding: rem(13px)
+            border: 1px solid transparent
+            &:hover,
+            &:focus
+                box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.11)
+                border-color: $forest
+            &-link
+                justify-content: center
+            &-svg
+                margin-right: rem(16px)
+            &-text
+                font-weight: 500
+                color: $cherry
+        &-btn
+            @include mq($until: mobile)
+                width: 80%
+                margin: 1rem auto 0
+                justify-content: center
+            .btn-svg
+                margin-right: rem(11px)
+                margin-top: rem(-3px)
+        &-pagination
+            @include mq($until: mobile)
+                flex-direction: column-reverse
+                align-items: flex-start
+    &__limit
+        &-table
+            width: 58%
+            @include mq($until: 1023px)
+                width: 100%
+        .order-search__row-cell.order-search__date
+            white-space: nowrap
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(20px)
+            line-height: rem(35px)
+            font-weight: 700
+        .order-search__row-cell.order-search__price
+            color: $cherry
+        .article-title,
+        .order-search__header
+            padding-left: rem(39px)
+            padding-right: rem(39px)
+        .order-search__header
+            padding-top: 0
+            margin-bottom: rem(11px)
+
+.complaint
+    &__nav
+        &-inner
+            padding: rem(32px) 0
+        &-back
+            &:hover .complaint__nav-back-text,
+            &:focus .complaint__nav-back-text
+                color: $cherry
+            &:hover .complaint__nav-back-svg path,
+            &:focus .complaint__nav-back-svg path
+                fill: $cherry
+        &-instruction
+            &:hover .complaint__nav-instruction-text,
+            &:focus .complaint__nav-instruction-text
+                color: $cherry
+            &:hover .complaint__nav-instruction-svg path,
+            &:focus .complaint__nav-instruction-svg path
+                fill: $cherry
+        &-back-svg,
+        &-instruction-svg
+            margin-right: rem(11px)
+            transition: all .5s ease-out
+        &-back-text,
+        &-instruction-text
+            text-transform: uppercase
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(15px)
+            line-height: rem(24px)
+            font-weight: 700
+            color: rgba($black, 0.6)
+            transition: all .5s ease-out
+    &__inner        
+        padding-top: rem(80px)
+        @include mq($until: mobile)
+            padding-top: 0
+        &-form
+            @include mq($until: 1023px)
+                flex-direction: column
+        .form__row
+            width: 50%
+            padding-right: 105px
+            margin-bottom: rem(50px)
+            @include mq($until: 1023px)
+                width: 100%
+                padding-right: 0
+            .input
+                width: 100%
+                background-color: $white
+                border: none
+                font-size: rem(17px)
+                font-weight: 500
+                &[disabled="disabled"]
+                    background-color: rgba($white, 0.5)
+                    color: #666666
+            .input:focus ~ .label, 
+            .input:valid ~ .label,
+            .input ~ .label.not-empty,
+            .input[disabled="disabled"] ~ .label
+                font-weight: 400
+        .custom-checkbox__wrapper
+            width: 50%
+            @include mq($until: 1023px)
+                width: 100%
+                margin-bottom: rem(40px)
+    &__main
+        flex-wrap: wrap
+    &__textarea
+        resize: none
+        border: none
+        width: 100%
+        height: 100px
+        background-color: $white
+        padding: rem(16px) rem(20px)
+        &::placeholder
+            font-weight: 500
+            font-size: rem(15px)
+            line-height: rem(24px)
+        &-wrapper
+            width: 100%
+            position: relative
+            margin-bottom: rem(40px)
+    &__title
+        padding: rem(14px) 0 rem(37px)
+        text-transform: uppercase
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(20px)
+        line-height: rem(24px)
+        font-weight: 700
+    &__photos
+        &-block
+            margin-bottom: rem(10px)
+            flex-wrap: wrap
+            &-text
+                width: 90%
+                background-color: $white
+                font-weight: 500
+                font-size: rem(15px)
+                line-height: rem(24px)
+                color: rgba($black, 0.6)
+                padding: rem(15px) rem(20px)
+                height: 56px
+                @include mq($until: mobile)
+                    padding: rem(15px) rem(20px)
+                    font-weight: 400
+                    font-size: rem(12px)
+                    line-height: 1.4
+            &-input
+                display: none
+            &-file
+                color: $black
+            .wrap
+                width: 10%
+        .btn
+            background-color: $forest
+            border: none
+            width: 56px
+            height: 56px
+            flex-shrink: 0
+            padding: 0
+            margin-left: rem(25px)
+            cursor: pointer
+            &:hover,
+            &:focus
+                background-color: $eveningForest
+        &-limit
+            font-size: rem(15px)
+            line-height: rem(24px)
+            color: #666666
+            padding-bottom: rem(25px)
+    &__left
+        width: 70%
+        @include mq($until: 1023px)
+            width: 100%
+        .lk__title
+            padding: rem(40px) 0 rem(57px)
+            @include mq($until: mobile)
+                font-size: rem(24px)
+                padding: 2rem 0
+    &__defects
+        padding-bottom: rem(40px)
+        @include mq($until: mobileLandscape)
+            display: flex
+            flex-direction: column
+    &__defect
+        padding: rem(15px) rem(25px)
+        border: 1px solid $middleGray
+        margin-right: rem(26px)
+        cursor: pointer
+        transition: all .5s ease-out
+        @include mq($until: mobileLandscape)
+            width: 100%
+            text-align: center
+            margin-bottom: 0.5rem
+        &:hover,
+        &:focus
+            background-color: $forest
+            border-color: $forest
+            color: $white
+        &--active
+            background-color: $forest
+            border-color: $forest
+            color: $white
+            cursor: default
+    &__right
+        width: 30%
+        @include mq($until: 1023px)
+            width: 100%
+            margin-top: 2rem
+        .form__row
+            width: 100%
+            padding-right: 0
+        .complaint__title
+            padding: rem(32px) 0 rem(42px)
+    &__submit
+        font-size: rem(15px)
+        line-height: rem(24px)
+        color: $cherry
+        padding-right: 1rem
+        padding-bottom: rem(57px)
+        @include mq($until: mobile)
+            flex-direction: column
+        &-required
+            @include mq($until: mobile)
+                margin-bottom: 0.5rem
+        .btn
+            background-color: transparent
+            border: none
+    .custom-checkbox__wrapper
+        .custom-checkbox > span
+            font-size: rem(17px)
+            font-weight: 500
+            
+.complaint__instruction
+    padding: rem(60px) 0 rem(40px)
+    &-title
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(30px)
+        line-height: rem(32px)
+        font-weight: 700
+        color: $deepGray
+        padding-bottom: rem(26px)
+        max-width: rem(896px)
+    &-p
+        margin-top: 0
+        margin-bottom: rem(20px)
+    &-list
+        margin: 0 0 rem(19px)
+        padding: 0
+        list-style-type: none
+    &-li
+        position: relative
+        line-height: rem(35px)
+        padding-left: rem(16px)
+        @include mq($until: mobile)
+            line-height: rem(25px)
+        &::before
+            content: ''
+            position: absolute
+            top: 15px
+            left: 0
+            background-color: $cherry
+            width: 5px
+            height: 5px
+    &-link
+        color: $cherry
+        &:hover,
+        &:focus
+            color: $black
+    .complaint__title
+        padding-bottom: rem(13px)

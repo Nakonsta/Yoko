@@ -1,0 +1,41 @@
+.pagination
+    &__inner
+        padding: rem(45px) 0 rem(68px)
+    &__prev
+        transform: rotate(180deg)
+        padding-left: rem(50px)
+        @include mq($until: mobile)
+            padding-left: 1.5rem
+    &__item
+        padding: rem(6px) rem(21px)
+        position: relative
+        font-size: rem(15px)
+        @include mq($until: mobile)
+            padding: rem(6px) rem(18px)
+        &::before
+            content: ''
+            position: absolute
+            width: 45px
+            height: 36px
+            top: 50%
+            left: 50%
+            transform: translate(-50%, -50%) skew(-35deg)
+            background-color: $white
+            z-index: -1
+        &--current
+            color: $white
+            &:hover,
+            &:focus
+                color: $white
+            &::before
+                background-color: $cherry
+    &__next
+        padding-left: rem(50px)
+        @include mq($until: mobile)
+            padding-left: 1.5rem
+    &__prev,
+    &__next
+        &:hover,
+        &:focus
+            path
+                opacity: 1

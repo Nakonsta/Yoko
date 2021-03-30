@@ -1,0 +1,325 @@
+.header
+    &__top
+        padding: rem(5px) 0
+        @include mq($until: mobile)
+            display: none
+    &__nav
+        &-item
+            padding-right: rem(20px)
+        &-link
+            text-transform: uppercase
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(13px)
+            line-height: rem(30px)
+    &__lk
+        position: relative
+        padding-left: rem(13px)
+        &::before
+            content: ''
+            position: absolute
+            border-radius: 50%
+            width: 6px
+            height: 6px
+            left: 0
+            top: 50%
+            transform: translateY(-50%)
+        &--active
+            &::before
+                background-color: $forest
+        &-title
+            text-transform: uppercase
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(13px)
+            line-height: rem(30px)
+            font-weight: 700
+        &:hover .header__menu,
+        &:focus .header__menu
+            display: block
+    &__menu
+        display: none
+        position: absolute
+        padding: rem(20px) rem(24px) rem(8px)
+        background: $white
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.11)
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(13px)
+        line-height: rem(25px)
+        text-transform: uppercase
+        color: $deepGray
+        z-index: 5
+        width: 248px
+        left: -160%
+        @include mq($until: large)
+            left: -170px
+        &-name
+            font-weight: 700
+            border-bottom: 1px solid rgba($deepGray, 0.2)
+            padding-bottom: 0.5rem
+        &-nav
+            padding-top: 1rem
+            &-item:last-child
+                padding-top: 0.5rem
+    &__bottom
+        background-color: $black
+        color: $white
+        position: relative
+        &-block
+            overflow-x: hidden
+    &__logo
+        line-height: 0
+        padding: rem(20px) 0
+        @include mq($until: mobile)
+            display: none
+        &-mobile
+            display: none
+            line-height: 0
+            padding: rem(20px) 0
+            @include mq($until: mobile)
+                display: block
+    &__search
+        padding: rem(20px) 0
+        &-submit
+            background-color: transparent
+            border: none
+            box-shadow: none
+    &__goods
+        padding: rem(20px) 0
+    &__catalog
+        &-title
+            position: relative
+            z-index: 2
+            color: $white
+            @include mq($until: mobile)
+                display: none
+        &-svg
+            position: relative
+            z-index: 2
+            @include mq($until: mobile)
+                margin: rem(8px) 0
+    &__logo
+        padding-right: rem(93px)
+        @include mq($until: widescreen)
+            padding-right: 1rem
+    &__search
+        width: 40%
+        margin-right: rem(43px)
+        @include mq($until: desktop)
+            display: none
+        &-form
+            position: relative
+            flex: 1
+        &-label
+            width: 100%
+        &-input 
+            width: 100%
+            border: none
+            border-bottom: 1px solid $white
+            &::placeholder
+                font-weight: 500
+                color: $white
+                opacity: 0.6
+                font-size: rem(15px)
+        &-fake
+            &--hided
+                display: none
+        &-mask
+            display: none
+            .header__search-label
+                margin-right: rem(30px)
+                @include mq($until: widescreen)
+                    margin-right: rem(5px)
+                &:last-child
+                    margin-right: rem(50px)
+                    @include mq($until: widescreen)
+                        margin-right: rem(40px)
+            &--active
+                display: flex
+        &-submit
+            position: absolute
+            right: 0
+            &::before
+                content: ''
+                position: absolute
+                width: 42px
+                height: 42px
+                top: -10px
+                left: -5px
+            &:hover::before,
+            &:focus::before
+                background-color: $forest
+            svg
+                position: relative
+                z-index: 2
+        &-close
+            margin-left: rem(28px)
+            display: block
+            @include mq($until: widescreen)
+                margin-left: rem(5px)
+            &--hided
+                display: none
+    &__good
+        margin-right: rem(32px)
+        &-link
+            line-height: 1
+        &-svg
+            margin-right: rem(8px)
+            transition: all $animation
+        &-num
+            opacity: 0.3
+            transition: all $animation
+            cursor: pointer
+        &--active
+            .header__good-svg
+                opacity: 1
+            .header__good-num
+                opacity: 1
+        &:hover,
+        &:focus
+            .header__good-svg
+                opacity: 1
+            .header__good-num
+                opacity: 1
+    &__catalog
+        @include mq($from: mobile)
+            &:hover,
+            &:focus
+                .header__catalog-dropdown
+                    display: block
+                .header__catalog-link
+                    &::before
+                        background-color: $black
+        &-link
+            position: relative
+            padding: rem(24px) 0 rem(24px) rem(78px)
+            &::before
+                content: ''
+                position: absolute
+                top: 0
+                bottom: 0
+                left: 0
+                right: -1000px
+                background-color: $cherry
+                transform: skewX(-25deg)
+            @include mq($until: mobile)
+                padding-left: rem(24px)
+        &-title
+            white-space: nowrap
+            padding-right: rem(18px)
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(15px)
+            line-height: rem(24px)
+            font-weight: 700
+            text-transform: uppercase
+        &-svg
+            margin-bottom: rem(3px)
+            &-close
+                display: none
+                position: relative
+                z-index: 5
+                margin: rem(3px) 0
+        &-dropdown
+            display: none
+            z-index: 6
+            position: absolute
+            background-color: $black
+            color: $white
+            top: 70px
+            left: 0
+            right: 0
+        &-text
+            padding: rem(40px) 0 rem(95px)
+            width: calc(100% - 400px)
+            z-index: 10
+            @include mq($until: large)
+                width: calc(100% - 300px)
+            @include mq($until: 1024px)
+                width: 100%
+                padding: rem(40px) 0
+            &-inner
+                @include mq($until: mobile)
+                    flex-direction: column
+        &-pic
+            background: url(../img/menu-bg.jpg) no-repeat 50% 50%
+            background-size: cover
+            width: 600px
+            position: relative
+            z-index: 7
+            @include mq($until: large)
+                width: 300px
+            @include mq($until: 1024px)
+                display: none
+            &::before
+                content: ''
+                position: absolute
+                top: 0
+                bottom: 0
+                left: -100px
+                width: 200px
+                background-color: $black
+                transform: skew(-35deg)
+        &-info
+            display: none
+            &--active
+                display: block
+            &-inner
+                @include mq($until: mobile)
+                    flex-direction: column
+                    padding-top: 1rem
+        &-nav
+            padding-right: 5rem
+            flex-shrink: 0
+            @include mq($until: large)
+                padding-right: 3rem
+            &-item
+                &--active
+                    position: relative
+                    &::after
+                        content: ''
+                        position: absolute
+                        top: 50%
+                        right: -2rem
+                        transform: translateY(-50%)
+                        width: 8px
+                        height: 12px
+                        background: url(../img/arrow-right.svg) no-repeat 50% 50%
+                        background-size: contain
+                        @include mq($until: large)
+                            right: -1.5rem
+            &-link
+                color: $white
+                font-family: 'RobotoCondensed', Arial, sans-serif
+                font-size: rem(20px)
+                line-height: rem(35px)
+                font-weight: 700
+                text-transform: uppercase
+                margin-bottom: 1rem
+                @include mq($until: 1439px)
+                    font-size: rem(16px)
+                    line-height: 1.6
+                &:hover,
+                &:focus
+                    color: $white
+        &-items
+            margin-right: 8rem
+            
+            @include mq($until: 1439px)
+                margin-right: 7rem
+        &-item
+            &-link
+                color: $white
+                line-height: rem(32px)
+                font-family: 'RobotoCondensed', Arial, sans-serif
+                &:hover,
+                &:focus
+                    color: $white
+                    text-decoration: underline
+        &-desc
+            &-link
+                color: $white
+                line-height: rem(32px)
+                font-family: 'RobotoCondensed', Arial, sans-serif
+                &:hover,
+                &:focus
+                    color: $white
+                    text-decoration: underline
+

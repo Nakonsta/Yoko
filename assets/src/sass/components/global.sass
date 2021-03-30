@@ -1,0 +1,333 @@
+@import "../variables/variables"
+@import "../mixins/fluid-mixin"
+@import "../mixins/mq"
+
+@font-face
+    font-family: 'Roboto'
+    font-weight: 400
+    src: url('/font/Roboto-Regular/Roboto-Regular.woff2') format('woff2'), url('/font/Roboto-Regular/Roboto-Regular.woff') format('woff'), url('/font/Roboto-Regular/Roboto-Regular.ttf')  format('truetype')
+
+@font-face
+    font-family: 'Roboto'
+    font-weight: 500
+    src: url('/font/Roboto-Medium/Roboto-Medium.woff2') format('woff2'), url('/font/Roboto-Medium/Roboto-Medium.woff') format('woff'), url('/font/Roboto-Medium/Roboto-Medium.ttf')  format('truetype')
+
+@font-face
+    font-family: 'Roboto'
+    font-weight: 700
+    src: url('/font/Roboto-Bold/Roboto-Bold.woff2') format('woff2'), url('/font/Roboto-Bold/Roboto-Bold.woff') format('woff'), url('/font/Roboto-Bold/Roboto-Bold.ttf')  format('truetype')
+
+@font-face
+    font-family: 'RobotoCondensed'
+    font-weight: 400
+    src: url('/font/RobotoCondensed-Regular/RobotoCondensed-Regular.woff2') format('woff2'), url('/font/RobotoCondensed-Regular/RobotoCondensed-Regular.woff') format('woff'), url('/font/RobotoCondensed-Regular/RobotoCondensed-Regular.ttf')  format('truetype')
+
+@font-face
+    font-family: 'RobotoCondensed'
+    font-weight: 700
+    src: url('/font/RobotoCondensed-Bold/RobotoCondensed-Bold.woff2') format('woff2'), url('/font/RobotoCondensed-Bold/RobotoCondensed-Bold.woff') format('woff'), url('/font/RobotoCondensed-Bold/RobotoCondensed-Bold.ttf')  format('truetype')
+
+html,
+body
+    font: $font
+    color: $black
+    height: 100% !important
+    line-height: 1.5
+    &.lock-popup
+        overflow: hidden
+
+    @media print
+        overflow: initial !important
+        font-size: 14px
+
+    //@include mq($until: widescreen)
+    //    font-size: 17px
+    //
+    //@include mq($until: desktop)
+    //    font-size: 16px
+    //
+    //@include mq($until: tablet)
+    //    font-size: 15px
+
+body
+    min-width: 320px
+    overflow-x: hidden
+
+a
+    color: $black
+    text-decoration: none
+    transition: color $animation
+    &:hover, &:focus
+        color: $cherry
+    @media print
+        text-decoration: none !important
+        color: $black !important
+        svg
+            fill: $black !important
+
+.container
+    max-width: 1260px
+    margin: 0 auto
+    @media print
+        //padding: 0 rem(10px) !important
+        padding: 0 !important
+    @include mq($until: 1439px)
+        padding: 0 4%
+    &--right
+        margin: 0
+        margin-right: calc((100% - 1260px)/4)
+        max-width: calc(1260px + ((100% - 1260px)/2))
+        @include mq($until: 1439px)
+            padding: 0 4% 0 0
+        @include mq($until: 1250px)
+            padding: 0 15% 0 0
+        @include mq($until: desktop)
+            padding: 0 4%
+            margin: 0 auto
+    &--left
+        margin: 0
+        margin-left: calc((100% - 1260px)/2)
+        max-width: calc(1260px + ((100% - 1260px)/2))
+        @include mq($until: 1439px)
+            padding: 0 0 0 4%
+        @include mq($until: 1250px)
+            padding: 0 0 0 15%
+        @include mq($until: desktop)
+            padding: 0 4%
+            margin: 0 auto
+    
+.nowrap
+    white-space: nowrap
+
+.d-flex
+    display: flex
+
+.justify-center
+    justify-content: center
+
+.justify
+    justify-content: space-between
+
+.align-center
+    align-items: center
+
+.align-end
+    align-items: flex-end
+
+.text-center
+    text-align: center
+
+.h-100
+    height: 100%
+
+.w-100
+    width: 100%
+
+.slick-arrows
+    .slick-arrow
+        font-size: 0
+        background-color: transparent
+        border: 1px solid $white
+        position: absolute
+        top: 50%
+        transform: translateY(-50%)
+        width: 56px
+        height: 56px
+        z-index: 5
+        transition: all 0.5s ease-out
+        @include mq($until: mobile)
+            border: none
+        &::after
+            content: ''
+            position: absolute
+            top: 50%
+            left: 50%
+            transform: translate(-50%, -50%)
+            width: 17px
+            height: 18px
+            background: url(../img/double-arrow-left.svg) no-repeat 50% 50%
+            background-size: contain
+        &:hover::after,
+        &:focus::after
+            transform: translate(-60%, -50%)
+        &.slick-prev
+            left: 20px
+            @include mq($until: desktop)
+                left: 10px
+            @include mq($until: mobile)
+                left: 0
+        &.slick-next
+            right: 20px
+            @include mq($until: desktop)
+                right: 10px
+            @include mq($until: mobile)
+                right: 0
+            &::after
+                transform: translate(-50%, -50%) rotate(180deg)
+            &:hover::after,
+            &:focus::after
+                transform: translate(-40%, -50%) rotate(180deg)
+
+.btn
+    font-family: 'RobotoCondensed', Arial, sans-serif
+    font-weight: 700
+    font-size: rem(15px)
+    line-height: rem(24px)
+    text-transform: uppercase
+    padding: rem(14px) rem(30px)
+    outline: none
+    .btn-text,
+    .btn-svg
+        position: relative
+        z-index: 2
+    &--arrow
+        .btn-text
+            padding-right: rem(11px)
+    &--skew
+        position: relative
+        &.btn--red
+            color: $white
+            &::before
+                background-color: $cherry
+            &::after
+                background-color: $black
+        &.btn--green
+            color: $white
+            &::before
+                background-color: $forest
+            &::after
+                background-color: $black
+        &.btn--gray
+            color: $black
+            &:hover,
+            &:focus
+                color: $white
+                .btn-svg-return path
+                    fill: $white
+            &::before
+                background-color: $white
+                border: 1px solid #D6D4CE
+            &::after
+                background-color: $cherry
+        &.btn--disabled
+            color: rgba($black, 0.2)
+            cursor: default
+            &::before
+                background-color: $white
+                border: 1px solid $white
+            &::after
+                content: none
+        &::before
+            content: ''
+            position: absolute
+            top: 0
+            bottom: 0
+            left: 0
+            right: 0
+            transform: skew(-35deg)
+            transition: all 0.5s ease-out
+        &::after
+            content: ''
+            position: absolute
+            top: 0
+            bottom: 0
+            left: 0
+            width: 0
+            transform: skew(-35deg)
+            transition: all 0.5s ease-out
+        &:hover::after,
+        &:focus::after
+            width: 100%
+    &-svg-return
+        position: relative
+        margin-right: rem(11px)
+        z-index: 2
+        flex-shrink: 0
+
+.w-50
+    width: 50%
+
+.w-100
+    width: 100%
+
+.bold
+    font-weight: 700
+            
+.section
+    &-title
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(46px)
+        line-height: rem(70px)
+        letter-spacing: -1px
+        position: relative
+        font-weight: 400
+        padding-bottom: rem(22px)
+        margin: 0
+        @include mq($until: 1023px)
+            font-size: rem(36px)
+            line-height: 1.6
+        @include mq($until: mobile)
+            font-size: rem(28px)
+            line-height: 1.4
+    &--nopaddingtop
+        padding-top: rem(5px) !important
+
+
+.tab
+    padding-right: rem(60px)
+    color: $gray20
+    cursor: pointer
+    @include mq($until: mobile)
+        padding-right: rem(40px)
+    &-sup
+        font-weight: 500
+        font-size: rem(17px)
+        line-height: rem(32px)
+        position: absolute
+        top: 10px
+        right: -20px
+        @include mq($until: mobile)
+            font-size: rem(14px)
+            top: 0
+    &--active
+        color: $black
+        cursor: default
+        .tab-sup
+            color: $cherry
+
+.corner
+    position: relative
+    &::before
+        content: ''
+        position: absolute
+        top: -3px
+        left: -30px
+        height: 55px
+        width: 40px
+        transform: skew(-35deg)
+    &--white::before
+        background-color: $white
+    &--beige::before
+        background-color: #F2F2F2
+    &--gray::before
+        background-color: $gray
+
+.accent
+    position: relative
+    padding-bottom: rem(48px)
+    &::after
+        content: ''
+        position: absolute
+        left: 0
+        bottom: 26px
+        background-color: #D70029
+        transform: skew(-35deg)
+        width: 74px
+        height: 6px
+
+.ruble
+    font-size: 0.75em
+
+.bg-gray
+    background-color: $gray
+

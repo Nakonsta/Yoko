@@ -1,0 +1,310 @@
+.modal-page
+    height: 100vh
+    position: relative
+    @include mq($until: 767px)
+        height: auto
+    &__bg
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        background-repeat: no-repeat
+        background-position: 100% 50%
+        background-size: cover
+        background-image: url(../img/auth-bg.jpg)
+        transition: all 1s ease-out
+        &--call
+            background-image: url(../img/call-bg.jpg)
+            right: auto
+            width: 100%
+            left: 9999px
+            &.active
+                left: 0
+                z-index: 2
+        &--login
+            background-image: url(../img/login-bg.jpg)
+            right: auto
+            width: 100%
+            left: 9999px
+            &.active
+                left: 0
+                z-index: 2
+        @include mq($until: 767px)
+            display: none !important
+    &__main
+        height: 100%
+        .btn[type="submit"]
+            background-color: transparent
+            border: none
+    &__content
+        position: relative
+        height: 100%
+        width: 100%
+        &::after
+            content: ''
+            position: absolute
+            top: 0
+            bottom: 0
+            left: -999px
+            right: 50%
+            transform: skew(-35deg)
+            background: linear-gradient($white 73%, #f2f2f2 73%)
+            z-index: 3
+            @include mq($until: desktop)
+                right: 5%
+                background: $white
+            @include mq($until: 767px)
+                content: none
+        &-inner
+            padding: 15% 0 5%
+            @include mq($until: widescreen)
+                padding: 25% 0 5%
+            @include mq($until: desktop)
+                padding: 30% 0 10%
+            @include mq($until: 767px)
+                padding: rem(150px) 0 rem(20px)
+    &__form
+        &-wrapper
+            position: relative
+            z-index: 4
+            width: 340px
+            @include mq($until: desktop)
+                padding-top: 3rem
+            @include mq($until: mobileLandscape)
+                width: 100%
+        .form__row
+            margin-top: rem(41px)
+            .label
+                opacity: 1
+            .input:focus ~ .label, 
+            .input:valid ~ .label,
+            .input ~ .label.not-empty,
+            .input[disabled="disabled"] ~ .label,
+                font-size: rem(15px)
+                font-weight: 400
+        .input
+            width: 100%
+        .label
+            color: $white
+            font-weight: 500
+            font-size: rem(18px)
+            line-height: rem(24px)
+            @include mq($until: desktop)
+                color: $black
+        .custom-checkbox__wrapper
+            padding: rem(36px) 0 rem(70px)
+            @include mq($until: large)
+                padding: rem(25px) 0
+        .custom-checkbox
+            color: $white
+            @include mq($until: desktop)
+                color: $black
+            &>span
+                @include mq($until: widescreen)
+                    font-weight: 400
+                    font-size: rem(12px)
+                    line-height: 1.4
+                &::before
+                    margin-right: rem(13px)
+        .input
+            color: $white
+            font-weight: 500
+            font-size: rem(18px)
+            line-height: rem(24px)
+            @include mq($until: desktop)
+                color: $black
+    &__forgot
+        font-size: rem(15px)
+        line-height: rem(51px)
+        color: $white
+        @include mq($until: 767px)
+            color: $black
+    &__rules
+        position: absolute
+        bottom: 0
+        color: $white
+        font-size: rem(13px)
+        line-height: rem(18px)
+        @include mq($until: widescreen)
+            font-weight: 400
+            font-size: rem(12px)
+            line-height: 1.4
+        @include mq($until: desktop)
+            position: relative
+            color: $black
+            padding-top: 2rem
+        &-link
+            color: $cherry
+    &__btns
+        @include mq($until: 767px)
+            flex-direction: column
+
+.header-modal
+    position: absolute
+    top: 52px
+    left: 0
+    right: 0
+    z-index: 6
+    @include mq($until: 767px)
+        top: 24px
+    &__inner
+        @include mq($until: 767px)
+            flex-direction: column
+    &__logo
+        position: relative
+        &::before
+            content: ''
+            position: absolute
+            top: -15px
+            bottom: -9px
+            left: -999px
+            right: -72px
+            transform: skew(-35deg)
+            background-color: $black
+            @include mq($until: 767px)
+                right: 20px
+    &__svg
+        position: relative
+        z-index: 5
+    &__auth
+        &-link
+            padding-bottom: rem(8px)
+            border-bottom: 1px solid $white
+            @include mq($until: desktop)
+                border-bottom-color: $black
+            @include mq($until: 767px)
+                padding: 1.5rem 0
+                border-bottom: none
+            &:hover,
+            &:focus
+                border-bottom: none
+        &-svg path
+            @include mq($until: desktop)
+                fill: $black
+        &-text
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(15px)
+            line-height: rem(24px)
+            text-transform: uppercase
+            color: $white
+            padding-right: rem(14px)
+            font-weight: 700
+            @include mq($until: desktop)
+                color: $black
+
+.footer-modal
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    z-index: 6
+    font-family: 'RobotoCondensed', Arial, sans-serif
+    font-size: rem(13px)
+    line-height: rem(24px)
+    padding-bottom: rem(24px)
+    @include mq($until: 767px)
+        position: relative
+        padding-top: 2rem
+    &__inner
+        @include mq($until: 767px)
+            flex-direction: column
+            align-items: flex-start
+    &__copy
+        color: rgba($black, 0.4)
+    &__link
+        position: relative
+        z-index: 3
+        display: inline-block
+        padding-left: rem(30px)
+        text-transform: uppercase
+        color: $white
+        font-weight: 700
+        @include mq($until: 767px)
+            color: $black
+            padding-left: 0
+            padding-right: 1rem
+        &:focus
+            color: $white
+
+.auth
+    &__text
+        position: relative
+        z-index: 5
+        max-width: 475px
+        height: 720px
+        @include mq($until: large)
+            height: 420px
+        @include mq($until: widescreen)
+            max-width: 400px
+        @include mq($until: desktop)
+            max-width: none
+        @include mq($until: desktop)
+            height: auto
+        .btn
+            position: absolute
+            bottom: 0
+            @include mq($until: desktop)
+                margin: 0 rem(20px)
+    &__title
+        letter-spacing: -1px
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(64px)
+        line-height: rem(65px)
+        font-weight: 700
+        padding-bottom: rem(79px)
+        @include mq($until: desktop)
+            font-size: rem(36px)
+            line-height: rem(36px)
+    &__desc
+        font-size: rem(20px)
+        line-height: rem(32px)
+        padding-bottom: rem(146px)
+        @include mq($until: mobile)
+            padding-bottom: rem(80px)
+.call
+    @include mq($until: desktop)
+        flex-direction: column
+    .auth__text
+        @include mq($until: desktop)
+            height: auto
+    .auth__desc
+        @include mq($until: desktop)
+            padding-bottom: 3rem
+    .btn
+        @include mq($until: desktop)
+            position: relative
+            margin: 0 rem(20px)
+
+.login
+    &__block
+        @include mq($until: desktop)
+            flex-direction: column
+        .auth__text
+            @include mq($until: desktop)
+                height: auto
+        .auth__desc
+            @include mq($until: desktop)
+                padding-bottom: 3rem
+        .btn
+            @include mq($until: desktop)
+                position: relative
+                margin: 0 rem(20px)
+
+.login
+    &__block-forgot
+        @include mq($until: desktop)
+            flex-direction: column
+        .auth__text
+            @include mq($until: desktop)
+                height: auto
+        .auth__desc
+            @include mq($until: desktop)
+                padding-bottom: 3rem
+        .btn
+            margin-top: 2rem
+            @include mq($until: desktop)
+                position: relative
+                margin: 1rem rem(40px) 0
+                text-align: center
+

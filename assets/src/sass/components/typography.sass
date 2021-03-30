@@ -1,0 +1,68 @@
+.typography
+    &-title
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-weight: 700
+        font-size: rem(20px)
+        line-height: rem(24px)
+        padding-bottom: rem(13px)
+        text-transform: uppercase
+    &-subtitle
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-weight: 700
+        font-size: rem(20px)
+        line-height: rem(24px)
+        padding-bottom: rem(22px)
+        text-transform: uppercase
+    &-h2
+        margin: 0
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-weight: 700
+        font-size: rem(30px)
+        line-height: rem(36px)
+        padding: 0 0 rem(22px)
+        color: $deepGray
+        @include mq($until: mobile)
+            font-size: rem(24px)
+            line-height: 1.4
+            padding: 0 0 rem(10px)
+    &-list
+        margin-bottom: rem(5px)
+        margin-top: 0
+        padding: 0
+        list-style-type: none
+    &-list-ol
+        margin: 0 0 rem(21px)
+        padding: 0 0 0 rem(17px)
+        .typography-list
+            padding-top: rem(9px)
+    &-li
+        position: relative
+        line-height: rem(35px)
+        padding-left: rem(16px)
+        @include mq($until: mobile)
+            line-height: rem(25px)
+        &::before
+            content: ''
+            position: absolute
+            top: 15px
+            left: 0
+            background-color: $cherry
+            width: 5px
+            height: 5px
+    &-li-ol
+        padding-left: rem(5px)
+    &-p
+        line-height: rem(25px)
+        padding: 0 0 rem(30px)
+        margin: 0
+        @include mq($until: mobile)
+            padding: 0 0 rem(10px)
+            font-size: rem(15px)
+            line-height: 1.4
+        &--smallpadding
+            padding-bottom: rem(15px)
+    &-link
+        color: $cherry
+        &:hover,
+        &:focus
+            color: $black

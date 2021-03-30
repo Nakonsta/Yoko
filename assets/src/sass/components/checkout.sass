@@ -1,0 +1,618 @@
+.checkout
+    padding-bottom: rem(95px)
+    overflow: hidden
+    &__inner
+        align-items: flex-start
+        @include mq($until: desktop)
+            flex-direction: column
+    &__left
+        width: 62%
+        @include mq($until: widescreen)
+            width: 55%
+        @include mq($until: desktop)
+            width: 100%
+    &__right
+        position: static
+        &.sticky
+            position: fixed
+            top: 1rem
+            right: 0
+            width: 32.5%
+            @include mq($until: large)
+                width: 26%
+    &__steps
+        padding-bottom: rem(50px)
+        @include mq($until: mobile)
+            overflow-x: auto
+    &__step
+        padding-right: rem(59px)
+        position: relative
+        @include mq($until: 1439px)
+            padding-right: rem(40px)
+        @include mq($until: widescreen)
+            padding-right: rem(30px)
+        &::after
+            content: ''
+            position: absolute
+            top: 2px
+            right: 20px
+            width: 17px
+            height: 18px
+            background: url(../img/double-arrow-gray.svg) no-repeat 50% 50%
+            background-size: contain
+            @include mq($until: 1439px)
+                right: 10px
+            @include mq($until: widescreen)
+                right: 10px
+                width: 9px
+                height: 9px
+                top: 8px
+        &:last-child
+            padding-right: 0
+            &::after
+                content: none
+        &-link
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(20px)
+            line-height: rem(24px)
+            text-transform: uppercase
+            color: rgba($black, 0.4)
+            white-space: nowrap
+            @include mq($until: widescreen)
+                font-size: rem(15px)
+        &--done
+            &::after
+                background: url(../img/double-arrow-cherry.svg) no-repeat 50% 50%
+                background-size: contain
+            .checkout__step-link
+                font-weight: 700
+                color: rgba($black, 1)
+    &__h1
+        padding: rem(5px) 0 rem(40px)
+    &__user
+        padding-bottom: rem(55px)
+        &-title
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-weight: 700
+            font-size: rem(30px)
+            line-height: rem(32px)
+            color: $deepGray
+            padding-bottom: rem(37px)
+        &-info
+            flex-wrap: wrap
+        &-block
+            width: 50%
+            padding-right: 1rem
+            padding-bottom: rem(29px)
+            @include mq($until: mobileLandscape)
+                width: 100%
+                padding-right: 0
+        &-name
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(20px)
+            line-height: rem(24px)
+            padding-bottom: rem(14px)
+        &-value
+            font-size: rem(15px)
+            line-height: rem(22px)
+    &__resume
+        position: relative
+        padding: rem(38px) 0
+        margin-bottom: rem(35px)
+        @include mq($until: widescreen)
+            padding: rem(20px)
+        &::after
+            content: ''
+            position: absolute
+            top: 0
+            bottom: 0
+            left: -120px
+            right: -1000px
+            background: linear-gradient(to right, $cherry, $cherry 15px, $black 15px, $black 25px, $cherry 25px, $cherry 35px, $black 35px, $black 47px, $cherry 47px, $cherry 52px, $black 52px, $black)
+            transform: skewX(-25deg)
+            @include mq($until: widescreen)
+                left: -90px
+            @include mq($until: desktop)
+                transform: none
+                left: 0
+                right: 0
+                background: $black
+        &-inner
+            position: relative
+            color: $white
+            z-index: 2
+        &-title
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-weight: 700
+            font-size: rem(20px)
+            line-height: rem(24px)
+            padding-bottom: rem(19px)
+        &-row
+            width: rem(290px)
+            font-size: rem(15px)
+            line-height: rem(20px)
+            padding-bottom: 0.75rem
+            @include mq($until: mobileLandscape)
+                width: 100%
+                flex-direction: column
+                align-items: flex-start
+                padding-bottom: 1rem
+            &:last-child
+                font-size: rem(20px)
+                font-weight: 700
+        &-name
+            padding-right: 1rem
+            @include mq($until: mobileLandscape)
+                padding-right: 0
+                padding-bottom: 0.5rem
+    &__features
+        width: rem(290px)
+        justify-content: flex-end
+        @include mq($until: desktop)
+            padding-bottom: rem(50px)
+        @include mq($until: mobileLandscape)
+            width: 100%
+            justify-content: center
+    &__feature
+        &:first-child
+            padding-right: rem(81px)
+            position: relative
+            &::after
+                content: ''
+                position: absolute
+                top: 3px
+                right: 40px
+                width: 1px
+                height: 92%
+                background-color: $middleGray
+        &-name
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(15px)
+            line-height: rem(32px)
+            padding-bottom: rem(6px)
+            text-transform: uppercase
+            color: rgba($black, 0.6)
+        &-value
+            &-svg
+                padding-right: rem(10px)
+                flex-shrink: 0
+            &-text
+                font-size: rem(24px)
+                line-height: rem(35px)
+    &__btns
+        @include mq($until: mobile)
+            flex-direction: column
+        .btn--gray
+            color: rgba($black, 0.6)
+            @include mq($until: mobile)
+                margin-bottom: 0.5rem
+    &__payment
+        padding-bottom: rem(46px)
+        @include mq($until: mobile)
+            padding-bottom: 0
+        &-ways
+            align-items: center
+            @include mq($until: mobile)
+                flex-direction: column
+                align-items: flex-start
+        &-way
+            width: 33%
+            padding: rem(25px) rem(20px)
+            border: 1px solid transparent
+            margin-right: rem(25px)
+            cursor: pointer
+            transition: all .5s ease-out
+            min-height: rem(101px)
+            @include mq($until: widescreen)
+                margin-right: rem(5px)
+                padding: rem(25px) rem(12px)
+            @include mq($until: desktop)
+                margin-right: rem(25px)
+                padding: rem(25px) rem(20px)
+            @include mq($until: mobile)
+                width: 100%
+                margin-right: 0
+                margin-bottom: 0.5rem
+            &--bordered
+                border-color: $middleGray
+            &--active,
+            &:hover,
+            &:focus
+                border-color: $forest
+                .checkout__payment-svg path
+                    fill: $forest
+                    opacity: 1
+            &--active
+                cursor: default
+            &:last-child
+                margin-right: 0
+            &--noborderhover
+                &:hover,
+                &:focus
+                    border-color: transparent
+        &-svg
+            margin-right: rem(13px)
+            flex-shrink: 0
+            @include mq($until: widescreen)
+                margin-right: rem(8px)
+            path
+                transition: all .5s ease-out
+        .order-search__have-svg
+            margin-right: rem(13px)
+        &-title
+            font-size: rem(17px)
+            line-height: rem(24px)
+            padding-bottom: rem(4px)
+        &-text
+            font-size: rem(15px)
+            line-height: rem(22px)
+            color: rgba($black, 0.6)
+            white-space: nowrap
+            @include mq($until: widescreen)
+                font-size: rem(13px)
+            @include mq($until: desktop)
+                font-size: rem(15px)
+    &__credit
+        padding: rem(8px) rem(27px)
+        &-text
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(15px)
+            line-height: rem(26px)
+            text-transform: uppercase
+            color: rgba($black, 0.6)
+        &-row
+            border-bottom: 1px solid $middleGray
+            padding: rem(16px) 0
+            &:last-child
+                border-bottom: none
+        &-name
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-size: rem(15px)
+            line-height: rem(30px)
+            text-transform: uppercase
+            color: rgba($black, 0.6)
+        &-value
+            font-size: rem(20px)
+            line-height: rem(35px)
+            &--total
+                color: $forest
+                font-size: rem(30px)
+    &__select
+        padding-bottom: rem(62px)
+        .select2
+            width: 100% !important
+        &-info
+            padding-top: rem(19px)
+            max-width: rem(290px)
+            font-size: rem(15px)
+            line-height: rem(22px)
+            color: rgba($black, 0.6)
+            @include mq($until: mobile)
+                max-width: none
+    &__block
+        display: none
+        &--active
+            display: block
+    &__takeaway
+        &-map
+            height: 263px
+        &-about
+            padding: rem(42px) 0 rem(62px)
+        &-title
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            padding-bottom: rem(36px)
+            font-size: rem(30px)
+            line-height: rem(32px)
+            font-weight: 700
+            @include mq($until: mobile)
+                font-size: rem(24px)
+                line-height: rem(28px)
+        &-block
+            padding-bottom: rem(28px)
+            &:last-child
+                padding-bottom: 0
+            &-title
+                font-family: 'RobotoCondensed', Arial, sans-serif
+                padding-bottom: rem(13px)
+                font-size: rem(20px)
+                line-height: rem(24px)
+            &-hours
+                font-size: rem(15px)
+                line-height: rem(22px)
+                padding-right: 3rem
+            &-day
+                width: 122px
+            &-time
+                white-space: nowrap
+            &-link
+                font-size: rem(15px)
+                line-height: rem(22px)
+            &-addresses
+                padding-bottom: rem(15px)
+            &-address
+                padding: rem(28px)
+                border: 1px solid $middleGray
+                margin-bottom: rem(10px)
+                &:hover,
+                &:focus
+                    border-color: $forest
+                &--active
+                    border-color: $forest
+            &-graph
+                @include mq($until: mobile)
+                    flex-direction: column
+                    align-items: flex-start
+        &-date-block
+            @include mq($until: mobile)
+                flex-direction: column
+                align-items: flex-start
+        .calendar
+            margin-right: rem(26px)
+            @include mq($until: mobile)
+                margin-right: 0
+                width: 100%
+            .input
+                @include mq($until: mobile)
+                    width: 100%
+    &__hint
+        background: $white
+        box-shadow: 0px 0px 30px rgba($black, 0.08)
+        padding: rem(31px) rem(22px)
+        max-width: 360px
+        @include mq($until: mobile)
+            max-width: none
+            margin-top: 1rem
+        &--large
+            max-width: none
+        &-svg
+            margin-right: rem(21px)
+            flex-shrink: 0
+        &-text
+            font-size: rem(15px)
+            line-height: rem(22px)
+            color: rgba($black, 0.6)
+    &__textarea
+        resize: none
+        width: 100%
+        border-color: $middleGray
+        height: 80px
+    &__complete
+        margin-right: 2rem
+        @include mq($until: widescreen)
+            margin-right: 2.5rem
+        @include mq($until: desktop)
+            margin-right: 0
+        &-title
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            padding-bottom: rem(24px)
+            font-size: rem(30px)
+            line-height: rem(32px)
+            font-weight: 700
+        &-table
+            border: 1px solid $middleGray
+            padding: 0 rem(10px)
+            margin-bottom: rem(24px)
+        &-row
+            padding: rem(34px) rem(10px)
+            border-bottom: 1px solid $middleGray
+            font-size: rem(15px)
+            line-height: rem(22px)
+            @include mq($until: widescreen)
+                font-size: rem(13px)
+            @include mq($until: desktop)
+                font-size: rem(15px)
+            @include mq($until: mobile)
+                flex-direction: column
+                align-items: flex-start
+                position: relative
+            &:last-child
+                border-bottom: none
+        &-art
+            width: 20%
+            font-weight: 700
+            padding-right: 0.5rem
+            @include mq($until: desktop)
+                padding-right: 1.5rem
+            @include mq($until: mobile)
+                width: 100%
+                padding-right: 0
+                font-weight: 400
+                padding-top: 0.25rem
+        &-good
+            width: 20%
+            padding-right: 0.5rem
+            @include mq($until: desktop)
+                padding-right: 1.5rem
+            @include mq($until: mobile)
+                width: 100%
+                padding-right: 0
+                padding-top: 0.25rem
+        &-vol
+            width: 10%
+            padding-right: 0.5rem
+            @include mq($until: desktop)
+                padding-right: 1.5rem
+            @include mq($until: mobile)
+                width: 100%
+                padding-right: 0
+                padding-top: 0.25rem
+        &-quantity
+            width: 8%
+            padding-right: 0.5rem
+            @include mq($until: desktop)
+                padding-right: 1.5rem
+            @include mq($until: mobile)
+                width: 100%
+                padding-right: 0
+                padding-top: 0.25rem
+        &-number
+            width: 20%
+            padding-right: 0.5rem
+            @include mq($until: desktop)
+                padding-right: 1.5rem
+            @include mq($until: mobile)
+                width: 100%
+                padding-right: 0
+                padding-top: 0.25rem
+            .quantity-block
+                @include mq($until: widescreen)
+                    padding: rem(7px) rem(3px)
+                    width: 85px
+                svg
+                    @include mq($until: widescreen)
+                        width: 8px
+                        height: 8px
+                .quantity-arrow-minus, .quantity-arrow-plus
+                    @include mq($until: widescreen)
+                        padding: 5px
+            &-text
+                font-size: rem(15px)
+                line-height: rem(35px)
+                padding-top: 0.5rem
+                @include mq($until: mobile)
+                    padding-top: 0
+        &-price
+            width: 16%
+            font-weight: 700
+            padding-right: 0.5rem
+            font-size: rem(20px)
+            line-height: rem(35px)
+            white-space: nowrap
+            @include mq($until: widescreen)
+                font-size: rem(15px)
+                line-height: rem(22px)
+            @include mq($until: desktop)
+                font-size: rem(20px)
+                padding-right: 1.5rem
+            @include mq($until: mobile)
+                width: 100%
+                padding-right: 0
+                padding-top: 0.25rem
+        &-delete
+            width: 5%
+            margin-top: 4rem
+            @include mq($until: mobile)
+                width: auto
+                padding-right: 0
+                margin-top: 0
+                position: absolute
+                top: 24px
+                right: 24px
+            &-svg
+                cursor: pointer
+                transition: all .5s ease-out
+                &:hover,
+                &:focus
+                    path
+                        opacity: 1
+                        fill: $black
+        &-cards
+            padding-bottom: rem(24px)
+            @include mq($until: mobile)
+                flex-direction: column
+                align-items: flex-start
+        &-card
+            width: 100%
+            margin-right: rem(19px)
+            border: 1px solid $middleGray
+            padding: rem(24px) rem(29px)
+            @include mq($until: mobile)
+                margin-right: 0
+                margin-bottom: rem(24px)
+            &:last-child
+                margin-right: 0
+                @include mq($until: mobile)
+                margin-bottom: 0
+            &-top
+                padding-bottom: rem(14px)
+            &-title
+                font-family: 'RobotoCondensed', Arial, sans-serif
+                font-size: rem(20px)
+                line-height: rem(24px)
+                padding-right: 0.5rem
+            &-change
+                color: $cherry
+                font-size: rem(15px)
+                line-height: rem(24px)
+                cursor: pointer
+                &:hover,
+                &:focus
+                    color: $black
+            &-svg
+                margin-right: rem(13px)
+            &-name
+                padding-bottom: rem(4px)
+            &-about
+                font-size: rem(15px)
+                line-height: rem(22px)
+                color: rgba($black, 0.6)
+        .checkout__takeaway
+            border: 1px solid $middleGray
+            padding: rem(24px) rem(29px)
+            margin-bottom: rem(24px)
+            &-about
+                padding-top: 0
+                padding-bottom: 0
+            &-top
+                padding-bottom: rem(36px)
+            &-title
+                padding-bottom: 0
+                padding-right: 1rem
+        &-comment
+            border: 1px solid $middleGray
+            padding: rem(24px) rem(29px)
+            margin-bottom: rem(61px)
+            &-text
+                font-size: rem(15px)
+                line-height: rem(22px)
+
+.complete
+    &__modal
+        .btn
+            &--gray
+                &:focus::after
+                    content: none
+            &:first-child
+                margin-right: 0.5rem
+                @include mq($until: mobile)
+                    margin-right: 0
+                    margin-bottom: 0.5rem
+        &-title
+            font-size: rem(20px)
+            line-height: rem(30px)
+            padding-bottom: rem(16px)
+            border-bottom: 1px solid $middleGray
+            font-weight: 700
+            &-svg
+                flex-shrink: 0
+                margin-right: rem(16px)
+        &-blocks
+            padding: rem(31px) 0 rem(18px)
+        &-block
+            padding-bottom: rem(29px)
+            &--top
+                color: $cherry
+                font-family: 'RobotoCondensed', Arial, sans-serif
+                font-size: rem(20px)
+                line-height: rem(24px)
+            &-left
+                width: rem(36px)
+                flex-shrink: 0
+            &-title
+                font-family: 'RobotoCondensed', Arial, sans-serif
+                font-size: rem(20px)
+                line-height: rem(24px)
+                padding-bottom: rem(14px)
+            &-desc
+                font-size: rem(15px)
+                line-height: rem(22px)
+
+#complete
+    &.modal
+        max-width: 560px
+        padding-left: rem(80px)
+        padding-right: rem(80px)
+        @include mq($until: mobile)
+            padding-left: rem(20px)
+            padding-right: rem(20px)
+

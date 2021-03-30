@@ -1,0 +1,41 @@
+.cart
+    padding-bottom: rem(32px)
+    &__h1
+        display: inline-block
+        .tab-sup
+            color: $cherry
+            right: -18px
+            top: 20px
+            @include mq($until: desktop)
+                top: 10px
+            @include mq($until: mobile)
+                top: 5px
+    &__checkout
+        padding-top: rem(65px)
+        width: 100%
+        @include mq($until: desktop)
+            padding-top: 1rem
+    &__stock
+        border: 1px solid $middleGray
+        padding: rem(24px) rem(28px)
+        margin-bottom: rem(24px)
+        margin-right: 2rem
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        @include mq($until: desktop)
+            margin-right: 0
+        &-svg
+            flex-shrink: 0
+            margin-right: rem(16px)
+        &-title
+            padding-bottom: rem(6px)
+            font-size: rem(20px)
+            line-height: rem(24px)
+    &__other
+        &-section
+            padding-bottom: rem(80px)
+        &-title
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            padding-bottom: rem(16px)
+            font-size: rem(30px)
+            line-height: rem(32px)
+            font-weight: 700

@@ -1,0 +1,29 @@
+.no-order
+    padding: rem(47px) rem(60px) rem(62px)
+    @include mq($until: mobile)
+        padding: rem(20px) 0
+    &__wrapper
+        margin-bottom: rem(63px)
+    &__title
+        color: $deepGray
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(30px)
+        line-height: rem(32px)
+        font-weight: 700
+        padding-bottom: rem(10px)
+        padding-left: rem(14px)
+        @include mq($until: mobile)
+            font-size: rem(20px)
+            line-height: 1.4
+            padding-left: 0
+    &__text
+        margin-bottom: rem(37px)
+        padding-left: rem(14px)
+        @include mq($until: mobile)
+            padding-left: 0
+    .btn
+        @include mq($until: mobile)
+            width: 80%
+            margin: 0 auto
+            display: block
+            text-align: center

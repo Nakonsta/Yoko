@@ -1,0 +1,102 @@
+.order
+    &__title
+        padding: 0 0 rem(49px)
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-weight: 700
+        font-size: rem(30px)
+        line-height: rem(32px)
+        color: $deepGray
+        position: relative
+        &::after
+            content: ''
+            position: absolute
+            left: 0
+            bottom: 26px
+            background-color: $cherry
+            transform: skew(-35deg)
+            width: 74px
+            height: 6px
+    &__info
+        padding-bottom: rem(18px)
+        @include mq($until: mobile)
+            flex-direction: column
+        &-left,
+        &-right
+            @include mq($until: mobile)
+                width: 100%
+        &-item
+            padding-bottom: rem(32px)
+    &__item
+        border-top: 1px solid rgba($deepGray, 0.3)
+        padding: rem(20px) 0 rem(27px)
+        font-size: rem(15px)
+        line-height: rem(22px)
+        @include mq($until: mobile)
+            flex-direction: column
+        &-art,
+        &-quantity,
+        &-desc
+            width: 23%
+            padding: 0 rem(50px) 0 0
+            @include mq($until: mobile)
+                padding: 0 0 1rem 0
+                width: 100%
+        &-price
+            width: 16%
+            padding: 0 rem(16px) 0 0
+            @include mq($until: mobile)
+                padding: 0 0 1rem 0
+                width: 100%
+        &-sum
+            width: 15%
+            padding: 0 rem(16px) 0 0
+            @include mq($until: mobile)
+                padding: 0 0 1rem 0
+                width: 100%
+    &__actions
+        border-top: 1px solid rgba($deepGray, 0.3)
+        padding-top: rem(25px)
+    &__action
+        padding: 0 0 0 rem(20px)
+        text-transform: uppercase
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-weight: 700
+        font-size: rem(15px)
+        line-height: rem(25px)
+        @include mq($until: mobile)
+            margin-bottom: 0.5rem
+        &:last-child
+            @include mq($until: mobile)
+                margin-bottom: 0
+        &--lh
+            line-height: rem(35px)
+            padding-left: 0
+        &-more
+            @include mq($until: mobile)
+                flex-direction: column
+        &-svg
+            margin-right: rem(12px)
+        &-text
+            &:hover,
+            &:focus
+                color: $forest
+        &-hide
+            text-transform: uppercase
+            font-family: 'RobotoCondensed', Arial, sans-serif
+            font-weight: 700
+            font-size: rem(15px)
+            line-height: rem(25px)
+            color: rgba(0, 0, 0, 0.6)
+            cursor: pointer
+            &:hover,
+            &:focus
+                color: $black
+    &__border
+        .article-title
+            border: 1px solid $middleGray
+    &__justify
+        .order-search__row
+            justify-content: space-between
+
+.orders
+    padding: rem(40px) 0 0

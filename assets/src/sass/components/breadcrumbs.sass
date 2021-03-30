@@ -1,0 +1,26 @@
+.breadcrumbs
+    padding-top: rem(18px)
+    &__item
+        position: relative
+        padding-right: 1.5rem
+        &::after
+            content: '/'
+            position: absolute
+            right: 0.5rem
+        &:last-child
+            &::after
+                content: none
+    &__link
+        text-transform: uppercase
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(13px)
+        line-height: rem(25px)
+        color: $black
+        font-weight: 700
+        &--current
+            color: #666666
+            cursor: default
+            font-weight: 400
+            &:hover,
+            &:focus
+                color: #666666

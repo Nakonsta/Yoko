@@ -1,0 +1,27 @@
+.requisites
+    padding-bottom: rem(81px)
+    &__download
+        padding-bottom: rem(22px)
+    &__block
+        border: 1px solid $middleGray
+        padding: rem(32px) rem(32px) rem(15px)
+        @include mq($until: mobile)
+            padding: rem(15px) rem(15px) 0
+    &__info
+        border-bottom: 1px solid $middleGray
+    &__row
+        line-height: rem(26px)
+        padding-bottom: 1rem
+        @include mq($until: mobile)
+            flex-direction: column
+    &__name
+        width: rem(220px)
+        padding-right: 1rem
+        color: #666666
+        flex-shrink: 0
+        @include mq($until: mobile)
+            margin-bottom: 0.5rem
+    &__value
+        max-width: rem(584px)
+    &__detailed
+        padding-top: 1rem

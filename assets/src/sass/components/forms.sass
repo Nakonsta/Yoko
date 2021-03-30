@@ -1,0 +1,313 @@
+input:-webkit-autofill
+    -webkit-box-shadow: 0 0 0px 1000px white inset
+    background-color: transparent
+
+
+input,
+button,
+textarea,
+select
+    outline: none
+
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+input[type="email"],
+textarea
+    background: transparent
+    box-shadow: none   
+
+.form__row
+    position: relative
+    
+.label
+    position: absolute
+    display: block
+    font-size: rem(15px)
+    line-height: rem(24px)
+    font-weight: 500
+    top: 16px
+    transition: all $animation ease-out
+    left: 20px
+    pointer-events: none
+    opacity: 0.6
+
+.form__row .input:focus ~ .label, 
+.form__row .input:valid ~ .label,
+.form__row .input ~ .label.not-empty,
+.form__row .input[disabled="disabled"] ~ .label,
+    top: -30px
+    left: 0
+    opacity: 1
+
+.select-span
+    position: absolute  
+    display: block
+    font-size: rem(15px)
+    line-height: rem(24px)
+    font-weight: 500
+    top: 16px
+    transition: all $animation ease-out
+    left: 20px
+    pointer-events: none
+    opacity: 0.6
+    top: -30px
+    left: 0
+    opacity: 1
+
+.form__row .input[disabled="disabled"] ~ .label
+    color: #666666
+
+label.error
+    position: absolute
+    left: 0
+    bottom: -20px
+    color: #b8061f
+    font-size: 12px
+    letter-spacing: 0.05em
+    font-family: 'Mont', Arial, sans-serif
+
+.input
+    border: 1px solid rgba($border, 0.5)
+    padding: rem(16px) rem(20px)
+    font-size: rem(15px)
+    line-height: rem(24px)
+    font-weight: 500
+    &--black
+        font-weight: 400
+        border-color: $middleGray
+
+.select2-container .select2-selection--single
+    height: auto
+
+.select2-container--default .select2-selection--single
+    background-color: transparent
+    border: 1px solid rgba($border, 0.5)
+    padding: rem(16px) rem(20px)
+    font-size: rem(15px)
+    line-height: rem(24px)
+    font-weight: 500
+    border-radius: 0
+    outline: none
+    min-height: rem(57px)
+
+.select--black  .select2-container--default .select2-selection--single
+    border-color: $middleGray
+
+.select2-container--default .select2-selection--single .select2-selection__rendered,
+.select2-container--classic .select2-selection--single .select2-selection__rendered
+    line-height: rem(24px)
+    color: rgba($white, 0.6)
+
+.select--black .select2-container--default .select2-selection--single .select2-selection__rendered,
+.select--black .select2-container--classic .select2-selection--single .select2-selection__rendered
+    color: rgba($black, 0.6)
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b,
+.select2-container--classic .select2-selection--single .select2-selection__arrow b
+    display: none
+
+.select2-container--default .select2-selection--single .select2-selection__arrow
+    background: url(../img/arrow-bottom.svg) no-repeat 50% 50%
+    width: 12px
+    height: 6px
+    right: 18px
+    top: 50%
+    transform: translateY(-50%)
+    transition: all .5 ease-in
+    opacity: 0.6
+
+.select--black .select2-container--default .select2-selection--single .select2-selection__arrow
+    background: url(../img/arrow-bottom-gray.svg) no-repeat 50% 50%
+
+.select2-container--open .select2-selection--single .select2-selection__arrow
+    transform: translateY(-50%) rotate(180deg)
+    opacity: 1
+
+.select2-results
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15)
+    &::-webkit-scrollbar
+        width: 5px
+
+.select2-results__option
+    padding-left: rem(17px)
+    border-left: 3px solid transparent
+    &.select2-results__option--highlighted.select2-results__option--selectable
+        border-left-color: $forest
+        background-color: $lightGray
+        color: $black
+    &.select2-results__option--selected
+        background-color: $forest
+        color: $white
+    
+
+/* для элемента input c type="checkbox" */
+.custom-checkbox>input 
+    position: absolute
+    z-index: -1
+    opacity: 0
+
+
+/* для элемента label, связанного с .custom-checkbox */
+.custom-checkbox>span 
+    display: inline-flex
+    user-select: none
+    font-weight: 500
+    font-size: rem(15px)
+    line-height: rem(24px)
+
+
+/* создание в label псевдоэлемента before со следующими стилями */
+.custom-checkbox>span::before 
+    content: ''
+    display: inline-block
+    width: 24px
+    height: 24px
+    flex-shrink: 0
+    flex-grow: 0
+    border: 1px solid rgba(#E6E5E1, 0.5)
+    margin-right: 0.5em
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: 50% 50%
+
+
+/* стили для чекбокса, находящегося в состоянии checked */
+.custom-checkbox>input:checked+span::before 
+    background-image: url(../img/mark.svg)
+    background-size: 13px 10px
+    background-position: 60% 50%
+
+/* стили для чекбокса, находящегося в состоянии disabled */
+.custom-checkbox>input:disabled+span::before 
+    background-color: #e9ecef
+
+.custom-checkbox__wrapper--black
+    .custom-checkbox > span::before
+        border-color: $white
+        background-color: $white
+    .custom-checkbox > span
+        font-weight: 400
+    .custom-checkbox>input:checked+span::before 
+        background-image: url(../img/mark-cherry.svg)
+        background-size: 13px 10px
+        background-position: 60% 50%
+
+.checkbox-link
+    text-decoration: underline
+    color: $white
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button 
+    -webkit-appearance: none
+    -moz-appearance: none
+    appearance: none
+    margin: 0
+
+input[type="number"] 
+    -moz-appearance: textfield
+
+
+.quantity-block 
+    font-size: rem(17px)
+    line-height: rem(35px)
+    display: flex
+    align-items: center
+    border: 1px solid #D6D4CE
+    padding: 7px
+    width: 130px
+    &--error
+        border-color: $cherry
+        .quantity-arrow-minus rect,
+        .quantity-arrow-plus path
+            fill: $cherry
+            stroke: $cherry
+    &--active
+        .quantity-arrow-minus rect,
+        .quantity-arrow-plus path
+            fill: $cherry
+            stroke: $cherry
+    &--byhands
+        border-color: $forest
+    &--disable
+        .quantity-num
+            color: $middleGray
+
+.quantity-arrow-minus,
+.quantity-arrow-plus 
+    cursor: pointer
+    font-size: 20px
+    padding: 5px 12px
+    width: 40px
+    box-sizing: border-box
+    outline: none
+    border: none
+    background-color: transparent
+    display: flex
+
+.quantity-num 
+    outline: none
+    border: none
+    width: 35px
+    text-align: center
+
+.flatpickr-calendar
+    border-radius: 0
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.11)
+    &::after,
+    &:before
+        content: none
+    .flatpickr-day.today
+        border-color: $black
+    .flatpickr-day:hover
+        background-color: #f2f2f2
+        border-color: #f2f2f2
+    .flatpickr-day.selected
+        background-color: $forest
+        border-color: $forest
+
+.calendar
+    position: relative
+    &::after
+        content: ''
+        position: absolute
+        top: 50%
+        right: 21px
+        width: 21px
+        height: 22px
+        transform: translateY(-50%)
+        background: url(../img/calendar.svg) 50% 50% no-repeat
+        background-size: contain
+
+.input-file 
+    input[type="file"] 
+        visibility: hidden
+        width: 1px
+        height: 1px
+    .btn 
+        background-color: #ddd
+        border-color: #ccc
+        color: #333
+        
+.file-selected 
+    font-size: 1rem
+    width: 100%
+    margin-top: -0.75rem
+.wrap 
+    display: flex
+    justify-content: flex-end
+    width: 100%
+    height: 100%
+.valign-middle 
+    display: table-cell
+    vertical-align: middle
+    text-align: center
+
+.numInputWrapper span
+    display: none
+
+.input.valid
+    background-image: url(../img/mark-green.svg) 
+    background-repeat: no-repeat
+    background-size: 13px 10px 
+    background-position:  95% 50%

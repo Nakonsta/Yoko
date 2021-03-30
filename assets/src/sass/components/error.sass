@@ -1,0 +1,57 @@
+.error404
+    position: relative
+    height: 1110px
+    @include mq($until: large)
+        height: 790px
+    @include mq($until: widescreen)
+        height: 600px
+    @include mq($until: mobile)
+        height: 500px
+    &__inner
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        background: url(../img/404.jpg)
+        background-repeat: no-repeat
+        background-position: 50% 35%
+        background-size: cover
+        @include mq($until: large)
+            background-position: 50% 40%
+        @include mq($until: widescreen)
+            background-position: 50% 20%
+        @include mq($until: mobile)
+            background-position: 50% 0%
+            top: 100px
+    &__text
+        padding: rem(54px) 0 0
+        position: relative
+        z-index: 2
+        @include mq($until: mobile)
+            padding-top: 2rem
+    &__title
+        font-family: 'RobotoCondensed', Arial, sans-serif
+        font-size: rem(30px)
+        line-height: rem(32px)
+        font-weight: 700
+        padding-bottom: rem(25px)
+        @include mq($until: widescreen)
+            font-size: rem(24px)
+            line-height: 1.4
+            padding-bottom: 0.5rem
+        @include mq($until: mobile)
+            font-size: rem(18px)
+    &__btns
+        @include mq($until: mobile)
+            flex-direction: column
+    .btn
+        @include mq($until: mobile)
+            width: 80%
+            margin-left: auto
+            margin-right: auto
+            text-align: center
+    .btn:first-child
+        margin-right: 1.75rem
+        @include mq($until: mobile)
+            margin-bottom: 0.5rem

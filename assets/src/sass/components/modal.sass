@@ -1,0 +1,21 @@
+.modal
+    display: none
+    &__inner
+        padding: rem(10px) rem(20px)
+        @include mq($until: mobile)
+            padding: 0
+
+#warehouses
+    max-width: 785px
+
+#created-complaint
+    .order-search__modal-title
+        color: $black
+    .order-search__modal-pic
+        margin-bottom: rem(37px)
+    .btn
+        text-align: center
+        .btn-text
+            padding-right: 0
+        &::before
+            border: 1px solid $middleGray
